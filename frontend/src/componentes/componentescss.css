@@ -1,0 +1,43 @@
+.navbar-height {
+    height: 80px;
+}
+
+.center {
+    margin: auto;
+    width: 40%;
+    padding: 10px;
+}
+
+
+#form1Search{
+  height: 40px;
+  width: 400px;
+}
+
+#form1Botao{
+    height: 30px;
+}
+
+#iconbotao {
+    bottom:20px;
+}
+
+.textolight {
+    color: white;
+}
+
+.textodark {
+    color: black;
+}
+
+.listaprodutos {
+    width: 10em;
+    border: 1px black;
+    border-style: solid;
+    text-align: center;
+}
+
+.logo {
+    margin-left:15px
+}
+
