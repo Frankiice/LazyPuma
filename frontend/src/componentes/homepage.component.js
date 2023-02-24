@@ -26,7 +26,7 @@ const ProdutosResposta = [{primeiroNome: "Bananas", quantidade:"30", tipo: "Made
 //   console.log(this.state.pesquisa);
 // };
 
-function searchResults(){
+function Homepage(){
     return (
       <div>
         <p>Homepage!</p>
@@ -35,4 +35,4 @@ function searchResults(){
   }
 
 
-export default searchResults
+export default Homepage

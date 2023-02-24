@@ -15,7 +15,7 @@ import Navbar from "./componentes/navbar.component";
 // import ExercisesList from "./componentes/exercises-list.component";
 // import EditExercise from "./componentes/edit-exercise.component";
 import SearchResults from "./componentes/searchresults.component";
-import Home from "./componentes/homepage.component";
+import Homepage from "./componentes/homepage.component";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
 
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Homepage />} />
         <Route path="/results" element={<SearchResults />} />
       </Routes>
     </Router>
