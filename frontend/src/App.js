@@ -6,14 +6,7 @@ import {
   Routes, 
   Route
 } from 'react-router-dom';
-// import {
-//   BrowserRouter,
-//   Routes,
-//   Route
-// } from "react-router-dom";
 import Navbar from "./componentes/navbar.component";
-// import ExercisesList from "./componentes/exercises-list.component";
-// import EditExercise from "./componentes/edit-exercise.component";
 import SearchResults from "./componentes/searchresults.component";
 import Homepage from "./componentes/homepage.component";
 
