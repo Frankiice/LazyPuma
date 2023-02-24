@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
-import "./componentescss.css";
+import "../styles/componentescss.css";
+import "../styles/styles.css";
 import { FaSearch } from "react-icons/fa"
 import {useState, useEffect} from 'react';
 import axios from 'axios';
@@ -47,42 +48,73 @@ function Navbar(){
       // <head>
       //   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"></link>
       // </head>
-      <nav className="navbar navbar-dark bg-dark navbar-expand-lg navbar-height">
-        <a href="/" className="navbar-brand logo">Lazy Puma</a>
-        <div className="collpase navbar-collapse">
 
-        {/* Componentes da navbar */}
-        <ul className="navbar-nav mr-auto">
-          <li className="navbar-item">
-          <a href="/teste1" className="nav-link">Teste1</a>
+      // NAV ANTIGA
+      // <nav className="navbar navbar-dark bg-dark navbar-expand-lg navbar-height">
+      //   <a href="/" className="navbar-brand logo">Lazy Puma</a>
+      //   <div className="collpase navbar-collapse">
+
+      //   {/* Componentes da navbar */}
+      //   <ul className="navbar-nav mr-auto">
+      //     <li className="navbar-item">
+      //     <a href="/teste1" className="nav-link">Teste1</a>
+      //     </li>
+      //     <li className="navbar-item">
+      //     <a href="/teste2" className="nav-link">Teste2</a>
+      //     </li>
+      //     <li className="navbar-item">
+      //     <a href="/teste3" className="nav-link">Teste3</a>
+      //     </li>
+      //   </ul>
+      //     <div className="input-group center">
+      //       <div className="form-outline">
+      //         <input type="search" id="form1Search" className="form-control inputSearch" onChange={e => {setQuery(e.target.value)}} placeholder='Search'/>
+      //       </div>
+      //       <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao" className="btn btn-primary"><FaSearch id="iconbotao" /></a>
+      //     </div>
+      //   </div>
+      // </nav>
+
+    //NAV NOVA
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2 py-3">
+      <a class="navbar-brand px-2" href="#!">Start Bootstrap</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse px-4" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Test1 <span class="sr-only">(current)</span></a>
           </li>
-          <li className="navbar-item">
-          <a href="/teste2" className="nav-link">Teste2</a>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Test2</a>
           </li>
-          <li className="navbar-item">
-          <a href="/teste3" className="nav-link">Teste3</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Dropdown
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
           </li>
         </ul>
-
-        {/* dropdown */}
-        {/* <li className="navbar-item dropdown">
-        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown link
-        </a>
-        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a className="dropdown-item" href="#">Action</a>
-          <a className="dropdown-item" href="#">Another action</a>
-          <a className="dropdown-item" href="#">Something else here</a>
-        </div>
-        </li> */}
-          <div className="input-group center">
+        <div className="input-group px-5">
             <div className="form-outline">
               <input type="search" id="form1Search" className="form-control inputSearch" onChange={e => {setQuery(e.target.value)}} placeholder='Search'/>
             </div>
-            <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao" className="btn btn-primary"><FaSearch id="iconbotao" /></a>
-          </div>
+          <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao" className="btn btn-primary"><FaSearch id="iconbotao" /></a>
         </div>
-      </nav>
+      </div>
+      <form class="d-flex px-3">
+        <button class="btn btn-outline-light col-md-12" type="submit">
+            <i class="bi-cart-fill me-1"></i>
+            Cart
+            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        </button>
+      </form>
+      {/* Login e signup buttons + informaçao sobre user logado */}
+    </nav>
     );
   }
 
