@@ -9,7 +9,12 @@ import {
 import Navbar from "./componentes/navbar.component";
 import SearchResults from "./componentes/searchresults.component";
 import Homepage from "./componentes/homepage.component";
+<<<<<<< HEAD
 import Footer from "./componentes/footer.component";
+=======
+import ExercisesList from "./componentes/exercises-list.component"
+import Registo from "./componentes/registo.component";
+>>>>>>> 2f1972a9d3249687da892d35ce9e89f677280a5f
 
 function App() {
   return (
@@ -20,6 +25,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/results" element={<SearchResults />} />
+        <Route path="/exercise-list" element={<ExercisesList/>}/>
+        <Route path="/registo" element={<Registo/>}/>
       </Routes>
     </Router>
 
