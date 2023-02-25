@@ -9,6 +9,7 @@ import {
 import Navbar from "./componentes/navbar.component";
 import SearchResults from "./componentes/searchresults.component";
 import Homepage from "./componentes/homepage.component";
+import Footer from "./componentes/footer.component";
 import ExercisesList from "./componentes/exercises-list.component"
 import Registo from "./componentes/registo.component";
 import Login from "./componentes/login.component";
@@ -27,6 +28,8 @@ function App() {
         <Route path="/login" element={<Login/>}/>
       </Routes>
     </Router>
+
+    <Footer/>
     </React.StrictMode>
   );
 }

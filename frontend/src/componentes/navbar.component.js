@@ -88,8 +88,10 @@ function Navbar(){
       // </nav>
 
     //NAV NOVA
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2 py-3">
-      <a class="navbar-brand px-2" href="#!">Start Bootstrap</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3">
+      <div class="logo px-4">
+        <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img></a>
+      </div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse px-4" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
