@@ -56,10 +56,6 @@ body{
     /* height: 600px; */
 }
 
-.form-header{
-    text-align: center;
-}
-
 .form-body{
     text-align: left;
     padding: 20px 10px;
@@ -73,10 +69,10 @@ body{
     width: 40%;
 }
 
-.form_input{
-    width: 60%;
+.form__input{
+    width: 45%;
 }
 
-.footer{
+.footer, .form-header{
     text-align: center;
 }
