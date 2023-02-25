@@ -6,7 +6,7 @@ import "../styles/styles.css";
 import { FaSearch } from "react-icons/fa"
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-
+import ExercisesList from './exercises-list.component';
 // const navigate = useNavigate();
 // const handleOnClickResults = useCallback(() => navigate('/results', {replace: true}), [navigate]);
 
@@ -35,6 +35,18 @@ import axios from 'axios';
 function Navbar(){
     const [query, setQuery] = useState('')
     const [data, setData] = useState([])
+    const [user, setUser] = useState(null);
+
+    // funcoes dummy --------------
+    async function login(user = null){
+      setUser(user);
+    }
+
+    async function logout(){
+      setUser(null);
+    }
+    // -----------------------------
+
 
     const sendSearchData = (query) => {
       const fetchUsers = () => {
@@ -82,10 +94,13 @@ function Navbar(){
       <div class="collapse navbar-collapse px-4" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Test1 <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/exercise-list">Test1 <span class="sr-only">(current)</span></a>
+            {/* <Link to={"/exercises-list"} className="nav-link">
+              Teste
+            </Link> */}
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Test2</a>
+            <a class="nav-link" href="/">Test2<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -115,10 +130,21 @@ function Navbar(){
       </form>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-        <a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/registo"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a>
         </li>
       </ul>
       {/* Login e signup buttons + informaçao sobre user logado */}
+
+      {/* Codigo para ver se user esta ou nao logado   */}
+      {/* {user ? ( // if there is a user (se for true) a primeira coisa acontece se for false acontece a segunda (depois de :)
+              <a onClick={logout} className="nav-link" style={{cursor:'pointer'}}>
+                Logout {user.name}
+              </a>
+            ) : (
+              <Link to={"/login"} className="nav-link">
+                Login/Registo
+              </Link>
+            )} */}
     </nav>
     );
   }

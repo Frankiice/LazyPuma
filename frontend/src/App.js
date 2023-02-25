@@ -9,6 +9,8 @@ import {
 import Navbar from "./componentes/navbar.component";
 import SearchResults from "./componentes/searchresults.component";
 import Homepage from "./componentes/homepage.component";
+import ExercisesList from "./componentes/exercises-list.component"
+import Registo from "./componentes/registo.component";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/results" element={<SearchResults />} />
+        <Route path="/exercise-list" element={<ExercisesList/>}/>
+        <Route path="/registo" element={<Registo/>}/>
       </Routes>
     </Router>
     </React.StrictMode>
