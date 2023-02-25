@@ -9,6 +9,7 @@ import {
 import Navbar from "./componentes/navbar.component";
 import SearchResults from "./componentes/searchresults.component";
 import Homepage from "./componentes/homepage.component";
+import Footer from "./componentes/footer.component";
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
         <Route path="/results" element={<SearchResults />} />
       </Routes>
     </Router>
+
+    <Footer/>
     </React.StrictMode>
   );
 }

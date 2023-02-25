@@ -1,3 +1,7 @@
+html, body {
+    min-height: 100%;
+}
+
 .navbar-height {
     height: 80px;
 }
@@ -8,10 +12,15 @@
     padding: 10px;
 }
 
+#imglogo {
+    height:50px;
+    width: 50px;
+}
 
 #form1Search{
-  height: 40px;
-  width: 700px;
+    margin-left: 140px;
+    height: 40px;
+    width: 800px;
 }
 
 #form1Botao{
@@ -40,4 +49,3 @@
 .logo {
     margin-left:15px
 }
-
