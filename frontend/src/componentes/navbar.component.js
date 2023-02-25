@@ -113,6 +113,11 @@ function Navbar(){
             <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
         </button>
       </form>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+        <a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
       {/* Login e signup buttons + informaçao sobre user logado */}
     </nav>
     );
