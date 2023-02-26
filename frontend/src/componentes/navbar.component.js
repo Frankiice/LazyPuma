@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/componentescss.css";
 import "../styles/styles.css";
-import { FaSearch } from "react-icons/fa"
+import { FarBootstrap } from "react-icons/fa";
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import ExercisesList from './exercises-list.component';
@@ -117,10 +117,9 @@ function Navbar(){
           </li>
         </ul>
         <div className="input-group px-5">
-            <div className="form-outline">
-              <input type="search" id="form1Search" className="form-control inputSearch" onChange={e => {setQuery(e.target.value)}} placeholder='Search'/>
+            <div className="form-group has-search">
+              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
-          <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao" className="btn btn-primary"><FaSearch id="iconbotao" /></a>
         </div>
       </div>
       <form class="d-flex px-3">
