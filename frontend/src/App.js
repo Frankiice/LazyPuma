@@ -12,6 +12,7 @@ import Homepage from "./componentes/homepage.component";
 import Footer from "./componentes/footer.component";
 import ExercisesList from "./componentes/exercises-list.component"
 import Registo from "./componentes/registo.component";
+import Login from "./componentes/login.component";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/results" element={<SearchResults />} />
         <Route path="/exercise-list" element={<ExercisesList/>}/>
         <Route path="/registo" element={<Registo/>}/>
+        <Route path="/login" element={<Login/>}/>
       </Routes>
     </Router>
 
