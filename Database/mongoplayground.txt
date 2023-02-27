@@ -1,0 +1,78 @@
+// MongoDB Playground
+// To disable this template go to Settings | MongoDB | Use Default Template For Playground.
+// Make sure you are connected to enable completions and to be able to run a playground.
+// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
+
+// Select the database to use.
+use('lazypuma');
+
+// The drop() command destroys all data from a collection.
+// Make sure you run it against the correct database and collection.
+//
+/*
+db.createCollection("users", {
+   validator: {
+      $jsonSchema: {
+         bsonType: "object",
+         required: ["email", "type","fullname","nickname","phone","morada","nif","password"],
+         properties: {
+            email: {
+               bsonType: "string",
+               pattern: "^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$",
+               description: "email do usuario"
+            },
+            type: {
+               bsonType: "string",
+               description: "fornecedor ou consumidor"
+            },
+            fullname: {
+               bsonType: "string",
+               description: "nome completo do usuario"
+            },
+            nickname: {
+               bsonType: "string",
+               description: "nickname do usuario"
+            },
+            phone: {
+               bsonType: "string",
+               description: "numero telemovel do usuario"
+            },
+            morada: {
+               bsonType: "string",
+               description: "morada do usuario"
+            },
+            nif: {
+              bsonType: "int",
+              minimum: 100000000,
+              maximum: 999999999,
+              exclusiveMinimum: true,
+              exclusiveMaximum: true,
+              description: "must be an integer with exactly 9 digits"
+            },
+            password: {
+               bsonType: "string",
+               minimum: 18,
+               description: "must be an integer and greater than or equal to 18"
+            }
+         }
+      }
+   }
+}) */
+
+
+/*db.users.insertOne({
+"email": "Admin@lazypuma.com",
+  "type": "Consumidor",
+  "fullname": "Admin",
+  "nickname": "Admin",
+  "phone": "000-000-000",
+  "morada": "Lisbon",
+  "nif": 123456789,
+  "password": "admin"
+})
+*/
+
+//db.lazypuma.deleteOne({"email": "Teste@lazypuma.com"})
+
+// db.getCollectionInfos()
+// Insert a few documents into the sales collection.
