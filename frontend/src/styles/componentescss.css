@@ -17,6 +17,12 @@ html, body {
     width: 50px;
 }
 
+#imgNome{
+    height: 19px;
+    position: relative;
+    /* bottom: 3px; */
+}
+
 #form1Search{
     /* margin-left: 140px;
     height: 40px;
@@ -151,7 +157,8 @@ a:hover {
     align-items: center;
     cursor: pointer;
     border: 1px solid #ddd;
-    color: #4343ff
+    /* color: #4343ff */
+    color: white
 }
 
 input[type='text'],

@@ -90,20 +90,18 @@ function Navbar(){
     //NAV NOVA
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3">
       <div class="logo px-4">
-        <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img></a>
+        <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
+        <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png"></img></a>
       </div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse px-4" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          {/* <li class="nav-item active">
             <a class="nav-link" href="/exercise-list">Test1 <span class="sr-only">(current)</span></a>
-            {/* <Link to={"/exercises-list"} className="nav-link">
-              Teste
-            </Link> */}
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/">Test2<span class="sr-only">(current)</span></a>
-          </li>
+          </li> */}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Dropdown

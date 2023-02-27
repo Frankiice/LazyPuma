@@ -8,7 +8,9 @@ const Registo = props => {
   const [name, setName] = useState(null);
   const [username, setUsername] = useState(null);
   const [morada, setMorada] = useState(null);
+  const [identificadorFiscal, setIdFiscal] = useState(null);
   const [email, setEmail] = useState(null);
+  const [telemovel, setTelemovel] = useState(null);
   const [password,setPassword] = useState(null);
   const [confirmPassword,setConfirmPassword] = useState(null);
 
@@ -32,8 +34,14 @@ const Registo = props => {
     if(id === "morada"){
         setMorada(value);
     }
+    if(id === "identificadorFiscal"){
+        setIdFiscal(value);
+    }
     if(id === "email"){
         setEmail(value);
+    }
+    if(id === "telemovel"){
+        setTelemovel(value);
     }
     if(id === "password"){
         setPassword(value);
@@ -50,7 +58,7 @@ const Registo = props => {
 
 const register = () => { //da registo no user e depois vai para a home page ???? copiado do login
     props.register(email)
-    console.log(tipoUser,name,username,morada,email,password,confirmPassword);
+    console.log(tipoUser,name,username,morada,identificadorFiscal,email,password,confirmPassword);
     props.history.push('/');
   }
 
@@ -66,11 +74,13 @@ const register = () => { //da registo no user e depois vai para a home page ????
                 <div class="panel-body p-3">
                     <form action="login_script.php" method="POST">
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> 
-                            <select class="bg-dark text-white">
-                                <option value="consumidor">Consumidor</option>
-                                <option value="produtor">Produtor</option>
-                            </select> </div>
+                            <div class="input-field bg-dark">
+                                 <span class="fa fa-user px-2"></span> 
+                                    <select class="bg-dark text-white">
+                                    <option value="consumidor">Consumidor</option>
+                                    <option value="produtor">Produtor</option>
+                                </select> 
+                            </div>
                         </div>
                         <div class="form-group py-2">
                             <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="name" value={name} onChange = {(e) => handleInputChange(e)} placeholder="Nome Completo" required /> </div>
@@ -79,20 +89,27 @@ const register = () => { //da registo no user e depois vai para a home page ????
                             <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="username" value={username} onChange = {(e) => handleInputChange(e)} placeholder="Username" required /> </div>
                         </div>
                         <div class="form-group py-2">
+                            <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" value={email} onChange = {(e) => handleInputChange(e)} placeholder="Email" required /> </div>
+                        </div>
+                        <div class="form-group py-2">
+                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white" type="text" id="telemovel" value={telemovel} onChange = {(e) => handleInputChange(e)} placeholder="Telemóvel" required /> </div>
+                        </div>
+                        <div class="form-group py-2">
                             <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" value={morada} onChange = {(e) => handleInputChange(e)} placeholder="Morada" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" value={email} onChange = {(e) => handleInputChange(e)} placeholder="Email" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="text" id="identificadorFiscal" value={identificadorFiscal} onChange = {(e) => handleInputChange(e)} placeholder="Identificador Fiscal" required /> </div>
                         </div>
                         <div class="form-group py-1 pb-2">
                             <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" value={password} onChange = {(e) => handleInputChange(e)} placeholder="Password" required /> </div>
                         </div>
                         <div class="form-group py-1 pb-2">
-                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" value={confirmPassword} onChange = {(e) => handleInputChange(e)} placeholder="Comfirme a Password" required /> </div>
+                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" value={confirmPassword} onChange = {(e) => handleInputChange(e)} placeholder="Confirme a Password" required /> </div>
                         </div>
                         <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
                         <div class="botao">
-                          <button onClick={register} className="btn btn-primary btn-block mt-3">
+                            <br></br>
+                          <button onClick={register}  class="btn btn-outline-light col-md-3">
                             Registar
                           </button>
                         </div>
