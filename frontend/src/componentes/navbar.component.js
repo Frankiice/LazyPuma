@@ -131,7 +131,7 @@ function Navbar(){
       </form>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-        <a class="nav-link" href="/registo"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a>
         </li>
       </ul>
       {/* Login e signup buttons + informaçao sobre user logado */}
