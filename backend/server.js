@@ -15,6 +15,29 @@ const connection = mongoose.connection;
 connection.once('open', () => {
 console.log("MongoDB database connection established successfully");
 })
+// FALTA RECEBER O JSON DO FRONTEND COM UMA ROUTE
+// insert from express into DB
+/*
+const userData = {
+    "email": "Gabriel@teste.com",
+      "type": "Consumidor",
+      "fullname": "Lazy Puma",
+      "nickname": "gabriel",
+      "phone": "000-000-000",
+      "morada": "Lisbon",
+      "nif": 123456789,
+      "password": "admin"
+}
+const usersCollection = connection.useDb("lazypuma").collection("users");
+usersCollection.insertOne(userData, (err, result) => {
+    if (err) {
+    console.error(err);
+    return res.status(500).send(err);
+    }
+    console.log(`${result.insertedCount} documents inserted into the collection`);
+    //res.send('Data inserted successfully!');
+});
+*/
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
