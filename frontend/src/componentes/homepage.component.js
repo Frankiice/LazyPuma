@@ -34,7 +34,7 @@ function Homepage(){
     <div class="scrollmenu">
         <div class="btn-toolbar col-lg-12 justify-content-center" role="toolbar" >
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="brinquedos">bebé e <br></br>criança</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  

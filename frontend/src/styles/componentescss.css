@@ -230,7 +230,9 @@ a[target='_blank'] {
     color: #ffffff;
     transform: translateY(-7px);
     font-size: 16px;
-  }
+    
+}
+
 div.scrollmenu {
     overflow: auto;
     white-space: nowrap;
@@ -242,8 +244,17 @@ div.scrollmenu {
     background-size: contain;
     background-position: 40px 20px 65px;
 }
+#butao2{
+    background-image: url('../images/brinquedos.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: justify;
+    padding:2.6em;
+}
 
-#butao1:hover{
+
+
+#butao1:hover, #butao2:hover{
     background-image:none;
 }
 
