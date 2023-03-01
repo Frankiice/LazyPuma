@@ -21,7 +21,7 @@ console.log("MongoDB database connection established successfully");
 
 // const User = mongoose.model("UserInfo");
 //TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
-app.post("/registo", async(req, res) => {
+app.post("/user/registar", async(req, res) => {
     const {tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password} = req.body;
     
     const encryptedPassword = await bcrypt.hash(password, 10);
@@ -63,6 +63,16 @@ usersCollection.insertOne(userData, (err, result) => {
     //res.send('Data inserted successfully!');
 });
 */
+
+app.post("/user/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    // continuar
+});
+
+app.post("/user", async (req, res) => { //este seria para aceder as infos do user
+    //continuar
+});
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
