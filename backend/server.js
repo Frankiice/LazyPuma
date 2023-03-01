@@ -16,6 +16,27 @@ connection.once('open', () => {
 console.log("MongoDB database connection established successfully");
 })
 // FALTA RECEBER O JSON DO FRONTEND COM UMA ROUTE
+
+// const User = mongoose.model("UserInfo");
+//TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
+app.post("/registo", async(req, res) => {
+    const {name, username,morada, identificadorFiscal, email, telemovel, password} = req.body;
+    //falta tmb o tipo de user mas ainda nao consegui isso
+    // try {
+    //     await User.create({
+    //         name,
+    //         username,
+    //         morada, 
+    //         identificadorFiscal, 
+    //         email, 
+    //         telemovel,
+    //         password,
+    //     });
+    //     res.send({ status: "ok" });
+    // }catch (error) {
+    //     res.send({ status: "error" })
+    // }
+})
 // insert from express into DB
 /*
 const userData = {

@@ -1,18 +1,72 @@
-import React, { useState, setState } from "react";
+import React, { useState, setState, Component } from "react";
 import Select from 'react-select'
 import '../styles/componentescss.css';
 
-const Registo = props => {
+// const Registo = props => {
+export default class Registo extends Component {
 
-  const [tipoUser, setTipoUser] = useState(null);
-  const [name, setName] = useState(null);
-  const [username, setUsername] = useState(null);
-  const [morada, setMorada] = useState(null);
-  const [identificadorFiscal, setIdFiscal] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [telemovel, setTelemovel] = useState(null);
-  const [password,setPassword] = useState(null);
-  const [confirmPassword,setConfirmPassword] = useState(null);
+    constructor(props){
+        super (props);
+        this.state={
+            tipoUser: "",
+            name: "",
+            username: "",
+            morada: "",
+            identificadorFiscal: "",
+            email: "",
+            telemovel: "",
+            password: "",
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+    };
+
+    handleSubmit(e){
+        e.preventDefault();
+        const {tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password} = this.state;
+        console.log(tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password);
+        fetch("http://localhost:5000/registo",{
+            method:"POST",
+            crossDomain:true,
+            headers:{
+                "Content-type":"application/json",
+                Accept:"application/json",
+                "Access-Control-Allow-Origin":"*",
+            },
+            body:JSON.stringify({
+                name,
+                username,
+                morada,
+                identificadorFiscal,
+                email,
+                telemovel,
+                password,
+            }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data, "userRegister");
+        })
+    };
+// const initialUserState = {
+//     tipoUser: "",
+//     name: "",
+//     username: "",
+//     morada: "",
+//     identificadorFiscal: "",
+//     email: "",
+//     telemovel: "",
+//     password: "",
+//   };
+
+//   const [tipoUser, setTipoUser] = useState(null);
+//   const [name, setName] = useState(null);
+//   const [username, setUsername] = useState(null);
+//   const [morada, setMorada] = useState(null);
+//   const [identificadorFiscal, setIdFiscal] = useState(null);
+//   const [email, setEmail] = useState(null);
+//   const [telemovel, setTelemovel] = useState(null);
+//   const [password,setPassword] = useState(null);
+//   const [confirmPassword,setConfirmPassword] = useState(null);
 
 //   const options = [
 //     { value: 'consumidor', label: 'Consumidor' },
@@ -20,49 +74,49 @@ const Registo = props => {
 //   ]
 
 
-  const handleInputChange = (e) => {
-    const {id , value} = e.target;
-    if(id === "tipoUser"){
-        setTipoUser(value);
-    }
-    if(id === "name"){
-        setName(value);
-    }
-    if(id === "username"){
-        setUsername(value);
-    }
-    if(id === "morada"){
-        setMorada(value);
-    }
-    if(id === "identificadorFiscal"){
-        setIdFiscal(value);
-    }
-    if(id === "email"){
-        setEmail(value);
-    }
-    if(id === "telemovel"){
-        setTelemovel(value);
-    }
-    if(id === "password"){
-        setPassword(value);
-    }
-    if(id === "confirmPassword"){
-        setConfirmPassword(value);
-    }
+//   const handleInputChange = (e) => {
+//     const {id , value} = e.target;
+//     if(id === "tipoUser"){
+//         setTipoUser(value);
+//     }
+//     if(id === "name"){
+//         setName(value);
+//     }
+//     if(id === "username"){
+//         setUsername(value);
+//     }
+//     if(id === "morada"){
+//         setMorada(value);
+//     }
+//     if(id === "identificadorFiscal"){
+//         setIdFiscal(value);
+//     }
+//     if(id === "email"){
+//         setEmail(value);
+//     }
+//     if(id === "telemovel"){
+//         setTelemovel(value);
+//     }
+//     if(id === "password"){
+//         setPassword(value);
+//     }
+//     if(id === "confirmPassword"){
+//         setConfirmPassword(value);
+//     }
 
-}
+
 
 // const handleSubmit  = () => {
 //   console.log(tipoUser,name,username,morada,email,password,confirmPassword);
 // }
 
-const register = () => { //da registo no user e depois vai para a home page ???? copiado do login
-    props.register(email)
-    console.log(tipoUser,name,username,morada,identificadorFiscal,email,password,confirmPassword);
-    props.history.push('/');
-  }
+// const register = () => { //da registo no user e depois vai para a home page ???? copiado do login
+//     props.register(email)
+//     console.log(tipoUser,name,username,morada,identificadorFiscal,email,password,confirmPassword);
+//     props.history.push('/');
+//   }
 
-
+render() {
   return (
     <div class="container">
     <div class="row">
@@ -72,44 +126,44 @@ const register = () => { //da registo no user e depois vai para a home page ????
                     <h3 class="pt-3 font-weight-bold text-white">Registo</h3>
                 </div>
                 <div class="panel-body p-3">
-                    <form action="login_script.php" method="POST">
+                    <form onSubmit={this.handleSubmit}>
                         <div class="form-group py-2">
                             <div class="input-field bg-dark">
                                  <span class="fa fa-user px-2"></span> 
-                                    <select class="bg-dark text-white">
+                                    <select class="bg-dark text-white" id="tipoUser" onChange={(e => this.setState({ tipoUser: e.target.value }))}>
                                     <option value="consumidor">Consumidor</option>
-                                    <option value="produtor">Produtor</option>
+                                    <option value="fornecedor">Fornecedor</option>
                                 </select> 
                             </div>
+                        </div>                                                                                                                          {/*value={name} onChange = {(e) => handleInputChange(e)}*/} 
+                        <div class="form-group py-2">
+                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="name" onChange={(e => this.setState({ name: e.target.value }))}  placeholder="Nome Completo" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="name" value={name} onChange = {(e) => handleInputChange(e)} placeholder="Nome Completo" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="username" onChange={(e => this.setState({ username: e.target.value }))} placeholder="Username" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="username" value={username} onChange = {(e) => handleInputChange(e)} placeholder="Username" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Email" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" value={email} onChange = {(e) => handleInputChange(e)} placeholder="Email" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white" type="text" id="telemovel" onChange={(e => this.setState({ telemovel: e.target.value }))} placeholder="Telemóvel" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white" type="text" id="telemovel" value={telemovel} onChange = {(e) => handleInputChange(e)} placeholder="Telemóvel" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder="Morada" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" value={morada} onChange = {(e) => handleInputChange(e)} placeholder="Morada" required /> </div>
-                        </div>
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="text" id="identificadorFiscal" value={identificadorFiscal} onChange = {(e) => handleInputChange(e)} placeholder="Identificador Fiscal" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="text" id="identificadorFiscal" onChange={(e => this.setState({ identificadorFiscal: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
                         </div>
                         <div class="form-group py-1 pb-2">
-                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" value={password} onChange = {(e) => handleInputChange(e)} placeholder="Password" required /> </div>
+                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Password" required /> </div>
                         </div>
                         <div class="form-group py-1 pb-2">
-                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" value={confirmPassword} onChange = {(e) => handleInputChange(e)} placeholder="Confirme a Password" required /> </div>
+                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }))} placeholder="Confirme a Password" required /> </div>
                         </div>
                         <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
                         <div class="botao">
                             <br></br>
-                          <button onClick={register}  class="btn btn-outline-light col-md-3">
+                          <button type="submit"  class="btn btn-outline-light col-md-3">
                             Registar
                           </button>
                         </div>
@@ -170,6 +224,7 @@ const register = () => { //da registo no user e depois vai para a home page ????
 //       <a href="/login" >Já possuo conta</a>
 //     </div>      
   );
-}
 
-export default Registo;
+    }
+}
+// export default Registo;
