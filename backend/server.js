@@ -9,6 +9,8 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+const bcrypt = require("bcryptjs");
+
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri);
 const connection = mongoose.connection;
@@ -20,7 +22,9 @@ console.log("MongoDB database connection established successfully");
 // const User = mongoose.model("UserInfo");
 //TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
 app.post("/registo", async(req, res) => {
-    const {name, username,morada, identificadorFiscal, email, telemovel, password} = req.body;
+    const {tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password} = req.body;
+    
+    const encryptedPassword = await bcrypt.hash(password, 10);
     //falta tmb o tipo de user mas ainda nao consegui isso
     // try {
     //     await User.create({
@@ -30,7 +34,7 @@ app.post("/registo", async(req, res) => {
     //         identificadorFiscal, 
     //         email, 
     //         telemovel,
-    //         password,
+    //         password: encryptedPassword,
     //     });
     //     res.send({ status: "ok" });
     // }catch (error) {

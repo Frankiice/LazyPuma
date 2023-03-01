@@ -8,7 +8,7 @@ export default class Registo extends Component {
     constructor(props){
         super (props);
         this.state={
-            tipoUser: "",
+            tipoUser: "consumidor",
             name: "",
             username: "",
             morada: "",
@@ -17,7 +17,17 @@ export default class Registo extends Component {
             telemovel: "",
             password: "",
         };
+        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    };
+
+   
+    // getInitialState(){
+    //     return {selectValue:'consumidor'};
+    // };
+    
+    handleChange(e){
+        this.setState({tipoUser:e.target.value});
     };
 
     handleSubmit(e){
@@ -33,6 +43,7 @@ export default class Registo extends Component {
                 "Access-Control-Allow-Origin":"*",
             },
             body:JSON.stringify({
+                tipoUser,
                 name,
                 username,
                 morada,
@@ -130,7 +141,9 @@ render() {
                         <div class="form-group py-2">
                             <div class="input-field bg-dark">
                                  <span class="fa fa-user px-2"></span> 
-                                    <select class="bg-dark text-white" id="tipoUser" onChange={(e => this.setState({ tipoUser: e.target.value }))}>
+                                    <select class="bg-dark text-white" id="tipoUser" 
+                                    value={this.state.tipoUser} 
+                                    onChange={this.handleChange} >
                                     <option value="consumidor">Consumidor</option>
                                     <option value="fornecedor">Fornecedor</option>
                                 </select> 
@@ -146,13 +159,13 @@ render() {
                             <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Email" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white" type="text" id="telemovel" onChange={(e => this.setState({ telemovel: e.target.value }))} placeholder="Telemóvel" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="telemovel" onChange={(e => this.setState({ telemovel: e.target.value }))} placeholder="Telemóvel" required /> </div>
                         </div>
                         <div class="form-group py-2">
                             <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder="Morada" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="text" id="identificadorFiscal" onChange={(e => this.setState({ identificadorFiscal: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="identificadorFiscal" onChange={(e => this.setState({ identificadorFiscal: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
                         </div>
                         <div class="form-group py-1 pb-2">
                             <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Password" required /> </div>

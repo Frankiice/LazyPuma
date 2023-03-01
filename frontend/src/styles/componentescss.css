@@ -169,6 +169,9 @@ a:hover {
 }
 
 input[type='text'],
+input[type='tel'],
+input[type='number'],
+select,
 input[type='password'] {
     border: none;
     outline: none;
