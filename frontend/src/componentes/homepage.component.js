@@ -30,13 +30,21 @@ function Homepage(){
     return (
     //<!-- Header -->
     <React.Fragment>
-    <header class="bg-secondary py-5">
-        <div class="container px-4 px-lg-5 my-5">
-            <div class="text-center text-dark">
-                <h1 class="display-4 fw-bolder">LazyPuma</h1>
-                <p class="lead fw-normal text-dark-50 mb-0">Swag</p>
-            </div>
+    <header class="cor_header height_header">  
+    <div class="scrollmenu">
+        <div class="btn-toolbar col-lg-12 justify-content-center" role="toolbar" >
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle " >50%</button>   
         </div>
+    </div>
     </header>
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="sidebar" aria-labelledby="produtos">

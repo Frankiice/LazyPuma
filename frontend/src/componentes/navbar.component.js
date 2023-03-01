@@ -58,7 +58,7 @@ function Navbar(){
     };
 
     return (
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
       
       {/* Logo e imagem do navbar */}
       <div class="logo px-4">

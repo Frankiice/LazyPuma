@@ -80,9 +80,9 @@ html, body {
 }
 
 body{
-    background: #bdc3c7;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #ffffff;  /* fallback for old browsers */
+    /* background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7);  Chrome 10-25, Safari 5.1-6 */
+    /* background: linear-gradient(to right, #2c3e50, #bdc3c7); W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .form{
@@ -207,6 +207,52 @@ a[target='_blank'] {
     left: 33%;
     background-color: #fff;
     padding: 0px 8px
+}
+
+.btn-xl {
+    padding: 50px;
+    width:10%;
+    display:block;
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
+    margin:20px 20px 20px 20px; 
+    border: none;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+    outline: none;
+    font-size: 0;
+}
+
+.btn-xl:hover {
+    box-shadow: 0px 15px 20px rgba(53, 52, 52, 0.4);
+    color: #ffffff;
+    transform: translateY(-7px);
+    font-size: 16px;
+  }
+div.scrollmenu {
+    overflow: auto;
+    white-space: nowrap;
+  }
+  
+
+#butao1{
+    background-image: url("https://ae01.alicdn.com/kf/H9bcc7fb7e08e4842a77427fabfe599e9j/100cm-djungelskog-urso-marrom-brinquedo-de-pel-cia-macio-animal-de-pel-cia-gigante-mr-boss.jpg_Q90.jpg_.webp");;
+    background-size: contain;
+    background-position: 40px 20px 65px;
+}
+
+#butao1:hover{
+    background-image:none;
+}
+
+.cor_header{
+    background-color: #F2F4F5;
+}
+.height_header{
+    height: 200px;
+    position: static;
 }
 
 @media(max-width: 360px) {
