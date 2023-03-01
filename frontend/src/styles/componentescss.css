@@ -239,13 +239,23 @@ a[target='_blank'] {
 div.scrollmenu {
     overflow: auto;
     white-space: nowrap;
-  }
-  
+    background-color: #F2F4F5;
+}
+
+div.scrollmenu .btn-xl {
+    display: inline-block;
+}
+
+#buttons_header{
+    display: inline-block;
+}
 
 #butao1{
     background-image: url("https://ae01.alicdn.com/kf/H9bcc7fb7e08e4842a77427fabfe599e9j/100cm-djungelskog-urso-marrom-brinquedo-de-pel-cia-macio-animal-de-pel-cia-gigante-mr-boss.jpg_Q90.jpg_.webp");;
     background-size: contain;
     background-position: 40px 20px 65px;
+    
+    
 }
 #butao2{
     background-image: url('../images/brinquedos.jpg');
@@ -253,6 +263,7 @@ div.scrollmenu {
     background-position: 40px 20px 65px;
     text-align: justify;
     padding:2.6em;
+    
 }
 
 
@@ -265,8 +276,8 @@ div.scrollmenu {
     background-color: #F2F4F5;
 }
 .height_header{
-    height: 200px;
-    position: static;
+    height: 170px;
+    
 }
 
 @media(max-width: 360px) {
