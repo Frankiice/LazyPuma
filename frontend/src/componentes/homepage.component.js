@@ -34,12 +34,12 @@ function Homepage(){
     <header class="cor_header height_header">  
     
         <div class="btn-toolbar col-lg-12 justify-content-center " id="buttons_header"role="toolbar" >
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="brinquedos">bebé e <br></br>criança</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao3" title="desporto">desporto</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais">animais</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza">beleza</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem">bricolagem</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="Telemóveis e smartphones">Telemóveis <br></br>e<br></br> Smartphones</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  

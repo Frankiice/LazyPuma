@@ -240,6 +240,7 @@ div.scrollmenu {
     overflow: auto;
     white-space: nowrap;
     background-color: #F2F4F5;
+    overflow-y:hidden;
 }
 
 div.scrollmenu .btn-xl {
@@ -262,13 +263,51 @@ div.scrollmenu .btn-xl {
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: justify;
-    padding:2.6em;
+    padding:2.5em;
     
 }
 
+#butao3{
+    background-image: url('../images/desporto.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: justify;
+    padding:2.1em;
+}
 
+#butao4{
+    background-image: url('../images/animais.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: justify;
+    padding:2.4em;
+}
 
-#butao1:hover, #butao2:hover{
+#butao5{
+    background-image: url('../images/beleza.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: justify;
+    padding:2.7em;
+}
+
+#butao6{
+    background-image: url('../images/bricolagem.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: justify;
+    padding:1.7em;
+}
+
+#butao7{
+    background-image: url('../images/telemovel.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.2em;
+}
+
+#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover{
     background-image:none;
 }
 
@@ -276,7 +315,7 @@ div.scrollmenu .btn-xl {
     background-color: #F2F4F5;
 }
 .height_header{
-    height: 170px;
+    height: 183px;
     
 }
 
