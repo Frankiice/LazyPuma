@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/componentescss.css";
-import "../styles/styles.css";
-import { FarBootstrap } from "react-icons/fa";
+import "../scripts/scripts.js";
+import { FaBootstrap } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa"
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import ExercisesList from './exercises-list.component';
@@ -57,43 +58,13 @@ function Navbar(){
     };
 
     return (
-      // <head>
-      //   <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css"></link>
-      // </head>
-
-      // NAV ANTIGA
-      // <nav className="navbar navbar-dark bg-dark navbar-expand-lg navbar-height">
-      //   <a href="/" className="navbar-brand logo">Lazy Puma</a>
-      //   <div className="collpase navbar-collapse">
-
-      //   {/* Componentes da navbar */}
-      //   <ul className="navbar-nav mr-auto">
-      //     <li className="navbar-item">
-      //     <a href="/teste1" className="nav-link">Teste1</a>
-      //     </li>
-      //     <li className="navbar-item">
-      //     <a href="/teste2" className="nav-link">Teste2</a>
-      //     </li>
-      //     <li className="navbar-item">
-      //     <a href="/teste3" className="nav-link">Teste3</a>
-      //     </li>
-      //   </ul>
-      //     <div className="input-group center">
-      //       <div className="form-outline">
-      //         <input type="search" id="form1Search" className="form-control inputSearch" onChange={e => {setQuery(e.target.value)}} placeholder='Search'/>
-      //       </div>
-      //       <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao" className="btn btn-primary"><FaSearch id="iconbotao" /></a>
-      //     </div>
-      //   </div>
-      // </nav>
-
-    //NAV NOVA
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3">
+      
+      {/* Logo e imagem do navbar */}
       <div class="logo px-4">
         <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
         <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png"></img></a>
       </div>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse px-4" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           {/* <li class="nav-item active">
@@ -102,16 +73,10 @@ function Navbar(){
           <li class="nav-item">
             <a class="nav-link" href="/">Test2<span class="sr-only">(current)</span></a>
           </li> */}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
+          <li class="nav-item">
+            <button id="produtosbtn" class="btn btn-outline-light col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasWithBothOptions">
+              Produtos
+            </button>
           </li>
         </ul>
         <div className="input-group px-5">
@@ -132,6 +97,7 @@ function Navbar(){
         <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a>
         </li>
       </ul>
+
       {/* Login e signup buttons + informaçao sobre user logado */}
 
       {/* Codigo para ver se user esta ou nao logado   */}

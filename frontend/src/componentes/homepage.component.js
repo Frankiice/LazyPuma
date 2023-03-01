@@ -30,14 +30,24 @@ function Homepage(){
     return (
     //<!-- Header -->
     <React.Fragment>
-      <header class="bg-secondary py-5">
-          <div class="container px-4 px-lg-5 my-5">
-              <div class="text-center text-dark">
-                  <h1 class="display-4 fw-bolder">LazyPuma</h1>
-                  <p class="lead fw-normal text-dark-50 mb-0">Swag</p>
-              </div>
-          </div>
-      </header>
+    <header class="bg-secondary py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-dark">
+                <h1 class="display-4 fw-bolder">LazyPuma</h1>
+                <p class="lead fw-normal text-dark-50 mb-0">Swag</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="sidebar" aria-labelledby="produtos">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Try scrolling the rest of the page to see this option in action.</p>
+        </div>
+    </div>
     {/* //<!-- Section --> */}
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
