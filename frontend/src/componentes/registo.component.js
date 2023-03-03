@@ -43,13 +43,13 @@ export default class Registo extends Component {
                 "Access-Control-Allow-Origin":"*",
             },
             body:JSON.stringify({
+                email,
                 tipoUser,
                 name,
                 username,
-                morada,
-                identificadorFiscal,
-                email,
                 telemovel,
+                morada,
+                identificadorFiscal,       
                 password,
             }),
         })

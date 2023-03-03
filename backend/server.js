@@ -17,30 +17,36 @@ const connection = mongoose.connection;
 connection.once('open', () => {
 console.log("MongoDB database connection established successfully");
 })
+
 // FALTA RECEBER O JSON DO FRONTEND COM UMA ROUTE
+/*
+require("./userDetails")
+const User = mongoose.model("users");
 
 // const User = mongoose.model("UserInfo");
 //TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
+
 app.post("/user/registar", async(req, res) => {
-    const {tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password} = req.body;
+    const {email, type, fullname,nickname, phone, morada, nif, password} = req.body;
     
     const encryptedPassword = await bcrypt.hash(password, 10);
-    //falta tmb o tipo de user mas ainda nao consegui isso
-    // try {
-    //     await User.create({
-    //         name,
-    //         username,
-    //         morada, 
-    //         identificadorFiscal, 
-    //         email, 
-    //         telemovel,
-    //         password: encryptedPassword,
-    //     });
-    //     res.send({ status: "ok" });
-    // }catch (error) {
-    //     res.send({ status: "error" })
-    // }
-})
+    
+    try {
+         await User.create({
+             email,
+             type,
+             fullname, 
+             nickname, 
+             phone,
+             morada, 
+             nif,
+             password: encryptedPassword,
+          });
+          res.send({ status: "ok" });
+    }catch (error) {
+         res.send({ status: "error" })
+    }
+})*/
 // insert from express into DB
 /*
 const userData = {
@@ -66,8 +72,9 @@ usersCollection.insertOne(userData, (err, result) => {
 
 app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
-
-    // continuar
+    /*
+    const user = await User.findOne({email})
+    */
 });
 
 app.post("/user", async (req, res) => { //este seria para aceder as infos do user
