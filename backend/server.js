@@ -22,7 +22,7 @@ console.log("MongoDB database connection established successfully");
 // const User = mongoose.model("UserInfo");
 //TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
 app.post("/user/registar", async(req, res) => {
-    const {tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password} = req.body;
+    const {type, fullname, nickname,morada, nif, email, phone, password} = req.body;
     
     const encryptedPassword = await bcrypt.hash(password, 10);
     //falta tmb o tipo de user mas ainda nao consegui isso
