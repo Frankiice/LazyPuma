@@ -259,11 +259,11 @@ div.scrollmenu .btn-xl {
     
 }
 #butao2{
-    background-image: url('../images/brinquedos.jpg');
+    background-image: url('../images/bebe.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: justify;
-    padding:2.5em;
+    padding:3.1em;
     
 }
 
@@ -296,7 +296,7 @@ div.scrollmenu .btn-xl {
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: justify;
-    padding:1.7em;
+    padding:1.5em;
 }
 
 #butao7{
@@ -307,7 +307,68 @@ div.scrollmenu .btn-xl {
     padding:1.2em;
 }
 
-#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover{
+#butao8{
+    background-image: url('../images/decoracao.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.5em;
+}
+#butao9{
+    background-image: url('../images/jardim.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.5em;
+}
+#butao10{
+    background-image: url('../images/comando.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.5em;
+}
+#butao11{
+    background-image: url('../images/tv.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.5em;
+}
+
+#butao12{
+    background-image: url('../images/lego.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.7em;
+}
+
+#butao13{
+    background-image: url('../images/wm.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;;
+    padding:0em;
+}
+
+#butao14{
+    background-image: url('../images/camera.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.7em;
+}
+
+#butao15{
+    background-image: url('../images/livros.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.7em;
+}
+
+#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
 }
 

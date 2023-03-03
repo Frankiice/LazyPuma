@@ -27,7 +27,8 @@ const User = mongoose.model("users");
 //TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
 
 app.post("/user/registar", async(req, res) => {
-    const {email, type, fullname,nickname, phone, morada, nif, password} = req.body;
+
+    const {type, fullname, nickname,morada, nif, email, phone, password} = req.body;
     
     const encryptedPassword = await bcrypt.hash(password, 10);
     

@@ -13,7 +13,7 @@ import Footer from "./componentes/footer.component";
 import ExercisesList from "./componentes/exercises-list.component"
 import Registo from "./componentes/registo.component";
 import Login from "./componentes/login.component";
-
+import Perfil from "./componentes/perfil";
 function App() {
   return (
     <React.StrictMode>
@@ -26,6 +26,7 @@ function App() {
         <Route path="/exercise-list" element={<ExercisesList/>}/>
         <Route path="/registo" element={<Registo/>}/>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/perfil" element={<Perfil/>}/>
       </Routes>
     </Router>
 

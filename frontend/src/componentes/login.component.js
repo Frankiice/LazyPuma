@@ -72,7 +72,7 @@ render() {
                     <div class="panel-body p-3">
                         <form onSubmit={this.handleSubmit}>
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Username ou Email" required /> </div>
+                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Insira o seu Email" required /> </div>
                             </div>
                             <div class="form-group py-1 pb-2">
                                 <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Insira a sua Password" required /> </div>

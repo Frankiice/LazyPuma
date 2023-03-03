@@ -8,13 +8,13 @@ export default class Registo extends Component {
     constructor(props){
         super (props);
         this.state={
-            tipoUser: "consumidor",
-            name: "",
-            username: "",
+            type: "consumidor",
+            fullname: "",
+            nickname: "",
             morada: "",
-            identificadorFiscal: "",
+            nif: "",
             email: "",
-            telemovel: "",
+            phone: "",
             password: "",
         };
         this.handleChange = this.handleChange.bind(this);
@@ -27,13 +27,13 @@ export default class Registo extends Component {
     // };
     
     handleChange(e){
-        this.setState({tipoUser:e.target.value});
+        this.setState({type:e.target.value});
     };
 
     handleSubmit(e){
         e.preventDefault();
-        const {tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password} = this.state;
-        console.log(tipoUser, name, username,morada, identificadorFiscal, email, telemovel, password);
+        const {type, fullname, nickname,morada, nif, email, phone, password} = this.state;
+        console.log(type, fullname, nickname,morada, nif, email, phone, password);
         fetch("http://localhost:5000//user/registar",{
             method:"POST",
             crossDomain:true,
@@ -43,13 +43,13 @@ export default class Registo extends Component {
                 "Access-Control-Allow-Origin":"*",
             },
             body:JSON.stringify({
-                email,
-                tipoUser,
-                name,
-                username,
-                telemovel,
+                type,
+                fullname,
+                nickname,
                 morada,
-                identificadorFiscal,       
+                nif,
+                email,
+                phone,
                 password,
             }),
         })
@@ -59,23 +59,23 @@ export default class Registo extends Component {
         })
     };
 // const initialUserState = {
-//     tipoUser: "",
-//     name: "",
-//     username: "",
+//     type: "",
+//     fullname: "",
+//     nickname: "",
 //     morada: "",
-//     identificadorFiscal: "",
+//     nif: "",
 //     email: "",
-//     telemovel: "",
+//     phone: "",
 //     password: "",
 //   };
 
-//   const [tipoUser, setTipoUser] = useState(null);
-//   const [name, setName] = useState(null);
-//   const [username, setUsername] = useState(null);
+//   const [type, settype] = useState(null);
+//   const [fullname, setName] = useState(null);
+//   const [nickname, setUsername] = useState(null);
 //   const [morada, setMorada] = useState(null);
-//   const [identificadorFiscal, setIdFiscal] = useState(null);
+//   const [nif, setIdFiscal] = useState(null);
 //   const [email, setEmail] = useState(null);
-//   const [telemovel, setTelemovel] = useState(null);
+//   const [phone, setTelemovel] = useState(null);
 //   const [password,setPassword] = useState(null);
 //   const [confirmPassword,setConfirmPassword] = useState(null);
 
@@ -87,25 +87,25 @@ export default class Registo extends Component {
 
 //   const handleInputChange = (e) => {
 //     const {id , value} = e.target;
-//     if(id === "tipoUser"){
-//         setTipoUser(value);
+//     if(id === "type"){
+//         settype(value);
 //     }
-//     if(id === "name"){
+//     if(id === "fullname"){
 //         setName(value);
 //     }
-//     if(id === "username"){
+//     if(id === "nickname"){
 //         setUsername(value);
 //     }
 //     if(id === "morada"){
 //         setMorada(value);
 //     }
-//     if(id === "identificadorFiscal"){
+//     if(id === "nif"){
 //         setIdFiscal(value);
 //     }
 //     if(id === "email"){
 //         setEmail(value);
 //     }
-//     if(id === "telemovel"){
+//     if(id === "phone"){
 //         setTelemovel(value);
 //     }
 //     if(id === "password"){
@@ -118,12 +118,12 @@ export default class Registo extends Component {
 
 
 // const handleSubmit  = () => {
-//   console.log(tipoUser,name,username,morada,email,password,confirmPassword);
+//   console.log(type,fullname,nickname,morada,email,password,confirmPassword);
 // }
 
 // const register = () => { //da registo no user e depois vai para a home page ???? copiado do login
 //     props.register(email)
-//     console.log(tipoUser,name,username,morada,identificadorFiscal,email,password,confirmPassword);
+//     console.log(type,fullname,nickname,morada,nif,email,password,confirmPassword);
 //     props.history.push('/');
 //   }
 
@@ -141,8 +141,8 @@ render() {
                         <div class="form-group py-2">
                             <div class="input-field bg-dark">
                                  <span class="fa fa-user px-2"></span> 
-                                    <select class="bg-dark text-white" id="tipoUser" 
-                                    value={this.state.tipoUser} 
+                                    <select class="bg-dark text-white" id="type" 
+                                    value={this.state.type} 
                                     onChange={this.handleChange} >
                                     <option value="consumidor">Consumidor</option>
                                     <option value="fornecedor">Fornecedor</option>
@@ -150,22 +150,22 @@ render() {
                             </div>
                         </div>                                                                                                                          {/*value={name} onChange = {(e) => handleInputChange(e)}*/} 
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="name" onChange={(e => this.setState({ name: e.target.value }))}  placeholder="Nome Completo" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))}  placeholder="Nome Completo" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="username" onChange={(e => this.setState({ username: e.target.value }))} placeholder="Username" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder="Username" required /> </div>
                         </div>
                         <div class="form-group py-2">
                             <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Email" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="telemovel" onChange={(e => this.setState({ telemovel: e.target.value }))} placeholder="Telemóvel" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder="Telemóvel" required /> </div>
                         </div>
                         <div class="form-group py-2">
                             <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder="Morada" required /> </div>
                         </div>
                         <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="identificadorFiscal" onChange={(e => this.setState({ identificadorFiscal: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
+                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
                         </div>
                         <div class="form-group py-1 pb-2">
                             <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Password" required /> </div>
@@ -206,8 +206,8 @@ render() {
 //      </div>
 //       <div className="form-body">
 //           <div className="tipoUtilizador">
-//               <label className="form__label" for="tipoUser">Tipo de Utilizador </label>
-//               {/* <input className="form__input" type="text" value={tipoUser} onChange = {(e) => handleInputChange(e)} id="tipoUser" placeholder="Consumidor"/>  */}
+//               <label className="form__label" for="type">Tipo de Utilizador </label>
+//               {/* <input className="form__input" type="text" value={type} onChange = {(e) => handleInputChange(e)} id="type" placeholder="Consumidor"/>  */}
 //               <Select className="form__input" options={options} />
 //           </div>
 //           <div className="name">

@@ -94,7 +94,12 @@ function Navbar(){
       </form>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-        <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a>
+        {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
+          <a  href="/login">
+            <button class="btn btn-outline-light col-md-12" id="botaoLogin">
+            <i class="bi bi-person-circle"></i> Login/Registo
+            </button>
+          </a>
         </li>
       </ul>
 
