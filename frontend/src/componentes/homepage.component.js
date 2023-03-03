@@ -34,20 +34,20 @@ function Homepage(){
     <header class="cor_header height_header">  
     
         <div class="btn-toolbar col-lg-12 justify-content-center " id="buttons_header"role="toolbar" >
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="brinquedos">bebé e <br></br>criança</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="bebé">bebé</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao3" title="desporto">desporto</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais">animais</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza">beleza</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem">bricolagem</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="telemóveis e smartphones">Telemóveis <br></br>e<br></br> Smartphones</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao8" title="decoração">decoração</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle " >50%</button>   
-            <button class="btn btn-outline-dark btn-xl rounded-circle " >50%</button>   
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle " >50%</button>   
-            <button class="btn btn-outline-dark btn-xl rounded-circle " >50%</button> 
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao9" title="jardinagem">jardinagem</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao10" title="gaming">gaming</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao11" title="TVs">TVs</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao12" title="jogos e brinquedos">jogos <br></br>e<br></br>brinquedos</button>   
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao13" title="eletrodomesticos">eletro-<br></br>-domésticos</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao14" title="fotografia">fotografia</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao15" title="livros">livros</button>  
         
     </div>
     </header>
