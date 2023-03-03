@@ -307,7 +307,15 @@ div.scrollmenu .btn-xl {
     padding:1.2em;
 }
 
-#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover{
+#butao8{
+    background-image: url('../images/decoracao.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.5em;
+}
+
+#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover{
     background-image:none;
 }
 

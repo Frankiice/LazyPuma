@@ -39,8 +39,8 @@ function Homepage(){
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais">animais</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza">beleza</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem">bricolagem</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="Telemóveis e smartphones">Telemóveis <br></br>e<br></br> Smartphones</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="telemóveis e smartphones">Telemóveis <br></br>e<br></br> Smartphones</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao8" title="decoração">decoração</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao1" title="urso">urso</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle " >50%</button>   
