@@ -79,7 +79,10 @@ render() {
                             </div>
                             <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
                             <div class="botao">
-                              <button className="btn btn-primary btn-block mt-3">
+                              {/* <button className="btn btn-primary btn-block mt-3">
+                                Login
+                              </button> */}
+                              <button type="submit"  class="btn btn-outline-light col-md-3">
                                 Login
                               </button>
                             </div>

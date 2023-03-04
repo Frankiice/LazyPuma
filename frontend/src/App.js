@@ -13,7 +13,7 @@ import Footer from "./componentes/footer.component";
 import ExercisesList from "./componentes/exercises-list.component"
 import Registo from "./componentes/registo.component";
 import Login from "./componentes/login.component";
-import Perfil from "./componentes/perfil";
+import Perfil from "./componentes/perfil.component";
 function App() {
   return (
     <React.StrictMode>
