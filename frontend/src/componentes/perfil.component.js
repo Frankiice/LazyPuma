@@ -106,14 +106,14 @@ render() {
                             <div class="form-group">
                                     <label>Bio</label>
                                     <div class="input-field bg-dark"> 
-                                        <textarea class="form-control" rows="4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea>
+                                        <textarea class="bg-dark text-white" rows="4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea>
                                     </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-primary">Update</button>
-                        <button class="btn btn-light">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
@@ -123,7 +123,7 @@ render() {
                             <div class="form-group">
                                 <label>Old password</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="password" class="form-control"/>
+                                    <input type="password" class="bg-dark text-white"/>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +133,7 @@ render() {
                             <div class="form-group">
                                 <label>New password</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="password" class="form-control"/>
+                                    <input type="password" class="bg-dark text-white"/>
                                 </div>
                             </div>
                         </div>
@@ -141,14 +141,14 @@ render() {
                             <div class="form-group">
                                 <label>Confirm new password</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="password" class="form-control"/>
+                                    <input type="password" class="bg-dark text-white"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-primary">Update</button>
-                        <button class="btn btn-light">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
@@ -156,15 +156,17 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                    <label>Login</label>
-                                    <input type="text" class="form-control"/>
+                                <label>Login</label>
+                                <div class="input-field bg-dark"> 
+                                    <input type="text" class="bg-dark text-white"/>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Two-factor auth</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="form-control"/>
+                                    <input type="text" class="bg-dark text-white"/>
                                 </div>
                             </div>
                         </div>
@@ -180,8 +182,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-primary">Update</button>
-                        <button class="btn btn-light">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
@@ -205,8 +207,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-primary">Update</button>
-                        <button class="btn btn-light">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
@@ -236,8 +238,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-primary">Update</button>
-                        <button class="btn btn-light">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
             </div>
