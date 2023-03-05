@@ -17,7 +17,7 @@ export default class Login extends Component {
     e.preventDefault();
     const {email, password} = this.state;
     console.log( email, password);
-    fetch("http://localhost:5000//user/login",{
+    fetch("http://localhost:5000/user/login",{
             method:"POST",
             crossDomain:true,
             headers:{
@@ -86,7 +86,7 @@ render() {
                                 Login
                               </button>
                             </div>
-                            <div class="text-center pt-4 text-muted">Ainda não possui uma conta? <a href="/registo">Registo</a> </div>
+                            <div class="text-center pt-4 text-muted">Ainda não possui uma conta? <a href="/user/registar">Registo</a> </div>
                         </form>
                     </div>
                     <div class="mx-3 my-2 py-2 bordert">

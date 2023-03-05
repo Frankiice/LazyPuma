@@ -34,7 +34,7 @@ export default class Registo extends Component {
         e.preventDefault();
         const {type, fullname, nickname,morada, nif, email, phone, password} = this.state;
         console.log(type, fullname, nickname,morada, nif, email, phone, password);
-        fetch("http://localhost:5000//user/registar",{
+        fetch("http://localhost:5000/user/registar",{
             method:"POST",
             crossDomain:true,
             headers:{
