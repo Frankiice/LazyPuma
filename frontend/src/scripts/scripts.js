@@ -19,3 +19,13 @@
 //       $('.menu-btn').css("visibility", "visible");
 //     });
 //   });
+
+document.addEventListener("DOMContentLoaded", function() {
+    var myOffcanvas = document.getElementById('myOffcanvas');
+    myOffcanvas.addEventListener('hidden.bs.offcanvas', function () {
+        var offcanvasBackdrop = document.querySelector('.offcanvas-backdrop');
+        if (offcanvasBackdrop) {
+        offcanvasBackdrop.parentNode.removeChild(offcanvasBackdrop);
+        }
+    });
+});

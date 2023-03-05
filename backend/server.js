@@ -20,9 +20,9 @@ console.log("MongoDB database connection established successfully");
 })
 
 // FALTA RECEBER O JSON DO FRONTEND COM UMA ROUTE
-/*
-require("./userDetails")
-const User = mongoose.model("users");
+
+//require("./userDetails")
+//const User = mongoose.model("users");
 
 // const User = mongoose.model("UserInfo");
 //TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
@@ -48,7 +48,7 @@ app.post("/user/registar", async(req, res) => {
     }catch (error) {
          res.send({ status: "error" })
     }
-})*/
+})
 // insert from express into DB
 /*
 const userData = {
