@@ -30,7 +30,7 @@ function Footer(){
     return (
     //Footer
     <div class="d-flex flex-column min-vh-100">
-      <footer class="bg-dark py-5 mt-auto">
+      <footer class="bg-dark py-3 mt-auto">
         <div class="container"><p class="m-0 text-center text-white">Copyright PTI/PTR &copy; LazyPuma 2023</p></div>
       </footer>
     </div>

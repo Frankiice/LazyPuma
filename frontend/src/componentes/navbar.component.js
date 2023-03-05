@@ -65,8 +65,8 @@ function Navbar(){
         <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
         <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png"></img></a>
       </div>
-      <div class="collapse navbar-collapse px-4" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+      <div class="collapse navbar-collapse px-3" id="navbarSupportedContent">
+        <ul class="navbar-nav px-3">
           {/* <li class="nav-item active">
             <a class="nav-link" href="/exercise-list">Test1 <span class="sr-only">(current)</span></a>
           </li>
@@ -74,12 +74,12 @@ function Navbar(){
             <a class="nav-link" href="/">Test2<span class="sr-only">(current)</span></a>
           </li> */}
           <li class="nav-item">
-            <button id="produtosbtn" class="btn btn-outline-light col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasWithBothOptions">
+            <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvas">
               Produtos
             </button>
           </li>
         </ul>
-        <div className="input-group px-5">
+        <div className="input-group px-3" id="searchbar">
             <div className="form-group has-search">
               <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
@@ -93,7 +93,7 @@ function Navbar(){
         </button>
       </form>
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <li class="nav-item active px-2">
         {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
           <a  href="/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">

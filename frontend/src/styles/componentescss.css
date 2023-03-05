@@ -29,9 +29,10 @@ html, body {
     width: 800px; */
     box-sizing: border-box;
     position: absolute;
-    margin-left: 75px;
+    margin-left: 90px;
+    margin-top: 21px;
 
-    width: 800px;
+    width: 71%;
     height: 40px;
 
     border: 1.5px solid #FFFFFF;
@@ -44,15 +45,16 @@ html, body {
 
 .form-control-feedback {
     position:absolute;
-    left: 10.5%;
+    left: 10%;
     right: 25.62%;
-    top: -3px;
+    top: 20%;
     bottom: 50.62%;
     margin-left: 48rem;
     margin-bottom: 5em;
 }
 
 #form1Botao{
+    width: 100%;
     height: 30px;
 }
 
@@ -117,7 +119,49 @@ body{
 
 #produtosbtn {
     padding: 5px;
-    margin-left: 50px;
+    margin-left: 1px;
+}
+
+#offcanvasItems {
+    width:450px;
+}
+
+.offcanvas-body {
+    padding: 0;
+}
+
+.offcanvas {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1040;
+    padding-top: 1rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%);
+}
+  
+.offcanvas.show {
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1030;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.offcanvas.show + .offcanvas-backdrop {
+    opacity: 1;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
