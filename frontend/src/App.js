@@ -24,9 +24,9 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/results" element={<SearchResults />} />
         <Route path="/exercise-list" element={<ExercisesList/>}/>
-        <Route path="/registo" element={<Registo/>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/perfil" element={<Perfil/>}/>
+        <Route path="/user/registar" element={<Registo/>}/>
+        <Route path="/user/login" element={<Login/>}/>
+        <Route path="/user" element={<Perfil/>}/>
       </Routes>
     </Router>
 

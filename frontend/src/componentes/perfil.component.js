@@ -13,7 +13,7 @@ export default class Perfil extends Component{
         };
     
       }
-      
+      //AO CARREGAR NO UPDATE ENVIA PARA USER/UPDATE
 
 render() {
     return (
@@ -56,17 +56,17 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>First Name</label>
+                                <label>Nome Completo</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" value="Kiran"/>
+                                    <input type="text" class="bg-dark text-white" placeholder="Kiran"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Last Name</label>
+                                <label>Username</label>
                                 <div class="input-field bg-dark">
-                                    <input type="text" class="bg-dark text-white" value="Acharya"/>
+                                    <input type="text" class="bg-dark text-white" placeholder="Acharya"/>
                                 </div>
                             </div>
                         </div>
@@ -74,46 +74,46 @@ render() {
                             <div class="form-group">
                                 <label>Email</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" value="kiranacharya287@gmail.com"/>
+                                    <input type="text" class="bg-dark text-white" placeholder="kiranacharya287@gmail.com"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Phone number</label>
+                                <label>Telemóvel</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" value="+91 9876543215"/>
+                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder="+91 9876543215"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Company</label>
+                                <label>Morada</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" value="Kiran Workspace"/>
+                                    <input type="text" class="bg-dark text-white" placeholder="Kiran Workspace"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Designation</label>
+                                <label>Identificador Fiscal</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" value="UI Developer"/>
+                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder="UI Developer"/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        {/* <div class="col-md-12">
                             <div class="form-group">
                                     <label>Bio</label>
                                     <div class="input-field bg-dark"> 
                                         <textarea class="bg-dark text-white" rows="4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea>
                                     </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
@@ -121,7 +121,7 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Old password</label>
+                                <label>Password Antiga</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -131,7 +131,7 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>New password</label>
+                                <label>Password Nova</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -139,7 +139,7 @@ render() {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Confirm new password</label>
+                                <label>Confirme a Nova Password</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -147,8 +147,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
@@ -182,8 +182,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
@@ -207,8 +207,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
@@ -238,8 +238,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Update</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
             </div>
