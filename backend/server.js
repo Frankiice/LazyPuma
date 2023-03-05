@@ -19,26 +19,34 @@ connection.once('open', () => {
 console.log("MongoDB database connection established successfully");
 })
 
-// FALTA RECEBER O JSON DO FRONTEND COM UMA ROUTE
-
-//require("./userDetails")
-//const User = mongoose.model("users");
-
-// const User = mongoose.model("UserInfo");
-//TEM AQUI MT CODIGO MAS ESTA EM COMENTARIO PQ PENSO QUE NAO É NECESSÁRIO E JA FIZERAM DE OUTRA FORMA
-
 app.post("/user/registar", async(req, res) => {
-
-    const {type, fullname, nickname,morada, nif, email, phone, password} = req.body;
+    const UserDetailsSchema = new mongoose.Schema(
+        {
+        email: String,
+        type: String,
+        fullname: String,
+        nickname: String,
+        phone: String,
+        morada: String,
+        nif: Number,
+        password: String,
+        },
+        {
+            collection: "users"
+        }
+    );
     
+    const User = mongoose.model("users", UserDetailsSchema);
+    //const usersCollection = connection.useDb("lazypuma").collection("users");
+    const {type, fullname, nickname, morada, nif, email, phone, password} = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10);
     
     try {
          await User.create({
              email,
              type,
-             fullname, 
-             nickname, 
+             fullname,
+             nickname,
              phone,
              morada, 
              nif,
@@ -49,28 +57,7 @@ app.post("/user/registar", async(req, res) => {
          res.send({ status: "error" })
     }
 })
-// insert from express into DB
-/*
-const userData = {
-    "email": "Gabriel@teste.com",
-      "type": "Consumidor",
-      "fullname": "Lazy Puma",
-      "nickname": "gabriel",
-      "phone": "000-000-000",
-      "morada": "Lisbon",
-      "nif": 123456789,
-      "password": "admin"
-}
-const usersCollection = connection.useDb("lazypuma").collection("users");
-usersCollection.insertOne(userData, (err, result) => {
-    if (err) {
-    console.error(err);
-    return res.status(500).send(err);
-    }
-    console.log(`${result.insertedCount} documents inserted into the collection`);
-    //res.send('Data inserted successfully!');
-});
-*/
+
 
 app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;

@@ -1,4 +1,4 @@
-/*const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const UserDetailsSchema = new mongoose.Schema(
     {
@@ -13,9 +13,9 @@ const UserDetailsSchema = new mongoose.Schema(
 
     },
     {
-        collection: "users "
+        collection: "users"
     }
 
 );
-*/
+
 //mongoose.model("users", UserDetailsSchema)
