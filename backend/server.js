@@ -10,7 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = "aisfnoiqnfnqnfqfinqfw+qofmwkginanpgangspaiag"
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri);
 const connection = mongoose.connection;
@@ -73,13 +74,34 @@ usersCollection.insertOne(userData, (err, result) => {
 
 app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
-    /*
     const user = await User.findOne({email})
-    */
+    if(!user){
+        return res.json({error:"User Not found"})
+    }
+    if(await bcrypt.compare(password,user.password)){
+        const token = jwt.sing({}, JWT_SECRET)
+        if(res.status(201)){
+            return res.json({status:"ok", data: token})
+        }else{
+            return res.json({error:"error"})
+        }
+    }
+    return res.json({status:"error", error: "Invalid Password"})
 });
 
 app.post("/user", async (req, res) => { //este seria para aceder as infos do user
-    //continuar
+    const {token} = req.body
+    try{
+        const user = jwt.verify(token,JWT_SECRET)
+        const user_email = user.email;
+        User.findOne({email:user_email})
+            .then((data) => {
+                res.send({status: "ok", data:data});
+            })
+            .catch((error)=>{
+                res.send({status: "error" ,data:error})
+            });
+    }catch(error){}
 });
 
 app.listen(port, () => {
