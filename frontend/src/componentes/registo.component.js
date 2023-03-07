@@ -12,6 +12,8 @@ export default class Registo extends Component {
             fullname: "",
             nickname: "",
             morada: "",
+            lat: "",
+            lon: "",
             nif: "",
             email: "",
             phone: "",
@@ -30,10 +32,27 @@ export default class Registo extends Component {
         this.setState({type:e.target.value});
     };
 
+    getCoordenadas(e){
+        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + this.state.morada
+        fetch(url)
+                  .then((response) => response.json())
+                  .then((data) => {
+                    if (data.length > 0) {
+                        data.forEach(element => {
+                            this.setState({ lat: element.lat });
+                            this.setState({ lon: element.lon });
+                            // console.log(element.lat);
+                            // console.log(this.state.lat);
+                        });
+                    }   
+                })
+                  .catch(err => console.log(err)) 
+    }
+
     handleSubmit(e){
         e.preventDefault();
-        const {type, fullname, nickname,morada, nif, email, phone, password} = this.state;
-        console.log(type, fullname, nickname,morada, nif, email, phone, password);
+        const {type, fullname, nickname,morada,lat,lon, nif, email, phone, password} = this.state;
+        console.log(type, fullname, nickname,morada,lat,lon, nif, email, phone, password);
         fetch("http://localhost:5000/user/registar",{
             method:"POST",
             crossDomain:true,
@@ -47,6 +66,8 @@ export default class Registo extends Component {
                 fullname,
                 nickname,
                 morada,
+                lat,
+                lon,
                 nif,
                 email,
                 phone,
@@ -171,7 +192,7 @@ render() {
                             <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Password" required /> </div>
                         </div>
                         <div class="form-group py-1 pb-2">
-                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }))} placeholder="Confirme a Password" required /> </div>
+                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }) (this.getCoordenadas()))} placeholder="Confirme a Password" required /> </div>
                         </div>
                         <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
                         <div class="botao">
