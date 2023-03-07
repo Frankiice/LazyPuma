@@ -41,6 +41,14 @@ db.createCollection("users", {
                bsonType: "string",
                description: "morada do usuario"
             },
+            lat: {
+               bsonType: "string",
+               description: "latitude da morada do usuario"
+            },
+            lon: {
+               bsonType: "string",
+               description: "latitude da morada do usuario"
+            },
             nif: {
               bsonType: "int",
               minimum: 100000000,

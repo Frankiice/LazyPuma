@@ -28,6 +28,8 @@ app.post("/user/registar", async(req, res) => {
         nickname: String,
         phone: String,
         morada: String,
+        lat: String,
+        lon: String,
         nif: Number,
         password: String,
         },
@@ -38,7 +40,7 @@ app.post("/user/registar", async(req, res) => {
     
     const User = mongoose.model("users", UserDetailsSchema);
     //const usersCollection = connection.useDb("lazypuma").collection("users");
-    const {type, fullname, nickname, morada, nif, email, phone, password} = req.body;
+    const {type, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10);
     
     try {
@@ -49,6 +51,8 @@ app.post("/user/registar", async(req, res) => {
              nickname,
              phone,
              morada, 
+             lat,
+             lon,
              nif,
              password: encryptedPassword,
           });
