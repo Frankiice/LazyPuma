@@ -20,30 +20,31 @@ console.log("MongoDB database connection established successfully");
 })
 
 app.post("/user/registar", async(req, res) => {
-    const UserDetailsSchema = new mongoose.Schema(
-        {
-        email: String,
-        type: String,
-        fullname: String,
-        nickname: String,
-        phone: String,
-        morada: String,
-        lat: String,
-        lon: String,
-        nif: Number,
-        password: String,
-        },
-        {
-            collection: "users"
-        }
-    );
-    
-    const User = mongoose.model("users", UserDetailsSchema);
-    //const usersCollection = connection.useDb("lazypuma").collection("users");
-    const {type, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    
     try {
+        const UserDetailsSchema = new mongoose.Schema(
+            {
+            email: String,
+            type: String,
+            fullname: String,
+            nickname: String,
+            phone: String,
+            morada: String,
+            lat: String,
+            lon: String,
+            nif: Number,
+            password: String,
+            },
+            {
+                collection: "users"
+            }
+        );
+        
+        const User = mongoose.model("users", UserDetailsSchema);
+        //const usersCollection = connection.useDb("lazypuma").collection("users");
+        const {type, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
+        const encryptedPassword = await bcrypt.hash(password, 10);
+        
+    
          await User.create({
              email,
              type,
