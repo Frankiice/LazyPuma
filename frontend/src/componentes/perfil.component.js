@@ -7,12 +7,30 @@ export default class Perfil extends Component{
 
     constructor(props){
         super(props);
-        this.state={
-          email:"",
-          password:"",
+        this.state = {
+            userData: "",
         };
-    
-      }
+    }
+
+componentDidMount(){
+    fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
+        method:"POST",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        body:JSON.stringify({
+            token: window.localStorage.getItem("token")
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data, "userData");
+        this.setState({userData: data.data})
+    })
+}
       //AO CARREGAR NO UPDATE ENVIA PARA USER/UPDATE
 
 render() {
@@ -25,7 +43,7 @@ render() {
                     <div class="img-circle text-center mb-3">
                         <img src="../images/user2.jpg" alt="Image" class="shadow"/>
                     </div>
-                    <h4 class="text-center">Kiran Acharya</h4>
+                    <h4 class="text-center">{this.state.userData.nickname}</h4>
                 </div>
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
@@ -58,7 +76,7 @@ render() {
                             <div class="form-group">
                                 <label>Nome Completo</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" placeholder="Kiran"/>
+                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.fullname}/>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +84,7 @@ render() {
                             <div class="form-group">
                                 <label>Username</label>
                                 <div class="input-field bg-dark">
-                                    <input type="text" class="bg-dark text-white" placeholder="Acharya"/>
+                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.nickname}/>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +92,7 @@ render() {
                             <div class="form-group">
                                 <label>Email</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" placeholder="kiranacharya287@gmail.com"/>
+                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.email}/>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +100,7 @@ render() {
                             <div class="form-group">
                                 <label>Telemóvel</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder="+91 9876543215"/>
+                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder={this.state.userData.phone}/>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +108,7 @@ render() {
                             <div class="form-group">
                                 <label>Morada</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" placeholder="Kiran Workspace"/>
+                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.morada}/>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +116,7 @@ render() {
                             <div class="form-group">
                                 <label>Identificador Fiscal</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder="UI Developer"/>
+                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder={this.state.userData.nif}/>
                                 </div>
                             </div>
                         </div>
