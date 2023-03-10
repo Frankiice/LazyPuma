@@ -201,7 +201,7 @@ render() {
                             Registar
                           </button>
                         </div>
-                        <div class="text-center pt-4 text-muted">Já tem uma conta? <a href="/login">Log in</a> </div>
+                        <div class="text-center pt-4 text-muted">Já tem uma conta? <a href="user/login">Log in</a> </div>
                     </form>
                 </div>
                 <div class="mx-3 my-2 py-2 bordert">
