@@ -9,7 +9,17 @@ export default class Perfil extends Component{
         super(props);
         this.state = {
             userData: "",
+            fullname: "", // penso que será necessário para dar update da info
+            nickname: "",
+            morada: "",
+            lat: "",
+            lon: "",
+            nif: "",
+            email: "",
+            phone: "",
+            password: "",
         };
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
 componentDidMount(){
@@ -31,24 +41,54 @@ componentDidMount(){
         this.setState({userData: data.data})
     })
 }
+
+handleSubmit(e){
+    e.preventDefault();
+    const {type, fullname, nickname,morada,lat,lon, nif, email, phone} = this.state;
+    console.log(type, fullname, nickname,morada,lat,lon, nif, email, phone);
+    fetch("http://localhost:5000/user/update",{
+        method:"POST",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        body:JSON.stringify({
+            type,
+            fullname,
+            nickname,
+            morada,
+            lat,
+            lon,
+            nif,
+            email,
+            phone,
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data, "userUpdate");
+    })
+};
       //AO CARREGAR NO UPDATE ENVIA PARA USER/UPDATE
 
 render() {
     return (
         <div class="container">
-        <h1 class="mb-5">Account Settings</h1>
-        <div class="bg-dark shadow rounded-lg d-block d-sm-flex">
+        {/* <h1 class="mb-5">Account Settings</h1> */}
+        <div class="bg-dark shadow rounded d-block d-sm-flex">
             <div class="profile-tab-nav border-right">
                 <div class="p-4">
                     <div class="img-circle text-center mb-3">
-                        <img src="../images/user2.jpg" alt="Image" class="shadow"/>
+                        <img id="#imagemPerfil" src='../images/user2.jpg' alt="Image" class="shadow"/>
                     </div>
                     <h4 class="text-center">{this.state.userData.nickname}</h4>
                 </div>
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
                         <i class="fa fa-home text-center mr-1"></i> 
-                        Account
+                        Conta
                     </a>
                     <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false">
                         <i class="fa fa-key text-center mr-1"></i> 
@@ -70,13 +110,14 @@ render() {
             </div>
             <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-                    <h3 class="mb-4">Account Settings</h3>
+                    <h3 class="mb-4">Definições da Conta</h3>
+                    <form onSubmit={this.handleSubmit}>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nome Completo</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.fullname}/>
+                                    <input type="text" class="bg-dark text-white" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))} placeholder={this.state.userData.fullname}/>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +125,7 @@ render() {
                             <div class="form-group">
                                 <label>Username</label>
                                 <div class="input-field bg-dark">
-                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.nickname}/>
+                                    <input type="text" class="bg-dark text-white" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder={this.state.userData.nickname}/>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +133,7 @@ render() {
                             <div class="form-group">
                                 <label>Email</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.email}/>
+                                    <input type="text" class="bg-dark text-white" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder={this.state.userData.email}/>
                                 </div>
                             </div>
                         </div>
@@ -100,7 +141,7 @@ render() {
                             <div class="form-group">
                                 <label>Telemóvel</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder={this.state.userData.phone}/>
+                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder={this.state.userData.phone}/>
                                 </div>
                             </div>
                         </div>
@@ -108,7 +149,7 @@ render() {
                             <div class="form-group">
                                 <label>Morada</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" placeholder={this.state.userData.morada}/>
+                                    <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder={this.state.userData.morada}/>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +157,7 @@ render() {
                             <div class="form-group">
                                 <label>Identificador Fiscal</label>
                                 <div class="input-field bg-dark"> 
-                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" placeholder={this.state.userData.nif}/>
+                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder={this.state.userData.nif}/>
                                 </div>
                             </div>
                         </div>
@@ -129,6 +170,7 @@ render() {
                             </div>
                         </div> */}
                     </div>
+                    </form>
                     <div>
                         <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
                         <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
