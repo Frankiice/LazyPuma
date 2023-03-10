@@ -15,7 +15,11 @@ import Registo from "./componentes/registo.component";
 import Login from "./componentes/login.component";
 import Perfil from "./componentes/perfil.component";
 function App() {
+
+  const isLoggedIn = window.localStorage.getItem("loggedIn");
   return (
+
+    
     <React.StrictMode>
     <Navbar/>
 

@@ -41,7 +41,11 @@ componentDidMount(){
         this.setState({userData: data.data})
     })
 }
+logOut = () => {
+    window.localStorage.clear();
+    window.location.href = "./user/login"
 
+}
 handleSubmit(e){
     e.preventDefault();
     const {type, fullname, nickname,morada,lat,lon, nif, email, phone} = this.state;

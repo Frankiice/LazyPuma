@@ -71,7 +71,7 @@ app.post("/user/login", async (req, res) => {
         return res.json({error:"User Not found"})
     }
     if(await bcrypt.compare(password,user.password)){
-        const token = jwt.sing({}, JWT_SECRET)
+        const token = jwt.sing({email:user.email}, JWT_SECRET)
         if(res.status(201)){
             return res.json({status:"ok", data: token})
         }else{
@@ -81,7 +81,7 @@ app.post("/user/login", async (req, res) => {
     return res.json({status:"error", error: "Invalid Password"})
 });
 
-app.post("/user", async (req, res) => { //este seria para aceder as infos do user
+app.post("/user/userData", async (req, res) => { //este seria para aceder as infos do user
     const {token} = req.body
     try{
         const user = jwt.verify(token,JWT_SECRET)
