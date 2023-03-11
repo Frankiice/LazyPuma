@@ -1,8 +1,10 @@
+import { Alert } from "bootstrap";
 import React, { useState, setState, Component } from "react";
 import Select from 'react-select'
 import '../styles/componentescss.css';
-
 // const Registo = props => {
+
+
 export default class Registo extends Component {
 
     constructor(props){
@@ -18,12 +20,14 @@ export default class Registo extends Component {
             email: "",
             phone: "",
             password: "",
+            flag:false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
     };
 
-   
+
     // getInitialState(){
     //     return {selectValue:'consumidor'};
     // };
@@ -35,8 +39,8 @@ export default class Registo extends Component {
     getCoordenadas(e){
         var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + this.state.morada
         fetch(url)
-                  .then((response) => response.json())
-                  .then((data) => {
+                .then((response) => response.json())
+                .then((data) => {
                     if (data.length > 0) {
                         data.forEach(element => {
                             this.setState({ lat: element.lat });
@@ -46,7 +50,7 @@ export default class Registo extends Component {
                         });
                     }   
                 })
-                  .catch(err => console.log(err)) 
+                .catch(err => console.log(err)) 
     }
 
     handleSubmit(e){
@@ -77,6 +81,14 @@ export default class Registo extends Component {
         .then((res) => res.json())
         .then((data) => {
             console.log(data, "userRegister");
+
+            if (data.status == 'ok'){
+                this.setState({ flag: true })
+            }else{
+                this.setState({ flag: false })
+        
+            }
+
         })
     };
 // const initialUserState = {
@@ -149,78 +161,99 @@ export default class Registo extends Component {
 //   }
 
 render() {
-  return (
-    <div class="container">
-    <div class="row">
-        <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
-            <div class="panel border bg-dark">
-                <div class="panel-heading">
-                    <h3 class="pt-3 font-weight-bold text-white">Registo</h3>
-                </div>
-                <div class="panel-body p-3">
-                    <form onSubmit={this.handleSubmit}>
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark">
-                                 <span class="fa fa-user px-2"></span> 
-                                    <select class="bg-dark text-white" id="type" 
-                                    value={this.state.type} 
-                                    onChange={this.handleChange} >
-                                    <option value="consumidor">Consumidor</option>
-                                    <option value="fornecedor">Fornecedor</option>
-                                </select> 
-                            </div>
-                        </div>                                                                                                                          {/*value={name} onChange = {(e) => handleInputChange(e)}*/} 
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))}  placeholder="Nome Completo" required /> </div>
-                        </div>
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder="Username" required /> </div>
-                        </div>
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Email" required /> </div>
-                        </div>
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder="Telemóvel" required /> </div>
-                        </div>
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder="Morada" required /> </div>
-                        </div>
-                        <div class="form-group py-2">
-                            <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
-                        </div>
-                        <div class="form-group py-1 pb-2">
-                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Password" required /> </div>
-                        </div>
-                        <div class="form-group py-1 pb-2">
-                            <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }) (this.getCoordenadas()))} placeholder="Confirme a Password" required /> </div>
-                        </div>
-                        <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
-                        <div class="botao">
-                            <br></br>
-                          <button type="submit"  class="btn btn-outline-light col-md-3">
-                            Registar
-                          </button>
-                        </div>
-                        <div class="text-center pt-4 text-muted">Já tem uma conta? <a href="user/login">Log in</a> </div>
-                    </form>
-                </div>
-                <div class="mx-3 my-2 py-2 bordert">
-                    <div class="text-center py-3">
-                      <a href="https://wwww.facebook.com" class="px-3"> 
-                        <img id="loginimg" src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="icon do facebook"/> 
-                      </a> 
-                      <a href="https://www.google.com" class="px-2"> 
-                        <img id="loginimg" src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" alt="icon do google"/> 
-                      </a> 
-                      <a href="https://www.github.com" class="px-3"> 
-                        <img id="loginimg" src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="icon do github"/> 
-                      </a>
+    if(this.state.flag){
+        return <div class="container " >
+        <div class="row " >
+            <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3 ">
+                <div class="panel border bg-dark">
+                    <div class="panel-heading">
+                        <br></br>
+                        <h3 class="pt-3 font-weight-bold text-white">Registado com sucesso!</h3>
+                        <br></br>
+                        <div class="text-center pt-4 text-muted">Inicie sessão aqui <a href="/user/login">Log in</a> </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    }else{
+        return <div class="container " id = "teste">
+        <div class="row " >
+            <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
+                <div class="panel border bg-dark">
+                    <div class="panel-heading">
+                        <h3 class="pt-3 font-weight-bold text-white">Registo</h3>
+                    </div>
+                    <div class="panel-body p-3">
+                        <form onSubmit={this.handleSubmit}>
+                            <div class="form-group py-2">
+                                <div class="input-field bg-dark">
+                                    <span class="fa fa-user px-2"></span> 
+                                        <select class="bg-dark text-white" id="type" 
+                                        value={this.state.type} 
+                                        onChange={this.handleChange}>
+                                        <option value="consumidor">Consumidor</option>
+                                        <option value="fornecedor">Fornecedor</option>
+                                    </select> 
+                                </div>
+                            </div>                                                                                                                          {/*value={name} onChange = {(e) => handleInputChange(e)}*/} 
+                            <div class="form-group py-2">
+                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))}  placeholder="Nome Completo" required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder="Username" required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                                <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Email" required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                                <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder="Telemóvel" required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder="Morada" required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                                <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
+                            </div>
+                            <div class="form-group py-1 pb-2">
+                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Password" required /> </div>
+                            </div>
+                            <div class="form-group py-1 pb-2">
+                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }) (this.getCoordenadas()))} placeholder="Confirme a Password" required /> </div>
+                            </div>
+                            <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
+                            <div class="botao">
+                                <br></br>
+                            <button type="submit"  class="btn btn-outline-light col-md-3">
+                                Registar
+                            </button>
+                            </div>
+                            <div class="text-center pt-4 text-muted">Já tem uma conta? <a href="user/login">Log in</a> </div>
+                        </form>
+                    </div>
+                    <div class="mx-3 my-2 py-2 bordert">
+                        <div class="text-center py-3">
+                        <a href="https://wwww.facebook.com" class="px-3"> 
+                            <img id="loginimg" src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="icon do facebook"/> 
+                        </a> 
+                        <a href="https://www.google.com" class="px-2"> 
+                            <img id="loginimg" src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" alt="icon do google"/> 
+                        </a> 
+                        <a href="https://www.github.com" class="px-3"> 
+                            <img id="loginimg" src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="icon do github"/> 
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+    </div>
+    }
+  //return (
+
+
+
 //     <div className="form">
 //      <div class="form-header">
 //       <h3>Registo</h3>
@@ -257,7 +290,7 @@ render() {
 //       </div>
 //       <a href="/login" >Já possuo conta</a>
 //     </div>      
-  );
+//  );
 
     }
 }
