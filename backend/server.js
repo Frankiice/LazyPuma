@@ -19,32 +19,32 @@ connection.once('open', () => {
 console.log("MongoDB database connection established successfully");
 })
 
+const UserDetailsSchema = new mongoose.Schema(
+    {
+    email: String,
+    type: String,
+    fullname: String,
+    nickname: String,
+    phone: String,
+    morada: String,
+    lat: String,
+    lon: String,
+    nif: Number,
+    password: String,
+    },
+    {
+        collection: "users"
+    }
+);
+
+const User = mongoose.model("users", UserDetailsSchema);
+
 app.post("/user/registar", async(req, res) => {
     try {
-        const UserDetailsSchema = new mongoose.Schema(
-            {
-            email: String,
-            type: String,
-            fullname: String,
-            nickname: String,
-            phone: String,
-            morada: String,
-            lat: String,
-            lon: String,
-            nif: Number,
-            password: String,
-            },
-            {
-                collection: "users"
-            }
-        );
-        
-        const User = mongoose.model("users", UserDetailsSchema);
         //const usersCollection = connection.useDb("lazypuma").collection("users");
         const {type, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
         const encryptedPassword = await bcrypt.hash(password, 10);
-        
-    
+            
          await User.create({
              email,
              type,
@@ -66,24 +66,6 @@ app.post("/user/registar", async(req, res) => {
 
 app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
-    const UserDetailsSchema = mongoose.Schema(
-        {
-        email: String,
-        type: String,
-        fullname: String,
-        nickname: String,
-        phone: String,
-        morada: String,
-        lat: String,
-        lon: String,
-        nif: Number,
-        password: String,
-        },
-        {
-            collection: "users"
-        }
-    );
-    const User = mongoose.model("users", UserDetailsSchema);
     const user = await User.findOne({email})
     if(!user){
         return res.json({error:"User Not found"})
@@ -105,24 +87,6 @@ app.post("/user/userData", async (req, res) => { //este seria para aceder as inf
         const user = jwt.verify(token,JWT_SECRET);
         const user_email = user.email;
         console.log(user_email, "teste1");
-        const UserDetailsSchema = mongoose.Schema(
-            {
-            email: String,
-            type: String,
-            fullname: String,
-            nickname: String,
-            phone: String,
-            morada: String,
-            lat: String,
-            lon: String,
-            nif: Number,
-            password: String,
-            },
-            {
-                collection: "users"
-            }
-        );
-        const User = mongoose.model("users", UserDetailsSchema);
         console.log(user_email, "teste2");
         User.findOne({email: user_email})
             .then((data) => {
