@@ -86,8 +86,21 @@ app.post("/user/userData", async (req, res) => { //este seria para aceder as inf
     try{
         const user = jwt.verify(token,JWT_SECRET);
         const user_email = user.email;
-        console.log(user_email, "teste1");
-        console.log(user_email, "teste2");
+        User.findOne({email: user_email})
+            .then((data) => {
+                res.send({status: "ok", data: data});
+            })
+            .catch((error)=>{
+                res.send({status: "error" ,data: error});
+            });
+    }catch(error){}
+});
+
+app.post("/user/update", async (req, res) => { //esste seria para atualizar as infos na BD
+    const {token, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
+    try{
+        const user = jwt.verify(token,JWT_SECRET);
+        const user_email = user.email;
         User.findOne({email: user_email})
             .then((data) => {
                 res.send({status: "ok", data: data});

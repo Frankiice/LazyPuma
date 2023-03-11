@@ -43,13 +43,13 @@ componentDidMount(){
 }
 logOut = () => {
     window.localStorage.clear();
-    window.location.href = "./user/login"
+    window.location.href = "./login"
 
 }
 handleSubmit(e){
     e.preventDefault();
-    const {type, fullname, nickname,morada,lat,lon, nif, email, phone} = this.state;
-    console.log(type, fullname, nickname,morada,lat,lon, nif, email, phone);
+    const {fullname, nickname,morada,lat,lon, nif, email, phone} = this.state;
+    console.log(fullname, nickname,morada,lat,lon, nif, email, phone);
     fetch("http://localhost:5000/user/update",{
         method:"POST",
         crossDomain:true,
@@ -59,7 +59,7 @@ handleSubmit(e){
             "Access-Control-Allow-Origin":"*",
         },
         body:JSON.stringify({
-            type,
+            token: window.localStorage.getItem("token"),
             fullname,
             nickname,
             morada,
@@ -85,7 +85,7 @@ render() {
             <div class="profile-tab-nav border-right">
                 <div class="p-4">
                     <div class="img-circle text-center mb-3">
-                        <img id="#imagemPerfil" src='../images/user2.jpg' alt="Image" class="shadow"/>
+                    <button class="btn btn-outline-dark btn-xl rounded-circle" id="butaoPerfil" title="perfil">bebé</button> 
                     </div>
                     <h4 class="text-center">{this.state.userData.nickname}</h4>
                 </div>
@@ -100,11 +100,11 @@ render() {
                     </a>
                     <a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
                         <i class="fa fa-user text-center mr-1"></i> 
-                        Security
+                        Logout
                     </a>
                     <a class="nav-link" id="application-tab" data-toggle="pill" href="#application" role="tab" aria-controls="application" aria-selected="false">
                         <i class="fa fa-tv text-center mr-1"></i> 
-                        Application
+                        Remover Conta
                     </a>
                     <a class="nav-link" id="notification-tab" data-toggle="pill" href="#notification" role="tab" aria-controls="notification" aria-selected="false">
                         <i class="fa fa-bell text-center mr-1"></i> 
@@ -116,69 +116,70 @@ render() {
                 <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
                     <h3 class="mb-4">Definições da Conta</h3>
                     <form onSubmit={this.handleSubmit}>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Nome Completo</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))} placeholder={this.state.userData.fullname}/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Username</label>
-                                <div class="input-field bg-dark">
-                                    <input type="text" class="bg-dark text-white" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder={this.state.userData.nickname}/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Email</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder={this.state.userData.email}/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Telemóvel</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder={this.state.userData.phone}/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Morada</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder={this.state.userData.morada}/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Identificador Fiscal</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder={this.state.userData.nif}/>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <div class="col-md-12">
-                            <div class="form-group">
-                                    <label>Bio</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nome Completo</label>
                                     <div class="input-field bg-dark"> 
-                                        <textarea class="bg-dark text-white" rows="4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea>
+                                        <input type="text" class="bg-dark text-white" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))} placeholder={this.state.userData.fullname}/>
                                     </div>
+                                </div>
                             </div>
-                        </div> */}
-                    </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <div class="input-field bg-dark">
+                                        <input type="text" class="bg-dark text-white" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder={this.state.userData.nickname}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <div class="input-field bg-dark"> 
+                                        <input type="text" class="bg-dark text-white" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder={this.state.userData.email}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Telemóvel</label>
+                                    <div class="input-field bg-dark"> 
+                                        <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder={this.state.userData.phone}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Morada</label>
+                                    <div class="input-field bg-dark"> 
+                                        <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder={this.state.userData.morada}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Identificador Fiscal</label>
+                                    <div class="input-field bg-dark"> 
+                                        <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder={this.state.userData.nif}/>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* <div class="col-md-12">
+                                <div class="form-group">
+                                        <label>Bio</label>
+                                        <div class="input-field bg-dark"> 
+                                            <textarea class="bg-dark text-white" rows="4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea>
+                                        </div>
+                                </div>
+                            </div> */}
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                            {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button> */}
+                        </div>
                     </form>
-                    <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
-                    </div>
+                    
                 </div>
                 <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
                     <h3 class="mb-4">Password Settings</h3>
@@ -216,63 +217,35 @@ render() {
                     </div>
                 </div>
                 <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
-                    <h3 class="mb-4">Security Settings</h3>
+                    <h3 class="mb-4">Efetue Logout</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Login</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white"/>
+                                <label>Pertende dar logout?</label>
+                                <div> 
+                                    <br></br>
+                                    <button onClick={this.logOut} class="btn btn-outline-light col-md-3 botaoPerfil">Logout</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Two-factor auth</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="recovery"/>
-                                    <label class="form-check-label" for="recovery">
-                                    Recovery
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
-                    <h3 class="mb-4">Application Settings</h3>
+                    <h3 class="mb-4">Remoção de Conta</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="app-check"/>
-                                    <label class="form-check-label" for="app-check">
-                                    App check
-                                    </label>
+                                <p>Atenção: Esta ação é irreversível</p>
+                                <label>Para remover a sua conta insira o seu username</label>
+                                <div class="input-field bg-dark"> 
+                                    <input type="text" class="bg-dark text-white" id="userRemocao"/>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" />
-                                    <label class="form-check-label" for="defaultCheck2">
-                                    Lorem ipsum dolor sit.
-                                    </label>
+                                <div> 
+                                    <br></br>
+                                    <button class="btn btn-outline-light col-md-3 botaoRemover">Remover</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">

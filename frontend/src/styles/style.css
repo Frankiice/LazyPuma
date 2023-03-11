@@ -53,3 +53,8 @@ label, h4, h3, p{
 	width: auto;
 }
 
+
+.botaoRemover:hover{
+	background-color: red !important;
+	color: white !important;
+}
