@@ -32,7 +32,7 @@ componentDidMount(){
             "Access-Control-Allow-Origin":"*",
         },
         body:JSON.stringify({
-            token: window.localStorage.getItem("token")
+            token: window.localStorage.getItem("token"),
         }),
     })
     .then((res) => res.json())

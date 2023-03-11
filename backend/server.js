@@ -66,12 +66,30 @@ app.post("/user/registar", async(req, res) => {
 
 app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
+    const UserDetailsSchema = mongoose.Schema(
+        {
+        email: String,
+        type: String,
+        fullname: String,
+        nickname: String,
+        phone: String,
+        morada: String,
+        lat: String,
+        lon: String,
+        nif: Number,
+        password: String,
+        },
+        {
+            collection: "users"
+        }
+    );
+    const User = mongoose.model("users", UserDetailsSchema);
     const user = await User.findOne({email})
     if(!user){
         return res.json({error:"User Not found"})
     }
     if(await bcrypt.compare(password,user.password)){
-        const token = jwt.sing({email:user.email}, JWT_SECRET)
+        const token = jwt.sign({email:user.email}, JWT_SECRET)
         if(res.status(201)){
             return res.json({status:"ok", data: token})
         }else{
@@ -82,16 +100,36 @@ app.post("/user/login", async (req, res) => {
 });
 
 app.post("/user/userData", async (req, res) => { //este seria para aceder as infos do user
-    const {token} = req.body
+    const {token} = req.body;
     try{
-        const user = jwt.verify(token,JWT_SECRET)
+        const user = jwt.verify(token,JWT_SECRET);
         const user_email = user.email;
-        User.findOne({email:user_email})
+        console.log(user_email, "teste1");
+        const UserDetailsSchema = mongoose.Schema(
+            {
+            email: String,
+            type: String,
+            fullname: String,
+            nickname: String,
+            phone: String,
+            morada: String,
+            lat: String,
+            lon: String,
+            nif: Number,
+            password: String,
+            },
+            {
+                collection: "users"
+            }
+        );
+        const User = mongoose.model("users", UserDetailsSchema);
+        console.log(user_email, "teste2");
+        User.findOne({email: user_email})
             .then((data) => {
-                res.send({status: "ok", data:data});
+                res.send({status: "ok", data: data});
             })
             .catch((error)=>{
-                res.send({status: "error" ,data:error})
+                res.send({status: "error" ,data: error});
             });
     }catch(error){}
 });
