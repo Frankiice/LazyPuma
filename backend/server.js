@@ -37,10 +37,11 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
-const User = mongoose.model("users", UserDetailsSchema);
+
 
 app.post("/user/registar", async(req, res) => {
     try {
+        const User = mongoose.model("users", UserDetailsSchema);
         //const usersCollection = connection.useDb("lazypuma").collection("users");
         const {type, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
         const encryptedPassword = await bcrypt.hash(password, 10);
@@ -65,6 +66,7 @@ app.post("/user/registar", async(req, res) => {
 
 
 app.post("/user/login", async (req, res) => {
+    const User = mongoose.model("users", UserDetailsSchema);
     const { email, password } = req.body;
     const user = await User.findOne({email})
     if(!user){
@@ -82,6 +84,7 @@ app.post("/user/login", async (req, res) => {
 });
 
 app.post("/user/userData", async (req, res) => { //este seria para aceder as infos do user
+    const User = mongoose.model("users", UserDetailsSchema);
     const {token} = req.body;
     try{
         const user = jwt.verify(token,JWT_SECRET);
@@ -97,6 +100,7 @@ app.post("/user/userData", async (req, res) => { //este seria para aceder as inf
 });
 
 app.post("/user/update", async (req, res) => { //esste seria para atualizar as infos na BD
+    const User = mongoose.model("users", UserDetailsSchema);
     const {token, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
     try{
         const user = jwt.verify(token,JWT_SECRET);
