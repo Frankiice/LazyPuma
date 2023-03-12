@@ -37,8 +37,6 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
-
-
 app.post("/user/registar", async(req, res) => {
     try {
         const User = mongoose.model("users", UserDetailsSchema);
