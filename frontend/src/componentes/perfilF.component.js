@@ -3,7 +3,7 @@ import "../styles/style.css";
 import {Helmet} from "react-helmet";
 
 
-export default class Perfil extends Component{
+export default class PerfilF extends Component{
 
     constructor(props){
         super(props);
@@ -94,21 +94,29 @@ render() {
                         <i class="fa fa-home text-center mr-1"></i> 
                         Conta
                     </a>
-                    <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false">
+                    <a class="nav-link" id="encomendas-tab" data-toggle="pill" href="#encomendas" role="tab" aria-controls="encomendas" aria-selected="false">
                         <i class="fa fa-key text-center mr-1"></i> 
-                        Password
+                        Encomendas
                     </a>
-                    <a class="nav-link" id="security-tab" data-toggle="pill" href="#security" role="tab" aria-controls="security" aria-selected="false">
+                    <a class="nav-link" id="relatorios-tab" data-toggle="pill" href="#relatorios" role="tab" aria-controls="relatorios" aria-selected="false">
+                        <i class="fa fa-key text-center mr-1"></i> 
+                        Relatórios
+                    </a>
+                    <a class="nav-link" id="logout-tab" data-toggle="pill" href="#logout" role="tab" aria-controls="logout" aria-selected="false">
                         <i class="fa fa-user text-center mr-1"></i> 
                         Logout
                     </a>
-                    <a class="nav-link" id="application-tab" data-toggle="pill" href="#application" role="tab" aria-controls="application" aria-selected="false">
+                    <a class="nav-link" id="remocao-tab" data-toggle="pill" href="#remocao" role="tab" aria-controls="remocao" aria-selected="false">
                         <i class="fa fa-tv text-center mr-1"></i> 
                         Remover Conta
                     </a>
-                    <a class="nav-link" id="notification-tab" data-toggle="pill" href="#notification" role="tab" aria-controls="notification" aria-selected="false">
+                    <a class="nav-link" id="up-tab" data-toggle="pill" href="#up" role="tab" aria-controls="up" aria-selected="false">
                         <i class="fa fa-bell text-center mr-1"></i> 
-                        Notification
+                        Unidades de Produção
+                    </a>
+                    <a class="nav-link" id="veiculos-tab" data-toggle="pill" href="#veiculos" role="tab" aria-controls="veiculos" aria-selected="false">
+                        <i class="fa fa-bell text-center mr-1"></i> 
+                        Veículos
                     </a>
                 </div>
             </div>
@@ -181,12 +189,12 @@ render() {
                     </form>
                     
                 </div>
-                <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
-                    <h3 class="mb-4">Password Settings</h3>
+                <div class="tab-pane fade" id="encomendas" role="tabpanel" aria-labelledby="encomendas-tab">
+                    <h3 class="mb-4">Histórico de Encomendas </h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Password Antiga</label>
+                                <label>encomendas Antiga</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -196,7 +204,7 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Password Nova</label>
+                                <label>encomendas Nova</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -204,7 +212,7 @@ render() {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Confirme a Nova Password</label>
+                                <label>Confirme a Nova encomendas</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -216,7 +224,43 @@ render() {
                         <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
+
+                <div class="tab-pane fade" id="relatorios" role="tabpanel" aria-labelledby="relatorios-tab">
+                    <h3 class="mb-4">Os seus Relatórios</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>relatorios</label>
+                                <div class="input-field bg-dark"> 
+                                    <input type="password" class="bg-dark text-white"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>relatorios </label>
+                                <div class="input-field bg-dark"> 
+                                    <input type="password" class="bg-dark text-white"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Confirme a Nova relatorios</label>
+                                <div class="input-field bg-dark"> 
+                                    <input type="password" class="bg-dark text-white"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
                     <h3 class="mb-4">Efetue Logout</h3>
                     <div class="row">
                         <div class="col-md-6">
@@ -230,7 +274,7 @@ render() {
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
+                <div class="tab-pane fade" id="remocao" role="tabpanel" aria-labelledby="remocao-tab">
                     <h3 class="mb-4">Remoção de Conta</h3>
                     <div class="row">
                         <div class="col-md-6">
@@ -248,28 +292,60 @@ render() {
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
-                    <h3 class="mb-4">Notification Settings</h3>
+                <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
+                    <h3 class="mb-4">Unidades de Producao Settings</h3>
                     <div class="form-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="notification1"/>
-                            <label class="form-check-label" for="notification1">
+                            <input class="form-check-input" type="checkbox" value="" id="up1"/>
+                            <label class="form-check-label" for="up1">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum accusantium accusamus, neque cupiditate quis
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="notification2"/>
-                            <label class="form-check-label" for="notification2">
+                            <input class="form-check-input" type="checkbox" value="" id="up2"/>
+                            <label class="form-check-label" for="up2">
                                 hic nesciunt repellat perferendis voluptatum totam porro eligendi.
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="notification3"/>
-                            <label class="form-check-label" for="notification3">
+                            <input class="form-check-input" type="checkbox" value="" id="up3"/>
+                            <label class="form-check-label" for="up3">
+                                commodi fugiat molestiae tempora corporis. Sed dignissimos suscipit
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="veiculos" role="tabpanel" aria-labelledby="veiculos-tab">
+                    <h3 class="mb-4">veiculos Settings</h3>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="veiculos1"/>
+                            <label class="form-check-label" for="veiculos1">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum accusantium accusamus, neque cupiditate quis
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="veiculos2"/>
+                            <label class="form-check-label" for="veiculos2">
+                                hic nesciunt repellat perferendis voluptatum totam porro eligendi.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="veiculos3"/>
+                            <label class="form-check-label" for="veiculos3">
                                 commodi fugiat molestiae tempora corporis. Sed dignissimos suscipit
                             </label>
                         </div>
