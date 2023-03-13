@@ -97,7 +97,7 @@ app.post("/user/userData", async (req, res) => { //este seria para aceder as inf
     }catch(error){}
 });
 
-app.post("/user/update", async (req, res) => { //esste seria para atualizar as infos na BD
+app.put("/user/update", async (req, res) => { //esste seria para atualizar as infos na BD
     const User = mongoose.model("users", UserDetailsSchema);
     const {token, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
     try{
@@ -109,6 +109,22 @@ app.post("/user/update", async (req, res) => { //esste seria para atualizar as i
             })
             .catch((error)=>{
                 res.send({status: "error" ,data: error});
+            });
+    }catch(error){}
+});
+
+app.delete("/user/delete", async (req, res) => { //esste seria para eleminar um user na BD
+    const User = mongoose.model("users", UserDetailsSchema);
+    const {token, userRemove} = req.body;
+    try{
+        const user = jwt.verify(token,JWT_SECRET);
+        const user_email = user.email;
+        User.findOneAndRemove({email: user_email})
+            .then((data) => {
+                res.send({status: "ok", data: data})
+            })
+            .catch((error) => {
+                res.send({status: "error", data: error})
             });
     }catch(error){}
 });

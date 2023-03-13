@@ -18,8 +18,10 @@ export default class PerfilC extends Component{
             email: "",
             phone: "",
             password: "",
+            userRemove: "",
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
     }
 
 componentDidMount(){
@@ -46,12 +48,38 @@ logOut = () => {
     window.location.href = "./login"
 
 }
+
+handleRemove(e){
+    e.preventDefault();
+    const {userRemove} = this.state;
+    console.log(userRemove);
+    fetch("http://localhost:5000/user/delete",{
+        method:"DELETE",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        body:JSON.stringify({       // o delete nem precisa de nada???
+            token: window.localStorage.getItem("token"),
+            userRemove, 
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data, "userDelete");
+    })
+
+    window.localStorage.clear();
+    window.location.href = "./login"
+}
 handleSubmit(e){
     e.preventDefault();
     const {fullname, nickname,morada,lat,lon, nif, email, phone} = this.state;
     console.log(fullname, nickname,morada,lat,lon, nif, email, phone);
     fetch("http://localhost:5000/user/update",{
-        method:"POST",
+        method:"PUT",
         crossDomain:true,
         headers:{
             "Content-type":"application/json",
@@ -275,15 +303,17 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <p>Atenção: Esta ação é irreversível</p>
-                                <label>Para remover a sua conta insira o seu username</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="text" class="bg-dark text-white" id="userRemocao"/>
-                                </div>
-                                <div> 
-                                    <br></br>
-                                    <button class="btn btn-outline-light col-md-3 botaoRemover">Remover</button>
-                                </div>
+                                <form onSubmit={this.handleRemove}>
+                                    <p>Atenção: Esta ação é irreversível</p>
+                                    <label>Para remover a sua conta insira o seu username</label>
+                                    <div class="input-field bg-dark"> 
+                                        <input type="text" onChange={(e => this.setState({ userRemove: e.target.value }))} class="bg-dark text-white" id="userRemove"/>
+                                    </div>
+                                    <div> 
+                                        <br></br>
+                                        <button type="submit" class="btn btn-outline-light col-md-3 botaoRemover">Remover</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
