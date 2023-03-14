@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../styles/componentescss.css";
 import "../scripts/scripts.js";
 import { FaSearch } from "react-icons/fa"
-import { useNavigate } from "react-router-dom";
+
 
 
 // import ExercisesList from "./componentes/exercises-list.component";
@@ -26,75 +26,8 @@ const ProdutosResposta = [{primeiroNome: "Bananas", quantidade:"30", tipo: "Made
 // Click = () => {
 //   console.log(this.state.pesquisa);
 // };
-//const navigate = useNavigate();
-export default class Homepage extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            categoria: "",
-            // bebe: "",
-            // desporto: "", 
-            // animais: "",
-            // beleza: "",
-            // bricolagem: "",
-            // telemoveis: "",
-            // decoracao: "",
-            // jardinagem: "",
-            // gaming: "",
-            // TVs: "",
-            // brinquedos: "",
-            // eletrodomesticos: "",
-            // fotografia: "",
-            // livros: "",
-        };
-        this.handleClick = this.handleClick.bind(this);
-        
-    }    
-    handleClick(e){
-        e.preventDefault();
-        //const {bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros} = this.state;
-        //console.log(bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros);
-        const {categoria} = this.state;
-        console.log(categoria);
-        // fetch("http://localhost:5000/user/update",{//mudar URL !
-        //     method:"PUT", //verificar!!!!!
-        //     crossDomain:true,
-        //     headers:{
-        //         "Content-type":"application/json",
-        //         Accept:"application/json",
-        //         "Access-Control-Allow-Origin":"*",
-        //     },
-        //     body:JSON.stringify({
-        //         token: window.localStorage.getItem("token"),
-        //         categoria,
-        //         // bebe,
-        //         // desporto, 
-        //         // animais,
-        //         // beleza,
-        //         // bricolagem,
-        //         // telemoveis,
-        //         // decoracao,
-        //         // jardinagem,
-        //         // gaming,
-        //         // TVs,
-        //         // brinquedos,
-        //         // eletrodomesticos,
-        //         // fotografia,
-        //         // livros,
-        //     }),
-        // })
-        // .then((res) => res.json())
-        // .then((data) => {
-        //     console.log(data, "userUpdate");
-        //     if(data.status=="ok") {
-        //         window.location.href = "/catalogo";
-        // }
-        // })
-    };
-    
-    render(){
-        
-    
+
+function Catalogo(){
     return (
     //<!-- Header -->
     <React.Fragment>
@@ -102,20 +35,20 @@ export default class Homepage extends Component{
     <header class="cor_header height_header">  
     
         <div class="btn-toolbar col-lg-12 justify-content-center " id="buttons_header"role="toolbar" >
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="bebé" value="bebe" onClick={(e => this.setState({categoria:e.target.value })(this.handleClick)(this.handleClick.bind(this)))}>bebé</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao3" title="desporto" onClick={(e => this.setState({ categoria:"desporto" }))}>desporto</button> 
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais" onClick={(e => this.setState({ categoria:"animais" }))}>animais</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza" onClick={(e => this.setState({ categoria:"beleza" }))}>beleza</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem" onClick={(e => this.setState({ categoria:"bricolagem" }))}>bricolagem</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="telemóveis e smartphones" onClick={(e => this.setState({ categoria:"telemoveis" }))}>Telemóveis <br></br>e<br></br> Smartphones</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao8" title="decoração" onClick={(e => this.setState({  categoria:"decoracao" }))}>decoração</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao9" title="jardinagem" onClick={(e => this.setState({  categoria:"jardinagem" }))}>jardinagem</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao10" title="gaming" onClick={(e => this.setState({  categoria:"gaming" }))}>gaming</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao11" title="TVs" onClick={(e => this.setState({  categoria:"TVs" }))}>TVs</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao12" title="jogos e brinquedos" onClick={(e => this.setState({  categoria:"brinquedos" }))}>jogos <br></br>e<br></br>brinquedos</button>   
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao13" title="eletrodomesticos" onClick={(e => this.setState({  categoria:"eletrodomesticos" }))}>eletro-<br></br>-domésticos</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao14" title="fotografia" onClick={(e => this.setState({  categoria:"fotografia" }))}>fotografia</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao15" title="livros" onClick={(e => this.setState({  categoria:"livros" }))}>livros</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="bebé">bebé</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao3" title="desporto">desporto</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais">animais</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza">beleza</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem">bricolagem</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="telemóveis e smartphones">Telemóveis <br></br>e<br></br> Smartphones</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao8" title="decoração">decoração</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao9" title="jardinagem">jardinagem</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao10" title="gaming">gaming</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao11" title="TVs">TVs</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao12" title="jogos e brinquedos">jogos <br></br>e<br></br>brinquedos</button>   
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao13" title="eletrodomesticos">eletro-<br></br>-domésticos</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao14" title="fotografia">fotografia</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao15" title="livros">livros</button>  
         
     </div>
     </header>
@@ -139,74 +72,18 @@ export default class Homepage extends Component{
             swag
         </div>
     </div> */}
-
-
-
-    
     <div class="offcanvas offcanvas-left" data-bs-scroll="true" tabindex="-1" id="sidebar">
-    <div class="offcanvas-header">
+        <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Produtos</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body sidebar">
+        <div class="offcanvas-body">
             <nav class="navbar navbar-light bg-light" id="offcanvasItems">
                 <div class="container-fluid">
                     <ul class="navbar-nav">
-                    <div class="dropdown">
-                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                           Bebé
-                         </button>
-                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                           <li><a class="dropdown-item active" href="#">Action</a></li>
-                           <li><a class="dropdown-item" href="#">Another action</a></li>
-                           <li><a class="dropdown-item" href="#">Something else here</a></li>
-                          
-                           <li><a class="dropdown-item" href="#">Separated link</a></li>
-                         </ul>
-                        </div>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Desporto</a>
+                            <a class="nav-link" href="#">Clickable Item</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Animais</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Beleza</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Bricolagem</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Telemóveis e Smartphones</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Decoração</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Jardinagem</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Animais</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Gaming</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">TVs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Jogos e Brinquedos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Eletrodomésticos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Fotografia</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Livros</a>
-                        </li>
-
                     </ul>
                 </div>
             </nav>
@@ -320,6 +197,6 @@ export default class Homepage extends Component{
     </React.Fragment>
     );
   }
-}
 
-//export default Homepage
+
+export default Catalogo

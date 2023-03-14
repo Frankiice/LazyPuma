@@ -15,6 +15,7 @@ import Registo from "./componentes/registo.component";
 import Login from "./componentes/login.component";
 import PerfilC from "./componentes/perfilC.component";
 import PerfilF from "./componentes/perfilF.component";
+import Catalogo from "./componentes/catalogo.component";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
         <Route path="/user/login" element={<Login/>}/>
         <Route path="/user/c" element={<PerfilC/>}/>
         <Route path="/user/f" element={<PerfilF/>}/>
+        <Route path="/catalogo" element={<Catalogo/>}/>
 
       </Routes>
     </Router>
