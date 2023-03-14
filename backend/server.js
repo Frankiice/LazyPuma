@@ -103,13 +103,17 @@ app.put("/user/update", async (req, res) => { //esste seria para atualizar as in
     try{
         const user = jwt.verify(token,JWT_SECRET);
         const user_email = user.email;
-        User.findOne({email: user_email})
-            .then((data) => {
-                res.send({status: "ok", data: data});
+        await User.findOneAndUpdate({email: user_email}, {fullname: fullname, nickname: nickname, morada:morada, nif:nif, lat: lat, lon:lon, phone:phone },
+            {new:true}, 
+            (err,result)=>{
+                res.json({msg:"Update success!!!!!!!"})
             })
-            .catch((error)=>{
-                res.send({status: "error" ,data: error});
-            });
+            // .then((data) => {
+            //     res.send({status: "ok", data: data});
+            // })
+            // .catch((error)=>{
+            //     res.send({status: "error" ,data: error});
+            // });
     }catch(error){}
 });
 

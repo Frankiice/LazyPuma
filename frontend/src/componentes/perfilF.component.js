@@ -40,7 +40,17 @@ componentDidMount(){
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "userData");
-        this.setState({userData: data.data})
+        this.setState({userData: data.data,
+                    fullname: data.data.fullname, 
+                    nickname: data.data.nickname,
+                    morada: data.data.morada,
+                    lat: data.data.lat,
+                    lon: data.data.lon,
+                    nif: data.data.nif,
+                    email: data.data.email,
+                    phone: data.data.phone,
+                    password: data.data.password,
+                    userRemove: data.data.userRemove,});
     })
 }
 logOut = () => {
@@ -98,6 +108,7 @@ handleSubmit(e){
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "userUpdate");
+        window.location.reload();
     })
 };
       //AO CARREGAR NO UPDATE ENVIA PARA USER/UPDATE
