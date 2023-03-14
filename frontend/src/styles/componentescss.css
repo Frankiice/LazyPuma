@@ -160,9 +160,10 @@ body{
     transition: opacity 0.3s ease-in-out;
 }
 
-.offcanvas.show + .offcanvas-backdrop {
-    opacity: 1;
+.offcanvas-backdrop {
+    display: none;
 }
+
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
