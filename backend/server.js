@@ -129,6 +129,22 @@ app.delete("/user/delete", async (req, res) => { //esste seria para eleminar um 
     }catch(error){}
 });
 
+app.post("/catalogo", async (req, res) => { //este seria para aceder as infos do user
+    const User = mongoose.model("users", UserDetailsSchema);//tera de ser outro coiso e nao o users
+    const {token, categoria} = req.body;
+    try{
+        const user = jwt.verify(token,JWT_SECRET);
+        const user_email = user.email;
+        User.findOne({email: user_email}) //find da categoria e os seus produtos
+            .then((data) => {
+                res.send({status: "ok", data: data});
+            })
+            .catch((error)=>{
+                res.send({status: "error" ,data: error});
+            });
+    }catch(error){}
+});
+
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
 });

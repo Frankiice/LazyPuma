@@ -50,14 +50,16 @@ export default class Homepage extends Component{
         this.handleClick = this.handleClick.bind(this);
         
     }    
+
     handleClick(e){
-        e.preventDefault();
         //const {bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros} = this.state;
         //console.log(bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros);
         const {categoria} = this.state;
         console.log(categoria);
-        // fetch("http://localhost:5000/user/update",{//mudar URL !
-        //     method:"PUT", //verificar!!!!!
+        window.localStorage.setItem("categoria", categoria);
+        window.location.href = "/catalogo";
+        // fetch("http://localhost:5000/catalogo",{//mudar URL !
+        //     method:"POST", //verificar!!!!!
         //     crossDomain:true,
         //     headers:{
         //         "Content-type":"application/json",
@@ -67,25 +69,11 @@ export default class Homepage extends Component{
         //     body:JSON.stringify({
         //         token: window.localStorage.getItem("token"),
         //         categoria,
-        //         // bebe,
-        //         // desporto, 
-        //         // animais,
-        //         // beleza,
-        //         // bricolagem,
-        //         // telemoveis,
-        //         // decoracao,
-        //         // jardinagem,
-        //         // gaming,
-        //         // TVs,
-        //         // brinquedos,
-        //         // eletrodomesticos,
-        //         // fotografia,
-        //         // livros,
         //     }),
         // })
         // .then((res) => res.json())
         // .then((data) => {
-        //     console.log(data, "userUpdate");
+        //     console.log(data, "userCatalogo");
         //     if(data.status=="ok") {
         //         window.location.href = "/catalogo";
         // }
@@ -101,21 +89,21 @@ export default class Homepage extends Component{
     <div class="scrollmenu">
     <header class="cor_header height_header">  
     
-        <div class="btn-toolbar col-lg-12 justify-content-center " id="buttons_header"role="toolbar" >
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="bebé" value="bebe" onClick={(e => this.setState({categoria:e.target.value })(this.handleClick)(this.handleClick.bind(this)))}>bebé</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao3" title="desporto" onClick={(e => this.setState({ categoria:"desporto" }))}>desporto</button> 
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais" onClick={(e => this.setState({ categoria:"animais" }))}>animais</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza" onClick={(e => this.setState({ categoria:"beleza" }))}>beleza</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem" onClick={(e => this.setState({ categoria:"bricolagem" }))}>bricolagem</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="telemóveis e smartphones" onClick={(e => this.setState({ categoria:"telemoveis" }))}>Telemóveis <br></br>e<br></br> Smartphones</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao8" title="decoração" onClick={(e => this.setState({  categoria:"decoracao" }))}>decoração</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao9" title="jardinagem" onClick={(e => this.setState({  categoria:"jardinagem" }))}>jardinagem</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao10" title="gaming" onClick={(e => this.setState({  categoria:"gaming" }))}>gaming</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao11" title="TVs" onClick={(e => this.setState({  categoria:"TVs" }))}>TVs</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao12" title="jogos e brinquedos" onClick={(e => this.setState({  categoria:"brinquedos" }))}>jogos <br></br>e<br></br>brinquedos</button>   
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao13" title="eletrodomesticos" onClick={(e => this.setState({  categoria:"eletrodomesticos" }))}>eletro-<br></br>-domésticos</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao14" title="fotografia" onClick={(e => this.setState({  categoria:"fotografia" }))}>fotografia</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao15" title="livros" onClick={(e => this.setState({  categoria:"livros" }))}>livros</button>  
+        <div class="btn-toolbar col-lg-12 justify-content-center " id="buttons_header"role="toolbar" >      {/*onClick{() => this.setState({ count: 1})}*/}
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="bebé" value="bebe" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bebé</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao3" title="desporto" value="desporto" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>desporto</button> 
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais" value="animais" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>animais</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza" value="beleza" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>beleza</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem" value="bricolagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bricolagem</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="telemóveis e smartphones"value="telemoveis" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>Telemóveis <br></br>e<br></br> Smartphones</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao8" title="decoração"value="decoracao" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>decoração</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao9" title="jardinagem"value="jardinagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jardinagem</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao10" title="gaming"value="gaming" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>gaming</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao11" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>TVs</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao12" title="jogos e brinquedos"value="brinquedos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jogos <br></br>e<br></br>brinquedos</button>   
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao13" title="eletrodomesticos"value="eletrodomesticos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao14" title="fotografia"value="fotografia" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>fotografia</button>  
+            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao15" title="livros"value="livros" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>livros</button>  
         
     </div>
     </header>

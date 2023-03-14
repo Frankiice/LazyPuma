@@ -27,7 +27,77 @@ const ProdutosResposta = [{primeiroNome: "Bananas", quantidade:"30", tipo: "Made
 //   console.log(this.state.pesquisa);
 // };
 
-function Catalogo(){
+export default class PerfilC extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            categoria: "",
+            // bebe: "",
+            // desporto: "", 
+            // animais: "",
+            // beleza: "",
+            // bricolagem: "",
+            // telemoveis: "",
+            // decoracao: "",
+            // jardinagem: "",
+            // gaming: "",
+            // TVs: "",
+            // brinquedos: "",
+            // eletrodomesticos: "",
+            // fotografia: "",
+            // livros: "",
+        };
+        this.handleClick = this.handleClick.bind(this);
+        
+    }  
+    componentDidMount(){
+        fetch("http://localhost:5000/catalogo", { //provavelmente teremos de mudar as cenas
+            method:"POST",
+            crossDomain:true,
+            headers:{
+                "Content-type":"application/json",
+                Accept:"application/json",
+                "Access-Control-Allow-Origin":"*",
+            },
+            body:JSON.stringify({
+                token: window.localStorage.getItem("token"),
+                categoria: window.localStorage.getItem("categoria")
+            }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data, "Catalogo");
+            this.setState({categoria: data.data}) //retificar depois
+        })
+    }
+
+    handleClick(e){
+        //const {bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros} = this.state;
+        //console.log(bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros);
+        const {categoria} = this.state;
+        console.log(categoria);
+        fetch("http://localhost:5000/catalogo",{//mudar URL !
+            method:"POST", //verificar!!!!!
+            crossDomain:true,
+            headers:{
+                "Content-type":"application/json",
+                Accept:"application/json",
+                "Access-Control-Allow-Origin":"*",
+            },
+            body:JSON.stringify({
+                token: window.localStorage.getItem("token"),
+                categoria,
+            }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data, "userUpdate");
+            if(data.status=="ok") {
+                window.location.href = "/catalogo";
+        }
+        })
+    };
+    render(){
     return (
     //<!-- Header -->
     <React.Fragment>
@@ -197,6 +267,7 @@ function Catalogo(){
     </React.Fragment>
     );
   }
+}
 
 
-export default Catalogo
+// export default Catalogo
