@@ -139,18 +139,74 @@ export default class Homepage extends Component{
             swag
         </div>
     </div> */}
+
+
+
+    
     <div class="offcanvas offcanvas-left" data-bs-scroll="true" tabindex="-1" id="sidebar">
-        <div class="offcanvas-header">
+    <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Produtos</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
+        <div class="offcanvas-body sidebar">
             <nav class="navbar navbar-light bg-light" id="offcanvasItems">
                 <div class="container-fluid">
                     <ul class="navbar-nav">
+                    <div class="dropdown">
+                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                           Bebé
+                         </button>
+                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                           <li><a class="dropdown-item active" href="#">Action</a></li>
+                           <li><a class="dropdown-item" href="#">Another action</a></li>
+                           <li><a class="dropdown-item" href="#">Something else here</a></li>
+                          
+                           <li><a class="dropdown-item" href="#">Separated link</a></li>
+                         </ul>
+                        </div>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Clickable Item</a>
+                            <a class="nav-link" href="#">Desporto</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Animais</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Beleza</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Bricolagem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Telemóveis e Smartphones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Decoração</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Jardinagem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Animais</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Gaming</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">TVs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Jogos e Brinquedos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Eletrodomésticos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Fotografia</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Livros</a>
+                        </li>
+
                     </ul>
                 </div>
             </nav>
