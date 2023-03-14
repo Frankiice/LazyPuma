@@ -167,16 +167,16 @@ body{
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 * {
-    font-family: 'Poppins', sans-serif
+    font-family: 'Poppins', sans-serif;
 }
 
 .container {
-    margin: 50px auto
+    margin: 50px auto;
 }
 
 .panel-heading {
     text-align: center;
-    margin-bottom: 10px
+    margin-bottom: 10px;
 }
 
 #forgot {
