@@ -135,7 +135,6 @@ body{
     top: 0;
     bottom: 0;
     z-index: 1040;
-    padding-top: 1rem;
     overflow-y: auto;
     overflow-x: hidden;
     visibility: hidden;
@@ -161,7 +160,30 @@ body{
 }
 
 .offcanvas-backdrop {
-    display: none;
+    display: none !important;
+}
+
+.offcanvas-title {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.linhaSeparacaoProdutos {
+    width: 30em;
+    margin-right: 4em;
+    text-align: center;
+}
+
+.container-fluid {
+    padding-left: 0px;
+    overflow-x: hidden;
+}
+
+.botaoProdutoDropdown {
+    width: 26.5em;
+    padding-right:0px;
+    margin-left:13px;
+    text-align: center;
 }
 
 

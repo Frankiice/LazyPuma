@@ -5,6 +5,7 @@ import "../styles/componentescss.css";
 import "../scripts/scripts.js";
 import { FaSearch } from "react-icons/fa"
 import { useNavigate } from "react-router-dom";
+import 'bootstrap';
 
 
 // import ExercisesList from "./componentes/exercises-list.component";
@@ -144,69 +145,115 @@ export default class Homepage extends Component{
 
     
     <div class="offcanvas offcanvas-left" data-bs-scroll="true" tabindex="-1" id="sidebar">
-    <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Produtos</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="offcanvas-header navbar-dark bg-dark">
+                <h5 class="offcanvas-title text-white" id="offcanvasWithBothOptionsLabel">Produtos</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body sidebar">
             <nav class="navbar navbar-light bg-light" id="offcanvasItems">
-                <div class="container-fluid">
-                    <ul class="navbar-nav">
-                    <div class="dropdown">
-                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                           Bebé
-                         </button>
-                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-                           <li><a class="dropdown-item active" href="#">Action</a></li>
-                           <li><a class="dropdown-item" href="#">Another action</a></li>
-                           <li><a class="dropdown-item" href="#">Something else here</a></li>
-                          
-                           <li><a class="dropdown-item" href="#">Separated link</a></li>
-                         </ul>
-                        </div>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Desporto</a>
+                <div class="container-fluid mt-2">
+                    <ul class="navbar-nav produtosSidebar">
+                    {/* <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" data-bs-target="#bebe" aria-expanded="false">
+                        Bebé
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark" id="bebe" aria-labelledby="dropdownMenuButton2">
+                            <li><a class="dropdown-item active" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            
+                            <li><a class="dropdown-item" href="#">Separated link</a></li>
+                        </ul>
+                    </div> */}
+                        <li class="nav-item dropdown ">
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="bebe" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Bebé
+                            </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="bebe">
+                                <li><a class="dropdown-item" href="#">Fraldas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Chupetas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Biberões</a></li>
+                            </ul>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Animais</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="desporto" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Desporto
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Beleza</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="animais" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Animais
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Bricolagem</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="beleza" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Beleza
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Telemóveis e Smartphones</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="bricolagem" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Bricolagem
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Decoração</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="telemoveis" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Telemóveis e Smartphones
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Jardinagem</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="decoracao" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Decoração
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Animais</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="jardinagem" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Jardinagem
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Gaming</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="gaming" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Gaming
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">TVs</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="televisoes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                TVs
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Jogos e Brinquedos</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="brinquedos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Jogos e Brinquedos
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Eletrodomésticos</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="eletrodomesticos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Eletrodomésticos
+                            </a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Fotografia</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="fotografia" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Fotografia</a>
                         </li>
+                        <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Livros</a>
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="livros" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Livros
+                            </a>
                         </li>
-
                     </ul>
                 </div>
             </nav>
