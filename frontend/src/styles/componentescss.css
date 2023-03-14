@@ -412,6 +412,14 @@ div.scrollmenu .btn-xl {
     padding:1.7em;
 }
 
+#butaoPerfil{
+    background-image: url('../images/user2.jpg');
+    background-size: contain;
+    background-position: 40px 20px 70px;
+    text-align: center;
+    padding:1.7em;
+}
+
 #butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
 }

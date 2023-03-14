@@ -13,9 +13,15 @@ import Footer from "./componentes/footer.component";
 import ExercisesList from "./componentes/exercises-list.component"
 import Registo from "./componentes/registo.component";
 import Login from "./componentes/login.component";
-import Perfil from "./componentes/perfil.component";
+import PerfilC from "./componentes/perfilC.component";
+import PerfilF from "./componentes/perfilF.component";
+
 function App() {
+
+  const isLoggedIn = window.localStorage.getItem("loggedIn");
   return (
+
+    
     <React.StrictMode>
     <Navbar/>
 
@@ -26,7 +32,9 @@ function App() {
         <Route path="/exercise-list" element={<ExercisesList/>}/>
         <Route path="/user/registar" element={<Registo/>}/>
         <Route path="/user/login" element={<Login/>}/>
-        <Route path="/user" element={<Perfil/>}/>
+        <Route path="/user/c" element={<PerfilC/>}/>
+        <Route path="/user/f" element={<PerfilF/>}/>
+
       </Routes>
     </Router>
 
