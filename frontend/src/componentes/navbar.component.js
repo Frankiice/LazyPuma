@@ -74,7 +74,8 @@ function Navbar(){
             <a class="nav-link" href="/">Test2<span class="sr-only">(current)</span></a>
           </li> */}
           <li class="nav-item">
-            <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvas">
+            <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
+            
               Produtos
             </button>
           </li>
