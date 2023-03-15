@@ -33,34 +33,53 @@ import ExercisesList from './exercises-list.component';
 
 // const [searchTerm, setSearchTerm] = useState('')
 
-function Navbar(){
-    const [query, setQuery] = useState('')
-    const [data, setData] = useState([])
-    const [user, setUser] = useState(null);
+export default class Navbar extends Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+        loggedIn:  window.localStorage.getItem("loggedIn"),
+        query: "",
+        data: "",
+        user: "",
+    };
+  }
+    // const [query, setQuery] = useState('')
+    // const [data, setData] = useState([])
+    // const [user, setUser] = useState(null);
 
     // funcoes dummy --------------
-    async function login(user = null){
-      setUser(user);
-    }
+    // async function login(user = null){
+    //   setUser(user);
+    // }
 
-    async function logout(){
-      setUser(null);
-    }
+    // async function logout(){
+    //   setUser(null);
+    // }
     // -----------------------------
 
 
-    const sendSearchData = (query) => {
-      const fetchUsers = () => {
-        const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
-        setData(res.data);
-      };
-      fetchUsers();
+   sendSearchData = (query) => {
+    const fetchUsers = () => {
+      const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
+      this.setState({data: res.data});
     };
+    fetchUsers();
+  };
+    // const sendSearchData = (query) => {
+    //   const fetchUsers = () => {
+    //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
+    //     setData(res.data);
+    //   };
+    //   fetchUsers();
+    // };
 
-    return (
+    render(){
+      return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
       
       {/* Logo e imagem do navbar */}
+      
       <div class="logo px-4">
         <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
         <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png"></img></a>
@@ -80,9 +99,9 @@ function Navbar(){
             </button>
           </li>
         </ul>
-        <div className="input-group px-3" id="searchbar">
-            <div className="form-group has-search">
-              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+        <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
+            <div className="form-group has-search">                                                                           
+              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({query: e.target.value} )}} placeholder='{Search}'/> <a href="/results" onClick={() => this.sendSearchData(this.state.query)} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
         </div>
       </div>
@@ -94,14 +113,23 @@ function Navbar(){
         </button>
       </form>
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active px-2">
         {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
+        {() => {if(!this.state.loggedIn){ return (
+          <li class="nav-item active px-2">
           <a  href="/user/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">
             <i class="bi bi-person-circle"></i> Login/Registo
             </button>
           </a>
-        </li>
+          </li>);}}}
+        {() => {if(this.state.loggedIn){ return(
+          <li class="nav-item active px-2">
+            <a  href="/user/login">
+              <button class="btn btn-outline-light col-md-12" id="botaoLogin">
+              <i class="bi bi-person-circle"></i> Bla
+              </button>
+          </a>
+          </li>);}}}
       </ul>
 
       {/* Login e signup buttons + informaçao sobre user logado */}
@@ -119,7 +147,6 @@ function Navbar(){
     </nav>
     );
   }
+}
 
-
-
-export default Navbar
+// export default Navbar
