@@ -114,27 +114,20 @@ export default class Navbar extends Component{
       </form>
       <ul class="navbar-nav mr-auto">
         {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
-        {!this.state.loggedIn ? (
-          () => {
-            return (
-            <li class="nav-item active px-2">
-            <a  href="/user/login">
-              <button class="btn btn-outline-light col-md-12" id="botaoLogin">
+        {this.state.loggedIn ? <li class="nav-item active px-2">
+          <a  href="/user/login">
+            <button class="btn btn-outline-light col-md-12" id="botaoLogin">
+              <i class="bi bi-person-circle"></i> Olá {}
+            </button>
+          </a>
+        </li> :
+        <li class="nav-item active px-2">
+          <a  href="/user/login">
+            <button class="btn btn-outline-light col-md-12" id="botaoLogin">
               <i class="bi bi-person-circle"></i> Login/Registo
-              </button>
-            </a>
-            </li>
-              );
-              }
-            ) : (
-            <li class="nav-item active px-2">
-              <a  href="/user/login">
-                <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-                <i class="bi bi-person-circle"></i> Olá {}
-                </button>
-            </a>
-            </li>
-            )}
+            </button>
+          </a>
+        </li>}
       </ul>
 
       {/* Login e signup buttons + informaçao sobre user logado */}
