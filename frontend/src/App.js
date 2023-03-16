@@ -18,8 +18,8 @@ import PerfilF from "./componentes/perfilF.component";
 import Catalogo from "./componentes/catalogo.component";
 
 function App() {
-
-  const isLoggedIn = window.localStorage.getItem("loggedIn");
+  // const isLoggedIn = window.localStorage.setItem("loggedIn", false);
+  // const isLoggedIn = window.localStorage.getItem("loggedIn");
   return (
 
     

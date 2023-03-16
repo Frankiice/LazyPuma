@@ -42,8 +42,10 @@ export default class Navbar extends Component{
         query: "",
         data: "",
         user: "",
+        nickname: "",
     };
   }
+
     // const [query, setQuery] = useState('')
     // const [data, setData] = useState([])
     // const [user, setUser] = useState(null);
@@ -66,6 +68,26 @@ export default class Navbar extends Component{
     };
     fetchUsers();
   };
+
+  componentDidMount(){
+    fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
+        method:"POST",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        body:JSON.stringify({
+            token: window.localStorage.getItem("token"),
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data, "userData");
+        this.setState({ nickname: data.data.nickname,});
+    })
+}
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
     //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
@@ -114,26 +136,27 @@ export default class Navbar extends Component{
       </form>
       <ul class="navbar-nav mr-auto">
         {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
-        {!this.state.loggedIn ? (
+        {"loggedIn" in localStorage ? (
           () => {
             return (
             <li class="nav-item active px-2">
+              {alert('yes')}
             <a  href="/user/login">
               <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Login/Registo
+              <i class="bi bi-person-circle"></i> Olá {this.state.nickname}
               </button>
             </a>
             </li>
               );
               }
             ) : (
-            <li class="nav-item active px-2">
+              <li class="nav-item active px-2">
               <a  href="/user/login">
                 <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-                <i class="bi bi-person-circle"></i> Olá {}
+                <i class="bi bi-person-circle"></i> Login/Registo
                 </button>
-            </a>
-            </li>
+              </a>
+              </li>
             )}
       </ul>
 
