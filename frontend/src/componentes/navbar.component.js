@@ -101,7 +101,7 @@ export default class Navbar extends Component{
         </ul>
         <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
             <div className="form-group has-search">                                                                           
-              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({query: e.target.value} )}} placeholder='{Search}'/> <a href="/results" onClick={() => this.sendSearchData(this.state.query)} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({query: e.target.value} )}} placeholder='Search'/> <a href="/results" onClick={() => this.sendSearchData(this.state.query)} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
         </div>
       </div>
@@ -114,22 +114,27 @@ export default class Navbar extends Component{
       </form>
       <ul class="navbar-nav mr-auto">
         {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
-        {() => {if(!this.state.loggedIn){ return (
-          <li class="nav-item active px-2">
-          <a  href="/user/login">
-            <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-            <i class="bi bi-person-circle"></i> Login/Registo
-            </button>
-          </a>
-          </li>);}}}
-        {() => {if(this.state.loggedIn){ return(
-          <li class="nav-item active px-2">
+        {!this.state.loggedIn ? (
+          () => {
+            return (
+            <li class="nav-item active px-2">
             <a  href="/user/login">
               <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Bla
+              <i class="bi bi-person-circle"></i> Login/Registo
               </button>
-          </a>
-          </li>);}}}
+            </a>
+            </li>
+              );
+              }
+            ) : (
+            <li class="nav-item active px-2">
+              <a  href="/user/login">
+                <button class="btn btn-outline-light col-md-12" id="botaoLogin">
+                <i class="bi bi-person-circle"></i> Olá {}
+                </button>
+            </a>
+            </li>
+            )}
       </ul>
 
       {/* Login e signup buttons + informaçao sobre user logado */}
