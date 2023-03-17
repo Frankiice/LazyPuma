@@ -8,6 +8,8 @@ import { FaSearch } from "react-icons/fa"
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import ExercisesList from './exercises-list.component';
+import 'bootstrap';
+
 // const navigate = useNavigate();
 // const handleOnClickResults = useCallback(() => navigate('/results', {replace: true}), [navigate]);
 
@@ -66,6 +68,11 @@ export default class Navbar extends Component{
     };
     fetchUsers();
   };
+
+  logOut = () => {
+    window.localStorage.clear();
+    window.location.href = "./login"
+  }
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
     //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
@@ -94,7 +101,6 @@ export default class Navbar extends Component{
           </li> */}
           <li class="nav-item">
             <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
-            
               Produtos
             </button>
           </li>
@@ -114,15 +120,31 @@ export default class Navbar extends Component{
       </form>
       <ul class="navbar-nav mr-auto">
         {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
-        {this.state.loggedIn ? <li class="nav-item active px-2">
-          <a  href="/user/login">
-            <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Olá {}
-            </button>
-          </a>
-        </li> :
+        {this.state.loggedIn ? 
+        // <li class="nav-item active px-2">
+        //   <div class="dropdown">
+        //     <button class="btn btn-outline-light col-md-12" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        //       <i class="bi bi-person-circle"></i> Olá, 
+        //     </button>
+        //     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        //       <a class="dropdown-item" href="#">Action</a>
+        //     </div>
+        //   </div>
+        // </li> 
+        <li class="nav-item dropdown active px-2">
+          <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="bi bi-person-circle"></i> Olá
+          </button>
+          <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
+              <li><a class="dropdown-item" href="/user/c">Perfil</a></li>
+              <li><hr class="dropdown-divider"></hr></li>
+              <li><a class="dropdown-item" href="#">Histórico</a></li>
+              <li><hr class="dropdown-divider"></hr></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
+          </ul>
+        </li>:
         <li class="nav-item active px-2">
-          <a  href="/user/login">
+          <a href="/user/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">
               <i class="bi bi-person-circle"></i> Login/Registo
             </button>

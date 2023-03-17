@@ -32,7 +32,7 @@ html, body {
     margin-left: 90px;
     margin-top: 21px;
 
-    width: 71%;
+    width: 64%;
     height: 40px;
 
     border: 1.5px solid #FFFFFF;
@@ -45,11 +45,11 @@ html, body {
 
 .form-control-feedback {
     position:absolute;
-    left: 10%;
-    right: 25.62%;
+    left: 6.5%;
+    right: 10%;
     top: 20%;
-    bottom: 50.62%;
-    margin-left: 48rem;
+    bottom: 10%;
+    margin-left: 46rem;
     margin-bottom: 5em;
 }
 
@@ -185,6 +185,17 @@ body{
     margin-left:13px;
     text-align: center;
 }
+
+#perfilDropdown {
+    margin-right: 3.5em;
+}
+
+
+.botaoPerfilDropdown {
+    width: -1%;
+}
+
+
 
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
