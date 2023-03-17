@@ -133,13 +133,7 @@ export default class Navbar extends Component{
             </div>
         </div>
       </div>
-      <form class="d-flex px-3">
-        <button class="btn btn-outline-light col-md-12" type="submit">
-            <i class="bi-cart-fill me-1"></i>
-            Cesto
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-        </button>
-      </form>
+     
       <ul class="navbar-nav mr-auto">
         {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
         {this.state.loggedIn ? 
@@ -155,7 +149,7 @@ export default class Navbar extends Component{
         // </li> 
         <li class="nav-item dropdown active px-2">
           <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="bi bi-person-circle"></i> Olá
+            <i class="bi bi-person-circle"></i> Olá {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
               <li><a class="dropdown-item" href="/user/c">Perfil</a></li>
@@ -173,6 +167,13 @@ export default class Navbar extends Component{
           </a>
         </li>}
       </ul>
+       <form class="d-flex px-3">
+        <button class="btn btn-outline-light col-md-12" type="submit">
+            <i class="bi-cart-fill me-1"></i>
+            Cesto
+            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+        </button>
+      </form>
 
       {/* Login e signup buttons + informaçao sobre user logado */}
 
