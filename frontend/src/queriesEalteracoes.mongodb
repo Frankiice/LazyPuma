@@ -5,7 +5,55 @@
 
 // Select the database to use.
 use('lazypuma');
+// db.createCollection("products")
 
 // The drop() command destroys all data from a collection.
 // Make sure you run it against the correct database and collection.
-db.users.findOne({email: "testea@teste.com"})
+// db.products.insertOne({
+//   "name": "Electronics",
+//   "subcategories": [
+//     {
+//       "name": "TVs",
+//       "subcategories": [
+//         {
+//           "name": "Samsung"
+//         },
+//         {
+//           "name": "LG"
+//         },
+//         {
+//           "name": "Sony"
+//         }
+//       ]
+//     },
+//     {
+//       "name": "Computers",
+//       "subcategories": [
+//         {
+//           "name": "Laptops"
+//         },
+//         {
+//           "name": "Desktops"
+//         },
+//         {
+//           "name": "Tablets"
+//         }
+//       ]
+//     },
+//     {
+//       "name": "Video Games",
+//       "subcategories": [
+//         {
+//           "name": "Consoles"
+//         },
+//         {
+//           "name": "Games"
+//         }
+//       ]
+//     }
+//   ]
+// });
+// db.products.find();
+// db.products.find({ "name": "Electronics" });
+// db.products.find({ "subcategories.name": "TVs" });
+// db.products.find({ "subcategories.subcategories.name": "Samsung" });
