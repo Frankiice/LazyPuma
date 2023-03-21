@@ -19,6 +19,21 @@ connection.once('open', () => {
 console.log("MongoDB database connection established successfully");
 })
 
+
+
+// const collection = connection.collection("products");
+// const query = { "name": "Electronics" };
+// const projection = { "subcategories": "TVs" };
+// const result = collection.findOne(query, projection);
+
+// result.then((doc) => {
+//     console.log(doc.subcategories[0].subcategories[0].name);
+// }).catch((err) => {
+//     console.error(err);
+// });
+
+
+
 const UserDetailsSchema = new mongoose.Schema(
     {
     email: String,
