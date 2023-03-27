@@ -19,6 +19,7 @@ export default class PerfilC extends Component{
             phone: "",
             password: "",
             userRemove: "",
+            userRemoveFailed: "",
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
@@ -61,33 +62,41 @@ logOut = () => {
 
 handleRemove(e){
     e.preventDefault();
-    const {userRemove} = this.state;
+    const {userRemove, userRemoveFailed} = this.state;
     console.log(userRemove);
-    fetch("http://localhost:5000/user/delete",{
-        method:"DELETE",
-        crossDomain:true,
-        headers:{
-            "Content-type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
-        },
-        body:JSON.stringify({       // o delete nem precisa de nada???
-            token: window.localStorage.getItem("token"),
-            userRemove, 
-        }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data, "userDelete");
-    })
-
-    window.localStorage.clear();
-    window.location.href = "./login"
+    if (this.state.userRemove === this.state.password){
+        console.log("entra no sitio errado")
+        fetch("http://localhost:5000/user/delete",{
+            method:"DELETE",
+            crossDomain:true,
+            headers:{
+                "Content-type":"application/json",
+                Accept:"application/json",
+                "Access-Control-Allow-Origin":"*",
+            },
+            body:JSON.stringify({       // o delete nem precisa de nada???
+                token: window.localStorage.getItem("token"),
+                userRemove, 
+            }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data, "userDelete");
+        })
+    
+        window.localStorage.clear();
+        window.location.href = "./login"
+    }else{
+        console.log("entra no sitio certo")
+        this.setState({ userRemoveFailed: true });
+        console.log(userRemoveFailed);
+    }
+    
 }
 handleSubmit(e){
     e.preventDefault();
-    const {fullname, nickname,morada,lat,lon, nif, email, phone} = this.state;
-    console.log(fullname, nickname,morada,lat,lon, nif, email, phone);
+    const {fullname, nickname,morada,lat,lon, email, nif, phone} = this.state;
+    console.log(fullname, nickname,morada,lat,lon, email, nif, phone);
     fetch("http://localhost:5000/user/update",{
         method:"PUT",
         crossDomain:true,
@@ -172,7 +181,7 @@ render() {
                                 <div class="form-group">
                                     <label>Username</label>
                                     <div class="input-field bg-dark">
-                                        <input type="text" class="bg-dark text-white" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder={this.state.userData.nickname}/>
+                                        <input type="text" class="bg-dark text-light" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder={this.state.userData.nickname}/>
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +189,7 @@ render() {
                                 <div class="form-group">
                                     <label>Email</label>
                                     <div class="input-field bg-dark"> 
-                                        <input type="text" class="bg-dark text-white" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder={this.state.userData.email}/>
+                                        <input type="text" class="bg-dark text-white" id="email"  value={this.state.userData.email}/>
                                     </div>
                                 </div>
                             </div>
@@ -316,7 +325,7 @@ render() {
                             <div class="form-group">
                                 <form onSubmit={this.handleRemove}>
                                     <p>Atenção: Esta ação é irreversível</p>
-                                    <label>Para remover a sua conta insira o seu username</label>
+                                    <label>Para remover a sua conta insira a sua password</label>
                                     <div class="input-field bg-dark"> 
                                         <input type="text" onChange={(e => this.setState({ userRemove: e.target.value }))} class="bg-dark text-white" id="userRemove"/>
                                     </div>
@@ -324,6 +333,13 @@ render() {
                                         <br></br>
                                         <button type="submit" class="btn btn-outline-light col-md-3 botaoRemover">Remover</button>
                                     </div>
+                                    {this.state.userRemoveFailed ?
+                                    <div> 
+                                        <br></br>
+                                        <p>ERRO: A pass inserida não está correta</p>
+                                    </div> : 
+                                    <div></div>
+                                    }
                                 </form>
                             </div>
                         </div>
