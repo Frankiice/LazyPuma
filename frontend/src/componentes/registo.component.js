@@ -13,7 +13,13 @@ export default class Registo extends Component {
             type: "consumidor",
             fullname: "",
             nickname: "",
-            morada: "",
+            rua: "",
+            localidade: "",
+            freguesia: "",
+            concelho: "",
+            cod_postal: "",
+            cidade: "",
+            pais: "Portugal",
             lat: "",
             lon: "",
             nif: "",
@@ -21,6 +27,7 @@ export default class Registo extends Component {
             phone: "",
             password: "",
             flag:false,
+            moradaCompleta: "",
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,7 +44,10 @@ export default class Registo extends Component {
     };
 
     getCoordenadas(e){
-        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + this.state.morada
+        var moradaCompleta = this.state.rua + " " + this.state.localidade + " " + this.state.freguesia + " " + this.state.concelho + " " + this.state.cidade + " " + this.state.cod_postal + " " + this.state.pais
+        this.setState({ moradaCompleta: moradaCompleta });
+        console.log("morada completa", this.state.moradaCompleta)
+        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + this.state.moradaCompleta
         fetch(url)
                 .then((response) => response.json())
                 .then((data) => {
@@ -55,8 +65,8 @@ export default class Registo extends Component {
 
     handleSubmit(e){
         e.preventDefault();
-        const {type, fullname, nickname,morada,lat,lon, nif, email, phone, password} = this.state;
-        console.log(type, fullname, nickname,morada,lat,lon, nif, email, phone, password);
+        const {type, fullname, nickname,moradaCompleta,lat,lon, nif, email, phone, password} = this.state;
+        console.log(type, fullname, nickname,moradaCompleta,lat,lon, nif, email, phone, password);
         fetch("http://localhost:5000/user/registar",{
             method:"POST",
             crossDomain:true,
@@ -69,7 +79,7 @@ export default class Registo extends Component {
                 type,
                 fullname,
                 nickname,
-                morada,
+                moradaCompleta,
                 lat,
                 lon,
                 nif,
@@ -187,6 +197,7 @@ render() {
                     <div class="panel-body p-3">
                         <form onSubmit={this.handleSubmit}>
                             <div class="form-group py-2">
+                            <label>Tipo de Utilizador</label>
                                 <div class="input-field bg-dark">
                                     <span class="fa fa-user px-2"></span> 
                                         <select class="bg-dark text-white" id="type" 
@@ -198,28 +209,60 @@ render() {
                                 </div>
                             </div>                                                                                                                          {/*value={name} onChange = {(e) => handleInputChange(e)}*/} 
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))}  placeholder="Nome Completo" required /> </div>
+                            <label>Nome Completo</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} placeholder="Username" required /> </div>
+                            <label>Nickname</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="nickname" onChange={(e => this.setState({ nickname: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Email" required /> </div>
+                            <label>Email</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder="Telemóvel" required /> </div>
+                            <label>Telemóvel</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder="Morada" required /> </div>
+                            <label>Rua</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="rua" onChange={(e => this.setState({ rua: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder="Identificador Fiscal" required /> </div>
+                            <label>Localidade</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="localidade" onChange={(e => this.setState({ localidade: e.target.value }))} required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                            <label>Freguesia</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="freguesia" onChange={(e => this.setState({ freguesia: e.target.value }))} required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                            <label>Concelho</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="concelho" onChange={(e => this.setState({ concelho: e.target.value }))} required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                            <label>Cidade</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="cidade" onChange={(e => this.setState({ cidade: e.target.value }))} required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                            <label>Código postal</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                            <label>País</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="pais" value={this.state.pais} required /> </div>
+                            </div>
+                            <div class="form-group py-2">
+                            <label>NIF</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="nif" onChange={(e => this.setState({ nif: e.target.value }))}  required /> </div>
                             </div>
                             <div class="form-group py-1 pb-2">
-                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Password" required /> </div>
+                            <label>Password</label>
+                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))}  required /> </div>
                             </div>
                             <div class="form-group py-1 pb-2">
-                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }) (this.getCoordenadas()))} placeholder="Confirme a Password" required /> </div>
+                            <label>Confirme a Password</label>
+                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }) (this.getCoordenadas()))} required /> </div>
                             </div>
                             <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
                             <div class="botao">
