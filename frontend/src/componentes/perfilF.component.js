@@ -18,10 +18,13 @@ export default class PerfilF extends Component{
             email: "",
             phone: "",
             password: "",
-            userRemove: "",
+            userRemoveFailed: "",
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+        this.preHandleRemove = this.preHandleRemove.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
+
     }
 
 componentDidMount(){
@@ -49,8 +52,7 @@ componentDidMount(){
                     nif: data.data.nif,
                     email: data.data.email,
                     phone: data.data.phone,
-                    password: data.data.password,
-                    userRemove: data.data.userRemove,});
+                    password: data.data.password,});
     })
 }
 logOut = () => {
@@ -58,11 +60,43 @@ logOut = () => {
     window.location.href = "./login"
 
 }
+preHandleRemove(e){
+    e.preventDefault();
+    const {email, password, userRemoveFailed} = this.state;
+    console.log("email" , email);
+    console.log("password" , password);
+
+    fetch("http://localhost:5000/user/login",{
+            method:"POST",
+            crossDomain:true,
+            headers:{
+                "Content-type":"application/json",
+                Accept:"application/json",
+                "Access-Control-Allow-Origin":"*",
+            },
+            body:JSON.stringify({
+                email,
+                password,
+            }),
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data, "userRegister");
+            if(data.status=="ok") {
+              this.handleRemove(e);   
+            }else{
+                this.setState({ userRemoveFailed: true });
+                console.log(userRemoveFailed);
+            }
+        })
+}
 
 handleRemove(e){
     e.preventDefault();
-    const {userRemove} = this.state;
-    console.log(userRemove);
+    const {password, userRemoveFailed} = this.state;
+    console.log(password);
+    // if (this.state.userRemove === this.state.password){
+    console.log("entra no sitio errado")
     fetch("http://localhost:5000/user/delete",{
         method:"DELETE",
         crossDomain:true,
@@ -71,15 +105,27 @@ handleRemove(e){
             Accept:"application/json",
             "Access-Control-Allow-Origin":"*",
         },
-        body:JSON.stringify({               // o delete nem precisa de nada???
+        body:JSON.stringify({       // o delete nem precisa de nada???
             token: window.localStorage.getItem("token"),
-            userRemove,
+            password, 
         }),
     })
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "userDelete");
+        if (data.status=="ok"){
+            window.localStorage.clear();
+            window.location.href = "./login"
+        }else{
+            console.log("entra no sitio certo")
+            this.setState({ userRemoveFailed: true });
+            console.log(userRemoveFailed);
+        }
     })
+    // }else{
+        
+    // }
+    
 }
 handleSubmit(e){
     e.preventDefault();
@@ -315,16 +361,23 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form onSubmit={this.handleRemove}>
+                                <form onSubmit={this.preHandleRemove}>
                                     <p>Atenção: Esta ação é irreversível</p>
-                                    <label>Para remover a sua conta insira o seu username</label>
+                                    <label>Para remover a sua conta insira a sua password</label>
                                     <div class="input-field bg-dark"> 
-                                        <input type="text" onChange={(e => this.setState({ userRemove: e.target.value }))} class="bg-dark text-white" id="userRemocao"/>
+                                        <input type="password" onChange={(e => this.setState({ password: e.target.value }))} class="bg-dark text-white" id="userRemocao"/>
                                     </div>
                                     <div> 
                                         <br></br>
                                         <button type="submit" class="btn btn-outline-light col-md-3 botaoRemover">Remover</button>
                                     </div>
+                                    {this.state.userRemoveFailed ?
+                                    <div> 
+                                        <br></br>
+                                        <p>ERRO: A pass inserida não está correta</p>
+                                    </div> : 
+                                    <div></div>
+                                    }
                                 </form>
                             </div>
                         </div>

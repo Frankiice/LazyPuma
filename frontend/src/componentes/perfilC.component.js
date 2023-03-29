@@ -18,11 +18,12 @@ export default class PerfilC extends Component{
             email: "",
             phone: "",
             password: "",
-            userRemove: "",
             userRemoveFailed: "",
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+        this.preHandleRemove = this.preHandleRemove.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
 
 componentDidMount(){
@@ -50,8 +51,7 @@ componentDidMount(){
                         nif: data.data.nif,
                         email: data.data.email,
                         phone: data.data.phone,
-                        password: data.data.password,
-                        userRemove: data.data.userRemove,});
+                        password: data.data.password,});
     })
 }
 logOut = () => {
@@ -59,38 +59,71 @@ logOut = () => {
     window.location.href = "./login"
 
 }
-
-handleRemove(e){
+preHandleRemove(e){
     e.preventDefault();
-    const {userRemove, userRemoveFailed} = this.state;
-    console.log(userRemove);
-    if (this.state.userRemove === this.state.password){
-        console.log("entra no sitio errado")
-        fetch("http://localhost:5000/user/delete",{
-            method:"DELETE",
+    const {email, password, userRemoveFailed} = this.state;
+    console.log("email" , email);
+    console.log("password" , password);
+
+    fetch("http://localhost:5000/user/login",{
+            method:"POST",
             crossDomain:true,
             headers:{
                 "Content-type":"application/json",
                 Accept:"application/json",
                 "Access-Control-Allow-Origin":"*",
             },
-            body:JSON.stringify({       // o delete nem precisa de nada???
-                token: window.localStorage.getItem("token"),
-                userRemove, 
+            body:JSON.stringify({
+                email,
+                password,
             }),
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data, "userDelete");
+            console.log(data, "userRegister");
+            if(data.status=="ok") {
+              this.handleRemove(e);   
+            }else{
+                this.setState({ userRemoveFailed: true });
+                console.log(userRemoveFailed);
+            }
         })
-    
-        window.localStorage.clear();
-        window.location.href = "./login"
-    }else{
-        console.log("entra no sitio certo")
-        this.setState({ userRemoveFailed: true });
-        console.log(userRemoveFailed);
-    }
+}
+
+handleRemove(e){
+    e.preventDefault();
+    const {password, userRemoveFailed} = this.state;
+    console.log(password);
+    // if (this.state.userRemove === this.state.password){
+    console.log("entra no sitio errado")
+    fetch("http://localhost:5000/user/delete",{
+        method:"DELETE",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        body:JSON.stringify({       // o delete nem precisa de nada???
+            token: window.localStorage.getItem("token"),
+            password, 
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data, "userDelete");
+        if (data.status=="ok"){
+            window.localStorage.clear();
+            window.location.href = "./login"
+        }else{
+            console.log("entra no sitio certo")
+            this.setState({ userRemoveFailed: true });
+            console.log(userRemoveFailed);
+        }
+    })
+    // }else{
+        
+    // }
     
 }
 handleSubmit(e){
@@ -323,11 +356,11 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <form onSubmit={this.handleRemove}>
+                                <form onSubmit={this.preHandleRemove}>
                                     <p>Atenção: Esta ação é irreversível</p>
                                     <label>Para remover a sua conta insira a sua password</label>
                                     <div class="input-field bg-dark"> 
-                                        <input type="text" onChange={(e => this.setState({ userRemove: e.target.value }))} class="bg-dark text-white" id="userRemove"/>
+                                        <input type="password" onChange={(e => this.setState({ password: e.target.value }))} class="bg-dark text-white" id="userRemove"/>
                                     </div>
                                     <div> 
                                         <br></br>
