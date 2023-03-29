@@ -27,7 +27,7 @@ export default class Registo extends Component {
             phone: "",
             password: "",
             flag:false,
-            moradaCompleta: "",
+            morada: "",
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,10 +44,10 @@ export default class Registo extends Component {
     };
 
     getCoordenadas(e){
-        var moradaCompleta = this.state.rua + " " + this.state.localidade + " " + this.state.freguesia + " " + this.state.concelho + " " + this.state.cidade + " " + this.state.cod_postal + " " + this.state.pais
-        this.setState({ moradaCompleta: moradaCompleta });
-        console.log("morada completa", this.state.moradaCompleta)
-        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + this.state.moradaCompleta
+        var morada = this.state.rua + ", " + this.state.localidade + ", " + this.state.freguesia + ", " + this.state.concelho + ", " + this.state.cidade + ", " + this.state.cod_postal + ", " + this.state.pais
+        this.setState({ morada: morada });
+        console.log("morada completa", this.state.morada)
+        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + this.state.morada
         fetch(url)
                 .then((response) => response.json())
                 .then((data) => {
@@ -65,8 +65,8 @@ export default class Registo extends Component {
 
     handleSubmit(e){
         e.preventDefault();
-        const {type, fullname, nickname,moradaCompleta,lat,lon, nif, email, phone, password} = this.state;
-        console.log(type, fullname, nickname,moradaCompleta,lat,lon, nif, email, phone, password);
+        const {type, fullname, nickname,morada,lat,lon, nif, email, phone, password} = this.state;
+        console.log(type, fullname, nickname,morada,lat,lon, nif, email, phone, password);
         fetch("http://localhost:5000/user/registar",{
             method:"POST",
             crossDomain:true,
@@ -79,7 +79,7 @@ export default class Registo extends Component {
                 type,
                 fullname,
                 nickname,
-                moradaCompleta,
+                morada,
                 lat,
                 lon,
                 nif,
