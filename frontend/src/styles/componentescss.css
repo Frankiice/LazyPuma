@@ -19,6 +19,14 @@ html, body {
     color: white;
   }
 
+a {
+    color: #84b3ff;
+}
+
+a:hover{
+    color: #84b3ff;
+}
+
 .center {
     margin: auto;
     width: 40%;

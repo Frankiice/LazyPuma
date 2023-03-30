@@ -68,17 +68,17 @@ app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({email})
     if(!user){
-        return res.json({error:"User Not found"})
+        return res.json({status: "error", error: "O utilizador não foi encontrado"})
     }
     if(await bcrypt.compare(password,user.password)){
         const token = jwt.sign({email:user.email}, JWT_SECRET)
         if(res.status(201)){
             return res.json({status:"ok", data: token, type: user.type})
         }else{
-            return res.json({error:"error"})
+            return res.json({status:"error", error: "Ocorreu um erro na ligação à base de dados"})
         }
     }
-    return res.json({status:"error", error: "Invalid Password"})
+    return res.json({status:"error", error: "Password inválida"})
 });
 
 app.post("/user/userData", async (req, res) => { //este seria para aceder as infos do user
@@ -106,7 +106,7 @@ app.put("/user/update", async (req, res) => { //esste seria para atualizar as in
         await User.findOneAndUpdate({email: user_email}, {fullname: fullname, nickname: nickname, morada:morada, nif:nif, lat: lat, lon:lon, phone:phone },
             {new:true}, 
             (err,result)=>{
-                res.json({msg:"Update success!!!!!!!"})
+                res.json({status: "ok", data:"Update success"})
             })
             // .then((data) => {
             //     res.send({status: "ok", data: data});

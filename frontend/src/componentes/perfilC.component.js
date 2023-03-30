@@ -19,6 +19,7 @@ export default class PerfilC extends Component{
             phone: "",
             password: "",
             userRemoveFailed: "",
+            userUpdated: window.localStorage.getItem("userUpdated"),
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
@@ -128,8 +129,8 @@ handleRemove(e){
 }
 handleSubmit(e){
     e.preventDefault();
-    const {fullname, nickname,morada,lat,lon, email, nif, phone} = this.state;
-    console.log(fullname, nickname,morada,lat,lon, email, nif, phone);
+    const {fullname, nickname,morada,lat,lon, email, nif, phone, userUpdated} = this.state;
+    console.log(fullname, nickname,morada,lat,lon, email, nif, phone, userUpdated);  
     fetch("http://localhost:5000/user/update",{
         method:"PUT",
         crossDomain:true,
@@ -153,6 +154,7 @@ handleSubmit(e){
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "userUpdate");
+        window.localStorage.setItem("userUpdated", true);
         window.location.reload();
     })
 };
@@ -250,6 +252,13 @@ render() {
                                     </div>
                                 </div>
                             </div>
+                            {this.state.userUpdated ?
+                              <div> 
+                                  <br></br>
+                                  <p>Informações foram alteradas com sucesso!</p>
+                              </div> : 
+                              <p></p>
+                            }
                             {/* <div class="col-md-12">
                                 <div class="form-group">
                                         <label>Bio</label>
