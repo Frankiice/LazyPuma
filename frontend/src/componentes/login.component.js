@@ -13,6 +13,8 @@ export default class Login extends Component {
       userError: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    window.localStorage.removeItem("userUpdated");
+
   }
 
   handleSubmit(e){

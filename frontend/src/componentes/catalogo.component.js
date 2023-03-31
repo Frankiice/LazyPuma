@@ -48,6 +48,8 @@ export default class PerfilC extends Component{
             // livros: "",
         };
         this.handleClick = this.handleClick.bind(this);
+        window.localStorage.removeItem("userUpdated");
+
         
     }  
     componentDidMount(){

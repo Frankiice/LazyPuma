@@ -19,6 +19,8 @@ export default class PerfilF extends Component{
             phone: "",
             password: "",
             userRemoveFailed: "",
+            userUpdated: window.localStorage.getItem("userUpdated"),
+
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
@@ -154,6 +156,7 @@ handleSubmit(e){
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "userUpdate");
+        window.localStorage.setItem("userUpdated", true);
         window.location.reload();
     })
 };
@@ -255,6 +258,13 @@ render() {
                                     </div>
                                 </div>
                             </div>
+                            {this.state.userUpdated ?
+                              <div> 
+                                  <br></br>
+                                  <p>Informações foram alteradas com sucesso!</p>
+                              </div> : 
+                              <p></p>
+                            }
                             {/* <div class="col-md-12">
                                 <div class="form-group">
                                         <label>Bio</label>

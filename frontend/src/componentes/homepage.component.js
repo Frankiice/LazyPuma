@@ -49,8 +49,10 @@ export default class Homepage extends Component{
             // livros: "",
         };
         this.handleClick = this.handleClick.bind(this);
+        window.localStorage.removeItem("userUpdated");
         
     }    
+
 
     handleClick(e){
         //const {bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros} = this.state;
