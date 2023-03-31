@@ -160,89 +160,322 @@ export default class Homepage extends Component{
                                 Bebé
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="bebe">
-                                <li><a class="dropdown-item" href="#">Fraldas</a></li>
+                                <li><a class="dropdown-item" href="#">Passeio e Viagem</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Chupetas</a></li>
+                                <li><a class="dropdown-item" href="#">Higiene e Fraldas</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Biberões</a></li>
+                                <li><a class="dropdown-item" href="#">Proteção e Saúde</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Mobiliário e Decoração</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Alimentação</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Brinquedos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="desporto" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Desporto
+                                Desporto, Outdoor e Viagem
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="desporto">
+                                <li><a class="dropdown-item" href="#">Desportos Outdoor</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Desportos Coletivos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Equipamento deCardio e Fitness</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Desportos Aquaticos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Desportos Neve</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Roupa Desportiva</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Tecnologia Desportiva</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Nutrição e Suplementos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Pesca</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Caça</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Campismo</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Viagem</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="animais" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Animais
+                                Animais de Estimação
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="animais">
+                                <li><a class="dropdown-item" href="#">Gatos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Cães</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Peixes</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Tartarugas e Répteis</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Pássaros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Coelhos e Roedores</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Animais de Quinta</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
+                            
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="beleza" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Beleza
+                                Beleza e Saúde
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="beleza">
+                                <li><a class="dropdown-item" href="#">Máquinas de Depilação</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Perfumes</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Cabelo</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Corpo</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Rosto</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Maquilhagem</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Higiene Oral</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Saúde e Bem Estar</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="bricolagem" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Bricolagem
+                                Bricolagem 
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="bricolagem">
+                                <li><a class="dropdown-item" href="#">Ferramentas de Bricolagem</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Tintas, Colas e semelhantes</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Segurança e Proteção</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Construção</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Ferrragens</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="telemoveis" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Telemóveis e Smartphones
+                                Telemóveis e Smartwatches
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="telemoveis">
+                                <li><a class="dropdown-item" href="#">Telemóveis e Smartphones</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Acessórios de Telemóvel</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Smartwatches</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Telefones Fixos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Acessórios de Som</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Telefones Fixos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="decoracao" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Decoração
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="decoracao">
+                                <li><a class="dropdown-item" href="#">Sala</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Sala de Jantar</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Quarto</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Cozinha</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Casa de Banho</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Iluminação</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Têxteis</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="jardinagem" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Jardinagem
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="Jardinagem">
+                                <li><a class="dropdown-item" href="#">Plantas Naturais</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Sementes e Bolbos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Adubos, Fertilizantes e Substratos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Inseticida</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Vasos e floreiras</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Ferramentas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Estufas e Coberturas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="gaming" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Gaming
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="gaming">
+                                <li><a class="dropdown-item" href="#">Consolas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Jogos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Gaming PC</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Acessórios Gaming</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="televisoes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                TVs
+                                TVs e Som
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="TVS">
+                                <li><a class="dropdown-item" href="#">Televisões</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">SoundBars</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Projetores de imagem</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Acessórios de TV</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Auriculares</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="brinquedos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Jogos e Brinquedos
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="brinquedos">
+                                <li><a class="dropdown-item" href="#">Jogos, Puzzles e Cartas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Legos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Funko Pop e Merchandising</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Brinquedos de Bebé</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="eletrodomesticos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Eletrodomésticos
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="eletrodomesticos">
+                                <li><a class="dropdown-item" href="#">Frigoríficos e Arcas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Máquinas de Roupa</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Máquinas de Loiça</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Fornos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Fogões</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Micro-ondas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Máquinas de Café</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Preparação de Alimentos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Aspiradores e Máquinas de Limpeza</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Ar condicionado</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="fotografia" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Fotografia</a>
+                                <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="fotografia">
+                                <li><a class="dropdown-item" href="#">Máquinas Fotográficas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Drones</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Vídeo</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Objetivas</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Acessórios de Fotografia</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                            </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="livros" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Livros
                             </a>
+                            <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="livros">
+                                <li><a class="dropdown-item" href="#">Romance</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Literatura infantil e juvenil</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Autoajuda</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Manga</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Livros técnicos</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+
+                            </ul>
                         </li>
                     </ul>
                 </div>
