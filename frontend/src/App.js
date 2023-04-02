@@ -16,6 +16,8 @@ import Login from "./componentes/login.component";
 import PerfilC from "./componentes/perfilC.component";
 import PerfilF from "./componentes/perfilF.component";
 import Catalogo from "./componentes/catalogo.component";
+import Produto from "./componentes/produto.component";
+
 
 function App() {
   // const isLoggedIn = window.localStorage.setItem("loggedIn", false);
@@ -36,6 +38,8 @@ function App() {
         <Route path="/user/c" element={<PerfilC/>}/>
         <Route path="/user/f" element={<PerfilF/>}/>
         <Route path="/catalogo" element={<Catalogo/>}/>
+        <Route path="/produto" element={<Produto/>}/>
+
 
       </Routes>
     </Router>

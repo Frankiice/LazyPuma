@@ -487,6 +487,15 @@ div.scrollmenu .btn-xl {
     
 }
 
+#inputQuantity{
+    max-width: 3rem;
+}
+
+.relatedItemSale{
+    top: 0.5rem; 
+    right: 0.5rem;
+}
+
 @media(max-width: 360px) {
     #forgot {
         margin-left: 0;
