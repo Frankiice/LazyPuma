@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/componentescss.css";
-import "../scripts/scripts.js";
 import { FaSearch } from "react-icons/fa"
 import { useNavigate } from "react-router-dom";
 import 'bootstrap';
+import {Helmet} from "react-helmet";
 
 
 // import ExercisesList from "./componentes/exercises-list.component";
@@ -51,7 +51,7 @@ export default class Homepage extends Component{
         this.handleClick = this.handleClick.bind(this);
         window.localStorage.removeItem("userUpdated");
         
-    }    
+    }
 
 
     handleClick(e){
@@ -60,7 +60,7 @@ export default class Homepage extends Component{
         const {categoria} = this.state;
         console.log(categoria);
         window.localStorage.setItem("categoria", categoria);
-        window.location.href = "/catalogo";
+        window.location.href = "/";
         // fetch("http://localhost:5000/catalogo",{//mudar URL !
         //     method:"POST", //verificar!!!!!
         //     crossDomain:true,
@@ -90,26 +90,24 @@ export default class Homepage extends Component{
     //<!-- Header -->
     <React.Fragment>
     <div class="scrollmenu">
-    <header class="cor_header height_header">  
-    
-        <div class="btn-toolbar col-lg-12 justify-content-center " id="buttons_header"role="toolbar" >      {/*onClick{() => this.setState({ count: 1})}*/}
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao2" title="bebé" value="bebe" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bebé</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao3" title="desporto" value="desporto" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>desporto</button> 
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao4" title="animais" value="animais" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>animais</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao5" title="beleza" value="beleza" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>beleza</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao6" title="bricolagem" value="bricolagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bricolagem</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao7" title="telemóveis e smartphones"value="telemoveis" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>Telemóveis <br></br>e<br></br> Smartphones</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao8" title="decoração"value="decoracao" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>decoração</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao9" title="jardinagem"value="jardinagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jardinagem</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao10" title="gaming"value="gaming" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>gaming</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao11" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>TVs</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao12" title="jogos e brinquedos"value="brinquedos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jogos <br></br>e<br></br>brinquedos</button>   
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao13" title="eletrodomesticos"value="eletrodomesticos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao14" title="fotografia"value="fotografia" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>fotografia</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle" id="butao15" title="livros"value="livros" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>livros</button>  
-        
-    </div>
-    </header>
+        <header class="cor_header height_header">
+            <div class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header"role="toolbar" >      {/*onClick{() => this.setState({ count: 1})}*/}
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="bebe" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bebé</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="desporto" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>desporto</button> 
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="animais" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>animais</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="beleza" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>beleza</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao6" title="bricolagem" value="bricolagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bricolagem</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao7" title="telemóveis e smartphones"value="telemoveis" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>Telemóveis <br></br>e<br></br> Smartphones</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao8" title="decoração"value="decoracao" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>decoração</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao9" title="jardinagem"value="jardinagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jardinagem</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao10" title="gaming"value="gaming" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>gaming</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao11" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>TVs</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao12" title="jogos e brinquedos"value="brinquedos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jogos <br></br>e<br></br>brinquedos</button>   
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="eletrodomesticos"value="eletrodomesticos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="fotografia"value="fotografia" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>fotografia</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="livros"value="livros" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>livros</button>
+            </div>
+        </header>
     </div>
 
     {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
@@ -482,6 +480,7 @@ export default class Homepage extends Component{
             </nav>
         </div>
     </div>
+    <script src="../scripts/sliderProdutos.js"></script>
     {/* //<!-- Section --> */}
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
@@ -584,9 +583,37 @@ export default class Homepage extends Component{
                         </div>
                     </div>
                 </div>
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">Fancy Product</h5>
+                                $40.00 - $80.00
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">Fancy Product</h5>
+                                $40.00 - $80.00
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-      </section>
+    </section>
     </React.Fragment>
     );
   }

@@ -19,6 +19,7 @@
     "react-bootstrap": "^2.7.2",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.6.0",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "scrollbooster": "^3.0.2"
   }
 }

@@ -1,31 +1,32 @@
-// const myModal = document.getElementById('myModal')
-// const myInput = document.getElementById('myInput')
+const slider = document.querySelector('.scrollcontainer');
+let isDown = false;
+let startX;
+let scrollLeft;
 
-// $(document).ready(function(){
-//     //jquery for toggle sub menus
-//     $('.sub-btn').click(function(){
-//       $(this).next('.sub-menu').slideToggle();
-//       $(this).find('.dropdown').toggleClass('rotate');
-//     });
+console.log(slider);
 
-//     //jquery for expand and collapse the sidebar
-//     $('.menu-btn').click(function(){
-//       $('.side-bar').addClass('active');
-//       $('.menu-btn').css("visibility", "hidden");
-//     });
-
-//     $('.close-btn').click(function(){
-//       $('.side-bar').removeClass('active');
-//       $('.menu-btn').css("visibility", "visible");
-//     });
-//   });
-
-// document.addEventListener("DOMContentLoaded", function() {
-//     var myOffcanvas = document.getElementById('myOffcanvas');
-//     myOffcanvas.addEventListener('hidden.bs.offcanvas', function () {
-//         var offcanvasBackdrop = document.querySelector('.offcanvas-backdrop');
-//         if (offcanvasBackdrop) {
-//             offcanvasBackdrop.parentNode.removeChild(offcanvasBackdrop);
-//         }
-//     });
-// });
+if (slider) {
+    // Not called
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        slider.classList.add('active');
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.classList.remove('active');
+    });
+    slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('active');
+    });
+    slider.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 3; //scroll-fast
+        slider.scrollLeft = scrollLeft - walk;
+        console.log(walk);
+    });
+}

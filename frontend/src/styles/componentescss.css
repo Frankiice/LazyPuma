@@ -1,5 +1,6 @@
 html, body {
-    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar-height {
@@ -31,6 +32,11 @@ a:hover{
     margin: auto;
     width: 40%;
     padding: 10px;
+}
+
+.scrollcontainer {
+	cursor: grab;
+	overflow: auto;
 }
 
 #imglogo {
@@ -133,6 +139,14 @@ body{
 .form__input{
     width: 45%;
 }
+
+.footer {
+    position: relative;
+    margin-top: 166px; /* negative value of footer height */
+    height: 150px;
+    clear:both;
+    padding-top:20px;
+  }   
 
 .footer, .form-header{
     text-align: center;
