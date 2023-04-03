@@ -184,9 +184,9 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Desportos Coletivos</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Equipamento deCardio e Fitness</a></li>
+                                <li><a class="dropdown-item" href="#">Equipamento de Cardio e Fitness</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Desportos Aquaticos</a></li>
+                                <li><a class="dropdown-item" href="#">Desportos Aquáticos</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Desportos Neve</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
