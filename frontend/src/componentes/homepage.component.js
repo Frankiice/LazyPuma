@@ -480,11 +480,11 @@ export default class Homepage extends Component{
             </nav>
         </div>
     </div>
-    <ul class="dropdown-menu" aria-labelledby="cartDropdown">
+    {/* <ul class="dropdown-menu" aria-labelledby="cartDropdown">
         <li><a class="dropdown-item" href="#">Action</a></li>
         <li><a class="dropdown-item" href="#">Another action</a></li>
         <li><a class="dropdown-item" href="#">Something else here</a></li>
-    </ul>
+    </ul> */}
     
     <script src="../scripts/sliderProdutos.js"></script>
     {/* //<!-- Section --> */}
