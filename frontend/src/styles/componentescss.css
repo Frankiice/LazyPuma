@@ -209,6 +209,29 @@ body{
     text-align: center;
 }
 
+/* para o CESTO */
+
+.offcanvas2-body {
+    padding: 0;
+}
+
+.offcanvas2 {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1040;
+    overflow-y: auto;
+    overflow-x: hidden;
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%);
+}
+  
+.offcanvas2.show {
+    visibility: visible;
+    transform: translateX(0);
+}
+
 .container-fluid {
     padding-left: 0px;
     overflow-x: hidden;
