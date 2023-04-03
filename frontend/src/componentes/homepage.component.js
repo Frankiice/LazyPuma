@@ -480,35 +480,12 @@ export default class Homepage extends Component{
             </nav>
         </div>
     </div>
-
-    <div class="offcanvas offcanvas-right" data-bs-scroll="true" tabindex="1" id="sidebar2">
-        <div class="offcanvas-header navbar-dark bg-dark">
-                <h5 class="offcanvas-title text-white" id="offcanvasWithBothOptionsLabel">Cesto</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body sidebar">
-            <nav class="navbar navbar-light bg-light" id="offcanvasItems">
-                <div class="container-fluid mt-2">
-                    <ul class="navbar-nav produtosSidebar">
-                      <li >
-                          <a href="#" id="bebe" >
-                              Bebé
-                          </a>
-
-                      </li>
-                      <hr class="linhaSeparacaoProdutos"></hr>
-                      <li class="nav-item">
-                          <a href="#" id="desporto" >
-                              Desporto, Outdoor e Viagem
-                          </a>
-                      </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </div>
-
-
+    <ul class="dropdown-menu" aria-labelledby="cartDropdown">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+    </ul>
+    
     <script src="../scripts/sliderProdutos.js"></script>
     {/* //<!-- Section --> */}
     <section class="py-5">

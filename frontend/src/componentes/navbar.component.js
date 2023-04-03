@@ -168,11 +168,12 @@ export default class Navbar extends Component{
         </li>}
       </ul>
        <form class="d-flex px-3">
-        <button class="btn btn-outline-light col-md-12" type="submit" data-bs-toggle="offcanvas" data-bs-target="#sidebar2" aria-controls="offcanvasScrolling">
-            <i class="bi-cart-fill me-1"></i>
+        <button class="btn btn-outline-light col-md-12" id="cartDropdown"  data-bs-toggle="dropdown" data-bs-target="#cart" >
+            <i class="bi-cart-fill me-1"  ></i>
             Cesto
             <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
         </button>
+          
       </form>
 
 
