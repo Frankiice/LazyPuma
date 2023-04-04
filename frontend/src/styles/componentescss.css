@@ -349,14 +349,19 @@ a[target='_blank'] {
     
 }
 
-div.scrollmenu {
+.scrollmenu {
     overflow: auto;
     white-space: nowrap;
     background-color: #F2F4F5;
     overflow-y:hidden;
+    cursor: grab;
 }
 
-div.scrollmenu .btn-xl {
+.scrollmenu:active {
+    cursor: grabbing;
+}
+
+.scrollmenu .btn-xl {
     display: inline-block;
 }
 
