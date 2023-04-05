@@ -5,7 +5,8 @@ import "../styles/componentescss.css";
 import { FaSearch } from "react-icons/fa"
 import { useNavigate } from "react-router-dom";
 import 'bootstrap';
-import {Helmet} from "react-helmet";
+import { useRef } from "react";
+import ScrollContainer from 'react-indiana-drag-scroll'
 
 
 // import ExercisesList from "./componentes/exercises-list.component";
@@ -29,6 +30,7 @@ const ProdutosResposta = [{primeiroNome: "Bananas", quantidade:"30", tipo: "Made
 // };
 //const navigate = useNavigate();
 export default class Homepage extends Component{
+
     constructor(props){
         super(props);
         this.state = {
@@ -91,7 +93,7 @@ export default class Homepage extends Component{
     <React.Fragment>
     <div class="scrollmenu">
         <header class="cor_header height_header">
-            <div class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header"role="toolbar" >      {/*onClick{() => this.setState({ count: 1})}*/}
+            <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">      {/*onClick{() => this.setState({ count: 1})}*/}
                 <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="bebe" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bebé</button>  
                 <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="desporto" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>desporto</button> 
                 <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="animais" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>animais</button>  
@@ -106,9 +108,10 @@ export default class Homepage extends Component{
                 <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="eletrodomesticos"value="eletrodomesticos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
                 <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="fotografia"value="fotografia" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>fotografia</button>  
                 <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="livros"value="livros" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>livros</button>
-            </div>
+            </ScrollContainer>
         </header>
     </div>
+
 
     {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
         <div class="offcanvas-header">
@@ -621,7 +624,7 @@ export default class Homepage extends Component{
         </div>
     </section>
     </React.Fragment>
-    );
+    )
   }
 }
 
