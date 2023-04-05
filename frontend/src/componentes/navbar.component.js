@@ -41,12 +41,45 @@ export default class Navbar extends Component{
     super(props);
     this.state = {
         loggedIn:  window.localStorage.getItem("loggedIn"),
-        query: "",
         data: "",
         user: "",
         nickname: "",
+        obj: {},
+        filterCategoria : [], //ir buscar à localstorage???
+        page: 1,
+        search: "",
     };
   }
+
+  handleSearch(){
+    try {
+      const base_url = "http://localhost:5000/produto/search" //este é a base nao sei se aceita do outro lado mais parametros aqui
+      const url = `${base_url}?page=${page}&categoria=${filterCategoria.toString()}&search=${search}`;
+      fetch( url, {
+        method:"GET",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        body:JSON.stringify({
+            token: window.localStorage.getItem("token"), //se daquela forma nao funcionar manda-se aqui os campos
+            // filterCategoria,
+            // page,
+            // search,
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data, "searchData");
+        this.setState({ obj: data.total}); //o que adicionar aqui??
+    })
+    }catch(err){
+      console.log(err);
+    }
+}
+
 
     // const [query, setQuery] = useState('')
     // const [data, setData] = useState([])
@@ -63,13 +96,13 @@ export default class Navbar extends Component{
     // -----------------------------
 
 
-   sendSearchData = (query) => {
-    const fetchUsers = () => {
-      const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
-      this.setState({data: res.data});
-    };
-    fetchUsers();
-  };
+  //  sendSearchData = (query) => {
+  //   const fetchUsers = () => {
+  //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
+  //     this.setState({data: res.data});
+  //   };
+  //   fetchUsers();
+  // };
 
   logOut = () => {
     window.localStorage.clear();
@@ -129,7 +162,7 @@ export default class Navbar extends Component{
         </ul>
         <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
             <div className="form-group has-search">                                                                           
-              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({query: e.target.value} )}} placeholder='Search'/> <a href="/results" onClick={() => this.sendSearchData(this.state.query)} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder='Search'/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
         </div>
       </div>

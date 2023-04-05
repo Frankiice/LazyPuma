@@ -37,6 +37,18 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
+  
+// const ProductDetailsSchema = new mongoose.Schema(
+//     {
+//     name: String,
+//     subcategories: Array,
+//     },
+//     {
+//         collection: "products"
+//     }
+// );
+
+
 app.post("/user/registar", async(req, res) => {
     try {
         const User = mongoose.model("users", UserDetailsSchema);
@@ -133,7 +145,7 @@ app.delete("/user/delete", async (req, res) => { //esste seria para eleminar um 
     }catch(error){}
 });
 
-app.post("/catalogo", async (req, res) => { //este seria para aceder as infos do user
+app.post("/catalogo", async (req, res) => { 
     const User = mongoose.model("users", UserDetailsSchema);//tera de ser outro coiso e nao o users
     const {token, categoria} = req.body;
     try{
@@ -147,6 +159,64 @@ app.post("/catalogo", async (req, res) => { //este seria para aceder as infos do
                 res.send({status: "error" ,data: error});
             });
     }catch(error){}
+});
+
+
+app.get("/produto/search", async (req, res) => { 
+    // const Product = mongoose.model("products", ProductDetailsSchema);
+
+    try{
+        const page = parseInt(req.query.page) - 1 || 0;
+		const limit = parseInt(req.query.limit) || 5;
+		const search = req.query.search || "";
+        let categoria = req.query.categoria || "All";
+
+        const categoriasPossivies = [
+            "bebe",
+            "desporto",
+            "animais",
+            "beleza",
+            "bricolagem",
+            "telemoveis",
+            "decoracao",
+            "jardinagem",
+            "gaming",
+            "TVs",
+            "brinquedos",
+            "eletrodomesticos",
+            "fotografia",
+            "livros"
+		];
+
+        categoria === "All"
+			? (categoria = [...categoriasPossivies])
+			: (categoria = req.query.categoria.split(","));
+
+        const products = await Product.find({ name: { $regex: search, $options: "i" } })
+            .where("categoria")
+			.in([...categoria])
+			.skip(page * limit)
+			.limit(limit);
+        
+        const total = await Product.countDocuments({
+            categoria: { $in: [...categoria] },
+            name: { $regex: search, $options: "i" },
+        });
+
+        const response = {
+            error: false,
+            total,
+            page: page + 1,
+            limit,
+            categoria: categoriasPossivies,
+            products,
+        };
+
+        res.status(200).json(response);
+    }catch(error){
+        console.log(err);
+		res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
 });
 
 app.listen(port, () => {
