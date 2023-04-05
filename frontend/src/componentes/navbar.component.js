@@ -52,6 +52,7 @@ export default class Navbar extends Component{
   }
 
   handleSearch(){
+    const {page, filterCategoria, search} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este é a base nao sei se aceita do outro lado mais parametros aqui
       const url = `${base_url}?page=${page}&categoria=${filterCategoria.toString()}&search=${search}`;
