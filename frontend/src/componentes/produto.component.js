@@ -29,14 +29,23 @@ export default class Produto extends Component{
                 <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." /></div>
                 <div class="col-md-6">
                     <div class="small mb-1">SKU: BST-498</div>
-                    <h1 class="display-5 fw-bolder">Shop item template</h1>
+                    <h1 class="display-5 fw-bolder">Nome do Produto</h1>
                     <div class="fs-5 mb-5">
                         <span class="text-decoration-line-through">$45.00</span>
                         <span>$40.00</span>
                     </div>
-                    <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero?</p>
+                    <p class="lead text-dark">Caracteristicas do produto</p>
+                    <p class="lead text-dark">Caracteristicas do produto</p>
+                    <p class="lead text-dark">Caracteristicas do produto</p>
+                    <br></br>
+                    <p class="lead text-dark">Caracteristicas do Fornecedor ?</p>
+                    <br></br>
+
+
                     <div class="d-flex">
-                        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" />
+                        <label class="lead text-dark">Quantidade: &nbsp; </label>
+                       
+                        <input class="form-control text-center me-3" id="inputQuantity" type="num" placeholder="1" />
                         <button class="btn btn-outline-dark flex-shrink-0" type="button">
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart

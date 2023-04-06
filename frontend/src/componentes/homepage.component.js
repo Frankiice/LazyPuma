@@ -187,9 +187,9 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Desportos Coletivos</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Equipamento deCardio e Fitness</a></li>
+                                <li><a class="dropdown-item" href="#">Equipamento de Cardio e Fitness</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Desportos Aquaticos</a></li>
+                                <li><a class="dropdown-item" href="#">Desportos Aquáticos</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Desportos Neve</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -483,6 +483,12 @@ export default class Homepage extends Component{
             </nav>
         </div>
     </div>
+    {/* <ul class="dropdown-menu" aria-labelledby="cartDropdown">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+    </ul> */}
+    
     <script src="../scripts/sliderProdutos.js"></script>
     {/* //<!-- Section --> */}
     <section class="py-5">
