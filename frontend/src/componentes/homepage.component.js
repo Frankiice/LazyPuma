@@ -34,7 +34,7 @@ export default class Homepage extends Component{
     constructor(props){
         super(props);
         this.state = {
-            categoria: "",
+            categoriaB: "",
             // bebe: "",
             // desporto: "", 
             // animais: "",
@@ -59,9 +59,9 @@ export default class Homepage extends Component{
     handleClick(e){
         //const {bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros} = this.state;
         //console.log(bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros);
-        const {categoria} = this.state;
-        console.log(categoria);
-        window.localStorage.setItem("categoria", categoria);
+        const {categoriaB} = this.state;
+        console.log(categoriaB);
+        window.localStorage.setItem("categoriaB", categoriaB);
         window.location.href = "/";
         // fetch("http://localhost:5000/catalogo",{//mudar URL !
         //     method:"POST", //verificar!!!!!
@@ -73,7 +73,7 @@ export default class Homepage extends Component{
         //     },
         //     body:JSON.stringify({
         //         token: window.localStorage.getItem("token"),
-        //         categoria,
+        //         categoriaB,
         //     }),
         // })
         // .then((res) => res.json())
@@ -94,20 +94,21 @@ export default class Homepage extends Component{
     <div class="scrollmenu">
         <header class="cor_header height_header">
             <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">      {/*onClick{() => this.setState({ count: 1})}*/}
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="bebe" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bebé</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="desporto" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>desporto</button> 
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="animais" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>animais</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="beleza" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>beleza</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao6" title="bricolagem" value="bricolagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>bricolagem</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao7" title="telemóveis e smartphones"value="telemoveis" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>Telemóveis <br></br>e<br></br> Smartphones</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao8" title="decoração"value="decoracao" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>decoração</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao9" title="jardinagem"value="jardinagem" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jardinagem</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao10" title="gaming"value="gaming" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>gaming</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao11" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>TVs</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao12" title="jogos e brinquedos"value="brinquedos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>jogos <br></br>e<br></br>brinquedos</button>   
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="eletrodomesticos"value="eletrodomesticos" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="fotografia"value="fotografia" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>fotografia</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="livros"value="livros" onClick={(e) => {this.setState({ categoria: e.target.value }, this.handleClick)}}>livros</button>
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bebé</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>desporto</button> 
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>animais</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="Cosmetics" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>beleza</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao6" title="bricolagem" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bricolagem</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao7" title="telemóveis e smartphones"value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Telemóveis <br></br>e<br></br> Smartphones</button>
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao8" title="informatica"value="Tech" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>informática </button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao9" title="decoração"value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>decoração</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao10" title="jardinagem"value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>jardinagem</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao11" title="gaming"value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>gaming</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao12" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>TVs</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="jogos e brinquedos"value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>jogos <br></br>e<br></br>brinquedos</button>   
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="eletrodomesticos"value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="fotografia"value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>fotografia</button>  
+                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>livros</button>
             </ScrollContainer>
         </header>
     </div>

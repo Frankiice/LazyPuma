@@ -45,17 +45,19 @@ export default class Navbar extends Component{
         user: "",
         nickname: "",
         obj: {},
-        filterCategoria : [], //ir buscar à localstorage???
+        categoriaA: "", 
+        categoriaB: window.localStorage.getItem("categoriaB") || "",
         page: 1,
         search: "",
     };
   }
 
   handleSearch(){
-    const {page, filterCategoria, search} = this.state;
+    const {page, categoriaA, categoriaB, search} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este é a base nao sei se aceita do outro lado mais parametros aqui
-      const url = `${base_url}?page=${page}&categoria=${filterCategoria.toString()}&search=${search}`;
+      const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&search=${search}`;
+      console.log(url);
       fetch( url, {
         method:"GET",
         crossDomain:true,
@@ -64,12 +66,12 @@ export default class Navbar extends Component{
             Accept:"application/json",
             "Access-Control-Allow-Origin":"*",
         },
-        body:JSON.stringify({
-            token: window.localStorage.getItem("token"), //se daquela forma nao funcionar manda-se aqui os campos
-            // filterCategoria,
-            // page,
-            // search,
-        }),
+        // body:JSON.stringify({
+        //     token: window.localStorage.getItem("token"), //se daquela forma nao funcionar manda-se aqui os campos
+        //     // filterCategoria,
+        //     // page,
+        //     // search,
+        // }),
     })
     .then((res) => res.json())
     .then((data) => {

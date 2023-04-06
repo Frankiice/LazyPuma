@@ -500,27 +500,35 @@ a[target='_blank'] {
 }
 
 #butao8{
+    background-image: url('../images/informatica.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.2em;
+}
+
+#butao9{
     background-image: url('../images/decoracao.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
     padding:1.5em;
 }
-#butao9{
+#butao10{
     background-image: url('../images/jardim.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
     padding:1.5em;
 }
-#butao10{
+#butao11{
     background-image: url('../images/comando.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
     padding:1.5em;
 }
-#butao11{
+#butao12{
     background-image: url('../images/tv.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -528,7 +536,7 @@ a[target='_blank'] {
     padding:1.5em;
 }
 
-#butao12{
+#butao13{
     background-image: url('../images/lego.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -536,7 +544,7 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
-#butao13{
+#butao14{
     background-image: url('../images/wm.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -544,7 +552,7 @@ a[target='_blank'] {
     padding:0em;
 }
 
-#butao14{
+#butao15{
     background-image: url('../images/camera.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -552,7 +560,7 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
-#butao15{
+#butao16{
     background-image: url('../images/livros.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;

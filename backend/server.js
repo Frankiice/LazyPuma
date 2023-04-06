@@ -11,6 +11,7 @@ app.use(express.json());
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { NavbarBrand } = require('react-bootstrap');
 const JWT_SECRET = "aisfnoiqnfnqnfqfinqfw+qofmwkginanpgangspaiag"
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri);
@@ -37,16 +38,19 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
-  
-// const ProductDetailsSchema = new mongoose.Schema(
-//     {
-//     name: String,
-//     subcategories: Array,
-//     },
-//     {
-//         collection: "products"
-//     }
-// );
+const ProductDetailsSchema =  new mongoose.Schema(
+    {
+        name: String,
+        brand: String,
+        categorieA: String,
+        categorieB: String,
+    },
+    {
+        collection: "products"
+    }
+)
+
+
 
 
 app.post("/user/registar", async(req, res) => {
@@ -163,58 +167,64 @@ app.post("/catalogo", async (req, res) => {
 
 
 app.get("/produto/search", async (req, res) => { 
-    // const Product = mongoose.model("products", ProductDetailsSchema);
+    const Product = mongoose.model("products", ProductDetailsSchema);
 
     try{
-        const page = parseInt(req.query.page) - 1 || 0;
-		const limit = parseInt(req.query.limit) || 5;
+        // const page = parseInt(req.query.page) - 1 || 0;
+		// const limit = parseInt(req.query.limit) || 1000;
 		const search = req.query.search || "";
         let categoria = req.query.categoria || "All";
+        let categorieB = req.query.categoriaB || "All";
 
-        const categoriasPossivies = [
-            "bebe",
-            "desporto",
-            "animais",
-            "beleza",
-            "bricolagem",
-            "telemoveis",
-            "decoracao",
-            "jardinagem",
-            "gaming",
+        console.log("categoria",categoria);
+        console.log("categorieB",categorieB);
+
+        const categoriasPossiviesB = [
+            "Baby",
+            "Sports",
+            "Animals",
+            "Cosmetics",
+            "DIY",
+            "Smartphones",
+            "Tech",
+            "Decoration",
+            "Gardening",
+            "Gaming",
             "TVs",
-            "brinquedos",
-            "eletrodomesticos",
-            "fotografia",
-            "livros"
+            "Toys",
+            "Appliances",
+            "Photography",
+            "Books"
 		];
 
-        categoria === "All"
-			? (categoria = [...categoriasPossivies])
-			: (categoria = req.query.categoria.split(","));
-
-        const products = await Product.find({ name: { $regex: search, $options: "i" } })
-            .where("categoria")
-			.in([...categoria])
-			.skip(page * limit)
-			.limit(limit);
+        categorieB === "All"
+			? (categorieB = [...categoriasPossiviesB])
+			: (categorieB = req.query.categoriaB);
+// User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] })
+        // const products = await Product.find({ name: { $regex: search, $options: "i" }})
+        const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+            .where("categorieB")
+			.in(categorieB)
+			// .skip(page * limit)
+			// .limit(limit);
         
         const total = await Product.countDocuments({
-            categoria: { $in: [...categoria] },
+            categorieB: { $in: categorieB },
             name: { $regex: search, $options: "i" },
         });
 
         const response = {
             error: false,
             total,
-            page: page + 1,
-            limit,
-            categoria: categoriasPossivies,
+            // page: page + 1,
+            // limit,
+            categoria: categoriasPossiviesB,
             products,
         };
 
         res.status(200).json(response);
     }catch(error){
-        console.log(err);
+        console.log(error);
 		res.status(500).json({ error: true, message: "Internal Server Error" });
     }
 });
