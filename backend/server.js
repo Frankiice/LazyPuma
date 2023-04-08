@@ -188,18 +188,70 @@ app.get("/catalogo", async (req, res) => {
 			.in(categorieB)
 			// .skip(page * limit)
 			// .limit(limit);
-        
+
+        // const setCategoriasA = new Set();
+        // const setProdutos =  new Set();
+        // for (let i = 0; i < products.length; i++) {
+        //     setCategoriasA.add(products[i].categorieA);  //faz isto para fazer um conjunto de das categorias A
+        //     setProdutos.add(products[i]);
+        // }
+
+        // const categoriasA = [...setCategoriasA]; //transforma num Array para enviar na response
+
+        const setProdCat = new Set();
+        const setCat = new Set();
+        for(let j = 0; j < products.length; j++){ //verifica se ja existe no set das Categorias, se nao existe é pq ainda nao temos um produto para essa categoria ent adiciona ao setProdutos
+            if (!setCat.has(products[j].categorieA)){ 
+                setCat.add(products[j].categorieA)
+                setProdCat.add(products[j]);
+            }
+        } 
+
+        // console.log("setCategoriasA", setCategoriasA );
+        // console.log("setProdutos", setProdutos );
+        // console.log("setProd", setProd);
+
+        const categoriasA = [...setProdCat]; //transforma num Array para enviar na response
+
+        const setProdBra =  new Set();
+        const setBrands = new Set();
+        if(categoriasA.length < 5){
+            // for (let i = 0; i < products.length; i++) {
+            //     setBrands.add(products[i].brand);  //faz isto para fazer um conjunto de das brands
+            // }
+            for(let j = 0; j < products.length; j++){ //verifica se ja existe no set das Brands, se nao existe é pq ainda nao temos um produto para essa marca ent adiciona ao setBrands
+                if (!setBrands.has(products[j].brand)){ 
+                    setBrands.add(products[j].brand)
+                    setProdBra.add(products[j]);
+                }
+            } 
+        };
+
+        // console.log("setBrands", setBrands);
+        // console.log("setProdBra", setProdBra);
+
+
+        const brands = [...setProdBra]; //transforma num Array para enviar na response
+
         const total = await Product.countDocuments({
             categorieB: { $in: categorieB },
         });
+
+        if(categoriasA.length < 5){ //se nao existirem categorias suficientes o novo header vai ser feito de brands
+            novoHeader = brands;
+        }else{
+            novoHeader = categoriasA; //caso contrrario será feito de categoriasA
+        }
 
         const response = {
             error: false,
             total,
             // page: page + 1,
             // limit,
-            categoria: categoriasPossiviesB,
+            categorias: categoriasPossiviesB,
             products,
+            novoHeader,
+
         };
 
         res.status(200).json(response);

@@ -307,6 +307,16 @@ body{
     object-fit: center;
 }
 
+.card{
+    height: 350px;
+}
+
+/* .containerProduto{
+    min-height: 300px;
+    max-height: 300px;
+    width: auto;
+} */
+
 /* .crop {
     height: 250px;
     width: auto;
