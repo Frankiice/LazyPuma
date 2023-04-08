@@ -149,20 +149,64 @@ app.delete("/user/delete", async (req, res) => { //esste seria para eleminar um 
     }catch(error){}
 });
 
-app.post("/catalogo", async (req, res) => { 
-    const User = mongoose.model("users", UserDetailsSchema);//tera de ser outro coiso e nao o users
-    const {token, categoria} = req.body;
+app.get("/catalogo", async (req, res) => { 
+    const Product = mongoose.model("products", ProductDetailsSchema);
+
     try{
-        const user = jwt.verify(token,JWT_SECRET);
-        const user_email = user.email;
-        User.findOne({email: user_email}) //find da categoria e os seus produtos
-            .then((data) => {
-                res.send({status: "ok", data: data});
-            })
-            .catch((error)=>{
-                res.send({status: "error" ,data: error});
-            });
-    }catch(error){}
+        // const page = parseInt(req.query.page) - 1 || 0;
+		// const limit = parseInt(req.query.limit) || 1000;
+        let categoria = req.query.categoria || "All";
+        let categorieB = req.query.categoriaB || "All";
+
+        console.log("categoria",categoria);
+        console.log("categorieB",categorieB);
+
+        const categoriasPossiviesB = [
+            "Baby",
+            "Sports",
+            "Animals",
+            "Cosmetics",
+            "DIY",
+            "Smartphones",
+            "Tech",
+            "Decoration",
+            "Gardening",
+            "Gaming",
+            "TVs",
+            "Toys",
+            "Appliances",
+            "Photography",
+            "Books"
+		];
+
+        categorieB === "All"
+			? (categorieB = [...categoriasPossiviesB])
+			: (categorieB = req.query.categoriaB);
+
+        const products = await Product.find({ })
+            .where("categorieB")
+			.in(categorieB)
+			// .skip(page * limit)
+			// .limit(limit);
+        
+        const total = await Product.countDocuments({
+            categorieB: { $in: categorieB },
+        });
+
+        const response = {
+            error: false,
+            total,
+            // page: page + 1,
+            // limit,
+            categoria: categoriasPossiviesB,
+            products,
+        };
+
+        res.status(200).json(response);
+    }catch(error){
+        console.log(error);
+		res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
 });
 
 
@@ -170,8 +214,8 @@ app.get("/produto/search", async (req, res) => {
     const Product = mongoose.model("products", ProductDetailsSchema);
 
     try{
-        // const page = parseInt(req.query.page) - 1 || 0;
-		// const limit = parseInt(req.query.limit) || 1000;
+        const page = parseInt(req.query.page) - 1 || 0;
+		const limit = parseInt(req.query.limit) || 5;
 		const search = req.query.search || "";
         let categoria = req.query.categoria || "All";
         let categorieB = req.query.categoriaB || "All";
@@ -200,13 +244,12 @@ app.get("/produto/search", async (req, res) => {
         categorieB === "All"
 			? (categorieB = [...categoriasPossiviesB])
 			: (categorieB = req.query.categoriaB);
-// User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] })
-        // const products = await Product.find({ name: { $regex: search, $options: "i" }})
+
         const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
             .where("categorieB")
 			.in(categorieB)
-			// .skip(page * limit)
-			// .limit(limit);
+			.skip(page * limit)
+			.limit(limit);
         
         const total = await Product.countDocuments({
             categorieB: { $in: categorieB },
@@ -216,8 +259,8 @@ app.get("/produto/search", async (req, res) => {
         const response = {
             error: false,
             total,
-            // page: page + 1,
-            // limit,
+            page: page + 1,
+            limit,
             categoria: categoriasPossiviesB,
             products,
         };

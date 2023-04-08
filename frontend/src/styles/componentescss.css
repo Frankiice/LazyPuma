@@ -301,6 +301,23 @@ body{
     
 }
 
+.card-img-top{
+    float: center;
+    max-height: 250px;
+    object-fit: center;
+}
+
+/* .crop {
+    height: 250px;
+    width: auto;
+    overflow: hidden;
+}
+
+.crop img {
+    height: auto;
+    width: 250px;
+} */
+
 
 
 

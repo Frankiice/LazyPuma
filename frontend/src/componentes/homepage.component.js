@@ -8,81 +8,25 @@ import 'bootstrap';
 import { useRef } from "react";
 import ScrollContainer from 'react-indiana-drag-scroll'
 
-
-// import ExercisesList from "./componentes/exercises-list.component";
-// import EditExercise from "./componentes/edit-exercise.component";
-// import CreateExercise from "./componentes/create-exercise.component";
-// import CreateUser from "./componentes/create-user.component";
-
-
-const ProdutosResposta = [{primeiroNome: "Bananas", quantidade:"30", tipo: "Madeira"}]
-
-// state = {
-//   pesquisa: ""
-// };
-
-// pesquisaInput = event => {
-//   this.setState({ pesquisa: event.target.value });
-// };
-
-// Click = () => {
-//   console.log(this.state.pesquisa);
-// };
-//const navigate = useNavigate();
 export default class Homepage extends Component{
 
     constructor(props){
         super(props);
         this.state = {
             categoriaB: "",
-            // bebe: "",
-            // desporto: "", 
-            // animais: "",
-            // beleza: "",
-            // bricolagem: "",
-            // telemoveis: "",
-            // decoracao: "",
-            // jardinagem: "",
-            // gaming: "",
-            // TVs: "",
-            // brinquedos: "",
-            // eletrodomesticos: "",
-            // fotografia: "",
-            // livros: "",
         };
         this.handleClick = this.handleClick.bind(this);
         window.localStorage.removeItem("userUpdated");
+        window.localStorage.removeItem("categoriaB");
         
     }
 
 
     handleClick(e){
-        //const {bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros} = this.state;
-        //console.log(bebe,desporto, animais,beleza,bricolagem,telemoveis,decoracao,jardinagem,gaming,TVs,brinquedos,eletrodomesticos,fotografia,livros);
         const {categoriaB} = this.state;
         console.log(categoriaB);
         window.localStorage.setItem("categoriaB", categoriaB);
-        window.location.href = "/";
-        // fetch("http://localhost:5000/catalogo",{//mudar URL !
-        //     method:"POST", //verificar!!!!!
-        //     crossDomain:true,
-        //     headers:{
-        //         "Content-type":"application/json",
-        //         Accept:"application/json",
-        //         "Access-Control-Allow-Origin":"*",
-        //     },
-        //     body:JSON.stringify({
-        //         token: window.localStorage.getItem("token"),
-        //         categoriaB,
-        //     }),
-        // })
-        // .then((res) => res.json())
-        // .then((data) => {
-        //     console.log(data, "userCatalogo");
-        //     if(data.status=="ok") {
-        //         window.location.href = "/catalogo";
-        // }
-        // })
+        window.location.href = "/catalogo";
     };
     
     render(){
