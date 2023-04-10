@@ -239,8 +239,10 @@ app.get("/catalogo", async (req, res) => {
 
         if(categoriasA.length < 5){ //se nao existirem categorias suficientes o novo header vai ser feito de brands
             novoHeader = brands;
+            novoHeaderTip = "brand";
         }else{
             novoHeader = categoriasA; //caso contrrario será feito de categoriasA
+            novoHeaderTip = "categorieA";
         }
 
         const response = {
@@ -251,6 +253,7 @@ app.get("/catalogo", async (req, res) => {
             categorias: categoriasPossiviesB,
             products,
             novoHeader,
+            novoHeaderTip,
 
         };
 

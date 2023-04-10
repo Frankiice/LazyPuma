@@ -14,8 +14,11 @@ export default class Catalogo extends Component{
             obj: [],
             categoriaA: window.localStorage.getItem("categoriaA") || "", 
             categoriaB: window.localStorage.getItem("categoriaB") || "",
+            brand: "",
             page: 1,
             novoHeader: [],
+            novoHeaderTip: "",
+            bla: ["1", "2", "3", "4", "5"]
         };
         this.handleClick = this.handleClick.bind(this);
         window.localStorage.removeItem("userUpdated");
@@ -40,27 +43,39 @@ export default class Catalogo extends Component{
         .then((data) => {
             console.log(data, "Catalogo");
             this.setState({obj: data.products,
-                            novoHeader: data.novoHeader}) ;
+                            novoHeader: data.novoHeader,
+                            novoHeaderTip: data.novoHeaderTip}) ;
         })
     }
 
     handleClick(e){
-        const {categoriaB} = this.state;
-        console.log(categoriaB);
-        window.localStorage.setItem("categoriaB", categoriaB);
+        const {categoriaA, brand} = this.state;
+        console.log("categoriaA no handleClick ",categoriaA);
+        console.log("brand no handleClick ", brand);
+        window.localStorage.setItem("categoriaA", categoriaA);
         window.location.href = "/catalogo";
     };
 
 
     render(){
     return (
-    //<!-- Header -->
+    // <!-- Header --> id={"butao"+ (index+2)}
     <React.Fragment>
     <div class="scrollmenu">
     <header class="cor_header height_header">  
-    
+
         <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
-            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bebé</button>  
+            {this.state.novoHeader.map((product) => (
+                <div  key={product._id} >                             
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" value={ product.brand }> {product.brand }</button> 
+
+                    {/* <button class="btn btn-outline-dark btn-xs rounded-circle" value={ product.brand}> {product.brand }</button>   */}
+
+                </div> 
+            ))}
+
+                     
+            {/* <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bebé</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>desporto</button> 
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>animais</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="Cosmetics" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>beleza</button>  
@@ -74,7 +89,7 @@ export default class Catalogo extends Component{
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="jogos e brinquedos"value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>jogos <br></br>e<br></br>brinquedos</button>   
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="eletrodomesticos"value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="fotografia"value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>fotografia</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>livros</button> 
+            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>livros</button>  */}
         </ScrollContainer>
     </header>
     </div>
