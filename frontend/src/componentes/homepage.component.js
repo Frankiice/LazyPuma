@@ -14,18 +14,24 @@ export default class Homepage extends Component{
         super(props);
         this.state = {
             categoriaB: "",
+            categoriaA: "",
+
         };
         this.handleClick = this.handleClick.bind(this);
         window.localStorage.removeItem("userUpdated");
         window.localStorage.removeItem("categoriaB");
+        window.localStorage.removeItem("categoriaA");
+
         
     }
 
 
     handleClick(e){
-        const {categoriaB} = this.state;
+        const {categoriaB, categoriaA} = this.state;
         console.log(categoriaB);
+        console.log(categoriaA);
         window.localStorage.setItem("categoriaB", categoriaB);
+        window.localStorage.setItem("categoriaA", categoriaA);
         window.location.href = "/catalogo";
     };
     
@@ -102,7 +108,7 @@ export default class Homepage extends Component{
                         </ul>
                     </div> */}
                         <li class="nav-item dropdown ">
-                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="bebe" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle botaoProdutoDropdown" id="bebe" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Bebé
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="bebe">
@@ -116,9 +122,9 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Alimentação</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Brinquedos</a></li>
+                                <li><button class="dropdown-item" value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value, categoriaA: e.target.value}, this.handleClick)}}>Brinquedos</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><button class="dropdown-item" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>Ver Tudo</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -152,7 +158,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Viagem</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -176,7 +182,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Animais de Quinta</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                             
@@ -203,7 +209,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Saúde e Bem Estar</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -223,7 +229,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Ferrragens</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -245,7 +251,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Telefones Fixos</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -269,7 +275,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Têxteis</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -293,7 +299,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Estufas e Coberturas</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -311,7 +317,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Acessórios Gaming</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -331,7 +337,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Auriculares</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -349,7 +355,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Brinquedos de Bebé</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -379,7 +385,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Ar condicionado</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -398,7 +404,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Acessórios de Fotografia</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -418,7 +424,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" href="#">Livros técnicos</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Outros</a></li>
+                                <li><a class="dropdown-item" href="#">Ver Tudo</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
 
                             </ul>

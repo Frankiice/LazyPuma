@@ -155,10 +155,10 @@ app.get("/catalogo", async (req, res) => {
     try{
         // const page = parseInt(req.query.page) - 1 || 0;
 		// const limit = parseInt(req.query.limit) || 1000;
-        let categoria = req.query.categoria || "All";
+        let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
 
-        console.log("categoria",categoria);
+        console.log("categoria",categorieA);
         console.log("categorieB",categorieB);
 
         const categoriasPossiviesB = [

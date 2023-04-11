@@ -65,14 +65,14 @@ export default class Catalogo extends Component{
     <header class="cor_header height_header">  
 
         <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
-            {this.state.novoHeader.map((product) => (
-                <div  key={product._id} >                             
-                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" value={ product.brand }> {product.brand }</button> 
+            {this.state.novoHeader.map((product, index) =>  {
+                return <div  key={product._id} >                             
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id={"butao"+(index+2)} value={ product.brand }> {product.brand }</button> 
 
                     {/* <button class="btn btn-outline-dark btn-xs rounded-circle" value={ product.brand}> {product.brand }</button>   */}
 
                 </div> 
-            ))}
+        })}
 
                      
             {/* <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bebé</button>  
