@@ -158,7 +158,7 @@ app.get("/catalogo", async (req, res) => {
         let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
 
-        console.log("categoria",categorieA);
+        console.log("categorieA",categorieA);
         console.log("categorieB",categorieB);
 
         const categoriasPossiviesB = [
@@ -183,11 +183,19 @@ app.get("/catalogo", async (req, res) => {
 			? (categorieB = [...categoriasPossiviesB])
 			: (categorieB = req.query.categoriaB);
 
-        const products = await Product.find({ })
-            .where("categorieB")
-			.in(categorieB)
-			// .skip(page * limit)
-			// .limit(limit);
+        let products = null;
+        categorieA === "All"
+            ?   (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                )
+            :   (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    // .skip(page * limit)
+			        // .limit(limit);
+            )
 
         // const setCategoriasA = new Set();
         // const setProdutos =  new Set();
@@ -207,7 +215,7 @@ app.get("/catalogo", async (req, res) => {
             }
         } 
 
-        // console.log("setCategoriasA", setCategoriasA );
+        // console.log("setCategoriasA", setCat );
         // console.log("setProdutos", setProdutos );
         // console.log("setProd", setProd);
 
