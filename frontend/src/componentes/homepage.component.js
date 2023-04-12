@@ -21,8 +21,8 @@ export default class Homepage extends Component{
         window.localStorage.removeItem("userUpdated");
         window.localStorage.removeItem("categoriaB");
         window.localStorage.removeItem("categoriaA");
+        window.localStorage.removeItem("produtoID");
 
-        
     }
 
 

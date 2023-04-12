@@ -335,16 +335,31 @@ app.get("/produto/search", async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-console.log(`Server is running on port: ${port}`);
+app.get("/produto", async (req, res) => { 
+    const Product = mongoose.model("products", ProductDetailsSchema);
+
+    try{
+        const produtoID = req.query.id;
+
+        const product = await Product.findById(produtoID);
+        
+        const total = await Product.countDocuments({
+            _id: produtoID,
+        });
+
+        const response = {
+            error: false,
+            total,
+            product,
+        };
+
+        res.status(200).json(response);
+    }catch(error){
+        console.log(error);
+		res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
 });
 
-app.get('/getProdutos', (req, res) => {
-    const { q } = req.query;
-    console.log(q)
-
-
-    const keys = ["primeiroNome"]
-    
-    res.json("ola")
+app.listen(port, () => {
+console.log(`Server is running on port: ${port}`);
 });

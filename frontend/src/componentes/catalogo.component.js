@@ -18,9 +18,11 @@ export default class Catalogo extends Component{
             page: 1,
             novoHeader: [],
             novoHeaderTip: "",
-            bla: ["1", "2", "3", "4", "5"]
+            bla: ["1", "2", "3", "4", "5"],
+            produtoID: "",
         };
         this.handleClick = this.handleClick.bind(this);
+        this.handleClick = this.handleProduto.bind(this);
         window.localStorage.removeItem("userUpdated");
 
         
@@ -54,6 +56,13 @@ export default class Catalogo extends Component{
         console.log("brand no handleClick ", brand);
         window.localStorage.setItem("categoriaA", categoriaA);
         window.location.href = "/catalogo";
+    };
+
+    handleProduto(e){
+        const {produtoID} = this.state;
+        console.log("produto no handleProduto ",produtoID);
+        window.localStorage.setItem("produtoID", produtoID);
+        window.location.href = "/produto";
     };
 
 
@@ -146,7 +155,7 @@ export default class Catalogo extends Component{
                                             </div>
                                         </div>
                                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                                            <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
                                         </div>
                                     </div>
                                 </div>
