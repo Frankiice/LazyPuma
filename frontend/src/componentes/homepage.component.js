@@ -141,32 +141,36 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="desporto" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Desporto, Outdoor e Viagem
+                               Sports
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="desporto">
-                                <li><a class="dropdown-item" href="#">Desportos Outdoor</a></li>
+                                <li><button class="dropdown-item" value="Running Shoes" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Running Shoes</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Desportos Coletivos</a></li>
+                                <li><button class="dropdown-item" value="Football" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Football</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Equipamento de Cardio e Fitness</a></li>
+                                <li><button class="dropdown-item" value="Badminton" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Badminton</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Desportos Aquáticos</a></li>
+                                <li><button class="dropdown-item" value="Golf" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Golf</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Desportos Neve</a></li>
+                                <li><button class="dropdown-item" value="Baseball" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Baseball</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Roupa Desportiva</a></li>
+                                <li><button class="dropdown-item" value="Hunting" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Hunting</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Tecnologia Desportiva</a></li>
+                                <li><button class="dropdown-item" value="Table Tennis" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Table Tennis</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Nutrição e Suplementos</a></li>
+                                <li><button class="dropdown-item" value="Basketball" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Basketball</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Pesca</a></li>
+                                <li><button class="dropdown-item" value="Boxing" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Boxing</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Caça</a></li>
+                                <li><button class="dropdown-item" value="Hockey" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Hockey</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Campismo</a></li>
+                                <li><button class="dropdown-item" value="Footwear" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Footwear</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Viagem</a></li>
+                                <li><button class="dropdown-item" value="Clothing" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Clothing</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Wearable Technology" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Wearable Technology</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Accessories" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -175,22 +179,18 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="animais" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Animais de Estimação
+                                Animals
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="animais">
-                                <li><a class="dropdown-item" href="#">Gatos</a></li>
+                            <li><button class="dropdown-item" value="Furniture" onClick={(e) => {this.setState({ categoriaB: "Animals", categoriaA: e.target.value}, this.handleClick)}}>Furniture</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Cães</a></li>
+                                <li><button class="dropdown-item" value="Accessories" onClick={(e) => {this.setState({ categoriaB: "Animals", categoriaA: e.target.value}, this.handleClick)}}>Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Peixes</a></li>
+                                <li><button class="dropdown-item" value="Supplies" onClick={(e) => {this.setState({ categoriaB: "Animals", categoriaA: e.target.value}, this.handleClick)}}>Supplies</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Tartarugas e Répteis</a></li>
+                                <li><button class="dropdown-item" value="Apparel" onClick={(e) => {this.setState({ categoriaB: "Animals", categoriaA: e.target.value}, this.handleClick)}}>Apparel</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Pássaros</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Coelhos e Roedores</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Animais de Quinta</a></li>
+                                <li><button class="dropdown-item" value="Toys" onClick={(e) => {this.setState({ categoriaB: "Animals", categoriaA: e.target.value}, this.handleClick)}}>Toys</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -228,18 +228,22 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="bricolagem" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Bricolagem 
+                            DIY 
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="bricolagem">
-                                <li><a class="dropdown-item" href="#">Ferramentas de Bricolagem</a></li>
+                                <li><button class="dropdown-item" value="Power Tools" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Power Tools</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Tintas, Colas e semelhantes</a></li>
+                                <li><button class="dropdown-item" value="Measuring Tools" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Measuring Tools</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Segurança e Proteção</a></li>
+                                <li><button class="dropdown-item" value="Woodworking Tools" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Woodworking Tools</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Construção</a></li>
+                                <li><button class="dropdown-item" value="Cutting Tools" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Cutting Tools</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Ferrragens</a></li>
+                                <li><button class="dropdown-item" value="Sanders" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Sanders</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Rotary Tools" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Rotary Tools</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Drill Bits" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Drill Bits</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -270,22 +274,18 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="decoracao" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Decoração
+                            Decoration
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="decoracao">
-                                <li><a class="dropdown-item" href="#">Sala</a></li>
+                                <li><button class="dropdown-item" value="Home Textiles" onClick={(e) => {this.setState({ categoriaB: "Decoration", categoriaA: e.target.value}, this.handleClick)}}>Home Textiles</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Sala de Jantar</a></li>
+                                <li><button class="dropdown-item" value="Lighting" onClick={(e) => {this.setState({ categoriaB: "Decoration", categoriaA: e.target.value}, this.handleClick)}}>Lighting</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Quarto</a></li>
+                                <li><button class="dropdown-item" value="Office Supplies" onClick={(e) => {this.setState({ categoriaB: "Decoration", categoriaA: e.target.value}, this.handleClick)}}>Office Supplies</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Cozinha</a></li>
+                                <li><button class="dropdown-item" value="Plant Hanger" onClick={(e) => {this.setState({ categoriaB: "Decoration", categoriaA: e.target.value}, this.handleClick)}}>Plant Hanger</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Casa de Banho</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Iluminação</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Têxteis</a></li>
+                                <li><button class="dropdown-item" value="Wall Decor" onClick={(e) => {this.setState({ categoriaB: "Decoration", categoriaA: e.target.value}, this.handleClick)}}>Wall Decor</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -294,22 +294,26 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="jardinagem" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Jardinagem
+                            Gardening
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="Jardinagem">
-                                <li><a class="dropdown-item" href="#">Plantas Naturais</a></li>
+                                <li><button class="dropdown-item" value="Hoses" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Hoses</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Sementes e Bolbos</a></li>
+                                <li><button class="dropdown-item" value="Pruning Shears" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Pruning Shears</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Adubos, Fertilizantes e Substratos</a></li>
+                                <li><button class="dropdown-item" value="Fertilizers" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Fertilizers</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Inseticida</a></li>
+                                <li><button class="dropdown-item" value="Hedge Trimmers" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Hedge Trimmers</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Vasos e floreiras</a></li>
+                                <li><button class="dropdown-item" value="Raised Garden Beds" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Raised Garden Beds</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Ferramentas</a></li>
+                                <li><button class="dropdown-item" value="Indoor Gardening" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Indoor Gardening</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Estufas e Coberturas</a></li>
+                                <li><button class="dropdown-item" value="String Trimmers" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>String Trimmers</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Garden Kneelers" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Garden Kneelers</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Soil" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Soil</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -356,16 +360,36 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="brinquedos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Jogos e Brinquedos
+                                Toys
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="brinquedos">
-                                <li><a class="dropdown-item" href="#">Jogos, Puzzles e Cartas</a></li>
+                                <li><button class="dropdown-item" value="Building Toys" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Building Toys</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Legos</a></li>
+                                <li><button class="dropdown-item" value="Dolls & Accessories" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Dolls & Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Funko Pop e Merchandising</a></li>
+                                <li><button class="dropdown-item" value="Board Games" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Board Games</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Brinquedos de Bebé</a></li>
+                                <li><button class="dropdown-item" value="Preschool Toys" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Preschool Toys</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Vehicles" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Vehicles</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Outdoor Toys" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Outdoor Toys</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Arts & Crafts" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Arts & Crafts</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Card Games" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Card Games</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Blaster Guns" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Blaster Guns</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Stacking Games" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Stacking Games</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Collectibles" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Collectibles</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Preschool Playsets" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Preschool Playsets</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Play Dough Sets" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Play Dough Sets</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Kids Electronics" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Kids Electronics</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -374,28 +398,18 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="eletrodomesticos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Eletrodomésticos
+                                Appliances
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="eletrodomesticos">
-                                <li><a class="dropdown-item" href="#">Frigoríficos e Arcas</a></li>
+                                <li><button class="dropdown-item" value="Refrigerators" onClick={(e) => {this.setState({ categoriaB: "Appliances", categoriaA: e.target.value}, this.handleClick)}}>Refrigerators</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Máquinas de Roupa</a></li>
+                                <li><button class="dropdown-item" value="Vacuum Cleaners" onClick={(e) => {this.setState({ categoriaB: "Appliances", categoriaA: e.target.value}, this.handleClick)}}>Vacuum Cleaners</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Máquinas de Loiça</a></li>
+                                <li><button class="dropdown-item" value="Kitchen Appliances" onClick={(e) => {this.setState({ categoriaB: "Appliances", categoriaA: e.target.value}, this.handleClick)}}>Kitchen Appliances</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Fornos</a></li>
+                                <li><button class="dropdown-item" value="Washing Machines" onClick={(e) => {this.setState({ categoriaB: "Appliances", categoriaA: e.target.value}, this.handleClick)}}>Washing Machines</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Fogões</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Micro-ondas</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Máquinas de Café</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Preparação de Alimentos</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Aspiradores e Máquinas de Limpeza</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Ar condicionado</a></li>
+                                <li><button class="dropdown-item" value="Dryers" onClick={(e) => {this.setState({ categoriaB: "Appliances", categoriaA: e.target.value}, this.handleClick)}}>Dryers</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
