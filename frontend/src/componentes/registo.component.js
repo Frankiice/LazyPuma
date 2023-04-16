@@ -57,10 +57,20 @@ export default class Registo extends Component {
                         data.forEach(element => {
                             this.setState({ lat: element.lat });
                             this.setState({ lon: element.lon });
+                            // this.setState({ msgMorada: "Morada Válida" });
+
+
                             // console.log(element.lat);
-                            // console.log(this.state.lat);
+                            // console.log("lat dentro do getCoordenadas", this.state.lat);
+                            // console.log("msgMorada dentro do getCoordenadas", this.state.msgMorada);
+
                         });
-                    }   
+                    }
+                    // else{
+                    //     this.setState({ msgMorada: "Morada Inválida, por favor corrija a sua morada" });
+                    //     console.log("msgMorada dentro do else getCoordenadas", this.state.msgMorada);
+
+                    // }   
                 })
                 .catch(err => console.log(err)) 
     }
