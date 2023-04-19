@@ -22,7 +22,7 @@ app.use(passport.session());
 
 app.use(
     cors({
-        origin:"http://lazypuma.com",
+        origin:"http://localhost:3000",
         methods: "GET,POST,PUT,DELETE",
         credentials: true,
     }
