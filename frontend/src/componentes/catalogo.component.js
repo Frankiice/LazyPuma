@@ -20,6 +20,7 @@ export default class Catalogo extends Component{
             novoHeaderTip: "",
             bla: ["1", "2", "3", "4", "5"],
             produtoID: "",
+            objSearch: JSON.parse(window.localStorage.getItem("objSearch")),
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleClick = this.handleProduto.bind(this);
@@ -143,7 +144,26 @@ export default class Catalogo extends Component{
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                         {/* {movies.map((movie) => ( */}
-                        {this.state.obj.map((produto) => (
+                        {this.state.objSearch ? 
+                        this.state.objSearch.map((produto) => (
+                            <div key={produto._id}>
+                            <div class="col mb-5">
+                                <div class="card h-100 crop">
+                                    <img class="card-img-top" src={produto.img} alt="..." />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <h5 class="fw-bolder">{produto.name}</h5>
+                                            $40.00 - $80.00
+                                        </div>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> ))
+                        :
+                        this.state.obj.map((produto) => (
                             <div key={produto._id}>
                                 <div class="col mb-5">
                                     <div class="card h-100 crop">

@@ -304,10 +304,10 @@ app.get("/produto/search", async (req, res) => {
         const page = parseInt(req.query.page) - 1 || 0;
 		const limit = parseInt(req.query.limit) || 5;
 		const search = req.query.search || "";
-        let categoria = req.query.categoria || "All";
+        let categoriaA = req.query.categoria || "All";
         let categorieB = req.query.categoriaB || "All";
 
-        console.log("categoria",categoria);
+        console.log("categoriaA",categoriaA);
         console.log("categorieB",categorieB);
 
         const categoriasPossiviesB = [
