@@ -44,16 +44,18 @@ export default class Navbar extends Component{
         data: "",
         user: "",
         nickname: "",
-        obj: {},
-        categoriaA: "", 
+        obj: [],
+        categoriaA: window.localStorage.getItem("categoriaA") || "", 
         categoriaB: window.localStorage.getItem("categoriaB") || "",
         page: 1,
         search: "",
     };
+    this.handleSearch = this.handleSearch.bind(this);
+
   }
 
   handleSearch(){
-    const {page, categoriaA, categoriaB, search} = this.state;
+    const {page, categoriaA, categoriaB, search, objSearch} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este é a base nao sei se aceita do outro lado mais parametros aqui
       const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&search=${search}`;
@@ -76,7 +78,9 @@ export default class Navbar extends Component{
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "searchData");
-        this.setState({ obj: data.total}); //o que adicionar aqui??
+        // this.setState({ objSearch: data.products}); //o que adicionar aqui??
+        window.localStorage.setItem("objSearch", JSON.stringify(data.products))
+        window.location.href= "./catalogo"
     })
     }catch(err){
       console.log(err);
@@ -131,6 +135,10 @@ export default class Navbar extends Component{
         this.setState({ nickname: data.data.nickname,});
     })
 }
+  handlePre(){
+    window.localStorage.removeItem("categoriaB");
+    window.localStorage.removeItem("categoriaA");
+}
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
     //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
@@ -146,7 +154,7 @@ export default class Navbar extends Component{
       {/* Logo e imagem do navbar */}
       
       <div class="logo px-4">
-        <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
+        <a onClick={this.handlePre} href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
         <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png"></img></a>
       </div>
       <div class="collapse navbar-collapse px-3" id="navbarSupportedContent">

@@ -14,10 +14,16 @@ export default class Catalogo extends Component{
             obj: [],
             categoriaA: window.localStorage.getItem("categoriaA") || "", 
             categoriaB: window.localStorage.getItem("categoriaB") || "",
+            brand: "",
             page: 1,
             novoHeader: [],
+            novoHeaderTip: "",
+            bla: ["1", "2", "3", "4", "5"],
+            produtoID: "",
+            objSearch: JSON.parse(window.localStorage.getItem("objSearch")),
         };
         this.handleClick = this.handleClick.bind(this);
+        this.handleClick = this.handleProduto.bind(this);
         window.localStorage.removeItem("userUpdated");
 
         
@@ -40,27 +46,46 @@ export default class Catalogo extends Component{
         .then((data) => {
             console.log(data, "Catalogo");
             this.setState({obj: data.products,
-                            novoHeader: data.novoHeader}) ;
+                            novoHeader: data.novoHeader,
+                            novoHeaderTip: data.novoHeaderTip}) ;
         })
     }
 
     handleClick(e){
-        const {categoriaB} = this.state;
-        console.log(categoriaB);
-        window.localStorage.setItem("categoriaB", categoriaB);
+        const {categoriaA, brand} = this.state;
+        console.log("categoriaA no handleClick ",categoriaA);
+        console.log("brand no handleClick ", brand);
+        window.localStorage.setItem("categoriaA", categoriaA);
         window.location.href = "/catalogo";
+    };
+
+    handleProduto(e){
+        const {produtoID} = this.state;
+        console.log("produto no handleProduto ",produtoID);
+        window.localStorage.setItem("produtoID", produtoID);
+        window.location.href = "/produto";
     };
 
 
     render(){
     return (
-    //<!-- Header -->
+    // <!-- Header --> id={"butao"+ (index+2)}
     <React.Fragment>
     <div class="scrollmenu">
     <header class="cor_header height_header">  
-    
+
         <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
-            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bebé</button>  
+            {this.state.novoHeader.map((product, index) =>  {
+                return <div  key={product._id} >                             
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id={"butao"+(index+2)} value={ product.brand }> {product.brand }</button> 
+
+                    {/* <button class="btn btn-outline-dark btn-xs rounded-circle" value={ product.brand}> {product.brand }</button>   */}
+
+                </div> 
+        })}
+
+                     
+            {/* <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bebé</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>desporto</button> 
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>animais</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="Cosmetics" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>beleza</button>  
@@ -74,7 +99,7 @@ export default class Catalogo extends Component{
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="jogos e brinquedos"value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>jogos <br></br>e<br></br>brinquedos</button>   
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="eletrodomesticos"value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>eletro-<br></br>-domésticos</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="fotografia"value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>fotografia</button>  
-            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>livros</button> 
+            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>livros</button>  */}
         </ScrollContainer>
     </header>
     </div>
@@ -119,7 +144,26 @@ export default class Catalogo extends Component{
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                         {/* {movies.map((movie) => ( */}
-                        {this.state.obj.map((produto) => (
+                        {this.state.objSearch ? 
+                        this.state.objSearch.map((produto) => (
+                            <div key={produto._id}>
+                            <div class="col mb-5">
+                                <div class="card h-100 crop">
+                                    <img class="card-img-top" src={produto.img} alt="..." />
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <h5 class="fw-bolder">{produto.name}</h5>
+                                            $40.00 - $80.00
+                                        </div>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> ))
+                        :
+                        this.state.obj.map((produto) => (
                             <div key={produto._id}>
                                 <div class="col mb-5">
                                     <div class="card h-100 crop">
@@ -131,7 +175,7 @@ export default class Catalogo extends Component{
                                             </div>
                                         </div>
                                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                                            <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
                                         </div>
                                     </div>
                                 </div>

@@ -179,10 +179,10 @@ app.get("/catalogo", async (req, res) => {
     try{
         // const page = parseInt(req.query.page) - 1 || 0;
 		// const limit = parseInt(req.query.limit) || 1000;
-        let categoria = req.query.categoria || "All";
+        let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
 
-        console.log("categoria",categoria);
+        console.log("categorieA",categorieA);
         console.log("categorieB",categorieB);
 
         const categoriasPossiviesB = [
@@ -207,11 +207,19 @@ app.get("/catalogo", async (req, res) => {
 			? (categorieB = [...categoriasPossiviesB])
 			: (categorieB = req.query.categoriaB);
 
-        const products = await Product.find({ })
-            .where("categorieB")
-			.in(categorieB)
-			// .skip(page * limit)
-			// .limit(limit);
+        let products = null;
+        categorieA === "All"
+            ?   (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                )
+            :   (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    // .skip(page * limit)
+			        // .limit(limit);
+            )
 
         // const setCategoriasA = new Set();
         // const setProdutos =  new Set();
@@ -231,7 +239,7 @@ app.get("/catalogo", async (req, res) => {
             }
         } 
 
-        // console.log("setCategoriasA", setCategoriasA );
+        // console.log("setCategoriasA", setCat );
         // console.log("setProdutos", setProdutos );
         // console.log("setProd", setProd);
 
@@ -263,8 +271,10 @@ app.get("/catalogo", async (req, res) => {
 
         if(categoriasA.length < 5){ //se nao existirem categorias suficientes o novo header vai ser feito de brands
             novoHeader = brands;
+            novoHeaderTip = "brand";
         }else{
             novoHeader = categoriasA; //caso contrrario será feito de categoriasA
+            novoHeaderTip = "categorieA";
         }
 
         const response = {
@@ -275,6 +285,7 @@ app.get("/catalogo", async (req, res) => {
             categorias: categoriasPossiviesB,
             products,
             novoHeader,
+            novoHeaderTip,
 
         };
 
@@ -293,10 +304,10 @@ app.get("/produto/search", async (req, res) => {
         const page = parseInt(req.query.page) - 1 || 0;
 		const limit = parseInt(req.query.limit) || 5;
 		const search = req.query.search || "";
-        let categoria = req.query.categoria || "All";
+        let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
 
-        console.log("categoria",categoria);
+        console.log("categoriaA",categorieA);
         console.log("categorieB",categorieB);
 
         const categoriasPossiviesB = [
@@ -348,16 +359,31 @@ app.get("/produto/search", async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-console.log(`Server is running on port: ${port}`);
+app.get("/produto", async (req, res) => { 
+    const Product = mongoose.model("products", ProductDetailsSchema);
+
+    try{
+        const produtoID = req.query.id;
+
+        const product = await Product.findById(produtoID);
+        
+        const total = await Product.countDocuments({
+            _id: produtoID,
+        });
+
+        const response = {
+            error: false,
+            total,
+            product,
+        };
+
+        res.status(200).json(response);
+    }catch(error){
+        console.log(error);
+		res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
 });
 
-app.get('/getProdutos', (req, res) => {
-    const { q } = req.query;
-    console.log(q)
-
-
-    const keys = ["primeiroNome"]
-    
-    res.json("ola")
+app.listen(port, () => {
+console.log(`Server is running on port: ${port}`);
 });
