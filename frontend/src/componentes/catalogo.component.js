@@ -14,7 +14,7 @@ export default class Catalogo extends Component{
             obj: [],
             categoriaA: window.localStorage.getItem("categoriaA") || "", 
             categoriaB: window.localStorage.getItem("categoriaB") || "",
-            brand: "",
+            brand: window.localStorage.getItem("brand") || "",
             page: 1,
             novoHeader: [],
             novoHeaderTip: "",
@@ -23,15 +23,15 @@ export default class Catalogo extends Component{
             objSearch: JSON.parse(window.localStorage.getItem("objSearch")),
         };
         this.handleClick = this.handleClick.bind(this);
-        this.handleClick = this.handleProduto.bind(this);
+        this.handleProduto = this.handleProduto.bind(this);
         window.localStorage.removeItem("userUpdated");
 
         
     }  
     componentDidMount(){
-        const {categoriaA, categoriaB} = this.state;
+        const {categoriaA, categoriaB, brand} = this.state;
         const base_url = "http://localhost:5000/catalogo" 
-        const url = `${base_url}?&categoriaB=${categoriaB}&categoriaA=${categoriaA}`;
+        const url = `${base_url}?&categoriaB=${categoriaB}&categoriaA=${categoriaA}&brand=${brand}`;
         console.log(url);
         fetch(url, { //provavelmente teremos de mudar as cenas
             method:"GET",
@@ -50,12 +50,14 @@ export default class Catalogo extends Component{
                             novoHeaderTip: data.novoHeaderTip}) ;
         })
     }
+    
 
     handleClick(e){
         const {categoriaA, brand} = this.state;
         console.log("categoriaA no handleClick ",categoriaA);
         console.log("brand no handleClick ", brand);
         window.localStorage.setItem("categoriaA", categoriaA);
+        window.localStorage.setItem("brand", brand);
         window.location.href = "/catalogo";
     };
 
@@ -75,15 +77,19 @@ export default class Catalogo extends Component{
     <header class="cor_header height_header">  
 
         <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
-            {this.state.novoHeader.map((product, index) =>  {
-                return <div  key={product._id} >                             
-                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id={"butao"+(index+2)} value={ product.brand }> {product.brand }</button> 
+                <div class="row">
+                    {this.state.novoHeader.map((product, index) =>  {
+                        return <div  key={product._id} class="col">   
+                        {this.state.novoHeaderTip == "brand"
+                        ?                
+                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" value={ product.brand} onClick={(e) => {this.setState({ brand: e.target.value }, this.handleClick)}}> {product.brand }</button> 
+                        :
+                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" value={ product.categorieA} onClick={(e) => {this.setState({ categoriaA: e.target.value }, this.handleClick)}}> {product.categorieA }</button> 
 
-                    {/* <button class="btn btn-outline-dark btn-xs rounded-circle" value={ product.brand}> {product.brand }</button>   */}
-
-                </div> 
-        })}
-
+                        }     
+                        </div> 
+                    })}
+                </div>
                      
             {/* <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>bebé</button>  
             <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>desporto</button> 
@@ -103,7 +109,18 @@ export default class Catalogo extends Component{
         </ScrollContainer>
     </header>
     </div>
-
+    <div className='breadcrumb'>
+        {this.state.categoriaA === ""
+        ?
+            this.state.brand === ""
+            ?
+                <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a></h2>
+            :
+                <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.brand}</a> </h2>
+        :
+            <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.categoriaA}</a> </h2>
+        }
+    </div>
     {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>

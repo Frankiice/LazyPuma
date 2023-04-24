@@ -181,9 +181,12 @@ app.get("/catalogo", async (req, res) => {
 		// const limit = parseInt(req.query.limit) || 1000;
         let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
+        let brand = req.query.brand || "All";
 
         console.log("categorieA",categorieA);
         console.log("categorieB",categorieB);
+        console.log("brand",brand);
+
 
         const categoriasPossiviesB = [
             "Baby",
@@ -209,16 +212,34 @@ app.get("/catalogo", async (req, res) => {
 
         let products = null;
         categorieA === "All"
-            ?   (products = await Product.find({ })
+            ?   (brand === "All" 
+                ? (products = await Product.find({ })
                     .where("categorieB").in(categorieB)
                     // .skip(page * limit)
 			        // .limit(limit);
+                    
                 )
-            :   (products = await Product.find({ })
+                : (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
+                )
+            :   (brand === "All"
+                ? (products = await Product.find({ })
                     .where("categorieB").in(categorieB)
                     .where("categorieA").in(categorieA)
                     // .skip(page * limit)
 			        // .limit(limit);
+                    )
+                : (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
             )
 
         // const setCategoriasA = new Set();

@@ -138,6 +138,10 @@ export default class Navbar extends Component{
   handlePre(){
     window.localStorage.removeItem("categoriaB");
     window.localStorage.removeItem("categoriaA");
+    window.localStorage.removeItem("brand");
+    window.localStorage.removeItem("produtoID");
+
+
 }
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
