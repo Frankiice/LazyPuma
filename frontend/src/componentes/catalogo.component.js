@@ -68,6 +68,12 @@ export default class Catalogo extends Component{
         window.location.href = "/produto";
     };
 
+    preBreadCrumb(e){
+        window.localStorage.removeItem("categoriaA");
+        window.localStorage.removeItem("brand");
+        window.localStorage.removeItem("produtoID");
+    }
+
 
     render(){
     return (
@@ -116,7 +122,7 @@ export default class Catalogo extends Component{
             ?
                 <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a></h2>
             :
-                <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.brand}</a> </h2>
+                <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.brand}</a> </h2>
         :
             <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.categoriaA}</a> </h2>
         }
