@@ -270,12 +270,13 @@ body{
     right: auto;
      */
     position: absolute;
-    left: 800px;
-    transform: translateX(-75%) translateY(6%);
+    left: 1800px;
+    transform: translateX(-74%) translateY(8%);
 
     overflow-y:auto;
-    min-height: 00px;
-    min-width:600px;
+    max-height: 810px;
+    min-width:400px;
+    
     /* max-height: 400px;
     max-width:300px; */
 }
@@ -284,15 +285,23 @@ body{
     overflow-y:auto;
     overflow-x:auto;
     
+    
+}
+.items-carrinho{
+    overflow: auto;
+    max-height: 580px;
+    
 }
 .carrinho-item{
     display:grid;
     grid-template-columns: 3fr 6fr 1fr;
     padding:5% 2%;
     background-color: #ffffff;
-    border-style: solid;
+    /* border-style: solid; */
     border-width: 1px;
     border-radius: 5px;
+    max-height: 300px;
+    margin-bottom: 5px;
 }
 
 .carrinho-item img{
@@ -301,7 +310,8 @@ body{
 }
 
 .cancel{
-    padding-left: 40px;
+    padding-left: 0px;
+    
     
 }
 
@@ -652,5 +662,6 @@ a[target='_blank'] {
     .bordert:after {
         left: 25%
     }
+    
 }
 

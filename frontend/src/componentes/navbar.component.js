@@ -49,9 +49,18 @@ export default class Navbar extends Component{
         categoriaB: window.localStorage.getItem("categoriaB") || "",
         page: 1,
         search: "",
+        isCartHovered: false,
     };
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleCartHover = this.handleCartHover.bind(this);
+    this.handleCartLeave = this.handleCartLeave.bind(this);
+  }
+  handleCartHover() {
+    this.setState({ isCartHovered: true });
+  }
 
+  handleCartLeave() {
+    this.setState({ isCartHovered: false });
   }
 
   handleSearch(){
@@ -152,6 +161,7 @@ export default class Navbar extends Component{
     // };
 
     render(){
+      const { isCartHovered } = this.state;
       return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
       
@@ -215,37 +225,149 @@ export default class Navbar extends Component{
           </a>
         </li>}
       </ul>
-       <form class="d-flex px-3 nav-item dropdown" >
-        <button class="btn btn-outline-light col-md-12" id="cartDropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-            <i class="bi-cart-fill me-1"  ></i>
-            Cesto
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+       <form class="d-flex px-3 nav-item " >
+       <button
+                className="btn btn-outline-light col-md-12 dropdown-hover"
+                id="cartDropdown"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onMouseEnter={this.handleCartHover}
+                
+              >
+            <i className="bi-cart-fill me-1"></i>
+            Cart
+            <span className="badge bg-dark text-white ms-1 rounded-pill">0</span>
         </button>
-        {/* <ul class="dropdown-menu botaoCart" aria-labelledby="cartDropdown">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul> */}
-          <div class="dropdown-menu p-4 text-dark botaoCart" aria-labelledby="cartDropdown" >
-            <h3 class="text-dark">Cesto de Compras</h3>
+        <div
+                className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
+                aria-labelledby="cartDropdown"
+                onMouseEnter={this.handleCartHover}
+                
+              >
+               
+            <h3 class="text-dark font-weight-bold ">Shopping Cart</h3>
              
             <p class="text-dark">
             
             </p>
             <div class="carrinhoWrapper pb-3" >
-              <div class="carrinho-item">
-                <img class="" src={require('../images/camera.jpg')} />
-                <div class="detalhes text-dark ">
-                  <h3 class= "text-dark ">Nome do item</h3>
-                  <p class= "text-dark ">isto é um exemplo de descrição de um item adicionado ao carrinho
-                  <br></br>
-                    <span class= " pt-5 text-dark ">$0.00</span>
-                  </p>
+              <div class="items-carrinho">
+                <div class="carrinho-item">
+                  <img class="" src={require('../images/camera.jpg')} />
+                  <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">Item name</h5>
+                    <p class= "text-dark ">
+                  
+                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: 1</p>
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
                 </div>
-                <div class="cancel">
-                <i class="bi bi-x-square-fill"></i>
+
+                <div class="carrinho-item">
+                  <img class="" src={require('../images/camera.jpg')} />
+                  <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">Item name</h5>
+                    <p class= "text-dark ">
+                  
+                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: 1</p>
+                     
+
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
                 </div>
-              </div>
+
+                <div class="carrinho-item">
+                  <img class="" src={require('../images/camera.jpg')} />
+                  <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">Item name</h5>
+                    <p class= "text-dark ">
+                  
+                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: 1</p>
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
+                </div>
+
+
+                <div class="carrinho-item">
+                  <img class="" src={require('../images/camera.jpg')} />
+                  <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">Item name</h5>
+                    <p class= "text-dark ">
+                 
+                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: 1</p>
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
+                </div>
+
+                <div class="carrinho-item">
+                  <img class="" src={require('../images/camera.jpg')} />
+                  <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">Item name</h5>
+                    <p class= "text-dark ">
+                 
+                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: 1</p>
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
+                </div>
+                <div class="carrinho-item">
+                  <img class="" src={require('../images/camera.jpg')} />
+                  <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">Item name</h5>
+                    <p class= "text-dark ">
+                 
+                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: 1</p>
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
+                </div>
+                <div class="carrinho-item">
+                  <img class="" src={require('../images/camera.jpg')} />
+                  <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">Item name</h5>
+                    <p class= "text-dark ">
+                 
+                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: 1</p>
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
+                </div>
+                </div>
+              
+
               
             </div>
             <p class="d-none">espaco</p>
@@ -253,6 +375,7 @@ export default class Navbar extends Component{
               <button class="btn btn-outline-dark col-md-12 mb-1" id="checkout">Checkout</button>
               <button class="verCarrinho btn btn-outline-light btn-dark col-md-12 " id="carrinho">Ver carrinho</button>
           </div>
+          
       </form>
       
 
