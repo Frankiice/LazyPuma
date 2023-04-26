@@ -88,9 +88,25 @@ export default class Catalogo extends Component{
                         return <div  key={product._id} class="col">   
                         {this.state.novoHeaderTip == "brand"
                         ?                
-                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" value={ product.brand} onClick={(e) => {this.setState({ brand: e.target.value }, this.handleClick)}}> {product.brand }</button> 
+                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" 
+                            style={{backgroundImage: `url(${product.img})`}} value={ product.brand} 
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundImage = "none";
+                              }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundImage = `url(${product.img})`;
+                              }}
+                            onClick={(e) => {this.setState({ brand: e.target.value }, this.handleClick)}}> {product.brand }</button> 
                         :
-                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" value={ product.categorieA} onClick={(e) => {this.setState({ categoriaA: e.target.value }, this.handleClick)}}> {product.categorieA }</button> 
+                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" 
+                            style={{ backgroundImage: `url(${product.img})` }} value={ product.categorieA} 
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundImage = "none";
+                              }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundImage = `url(${product.img})`;
+                              }}
+                            onClick={(e) => {this.setState({ categoriaA: e.target.value }, this.handleClick)}}> {product.categorieA }</button> 
 
                         }     
                         </div> 
@@ -124,7 +140,7 @@ export default class Catalogo extends Component{
             :
                 <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.brand}</a> </h2>
         :
-            <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.categoriaA}</a> </h2>
+            <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.categoriaA}</a> </h2>
         }
     </div>
     {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
