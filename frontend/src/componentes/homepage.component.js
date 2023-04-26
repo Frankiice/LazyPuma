@@ -126,7 +126,7 @@ export default class Homepage extends Component{
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="bebe">
                                 <li><button class="dropdown-item" value="Playards" onClick={(e) => {this.setState({ categoriaB: "Baby", categoriaA: e.target.value}, this.handleClick)}}>Playards</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><button class="dropdown-item" value="Rockers & Bouncers" onClick={(e) => {this.setState({ categoriaB: "Baby", categoriaA: e.target.value}, this.handleClick)}}>Rockers & Bouncers</button></li>
+                                <li><button class="dropdown-item" value="Rockers and Bouncers" onClick={(e) => {this.setState({ categoriaB: "Baby", categoriaA: e.target.value}, this.handleClick)}}>Rockers and Bouncers</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Bath" onClick={(e) => {this.setState({ categoriaB: "Baby", categoriaA: e.target.value}, this.handleClick)}}>Bath</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -377,7 +377,7 @@ export default class Homepage extends Component{
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="brinquedos">
                                 <li><button class="dropdown-item" value="Building Toys" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Building Toys</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><button class="dropdown-item" value="Dolls & Accessories" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Dolls & Accessories</button></li>
+                                <li><button class="dropdown-item" value="Dolls and Accessories" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Dolls and Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Board Games" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Board Games</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -387,7 +387,7 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Outdoor Toys" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Outdoor Toys</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><button class="dropdown-item" value="Arts & Crafts" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Arts & Crafts</button></li>
+                                <li><button class="dropdown-item" value="Arts and Crafts" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Arts and Crafts</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Card Games" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Card Games</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
