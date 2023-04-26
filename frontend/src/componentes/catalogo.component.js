@@ -58,6 +58,7 @@ export default class Catalogo extends Component{
         console.log("brand no handleClick ", brand);
         window.localStorage.setItem("categoriaA", categoriaA);
         window.localStorage.setItem("brand", brand);
+        window.localStorage.removeItem("objSearch");
         window.location.href = "/catalogo";
     };
 
@@ -72,6 +73,22 @@ export default class Catalogo extends Component{
         window.localStorage.removeItem("categoriaA");
         window.localStorage.removeItem("brand");
         window.localStorage.removeItem("produtoID");
+        window.localStorage.removeItem("objSearch");
+        window.localStorage.removeItem("search");
+    }
+
+    preBreadCrumb2(e){
+        window.localStorage.removeItem("categoriaA");
+        window.localStorage.removeItem("produtoID");
+        window.localStorage.removeItem("objSearch");
+        window.localStorage.removeItem("search");
+    }
+
+    preBreadCrumb3(e){
+        window.localStorage.removeItem("brand");
+        window.localStorage.removeItem("produtoID");
+        window.localStorage.removeItem("objSearch");
+        window.localStorage.removeItem("search");
     }
 
 
@@ -136,11 +153,11 @@ export default class Catalogo extends Component{
         ?
             this.state.brand === ""
             ?
-                <h2>&nbsp;<a href='/catalogo'>{this.state.categoriaB}</a></h2>
+                <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a></h2>
             :
-                <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.brand}</a> </h2>
+                <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb2} href='/catalogo'>{this.state.brand}</a> </h2>
         :
-            <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a href='/catalogo'>{this.state.categoriaA}</a> </h2>
+            <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb3} href='/catalogo'>{this.state.categoriaA}</a> </h2>
         }
     </div>
     {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
@@ -182,28 +199,12 @@ export default class Catalogo extends Component{
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                        {/* {movies.map((movie) => ( */}
-                        {this.state.objSearch ? 
-                        this.state.objSearch.map((produto) => (
-                            <div key={produto._id}>
-                            <div class="col mb-5">
-                                <div class="card h-100 crop">
-                                    <img class="card-img-top" src={produto.img} alt="..." />
-                                    <div class="card-body p-4">
-                                        <div class="text-center">
-                                            <h5 class="fw-bolder">{produto.name}</h5>
-                                            $40.00 - $80.00
-                                        </div>
-                                    </div>
-                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                        <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> ))
-                        :
-                        this.state.obj.map((produto) => (
-                            <div key={produto._id}>
+                        {this.state.objSearch ?
+                            this.state.objSearch.length === 0 ? 
+                             <h2>No Products Found</h2>
+                            :
+                            this.state.objSearch.map((produto) => (
+                                <div key={produto._id}>
                                 <div class="col mb-5">
                                     <div class="card h-100 crop">
                                         <img class="card-img-top" src={produto.img} alt="..." />
@@ -218,8 +219,27 @@ export default class Catalogo extends Component{
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
-                        ))}
+                            </div> ))
+                        :
+                            this.state.obj.map((produto) => (
+                                <div key={produto._id}>
+                                    <div class="col mb-5">
+                                        <div class="card h-100 crop">
+                                            <img class="card-img-top" src={produto.img} alt="..." />
+                                            <div class="card-body p-4">
+                                                <div class="text-center">
+                                                    <h5 class="fw-bolder">{produto.name}</h5>
+                                                    $40.00 - $80.00
+                                                </div>
+                                            </div>
+                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            ))                   
+                       }
                     </div>
                 </div>
     </section>

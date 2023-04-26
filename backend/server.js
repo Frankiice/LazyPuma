@@ -183,9 +183,9 @@ app.get("/catalogo", async (req, res) => {
         let categorieB = req.query.categoriaB || "All";
         let brand = req.query.brand || "All";
 
-        console.log("categorieA",categorieA);
-        console.log("categorieB",categorieB);
-        console.log("brand",brand);
+        // console.log("categorieA",categorieA);
+        // console.log("categorieB",categorieB);
+        // console.log("brand",brand);
 
 
         const categoriasPossiviesB = [
@@ -327,9 +327,12 @@ app.get("/produto/search", async (req, res) => {
 		const search = req.query.search || "";
         let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
+        let brand = req.query.brand || "All";
 
         console.log("categoriaA",categorieA);
         console.log("categorieB",categorieB);
+        console.log("brand",brand);
+
 
         const categoriasPossiviesB = [
             "Baby",
@@ -353,11 +356,47 @@ app.get("/produto/search", async (req, res) => {
 			? (categorieB = [...categoriasPossiviesB])
 			: (categorieB = req.query.categoriaB);
 
-        const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
-            .where("categorieB")
-			.in(categorieB)
-			.skip(page * limit)
-			.limit(limit);
+        let products = null;
+        categorieA === "All"
+            ?   (brand === "All" 
+                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                    
+                )
+                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
+                )
+            :   (brand === "All"
+                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                    )
+                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
+            )
+
+        // const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+        //     .where("categorieB")
+		// 	.in(categorieB)
+        //     .where("categorieA")
+        //     .in(categorieA)
+        //     .where("brand")
+        //     .in(brand)
+		// 	.skip(page * limit)
+		// 	.limit(limit);
         
         const total = await Product.countDocuments({
             categorieB: { $in: categorieB },
