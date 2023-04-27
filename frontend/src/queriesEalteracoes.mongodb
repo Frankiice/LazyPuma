@@ -5,6 +5,60 @@
 
 // Select the database to use.
 use('lazypuma');
+
+// db.createCollection("products", {
+//    validator: {
+//       $jsonSchema: {
+//          bsonType: "object",
+//          required: ["name","brand","categorieA","categorieB"],
+//          properties: {
+//             name: {
+//                bsonType: "string",
+//                description: "nome do produto"
+//             },
+//             brand: {
+//                 bsonType: "string",
+//                 description: "marca do produto"
+//              },
+//             categorieA: {
+//                bsonType: "string",
+//                description: "Categoria específica do produto"
+//             },
+//             categorieB: {
+//                bsonType: "string",
+//                description: "Categoria geral do produto"
+//             },
+//          }
+//       }
+//    }
+// })
+const produtos = [
+    {
+        "name": "Art of War",
+        "author": "Sun Tzu",
+        "categorieA": "Historical",
+        "categorieB": "Books"
+    },
+    {
+        "name": "Sherlock Holmes Series",
+        "author": "Arthur Conan Doyle",
+        "categorieA": "Romance",
+        "categorieB": "Books"
+    }
+];
+
+  
+
+
+
+db.products.insertMany(produtos)
+
+// db.products.find({"categorieB": "Gardening"})
+
+
+// db.products.find({"categorieB":"Electronics"});
+
+
 // db.createCollection("products")
 
 // The drop() command destroys all data from a collection.
