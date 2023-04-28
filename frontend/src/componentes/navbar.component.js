@@ -234,6 +234,7 @@ export default class Navbar extends Component{
                 aria-expanded="false"
                 onMouseEnter={this.handleCartHover}
                 
+                
               >
             <i className="bi-cart-fill me-1"></i>
             Cart
@@ -242,7 +243,9 @@ export default class Navbar extends Component{
         <div
                 className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
                 aria-labelledby="cartDropdown"
-                onMouseEnter={this.handleCartHover}
+                onMouseLeave={this.handleCartLeave}
+                
+                
                 
               >
                
@@ -372,10 +375,13 @@ export default class Navbar extends Component{
             </div>
             <p class="d-none">espaco</p>
             <p class="text-end text-dark" id="total">Total: $</p>
-              <button class="btn btn-outline-dark col-md-12 mb-1" id="checkout">Checkout</button>
-              <button class="verCarrinho btn btn-outline-light btn-dark col-md-12 " id="carrinho">Ver carrinho</button>
+              <button class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout">Checkout</button>
+              <button class="btn btn-outline-dark  col-md-12 " id="carrinho">View Cart</button>
+
+
+              
           </div>
-          
+          <div class="overlay"></div>
       </form>
       
 
