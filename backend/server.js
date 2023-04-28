@@ -83,7 +83,10 @@ app.post("/user/registar", async(req, res) => {
         //const usersCollection = connection.useDb("lazypuma").collection("users");
         const {type, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
         const encryptedPassword = await bcrypt.hash(password, 10);
-            
+        const user = await User.findOne({email})
+        if(user){
+            return res.json({status: "error", error: "There is already an account with this email"})
+        }else{
          await User.create({
              email,
              type,
@@ -97,8 +100,9 @@ app.post("/user/registar", async(req, res) => {
              password: encryptedPassword,
           });
           res.send({ status: "ok" });
+        }
     }catch (error) {
-         res.send({ status: "error" })
+         res.send({ status: "error", error: error })
     }
 })
 

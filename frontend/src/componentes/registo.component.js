@@ -29,10 +29,11 @@ export default class Registo extends Component {
             flag:false,
             morada: "",
             msgMorada: "",
+            msgErroBackend: "",
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.getCoordenadas = this.getCoordenadas.bind(this);
+        this.getCoordenadas = this.getCoordenadas.bind(this);
 
     };
 
@@ -45,35 +46,32 @@ export default class Registo extends Component {
         this.setState({type:e.target.value});
     };
 
-    getCoordenadas(e){
-        var morada = this.state.rua + ", " + this.state.localidade + ", " + this.state.freguesia + ", " + this.state.concelho + ", " + this.state.cidade + ", " + this.state.cod_postal + ", " + this.state.pais
-        this.setState({ morada: morada });
-        console.log("morada completa", this.state.morada)
-        var url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + morada
+    getCoordenadas(e) {
+        e.preventDefault();
+        const { rua, localidade, freguesia, concelho, cod_postal, cidade, pais } = this.state;
+        const morada = `${rua}, ${localidade}, ${freguesia}, ${concelho}, ${cod_postal}, ${cidade}, ${pais}`;
+        console.log(morada);
+        this.setState({morada: morada})
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${encodeURIComponent(morada)}`;
+      
         fetch(url)
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.length > 0) {
-                        data.forEach(element => {
-                            this.setState({ lat: element.lat });
-                            this.setState({ lon: element.lon });
-                            // this.setState({ msgMorada: "Morada Válida" });
-
-
-                            // console.log(element.lat);
-                            // console.log("lat dentro do getCoordenadas", this.state.lat);
-                            // console.log("msgMorada dentro do getCoordenadas", this.state.msgMorada);
-
-                        });
-                    }
-                    // else{
-                    //     this.setState({ msgMorada: "Morada Inválida, por favor corrija a sua morada" });
-                    //     console.log("msgMorada dentro do else getCoordenadas", this.state.msgMorada);
-
-                    // }   
-                })
-                .catch(err => console.log(err)) 
-    }
+          .then((response) => response.json())
+          .then((data) => {
+            if (data && data.length > 0) {
+              const { lat, lon } = data[0];
+              this.setState({ lat, lon, msgMorada: "Morada Válida, pode prosseguir no seu registo" });
+              console.log("entra no if")
+            } else {
+              this.setState({ msgMorada: "Erro: Morada Inválida, por favor corrija a sua morada" });
+              console.log("entra no else")
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            this.setState({ msgMorada: "Erro ao validar a morada, por favor tente novamente mais tarde" });
+          });
+      }
+      
 
     handleSubmit(e){
         e.preventDefault();
@@ -110,7 +108,7 @@ export default class Registo extends Component {
                 this.setState({ flag: true })
             }else{
                 this.setState({ flag: false })
-        
+                this.setState({ msgErroBackend: data.error })
             }
 
         })
@@ -267,6 +265,15 @@ render() {
                                 <label>País</label>
                                     <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="pais" value={this.state.pais} required /> </div>
                                 </div>
+                                <button onClick={this.getCoordenadas} class="btn btn-outline-light col-md-3">
+                                    Verificar Morada
+                                </button>
+                                {this.state.msgMorada != "" ? 
+                               
+                                <label><br></br>{this.state.msgMorada}</label>
+                                :
+                                <label></label>
+                                }
                             </div>
                             <div class="form-group py-2">
                             <label>NIF</label>
@@ -278,7 +285,7 @@ render() {
                             </div>
                             <div class="form-group py-1 pb-2">
                             <label>Confirme a Password</label>
-                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }) (this.getCoordenadas(e)))} required /> </div>
+                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
                             <div class="botao">
@@ -286,12 +293,12 @@ render() {
                             <button type="submit"  class="btn btn-outline-light col-md-3">
                                 Registar
                             </button>
-                            {/* {this.state.msgMorada ? 
-                                <label>Morada Inválida, corrija a sua morada</label>
-                                :
-                                <label>Morada Válida</label>
-                            } */}
-                            {/* <label>{this.state.msgMorada}</label> */}
+                            {this.state.msgErroBackend != "" ? 
+                               
+                               <label><br></br>{this.state.msgErroBackend}</label>
+                               :
+                               <label></label>
+                               }
                             </div>
                             <div class="text-center pt-4 text-muted">Já tem uma conta? <a href="user/login">Log in</a> </div>
                         </form>
