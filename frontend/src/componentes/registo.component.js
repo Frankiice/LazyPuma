@@ -259,7 +259,7 @@ render() {
                                 </div>
                                 <div class="form-group py-2">
                                 <label>Código postal</label>
-                                    <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} required /> </div>
+                                    <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" pattern="\d{4}-\d{3}" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} required /> </div>
                                 </div>
                                 <div class="form-group py-2">
                                 <label>País</label>

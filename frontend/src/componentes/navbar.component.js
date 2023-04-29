@@ -124,7 +124,7 @@ export default class Navbar extends Component{
 
   logOut = () => {
     window.localStorage.clear();
-    window.location.href = "./login"
+    window.location.href = "./user/login"
   }
   
   componentDidMount(){
