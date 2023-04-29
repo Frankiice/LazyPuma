@@ -646,6 +646,12 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
+.box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
 #butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
 }

@@ -223,8 +223,6 @@ export default class Homepage extends Component{
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Foundation" onClick={(e) => {this.setState({ categoriaB: "Cosmetics", categoriaA: e.target.value}, this.handleClick)}}>Foundation</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><button class="dropdown-item" value="Rosto" onClick={(e) => {this.setState({ categoriaB: "Cosmetics", categoriaA: e.target.value}, this.handleClick)}}>Rosto</button></li>
-                                <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Eye Shadow" onClick={(e) => {this.setState({ categoriaB: "Cosmetics", categoriaA: e.target.value}, this.handleClick)}}>Eye Shadow</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Concealer" onClick={(e) => {this.setState({ categoriaB: "Cosmetics", categoriaA: e.target.value}, this.handleClick)}}>Concealer</button></li>

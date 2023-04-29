@@ -392,35 +392,55 @@ render() {
                     <h3 class="mb-4">Histórico de Encomendas </h3>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>encomendas Antiga</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>encomendas Nova</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Confirme a Nova encomendas</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
                             </div>
                         </div>
                     </div>
+                    
+
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
+                        
+                        
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Visualizar todas as encomendas</button> 
+                        {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button> */}
                     </div>
                 </div>
 
