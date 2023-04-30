@@ -190,9 +190,9 @@ render() {
                 <div class="panel border bg-dark">
                     <div class="panel-heading">
                         <br></br>
-                        <h3 class="pt-3 font-weight-bold text-white">Registado com sucesso!</h3>
+                        <h3 class="pt-3 font-weight-bold text-white">Successfully registered!</h3>
                         <br></br>
-                        <div class="text-center pt-4 text-muted">Inicie sessão aqui <a href="/user/login">Log in</a> </div>
+                        <div class="text-center pt-4 text-muted">Login here <a href="/user/login">Login in</a> </div>
                     </div>
                 </div>
             </div>
@@ -204,24 +204,24 @@ render() {
             <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
                 <div class="panel border bg-dark">
                     <div class="panel-heading">
-                        <h3 class="pt-3 font-weight-bold text-white">Registo</h3>
+                        <h3 class="pt-3 font-weight-bold text-white">Register</h3>
                     </div>
                     <div class="panel-body p-3">
                         <form onSubmit={this.handleSubmit}>
                             <div class="form-group py-2">
-                            <label>Tipo de Utilizador</label>
+                            <label>Type of User</label>
                                 <div class="input-field bg-dark">
                                     <span class="fa fa-user px-2"></span> 
                                         <select class="bg-dark text-white" id="type" 
                                         value={this.state.type} 
                                         onChange={this.handleChange}>
-                                        <option value="consumidor">Consumidor</option>
-                                        <option value="fornecedor">Fornecedor</option>
+                                        <option value="consumidor">Consumer</option>
+                                        <option value="fornecedor">Supplier</option>
                                     </select> 
                                 </div>
                             </div>                                                                                                                          {/*value={name} onChange = {(e) => handleInputChange(e)}*/} 
                             <div class="form-group py-2">
-                            <label>Nome Completo</label>
+                            <label>Fullname</label>
                                 <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-group py-2">
@@ -233,40 +233,40 @@ render() {
                                 <div class="input-field bg-dark"> <span class="fa fa-envelope px-1"></span> <input class="bg-dark text-white" type="text" id="email" onChange={(e => this.setState({ email: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-group py-2">
-                            <label>Telemóvel</label>
+                            <label>Phone Number</label>
                                 <div class="input-field bg-dark"> <span class="fa fa-phone px-1"></span> <input class="bg-dark text-white"  type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} required /> </div>
                             </div>
                             <div class="border-top border-bottom pb-2">
                                 <div class="form-group py-2">
-                                <label>Rua</label>
+                                <label>Street</label>
                                     <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="rua" onChange={(e => this.setState({ rua: e.target.value }))} required /> </div>
                                 </div>
                                 <div class="form-group py-2">
-                                <label>Localidade</label>
+                                <label>Location</label>
                                     <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="localidade" onChange={(e => this.setState({ localidade: e.target.value }))} required /> </div>
                                 </div>
                                 <div class="form-group py-2">
-                                <label>Freguesia</label>
+                                <label>Parish</label>
                                     <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="freguesia" onChange={(e => this.setState({ freguesia: e.target.value }))} required /> </div>
                                 </div>
                                 <div class="form-group py-2">
-                                <label>Concelho</label>
+                                <label>County</label>
                                     <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="concelho" onChange={(e => this.setState({ concelho: e.target.value }))} required /> </div>
                                 </div>
                                 <div class="form-group py-2">
-                                <label>Cidade</label>
+                                <label>City</label>
                                     <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="cidade" onChange={(e => this.setState({ cidade: e.target.value }))} required /> </div>
                                 </div>
                                 <div class="form-group py-2">
-                                <label>Código postal</label>
-                                    <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} required /> </div>
+                                <label>Postal Code</label>
+                                    <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" pattern="\d{4}-\d{3}" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} required /> </div>
                                 </div>
                                 <div class="form-group py-2">
-                                <label>País</label>
+                                <label>Country</label>
                                     <div class="input-field bg-dark"> <span class="fa fa-map-marker px-2"></span> <input class="bg-dark text-white" type="text" id="pais" value={this.state.pais} required /> </div>
                                 </div>
                                 <button onClick={this.getCoordenadas} class="btn btn-outline-light col-md-3">
-                                    Verificar Morada
+                                    Verify Address
                                 </button>
                                 {this.state.msgMorada != "" ? 
                                
@@ -284,14 +284,14 @@ render() {
                                 <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))}  required /> </div>
                             </div>
                             <div class="form-group py-1 pb-2">
-                            <label>Confirme a Password</label>
+                            <label>Confirm Password</label>
                                 <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }))} required /> </div>
                             </div>
                             <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
                             <div class="botao">
                                 <br></br>
                             <button type="submit"  class="btn btn-outline-light col-md-3">
-                                Registar
+                                Register
                             </button>
                             {this.state.msgErroBackend != "" ? 
                                
@@ -300,7 +300,7 @@ render() {
                                <label></label>
                                }
                             </div>
-                            <div class="text-center pt-4 text-muted">Já tem uma conta? <a href="user/login">Log in</a> </div>
+                            <div class="text-center pt-4 text-muted">Already have an account? <a href="user/login">Log in</a> </div>
                         </form>
                     </div>
                     <div class="mx-3 my-2 py-2 bordert">

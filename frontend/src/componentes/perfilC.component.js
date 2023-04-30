@@ -11,6 +11,13 @@ export default class PerfilC extends Component{
             userData: "",
             fullname: "", // penso que será necessário para dar update da info
             nickname: "",
+            rua: "",
+            localidade: "",
+            freguesia: "",
+            concelho: "",
+            cod_postal: "",
+            cidade: "",
+            pais: "Portugal",
             morada: "",
             lat: "",
             lon: "",
@@ -20,11 +27,15 @@ export default class PerfilC extends Component{
             password: "",
             userRemoveFailed: "",
             userUpdated: window.localStorage.getItem("userUpdated"),
+            msgMorada: "",
+
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
         this.preHandleRemove = this.preHandleRemove.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.getCoordenadas = this.getCoordenadas.bind(this);
+
     }
 
 componentDidMount(){
@@ -53,6 +64,14 @@ componentDidMount(){
                         email: data.data.email,
                         phone: data.data.phone,
                         password: data.data.password,});
+        var moradaArray = data.data.morada.split(",");
+        this.setState({
+                    rua: moradaArray[0],
+                    localidade: moradaArray[1],
+                    freguesia: moradaArray[2],
+                    concelho: moradaArray[3],
+                    cod_postal: moradaArray[4],
+                    cidade: moradaArray[5]});
     })
 }
 logOut = () => {
@@ -60,6 +79,32 @@ logOut = () => {
     window.location.href = "./login"
 
 }
+
+getCoordenadas(e) {
+    e.preventDefault();
+    const { rua, localidade, freguesia, concelho, cod_postal, cidade, pais } = this.state;
+    const morada = `${rua}, ${localidade}, ${freguesia}, ${concelho}, ${cod_postal}, ${cidade}, ${pais}`;
+    console.log(morada);
+    this.setState({morada: morada})
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${encodeURIComponent(morada)}`;
+  
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.length > 0) {
+          const { lat, lon } = data[0];
+          this.setState({ lat, lon, msgMorada: "Morada Válida, pode prosseguir" });
+          console.log("entra no if")
+        } else {
+          this.setState({ msgMorada: "Erro: Morada Inválida, por favor corrija a sua morada" });
+          console.log("entra no else")
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ msgMorada: "Erro ao validar a morada, por favor tente novamente mais tarde" });
+      });
+  }
 preHandleRemove(e){
     e.preventDefault();
     const {email, password, userRemoveFailed} = this.state;
@@ -238,19 +283,72 @@ render() {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Morada</label>
-                                    <div class="input-field bg-dark"> 
-                                        <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ morada: e.target.value }))} placeholder={this.state.userData.morada}/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
                                     <label>Identificador Fiscal</label>
                                     <div class="input-field bg-dark"> 
                                         <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder={this.state.userData.nif}/>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="border-top border-bottom pb-2">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Rua</label>
+                                            <div class="input-field bg-dark"> 
+                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ rua: e.target.value }))} placeholder={this.state.rua}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Localidade</label>
+                                            <div class="input-field bg-dark"> 
+                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ localidade: e.target.value }))} placeholder={this.state.localidade}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Freguesia</label>
+                                            <div class="input-field bg-dark"> 
+                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ freguesia: e.target.value }))} placeholder={this.state.freguesia}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Concelho</label>
+                                            <div class="input-field bg-dark"> 
+                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ concelho: e.target.value }))} placeholder={this.state.concelho}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Codigo Postal</label>
+                                            <div class="input-field bg-dark"> 
+                                            <input type="text" pattern="\d{4}-\d{3}" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cod_postal: e.target.value }))} placeholder={this.state.cod_postal}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Cidade</label>
+                                            <div class="input-field bg-dark"> 
+                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cidade: e.target.value }))} placeholder={this.state.cidade}/>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <button onClick={this.getCoordenadas} class="btn btn-outline-light col-md-3">
+                                    Verificar Morada
+                                </button>
+                                {this.state.msgMorada != "" ? 
+                               
+                                <label><br></br>{this.state.msgMorada}</label>
+                                :
+                                <label></label>
+                                }
                             </div>
                             {this.state.userUpdated ?
                               <div> 
@@ -269,7 +367,16 @@ render() {
                             </div> */}
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                             {this.state.msgMorada != "" ? 
+                               this.state.msgMorada == "Erro: Morada Inválida, por favor corrija a sua morada" ?
+                                    <label></label>
+                                    :
+                                    <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+
+                            :
+                               <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                               }
+                            {/* <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button> */}
                             {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button> */}
                         </div>
                     </form>
@@ -279,35 +386,55 @@ render() {
                     <h3 class="mb-4">Histórico de Encomendas </h3>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>encomendas Antiga</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>encomendas Nova</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Confirme a Nova encomendas</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
+                            <div class="form-group box">
+                                <label>Encomenda mais recente</label>
+                                <p> Encomenda Nº:</p>
+                                <p> Data da Compra:</p>
+                                <p> Valor:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+
                             </div>
                         </div>
                     </div>
+                    
+
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
+                        
+                        
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Visualizar todas as encomendas</button>
+                        {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button> */}
                     </div>
                 </div>
 

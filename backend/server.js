@@ -272,7 +272,7 @@ app.get("/catalogo", async (req, res) => {
 
         const setProdBra =  new Set();
         const setBrands = new Set();
-        if(categoriasA.length < 5){
+        if(categoriasA.length < 2){
             // for (let i = 0; i < products.length; i++) {
             //     setBrands.add(products[i].brand);  //faz isto para fazer um conjunto de das brands
             // }
@@ -294,9 +294,18 @@ app.get("/catalogo", async (req, res) => {
             categorieB: { $in: categorieB },
         });
 
-        if(categoriasA.length < 5){ //se nao existirem categorias suficientes o novo header vai ser feito de brands
+        if(categoriasA.length < 2){ //se nao existirem categorias suficientes o novo header vai ser feito de brands
+            if(categoriasA.length < 2){
+                novoHeader = [];
+                novoHeaderTip = "null";
+            }
+            if(brands.length < 2){
+                novoHeader = [];
+                novoHeaderTip = "null";
+            }else{
             novoHeader = brands;
             novoHeaderTip = "brand";
+            }
         }else{
             novoHeader = categoriasA; //caso contrrario será feito de categoriasA
             novoHeaderTip = "categorieA";
