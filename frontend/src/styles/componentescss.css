@@ -511,6 +511,7 @@ a[target='_blank'] {
     background-size: contain;
     background-position: 40px 20px 65px;   
     text-align: center;
+    padding:1.2em;
 }
 
 #butao1{
@@ -524,8 +525,8 @@ a[target='_blank'] {
     background-image: url('../images/bebe.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
-    padding:3.1em;
+    text-align: center;
+    padding:1.5em;
     
 }
 
@@ -533,15 +534,15 @@ a[target='_blank'] {
     background-image: url('../images/desporto.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
-    padding:2.1em;
+    text-align: center;
+    padding:1.5em;
 }
 
 #butao4{
     background-image: url('../images/animais.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.4em;
 }
 
@@ -549,15 +550,15 @@ a[target='_blank'] {
     background-image: url('../images/beleza.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
-    padding:2.7em;
+    text-align: center;
+    padding:1.5em;
 }
 
 #butao6{
     background-image: url('../images/bricolagem.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:1.5em;
 }
 
@@ -627,7 +628,7 @@ a[target='_blank'] {
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
-    padding:1.7em;
+    padding:1.2em;
 }
 
 #butao16{
@@ -652,7 +653,7 @@ a[target='_blank'] {
     border-radius: 5px;
 }
 
-#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
+#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover, #butao16:hover{
     background-image:none;
 }
 
