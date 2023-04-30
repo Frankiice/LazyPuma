@@ -61,7 +61,7 @@ componentDidMount(){
                         <span class="text-decoration-line-through">$45.00</span>
                         <span>$40.00</span>
                     </div>
-                    <p class="lead text-dark">Marca: {this.state.produto.brand}</p>
+                    <p class="lead text-dark">Brand: {this.state.produto.brand}</p>
                     <p class="lead text-dark">Caracteristicas do produto</p>
                     <p class="lead text-dark">Caracteristicas do produto</p>
                     <br></br>
@@ -70,7 +70,7 @@ componentDidMount(){
 
 
                     <div class="d-flex">
-                        <label class="lead text-dark">Quantidade: &nbsp; </label>
+                        <label class="lead text-dark">Quantity: &nbsp; </label>
                        
                         <input class="form-control text-center me-3" id="inputQuantity" type="num" placeholder="1" />
                         <button class="btn btn-outline-dark flex-shrink-0" type="button">
