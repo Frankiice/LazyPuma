@@ -183,7 +183,7 @@ export default class Navbar extends Component{
           </li> */}
           <li class="nav-item">
             <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
-              Produtos
+              Products
             </button>
           </li>
         </ul>
@@ -209,12 +209,12 @@ export default class Navbar extends Component{
         // </li> 
         <li class="nav-item dropdown active px-2">
           <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="bi bi-person-circle"></i> Olá {this.state.nickname}
+            <i class="bi bi-person-circle"></i> Hey {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" href="/user/c">Perfil</a></li>
+              <li><a class="dropdown-item" href="/user/c">Profile</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" href="#">Histórico</a></li>
+              <li><a class="dropdown-item" href="#">Historic</a></li>
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
           </ul>
@@ -222,7 +222,7 @@ export default class Navbar extends Component{
         <li class="nav-item active px-2">
           <a href="/user/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Login/Registo
+              <i class="bi bi-person-circle"></i> Login/Register
             </button>
           </a>
         </li>}
