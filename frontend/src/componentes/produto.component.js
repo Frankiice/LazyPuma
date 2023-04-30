@@ -13,8 +13,33 @@ export default class Produto extends Component{
         this.state = {
             produtoID: window.localStorage.getItem("produtoID"),
             produto: {},
+            carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
+            quantidade: '',
         };        
+        this.adicionarCarrinho = this.adicionarCarrinho.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }  
+
+adicionarCarrinho() {
+    const novoProduto = { nome: this.state.produto.name, preco: 10, quantidade: this.state.quantidade, img:this.state.produto.img };
+    let novoCarrinho = [...this.state.carrinho];
+    let existingProductIndex = novoCarrinho.findIndex(item => item.nome === this.state.produto.name);
+
+    if (existingProductIndex >= 0) {
+      novoCarrinho[existingProductIndex].quantidade = parseInt(novoCarrinho[existingProductIndex].quantidade)+parseInt(this.state.quantidade);
+    } else {
+      novoCarrinho.push(novoProduto);
+    }
+
+    localStorage.setItem('carrinho', JSON.stringify(novoCarrinho));
+    this.setState({ carrinho: novoCarrinho });
+
+    // this.setState({ carrinho: novoCarrinho });
+
+}
+handleChange(event) {
+    this.setState({ quantidade: event.target.value });
+  }
 
 componentDidMount(){
     const {produtoID} = this.state;
@@ -72,8 +97,14 @@ componentDidMount(){
                     <div class="d-flex">
                         <label class="lead text-dark">Quantidade: &nbsp; </label>
                        
-                        <input class="form-control text-center me-3" id="inputQuantity" type="num" placeholder="1" />
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        <input value={this.state.quantidade} onChange={this.handleChange}
+                        class="form-control text-center me-3"
+                         id="inputQuantity"
+                          type="num"
+                           placeholder="1" />
+                        <button onClick={this.adicionarCarrinho}
+                         class="btn btn-outline-dark flex-shrink-0" 
+                         type="button" >
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart
                         </button>
