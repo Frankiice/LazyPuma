@@ -51,11 +51,19 @@ export default class Navbar extends Component{
         page: 1,
         search: window.localStorage.getItem("search") || "",
         isCartHovered: false,
+        carrinho: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCartHover = this.handleCartHover.bind(this);
     this.handleCartLeave = this.handleCartLeave.bind(this);
   }
+
+  componentDidMount() {
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    console.log(carrinho);
+    this.setState({ carrinho });
+  }
+
   handleCartHover() {
     this.setState({ isCartHovered: true });
   }
@@ -128,6 +136,8 @@ export default class Navbar extends Component{
   }
   
   componentDidMount(){
+
+
     fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
         method:"POST",
         crossDomain:true,
@@ -164,6 +174,8 @@ export default class Navbar extends Component{
 
     render(){
       const { isCartHovered } = this.state;
+      const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      
       return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
       
@@ -183,7 +195,7 @@ export default class Navbar extends Component{
           </li> */}
           <li class="nav-item">
             <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
-              Produtos
+              Products
             </button>
           </li>
         </ul>
@@ -209,12 +221,12 @@ export default class Navbar extends Component{
         // </li> 
         <li class="nav-item dropdown active px-2">
           <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="bi bi-person-circle"></i> Olá {this.state.nickname}
+            <i class="bi bi-person-circle"></i> Hey {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" href="/user/c">Perfil</a></li>
+              <li><a class="dropdown-item" href="/user/c">Profile</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" href="#">Histórico</a></li>
+              <li><a class="dropdown-item" href="#">Historic</a></li>
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
           </ul>
@@ -222,7 +234,7 @@ export default class Navbar extends Component{
         <li class="nav-item active px-2">
           <a href="/user/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Login/Registo
+              <i class="bi bi-person-circle"></i> Login/Register
             </button>
           </a>
         </li>}
@@ -257,119 +269,36 @@ export default class Navbar extends Component{
             
             </p>
             <div class="carrinhoWrapper pb-3" >
+
               <div class="items-carrinho">
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
+              
+              <div>
+              {carrinho.length === 0 ? (
+                <div class="carrinho-vazio">
+                <h3 class= "text-dark ">The cart is empty! :(</h3>
+                </div>
+              ) : (
+                carrinho.map(item => (
+                  <div class="carrinho-item" key={item.nome}>
+                    <img class="" src={item.img} />
+                    <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">{item.nome}</h5>
                     <p class= "text-dark ">
-                  
-                      <span class= " pt-5 text-dark ">$0.00</span>
+                      <span class= " pt-5 text-dark ">{item.preco}$</span>
                       <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
+                      <p class="text-secondary float-right">Quantity: {item.quantidade}</p>
                     </p>
                   </div>
                   <div class="cancel">
                   <i class="bi bi-x-square-fill"></i>
                   </div>
-                </div>
+                  </div>
+                ))
+              )}
+            </div>
 
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                  
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                     
-
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                  
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-
-
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                 
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                 
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                 
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                 
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
+               
+                
                 </div>
               
 
