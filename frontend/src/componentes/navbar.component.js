@@ -228,7 +228,7 @@ export default class Navbar extends Component{
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" href="#">Historic</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="./user/login">Log out</a></li>
           </ul>
         </li>:
         <li class="nav-item active px-2">
