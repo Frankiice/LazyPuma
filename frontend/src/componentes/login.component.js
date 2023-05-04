@@ -108,7 +108,7 @@ render() {
                               </div> : 
                               <p></p>
                             }
-                            <div class="text-center pt-4 text-light">Ainda não possui uma conta? <a href="/user/registar">Registo</a> </div>
+                            <div class="text-center pt-4 text-light">Don't have an account? <a href="/user/registar">Register</a> </div>
                         </form>
                     </div>
                     <div class="mx-3 my-2 py-2 bordert">
