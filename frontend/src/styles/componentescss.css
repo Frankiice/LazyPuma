@@ -257,6 +257,55 @@ body{
     width: -1%;
 }
 
+.botaoCart{
+    /* display: none;
+    position: absolute; */
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0.4,0.4,0.3,0.7);
+    padding: 12px 16px;
+    z-index: 1;
+  
+ 
+    /* left: 50%;
+    right: auto;
+     */
+    position: absolute;
+    left: 800px;
+    transform: translateX(-75%) translateY(6%);
+
+    overflow-y:auto;
+    min-height: 00px;
+    min-width:600px;
+    /* max-height: 400px;
+    max-width:300px; */
+}
+
+.carrinhoWrapper{
+    overflow-y:auto;
+    overflow-x:auto;
+    
+}
+.carrinho-item{
+    display:grid;
+    grid-template-columns: 3fr 6fr 1fr;
+    padding:5% 2%;
+    background-color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.carrinho-item img{
+    width: 100%;
+    padding-right: 30px;
+}
+
+.cancel{
+    padding-left: 40px;
+    
+}
+
+
 
 
 .botaoCart{

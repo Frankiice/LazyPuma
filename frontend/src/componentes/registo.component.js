@@ -59,16 +59,16 @@ export default class Registo extends Component {
           .then((data) => {
             if (data && data.length > 0) {
               const { lat, lon } = data[0];
-              this.setState({ lat, lon, msgMorada: "Morada Válida, pode prosseguir no seu registo" });
+              this.setState({ lat, lon, msgMorada: "Valid address, you can proceed with your registration" });
               console.log("entra no if")
             } else {
-              this.setState({ msgMorada: "Erro: Morada Inválida, por favor corrija a sua morada" });
+              this.setState({ msgMorada: "Error: Invalid address, please correct your address" });
               console.log("entra no else")
             }
           })
           .catch((error) => {
             console.log(error);
-            this.setState({ msgMorada: "Erro ao validar a morada, por favor tente novamente mais tarde" });
+            this.setState({ msgMorada: "Error validating address, please try again later" });
           });
       }
       

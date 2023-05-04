@@ -14,7 +14,7 @@ export default class Produto extends Component{
             produtoID: window.localStorage.getItem("produtoID"),
             produto: {},
             carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
-            quantidade: '',
+            quantidade: "1",
         };        
         this.adicionarCarrinho = this.adicionarCarrinho.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -100,8 +100,8 @@ componentDidMount(){
                         <input value={this.state.quantidade} onChange={this.handleChange}
                         class="form-control text-center me-3"
                          id="inputQuantity"
-                          type="num"
-                           placeholder="1" />
+                          type="number"
+                            />
                         <button onClick={this.adicionarCarrinho}
                          class="btn btn-outline-dark flex-shrink-0" 
                          type="button" >
