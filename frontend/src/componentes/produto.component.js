@@ -97,11 +97,12 @@ componentDidMount(){
                     <div class="d-flex">
                         <label class="lead text-dark">Quantidade: &nbsp; </label>
                        
-                        <input value={this.state.quantidade} onChange={this.handleChange}
+                        <input value={this.state.quantidade} onChange={this.handleChange} 
                         class="form-control text-center me-3"
                          id="inputQuantity"
                           type="num"
-                           placeholder="1" />
+                           placeholder="1"
+                            />
                         <button onClick={this.adicionarCarrinho}
                          class="btn btn-outline-dark flex-shrink-0" 
                          type="button" >
