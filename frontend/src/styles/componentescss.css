@@ -389,6 +389,11 @@ body{
 .btn-checkout:hover{
     border-color: #000000;
 }
+
+.stepsEncomenda {
+    margin-left: auto;
+    margin-right: auto;
+}
 /* .containerProduto{
     min-height: 300px;
     max-height: 300px;
