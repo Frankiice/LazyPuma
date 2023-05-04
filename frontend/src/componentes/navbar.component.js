@@ -72,6 +72,20 @@ export default class Navbar extends Component{
     this.setState({ isCartHovered: false });
   }
 
+  countTotalProducts() {
+    let localStorageObj = JSON.parse(localStorage.getItem('carrinho'));
+
+    let count = 0;
+    for (let key in localStorageObj) {
+      if (localStorageObj.hasOwnProperty(key)) {
+        count += localStorageObj[key].quantidade;
+      }
+    }
+    return count;
+  }
+
+
+
   handleSearch(){
     const {page, categoriaA, categoriaB, search,brand, objSearch} = this.state;
     try {
@@ -252,7 +266,7 @@ export default class Navbar extends Component{
               >
             <i className="bi-cart-fill me-1"></i>
             Cart
-            <span className="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
         </button>
         <div
                 className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
@@ -275,7 +289,7 @@ export default class Navbar extends Component{
               <div>
               {carrinho.length === 0 ? (
                 <div class="carrinho-vazio">
-                <h3 class= "text-dark ">The cart is empty! :(</h3>
+                <p class= "text-dark ">The cart is empty!</p>
                 </div>
               ) : (
                 carrinho.map(item => (
