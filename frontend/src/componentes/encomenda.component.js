@@ -3,12 +3,12 @@ import '../styles/componentescss.css';
 import { Stepper } from 'react-form-stepper';
 import { FarBootstrap } from "react-icons/fa";
 
-function Details() {
+function Details(props) {
   return (
   <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
     <div class="p-5 col-md-4 order-md-2 mb-4">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted">Your cart</span>
+        <span >Your cart</span>
         <span class="badge badge-secondary badge-pill">3</span>
       </h4>
       <ul class="list-group mb-3">
@@ -46,14 +46,14 @@ function Details() {
         </li>
       </ul>
 
-      <form class="card p-2" style={{height:'10%'}}>
+      {/* <form class="card p-2" style={{height:'10%'}}>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Promo code"></input>
           <div class="input-group-append">
             <button type="submit" class="btn btn-secondary">Redeem</button>
           </div>
         </div>
-      </form>
+      </form> */}
     </div>
     <div class="p-5 col-md-8 order-md-1">
       <h4 class="mb-3">Billing address</h4>
@@ -61,14 +61,18 @@ function Details() {
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="firstName">First name</label>
-            <input type="text" class="form-control" id="firstName" placeholder="First name" value="" required></input>
+            <div class="input-field bg-dark"> 
+              <input type="text" class="form-control bg-dark text-white" id="firstName" placeholder={props.state.fName} required></input>
+            </div>
             <div class="invalid-feedback">
               Valid first name is required.
             </div>
           </div>
           <div class="col-md-6 mb-3">
             <label for="lastName">Last name</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Last name" value="" required></input>
+            <div class="input-field bg-dark"> 
+              <input type="text" class="form-control bg-dark text-white" id="lastName" placeholder={props.state.lName} required></input>
+            </div>
             <div class="invalid-feedback">
               Valid last name is required.
             </div>
@@ -76,21 +80,8 @@ function Details() {
         </div>
 
         <div class="mb-3">
-          <label for="username">Username</label>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">@</span>
-            </div>
-            <input type="text" class="form-control" id="username" placeholder="Username" required></input>
-            <div class="invalid-feedback" style={{width: '100%'}}>
-              Your username is required.
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-3">
           <label for="email">Email <span class="text-muted">(Optional)</span></label>
-          <input type="email" class="form-control" id="email" placeholder="you@example.com"></input>
+            <input type="email" class="form-control bg-dark text-white" id="email" placeholder={props.state.email}></input>
           <div class="invalid-feedback">
             Please enter a valid email address for shipping updates.
           </div>
@@ -98,18 +89,32 @@ function Details() {
 
         <div class="mb-3">
           <label for="address">Address</label>
-          <input type="text" class="form-control" id="address" placeholder="1234 Main St" required></input>
+          <div class="input-field bg-dark"> 
+            <input type="text" class="form-control bg-dark text-white" id="address" placeholder={props.state.morada} required></input>
+          </div>
           <div class="invalid-feedback">
             Please enter your shipping address.
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="address2">Address 2 <span class="text-muted">(Optional)</span></label>
-          <input type="text" class="form-control" id="address2" placeholder="Apartment or suite"></input>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="firstName">NIF</label>
+              <input type="num" class="form-control bg-dark text-white" id="NIF" placeholder={props.state.nif} required></input>
+            <div class="invalid-feedback">
+              Valid NIF is required.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="lastName">Phone Number</label>
+              <input type="num" class="form-control bg-dark text-white" id="phone" placeholder={props.state.phone} required></input>
+            <div class="invalid-feedback">
+              Valid Phone Number is required.
+            </div>
+          </div>
         </div>
 
-        <div class="row">
+        {/* <div class="row">
           <div class="col-md-5 mb-3">
             <label for="country">Country</label>
             <select class="custom-select d-block w-100 rounded" id="country" required>
@@ -137,7 +142,7 @@ function Details() {
               Zip code required.
             </div>
           </div>
-        </div>
+        </div> */}
         <hr class="mb-4"></hr>
         <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
       </form>
@@ -274,8 +279,28 @@ export default class Encomenda extends Component {
     super(props);
 
     this.state = {
+      token: window.localStorage.getItem("token"),
       activeStep: 0,
-    };
+      userData: "",
+      fullname: "", 
+      fName:"",
+      lName:"",
+      nickname: "",
+      rua: "",
+      localidade: "",
+      freguesia: "",
+      concelho: "",
+      cod_postal: "",
+      cidade: "",
+      pais: "Portugal",
+      morada: "",
+      lat: "",
+      lon: "",
+      nif: "",
+      email: "",
+      phone: "",
+  };
+  this.componentDidMount = this.componentDidMount.bind(this);
 
     this.steps = [
       { label: 'Details' },
@@ -293,41 +318,96 @@ export default class Encomenda extends Component {
     };
 
   }
-  
+
+  componentDidMount(){
+    fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
+        method:"POST",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        body:JSON.stringify({
+            token: window.localStorage.getItem("token"),
+        }),
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data, "userData");
+        this.setState({userData: data.data,
+                    fullname: data.data.fullname, 
+                    nickname: data.data.nickname,
+                    morada: data.data.morada,
+                    lat: data.data.lat,
+                    lon: data.data.lon,
+                    nif: data.data.nif,
+                    email: data.data.email,
+                    phone: data.data.phone,
+                    password: data.data.password,});
+        var moradaArray = data.data.morada.split(",");
+        var nomeArray = data.data.fullname.split(" ");
+        var lastIndex = nomeArray.length - 1;
+        this.setState({
+                    rua: moradaArray[0],
+                    localidade: moradaArray[1],
+                    freguesia: moradaArray[2],
+                    concelho: moradaArray[3],
+                    cod_postal: moradaArray[4],
+                    cidade: moradaArray[5],
+                    fName: nomeArray[0],
+                    lName: nomeArray[lastIndex],
+                  });
+    })
+}
+
+getSectionComponent(s) {
+  const { state } = this;
+  switch(s) {
+    case 0: return <Details state={state}/>;
+    case 1: return <Payment />;
+    case 2: return <Confirmation />;
+    default: return <Details />;
+  }
+}
 
   render() {
 
-    function getSectionComponent(s) {
-      switch(s) {
-        case 0: return <Details />;
-        case 1: return <Payment />;
-        case 2: return <Confirmation />;
-        default: return <Details />;
-      }
-    }
-
+   
     return (
-      <React.Fragment>
-      <div class="cor_header height_header">  
-        <br></br>
-        <Stepper
-        // steps={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]}
-        // activeStep={1}
-        steps={this.steps}
-        activeStep={this.state.activeStep}
-        stepStyle={this.stepStyle}
-        />
+      this.state.token ?
+        <React.Fragment>
+        <div class="cor_header height_header">  
+          <br></br>
+          <Stepper
+          // steps={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]}
+          // activeStep={1}
+          steps={this.steps}
+          activeStep={this.state.activeStep}
+          stepStyle={this.stepStyle}
+          />
+        </div>
+        <div class="stepsEncomenda" style={{padding: '25px'}}>
+          { this.getSectionComponent(this.state.activeStep) }
+          { 
+          (this.state.activeStep !== 0 && this.state.activeStep !== this.steps.length) && <button onClick={ () => this.setState({ activeStep: this.state.activeStep - 1 }) }>Previous</button>
+          }
+          { 
+          this.state.activeStep !== this.steps.length - 1 && <button onClick={ () => this.setState({ activeStep: this.state.activeStep + 1 }) }>Next</button>
+          }
+        </div>
+        </React.Fragment>
+      :
+      <div class="parent" style={{ height: "53vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <div class="stepsEncomenda" style={{textAlign: "center", marginTop: "10px", color: "white"}}>
+          <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
+            <br></br>
+            <h1>Create Account or login to proceed to Checkout</h1>
+            <br></br>
+            <h2><a href="/user/login">Login</a> or <a href="/user/registar">Create an Account</a></h2>
+          </div>
+        </div>
       </div>
-      <div class="stepsEncomenda" style={{padding: '25px'}}>
-        { getSectionComponent(this.state.activeStep) }
-        { 
-        (this.state.activeStep !== 0 && this.state.activeStep !== this.steps.length) && <button onClick={ () => this.setState({ activeStep: this.state.activeStep - 1 }) }>Previous</button>
-        }
-        { 
-        this.state.activeStep !== this.steps.length - 1 && <button onClick={ () => this.setState({ activeStep: this.state.activeStep + 1 }) }>Next</button>
-        }
-      </div>
-      </React.Fragment>
     );
   }
 }
