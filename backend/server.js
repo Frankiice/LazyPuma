@@ -61,7 +61,15 @@ const UserDetailsSchema = new mongoose.Schema(
         collection: "users"
     }
 );
-
+//const EdicaoDetailsSchema = new mongoose.Schema[
+//    {
+//        listaProdutos: Array,
+//        listaVeiculos: Array,
+//        lat: String,
+//        long: String,
+//        morada: String,
+//    }
+//]
 const ProductDetailsSchema =  new mongoose.Schema(
     {
         name: String,
@@ -460,3 +468,20 @@ app.get("/produto", async (req, res) => {
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
 });
+
+//app.get("/Unidade_Producao", async (req,res) => {
+//    try{
+//        const Edicao = mongoose.model("unidadeProducao", EdicaoDetailsSchema);
+//        const {listaProdutos, listaVeiculos, lat, long, morada} = req.body;
+//        await Edicao.findOneAndUpdate({}
+//        (err,result)=>{
+//            res.json({status: "ok", data:"Update success"})
+//            })
+//
+//    }catch(error) {
+//        res.send({ status: "error", error: error })
+//   }
+//
+//
+//
+//});
