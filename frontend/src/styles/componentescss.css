@@ -257,55 +257,6 @@ body{
     width: -1%;
 }
 
-.botaoCart{
-    /* display: none;
-    position: absolute; */
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0.4,0.4,0.3,0.7);
-    padding: 12px 16px;
-    z-index: 1;
-  
- 
-    /* left: 50%;
-    right: auto;
-     */
-    position: absolute;
-    left: 800px;
-    transform: translateX(-75%) translateY(6%);
-
-    overflow-y:auto;
-    min-height: 00px;
-    min-width:600px;
-    /* max-height: 400px;
-    max-width:300px; */
-}
-
-.carrinhoWrapper{
-    overflow-y:auto;
-    overflow-x:auto;
-    
-}
-.carrinho-item{
-    display:grid;
-    grid-template-columns: 3fr 6fr 1fr;
-    padding:5% 2%;
-    background-color: #ffffff;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 5px;
-}
-
-.carrinho-item img{
-    width: 100%;
-    padding-right: 30px;
-}
-
-.cancel{
-    padding-left: 40px;
-    
-}
-
-
 
 
 .botaoCart{
@@ -356,12 +307,12 @@ body{
 }
 .carrinho-vazio{
     
-    background-color: #ffffff;
+    /* background-color: #ffffff; */
     /* border-style: solid; */
     border-width: 1px;
     border-radius: 5px;
-    padding-top: 30px;
-    padding-left: 16%;
+    padding-top: 50px;
+    padding-left: 29%;
     height: 100px;
     margin-bottom: 5px;
 }
@@ -405,7 +356,6 @@ body{
     width: auto;
     overflow: hidden;
 }
-
 .crop img {
     height: auto;
     width: 250px;
@@ -575,7 +525,6 @@ a[target='_blank'] {
     background-size: contain;
     background-position: 40px 20px 65px;   
     text-align: center;
-    padding:1.2em;
 }
 
 #butao1{
@@ -589,8 +538,8 @@ a[target='_blank'] {
     background-image: url('../images/bebe.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: center;
-    padding:1.5em;
+    text-align: justify;
+    padding:3.1em;
     
 }
 
@@ -598,15 +547,15 @@ a[target='_blank'] {
     background-image: url('../images/desporto.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: center;
-    padding:1.5em;
+    text-align: justify;
+    padding:2.1em;
 }
 
 #butao4{
     background-image: url('../images/animais.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: center;
+    text-align: justify;
     padding:2.4em;
 }
 
@@ -614,15 +563,15 @@ a[target='_blank'] {
     background-image: url('../images/beleza.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: center;
-    padding:1.5em;
+    text-align: justify;
+    padding:2.7em;
 }
 
 #butao6{
     background-image: url('../images/bricolagem.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: center;
+    text-align: justify;
     padding:1.5em;
 }
 
@@ -692,7 +641,7 @@ a[target='_blank'] {
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
-    padding:1.2em;
+    padding:1.7em;
 }
 
 #butao16{
@@ -711,13 +660,7 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
-.box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover, #butao16:hover{
+#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
 }
 
@@ -757,4 +700,3 @@ a[target='_blank'] {
     }
     
 }
-

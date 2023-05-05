@@ -47,9 +47,8 @@ export default class Navbar extends Component{
         obj: [],
         categoriaA: window.localStorage.getItem("categoriaA") || "", 
         categoriaB: window.localStorage.getItem("categoriaB") || "",
-        brand: window.localStorage.getItem("brand") || "",
         page: 1,
-        search: window.localStorage.getItem("search") || "",
+        search: "",
         isCartHovered: false,
         carrinho: [],
     };
@@ -72,13 +71,26 @@ export default class Navbar extends Component{
     this.setState({ isCartHovered: false });
   }
 
+  countTotalProducts() {
+    let localStorageObj = JSON.parse(localStorage.getItem('carrinho'));
+
+    let count = 0;
+    for (let key in localStorageObj) {
+      if (localStorageObj.hasOwnProperty(key)) {
+        count += parseInt(localStorageObj[key].quantidade);
+      }
+    }
+    return count;
+  }
+
+
+
   handleSearch(){
-    const {page, categoriaA, categoriaB, search,brand, objSearch} = this.state;
+    const {page, categoriaA, categoriaB, search, objSearch} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este é a base nao sei se aceita do outro lado mais parametros aqui
-      const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&brand=${brand}&search=${search}`;
+      const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&search=${search}`;
       console.log(url);
-      window.localStorage.setItem("search", search)
       fetch( url, {
         method:"GET",
         crossDomain:true,
@@ -132,7 +144,7 @@ export default class Navbar extends Component{
 
   logOut = () => {
     window.localStorage.clear();
-    window.location.href = "./user/login"
+    window.location.href = "./login"
   }
   
   componentDidMount(){
@@ -161,8 +173,8 @@ export default class Navbar extends Component{
     window.localStorage.removeItem("categoriaA");
     window.localStorage.removeItem("brand");
     window.localStorage.removeItem("produtoID");
-    window.localStorage.removeItem("objSearch");
-    window.localStorage.removeItem("search");
+
+
 }
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
@@ -195,13 +207,13 @@ export default class Navbar extends Component{
           </li> */}
           <li class="nav-item">
             <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
-              Products
+              Produtos
             </button>
           </li>
         </ul>
         <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
             <div className="form-group has-search">                                                                           
-              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder={this.state.search === "" ? 'Search' : this.state.search}/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder='Search'/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
         </div>
       </div>
@@ -221,20 +233,20 @@ export default class Navbar extends Component{
         // </li> 
         <li class="nav-item dropdown active px-2">
           <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="bi bi-person-circle"></i> Hey {this.state.nickname}
+            <i class="bi bi-person-circle"></i> Olá {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" href="/user/c">Profile</a></li>
+              <li><a class="dropdown-item" href="/user/c">Perfil</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" href="#">Historic</a></li>
+              <li><a class="dropdown-item" href="#">Histórico</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" onClick={this.logOut} href="./user/login">Log out</a></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
           </ul>
         </li>:
         <li class="nav-item active px-2">
           <a href="/user/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Login/Register
+              <i class="bi bi-person-circle"></i> Login/Registo
             </button>
           </a>
         </li>}
@@ -252,7 +264,7 @@ export default class Navbar extends Component{
               >
             <i className="bi-cart-fill me-1"></i>
             Cart
-            <span className="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
         </button>
         <div
                 className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
@@ -275,7 +287,7 @@ export default class Navbar extends Component{
               <div>
               {carrinho.length === 0 ? (
                 <div class="carrinho-vazio">
-                <h3 class= "text-dark ">The cart is empty! :(</h3>
+                <p class= "text-dark ">The cart is empty!</p>
                 </div>
               ) : (
                 carrinho.map(item => (

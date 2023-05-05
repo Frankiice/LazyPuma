@@ -26,7 +26,8 @@ adicionarCarrinho() {
     let existingProductIndex = novoCarrinho.findIndex(item => item.nome === this.state.produto.name);
 
     if (existingProductIndex >= 0) {
-      novoCarrinho[existingProductIndex].quantidade = parseInt(novoCarrinho[existingProductIndex].quantidade)+parseInt(this.state.quantidade);
+        novoCarrinho[existingProductIndex].quantidade = +novoCarrinho[existingProductIndex].quantidade + +this.state.quantidade;
+
     } else {
       novoCarrinho.push(novoProduto);
     }
@@ -98,9 +99,11 @@ componentDidMount(){
                         <label class="lead text-dark">Quantity: &nbsp; </label>
                        
                         <input value={this.state.quantidade} onChange={this.handleChange}
-                        class="form-control text-center me-3"
+                        class="form-control text-center me-3 quantidade_seta"
                          id="inputQuantity"
                           type="number"
+                          min={1}
+                          
                             />
                         <button onClick={this.adicionarCarrinho}
                          class="btn btn-outline-dark flex-shrink-0" 
