@@ -44,16 +44,49 @@ export default class Navbar extends Component{
         data: "",
         user: "",
         nickname: "",
-        obj: {},
-        categoriaA: "", 
+        obj: [],
+        categoriaA: window.localStorage.getItem("categoriaA") || "", 
         categoriaB: window.localStorage.getItem("categoriaB") || "",
         page: 1,
         search: "",
+        isCartHovered: false,
+        carrinho: [],
     };
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleCartHover = this.handleCartHover.bind(this);
+    this.handleCartLeave = this.handleCartLeave.bind(this);
   }
 
+  componentDidMount() {
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    console.log(carrinho);
+    this.setState({ carrinho });
+  }
+
+  handleCartHover() {
+    this.setState({ isCartHovered: true });
+  }
+
+  handleCartLeave() {
+    this.setState({ isCartHovered: false });
+  }
+
+  countTotalProducts() {
+    let localStorageObj = JSON.parse(localStorage.getItem('carrinho'));
+
+    let count = 0;
+    for (let key in localStorageObj) {
+      if (localStorageObj.hasOwnProperty(key)) {
+        count += parseInt(localStorageObj[key].quantidade);
+      }
+    }
+    return count;
+  }
+
+
+
   handleSearch(){
-    const {page, categoriaA, categoriaB, search} = this.state;
+    const {page, categoriaA, categoriaB, search, objSearch} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este é a base nao sei se aceita do outro lado mais parametros aqui
       const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&search=${search}`;
@@ -76,7 +109,9 @@ export default class Navbar extends Component{
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "searchData");
-        this.setState({ obj: data.total}); //o que adicionar aqui??
+        // this.setState({ objSearch: data.products}); //o que adicionar aqui??
+        window.localStorage.setItem("objSearch", JSON.stringify(data.products))
+        window.location.href= "./catalogo"
     })
     }catch(err){
       console.log(err);
@@ -109,10 +144,12 @@ export default class Navbar extends Component{
 
   logOut = () => {
     window.localStorage.clear();
-    window.location.href = "./login"
+    window.location.href = "./user/login"
   }
   
   componentDidMount(){
+
+
     fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
         method:"POST",
         crossDomain:true,
@@ -131,6 +168,14 @@ export default class Navbar extends Component{
         this.setState({ nickname: data.data.nickname,});
     })
 }
+  handlePre(){
+    window.localStorage.removeItem("categoriaB");
+    window.localStorage.removeItem("categoriaA");
+    window.localStorage.removeItem("brand");
+    window.localStorage.removeItem("produtoID");
+
+
+}
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
     //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
@@ -140,13 +185,16 @@ export default class Navbar extends Component{
     // };
 
     render(){
+      const { isCartHovered } = this.state;
+      const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      
       return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
       
       {/* Logo e imagem do navbar */}
       
       <div class="logo px-4">
-        <a href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
+        <a onClick={this.handlePre} href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
         <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png"></img></a>
       </div>
       <div class="collapse navbar-collapse px-3" id="navbarSupportedContent">
@@ -192,7 +240,7 @@ export default class Navbar extends Component{
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" href="#">Histórico</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="./user/login">Log out</a></li>
           </ul>
         </li>:
         <li class="nav-item active px-2">
@@ -203,44 +251,80 @@ export default class Navbar extends Component{
           </a>
         </li>}
       </ul>
-       <form class="d-flex px-3 nav-item dropdown" >
-        <button class="btn btn-outline-light col-md-12" id="cartDropdown"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-            <i class="bi-cart-fill me-1"  ></i>
-            Cesto
-            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+       <form class="d-flex px-3 nav-item " >
+       <button
+                className="btn btn-outline-light col-md-12 dropdown-hover"
+                id="cartDropdown"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onMouseEnter={this.handleCartHover}
+                
+                
+              >
+            <i className="bi-cart-fill me-1"></i>
+            Cart
+            <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
         </button>
-        {/* <ul class="dropdown-menu botaoCart" aria-labelledby="cartDropdown">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul> */}
-          <div class="dropdown-menu p-4 text-dark botaoCart" aria-labelledby="cartDropdown" >
-            <h3 class="text-dark">Cesto de Compras</h3>
+        <div
+                className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
+                aria-labelledby="cartDropdown"
+                onMouseLeave={this.handleCartLeave}
+                
+                
+                
+              >
+               
+            <h3 class="text-dark font-weight-bold ">Shopping Cart</h3>
              
             <p class="text-dark">
             
             </p>
             <div class="carrinhoWrapper pb-3" >
-              <div class="carrinho-item">
-                <img class="" src={require('../images/camera.jpg')} />
-                <div class="detalhes text-dark ">
-                  <h3 class= "text-dark ">Nome do item</h3>
-                  <p class= "text-dark ">isto é um exemplo de descrição de um item adicionado ao carrinho
-                  <br></br>
-                    <span class= " pt-5 text-dark ">$0.00</span>
-                  </p>
+
+              <div class="items-carrinho">
+              
+              <div>
+              {carrinho.length === 0 ? (
+                <div class="carrinho-vazio">
+                <p class= "text-dark ">The cart is empty!</p>
                 </div>
-                <div class="cancel">
-                <i class="bi bi-x-square-fill"></i>
+              ) : (
+                carrinho.map(item => (
+                  <div class="carrinho-item" key={item.nome}>
+                    <img class="" src={item.img} />
+                    <div class="detalhes text-dark ">
+                    <h5 class= "text-dark ">{item.nome}</h5>
+                    <p class= "text-dark ">
+                      <span class= " pt-5 text-dark ">{item.preco}$</span>
+                      <br></br>
+                      <p class="text-secondary float-right">Quantity: {item.quantidade}</p>
+                    </p>
+                  </div>
+                  <div class="cancel">
+                  <i class="bi bi-x-square-fill"></i>
+                  </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+               
+                
                 </div>
-              </div>
+              
+
               
             </div>
             <p class="d-none">espaco</p>
             <p class="text-end text-dark" id="total">Total: $</p>
-              <button class="btn btn-outline-dark col-md-12 mb-1" id="checkout">Checkout</button>
-              <button class="verCarrinho btn btn-outline-light btn-dark col-md-12 " id="carrinho">Ver carrinho</button>
+              <button class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout">Checkout</button>
+              <button class="btn btn-outline-dark  col-md-12 " id="carrinho">View Cart</button>
+
+
+              
           </div>
+          <div class="overlay"></div>
       </form>
       
 

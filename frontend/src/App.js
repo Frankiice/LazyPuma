@@ -17,6 +17,8 @@ import PerfilC from "./componentes/perfilC.component";
 import PerfilF from "./componentes/perfilF.component";
 import Catalogo from "./componentes/catalogo.component";
 import Produto from "./componentes/produto.component";
+import Encomenda from "./componentes/encomenda.component";
+
 
 
 function App() {
@@ -39,6 +41,8 @@ function App() {
         <Route path="/user/f" element={<PerfilF/>}/>
         <Route path="/catalogo" element={<Catalogo/>}/>
         <Route path="/produto" element={<Produto/>}/>
+        <Route path="/user/encomenda" element={<Encomenda/>}/>
+
 
 
       </Routes>

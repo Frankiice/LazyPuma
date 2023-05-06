@@ -11,10 +11,63 @@ export default class Produto extends Component{
     constructor(props){
         super(props);
         this.state = {
-            categoria: "",
+            produtoID: window.localStorage.getItem("produtoID"),
+            produto: {},
+            carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
+            quantidade: "1",
         };        
+        this.adicionarCarrinho = this.adicionarCarrinho.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }  
 
+adicionarCarrinho() {
+    const novoProduto = { nome: this.state.produto.name, preco: 10, quantidade: this.state.quantidade, img:this.state.produto.img };
+    let novoCarrinho = [...this.state.carrinho];
+    let existingProductIndex = novoCarrinho.findIndex(item => item.nome === this.state.produto.name);
+
+    if (existingProductIndex >= 0) {
+        novoCarrinho[existingProductIndex].quantidade = +novoCarrinho[existingProductIndex].quantidade + +this.state.quantidade;
+
+    } else {
+      novoCarrinho.push(novoProduto);
+    }
+
+    localStorage.setItem('carrinho', JSON.stringify(novoCarrinho));
+    this.setState({ carrinho: novoCarrinho });
+
+    // this.setState({ carrinho: novoCarrinho });
+
+}
+handleChange(event) {
+    this.setState({ quantidade: event.target.value });
+  }
+
+componentDidMount(){
+    const {produtoID} = this.state;
+    console.log("produtoID",produtoID);
+    try{
+        const base_url = "http://localhost:5000/produto"
+        const url = `${base_url}?id=${produtoID}`;
+        console.log(url);
+        fetch( url, {
+        method:"GET",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data, "produtoData");
+            this.setState({ produto: data.product })
+            console.log(this.state.produto)
+        }) 
+    }catch(err){
+        console.log(err);
+    }
+}
 
 
     
@@ -26,15 +79,15 @@ export default class Produto extends Component{
      <section class="py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="row gx-4 gx-lg-5 align-items-center">
-                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." /></div>
+                <div class="col-md-6"><img class="card-img" src={this.state.produto.img} alt="..." /></div>
                 <div class="col-md-6">
                     <div class="small mb-1">SKU: BST-498</div>
-                    <h1 class="display-5 fw-bolder">Nome do Produto</h1>
+                    <h1 class="display-5 fw-bolder">{this.state.produto.name}</h1>
                     <div class="fs-5 mb-5">
                         <span class="text-decoration-line-through">$45.00</span>
                         <span>$40.00</span>
                     </div>
-                    <p class="lead text-dark">Caracteristicas do produto</p>
+                    <p class="lead text-dark">Brand: {this.state.produto.brand}</p>
                     <p class="lead text-dark">Caracteristicas do produto</p>
                     <p class="lead text-dark">Caracteristicas do produto</p>
                     <br></br>
@@ -43,10 +96,18 @@ export default class Produto extends Component{
 
 
                     <div class="d-flex">
-                        <label class="lead text-dark">Quantidade: &nbsp; </label>
+                        <label class="lead text-dark">Quantity: &nbsp; </label>
                        
-                        <input class="form-control text-center me-3" id="inputQuantity" type="num" placeholder="1" />
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        <input value={this.state.quantidade} onChange={this.handleChange}
+                        class="form-control text-center me-3 quantidade_seta"
+                         id="inputQuantity"
+                          type="number"
+                          min={1}
+                          
+                            />
+                        <button onClick={this.adicionarCarrinho}
+                         class="btn btn-outline-dark flex-shrink-0" 
+                         type="button" >
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart
                         </button>

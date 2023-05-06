@@ -94,7 +94,10 @@ app.post("/user/registar", async(req, res) => {
         //const usersCollection = connection.useDb("lazypuma").collection("users");
         const {type, fullname, nickname, morada, nif, lat, lon, email, phone, password} = req.body;
         const encryptedPassword = await bcrypt.hash(password, 10);
-            
+        const user = await User.findOne({email})
+        if(user){
+            return res.json({status: "error", error: "There is already an account with this email"})
+        }else{
          await User.create({
              email,
              type,
@@ -108,8 +111,9 @@ app.post("/user/registar", async(req, res) => {
              password: encryptedPassword,
           });
           res.send({ status: "ok" });
+        }
     }catch (error) {
-         res.send({ status: "error" })
+         res.send({ status: "error", error: error })
     }
 })
 
@@ -184,35 +188,20 @@ app.delete("/user/delete", async (req, res) => { //esste seria para eleminar um 
     }catch(error){}
 });
 
-app.post("/catalogo", async (req, res) => { 
-    const User = mongoose.model("users", UserDetailsSchema);//tera de ser outro coiso e nao o users
-    const {token, categoria} = req.body;
-    try{
-        const user = jwt.verify(token,JWT_SECRET);
-        const user_email = user.email;
-        User.findOne({email: user_email}) //find da categoria e os seus produtos
-            .then((data) => {
-                res.send({status: "ok", data: data});
-            })
-            .catch((error)=>{
-                res.send({status: "error" ,data: error});
-            });
-    }catch(error){}
-});
-
-
-app.get("/produto/search", async (req, res) => { 
+app.get("/catalogo", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
 
     try{
         // const page = parseInt(req.query.page) - 1 || 0;
 		// const limit = parseInt(req.query.limit) || 1000;
-		const search = req.query.search || "";
-        let categoria = req.query.categoria || "All";
+        let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
+        let brand = req.query.brand || "All";
 
-        console.log("categoria",categoria);
-        console.log("categorieB",categorieB);
+        // console.log("categorieA",categorieA);
+        // console.log("categorieB",categorieB);
+        // console.log("brand",brand);
+
 
         const categoriasPossiviesB = [
             "Baby",
@@ -235,13 +224,203 @@ app.get("/produto/search", async (req, res) => {
         categorieB === "All"
 			? (categorieB = [...categoriasPossiviesB])
 			: (categorieB = req.query.categoriaB);
-// User.findOne({ $or: [{ email: req.body.email }, { username: req.body.username }] })
-        // const products = await Product.find({ name: { $regex: search, $options: "i" }})
-        const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
-            .where("categorieB")
-			.in(categorieB)
-			// .skip(page * limit)
-			// .limit(limit);
+
+        let products = null;
+        categorieA === "All"
+            ?   (brand === "All" 
+                ? (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                    
+                )
+                : (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
+                )
+            :   (brand === "All"
+                ? (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                    )
+                : (products = await Product.find({ })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
+            )
+
+        // const setCategoriasA = new Set();
+        // const setProdutos =  new Set();
+        // for (let i = 0; i < products.length; i++) {
+        //     setCategoriasA.add(products[i].categorieA);  //faz isto para fazer um conjunto de das categorias A
+        //     setProdutos.add(products[i]);
+        // }
+
+        // const categoriasA = [...setCategoriasA]; //transforma num Array para enviar na response
+
+        const setProdCat = new Set();
+        const setCat = new Set();
+        for(let j = 0; j < products.length; j++){ //verifica se ja existe no set das Categorias, se nao existe é pq ainda nao temos um produto para essa categoria ent adiciona ao setProdutos
+            if (!setCat.has(products[j].categorieA)){ 
+                setCat.add(products[j].categorieA)
+                setProdCat.add(products[j]);
+            }
+        } 
+
+        // console.log("setCategoriasA", setCat );
+        // console.log("setProdutos", setProdutos );
+        // console.log("setProd", setProd);
+
+        const categoriasA = [...setProdCat]; //transforma num Array para enviar na response
+
+        const setProdBra =  new Set();
+        const setBrands = new Set();
+        if(categoriasA.length < 2){
+            // for (let i = 0; i < products.length; i++) {
+            //     setBrands.add(products[i].brand);  //faz isto para fazer um conjunto de das brands
+            // }
+            for(let j = 0; j < products.length; j++){ //verifica se ja existe no set das Brands, se nao existe é pq ainda nao temos um produto para essa marca ent adiciona ao setBrands
+                if (!setBrands.has(products[j].brand)){ 
+                    setBrands.add(products[j].brand)
+                    setProdBra.add(products[j]);
+                }
+            } 
+        };
+
+        // console.log("setBrands", setBrands);
+        // console.log("setProdBra", setProdBra);
+
+
+        const brands = [...setProdBra]; //transforma num Array para enviar na response
+
+        const total = await Product.countDocuments({
+            categorieB: { $in: categorieB },
+        });
+
+        if(categoriasA.length < 2){ //se nao existirem categorias suficientes o novo header vai ser feito de brands
+            if(categoriasA.length < 2){
+                novoHeader = [];
+                novoHeaderTip = "null";
+            }
+            if(brands.length < 2){
+                novoHeader = [];
+                novoHeaderTip = "null";
+            }else{
+            novoHeader = brands;
+            novoHeaderTip = "brand";
+            }
+        }else{
+            novoHeader = categoriasA; //caso contrrario será feito de categoriasA
+            novoHeaderTip = "categorieA";
+        }
+
+        const response = {
+            error: false,
+            total,
+            // page: page + 1,
+            // limit,
+            categorias: categoriasPossiviesB,
+            products,
+            novoHeader,
+            novoHeaderTip,
+
+        };
+
+        res.status(200).json(response);
+    }catch(error){
+        console.log(error);
+		res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
+});
+
+
+app.get("/produto/search", async (req, res) => { 
+    const Product = mongoose.model("products", ProductDetailsSchema);
+
+    try{
+        const page = parseInt(req.query.page) - 1 || 0;
+		const limit = parseInt(req.query.limit) || 5;
+		const search = req.query.search || "";
+        let categorieA = req.query.categoriaA || "All";
+        let categorieB = req.query.categoriaB || "All";
+        let brand = req.query.brand || "All";
+
+        console.log("categoriaA",categorieA);
+        console.log("categorieB",categorieB);
+        console.log("brand",brand);
+
+
+        const categoriasPossiviesB = [
+            "Baby",
+            "Sports",
+            "Animals",
+            "Cosmetics",
+            "DIY",
+            "Smartphones",
+            "Tech",
+            "Decoration",
+            "Gardening",
+            "Gaming",
+            "TVs",
+            "Toys",
+            "Appliances",
+            "Photography",
+            "Books"
+		];
+
+        categorieB === "All"
+			? (categorieB = [...categoriasPossiviesB])
+			: (categorieB = req.query.categoriaB);
+
+        let products = null;
+        categorieA === "All"
+            ?   (brand === "All" 
+                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                    
+                )
+                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
+                )
+            :   (brand === "All"
+                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    // .skip(page * limit)
+			        // .limit(limit);
+                    )
+                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                    .where("categorieB").in(categorieB)
+                    .where("categorieA").in(categorieA)
+                    .where("brand").in(brand)
+                    // .skip(page * limit)
+                    // .limit(limit);
+                    )
+            )
+
+        // const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+        //     .where("categorieB")
+		// 	.in(categorieB)
+        //     .where("categorieA")
+        //     .in(categorieA)
+        //     .where("brand")
+        //     .in(brand)
+		// 	.skip(page * limit)
+		// 	.limit(limit);
         
         const total = await Product.countDocuments({
             categorieB: { $in: categorieB },
@@ -251,10 +430,35 @@ app.get("/produto/search", async (req, res) => {
         const response = {
             error: false,
             total,
-            // page: page + 1,
-            // limit,
+            page: page + 1,
+            limit,
             categoria: categoriasPossiviesB,
             products,
+        };
+
+        res.status(200).json(response);
+    }catch(error){
+        console.log(error);
+		res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
+});
+
+app.get("/produto", async (req, res) => { 
+    const Product = mongoose.model("products", ProductDetailsSchema);
+
+    try{
+        const produtoID = req.query.id;
+
+        const product = await Product.findById(produtoID);
+        
+        const total = await Product.countDocuments({
+            _id: produtoID,
+        });
+
+        const response = {
+            error: false,
+            total,
+            product,
         };
 
         res.status(200).json(response);
@@ -286,14 +490,4 @@ app.post("/user/encomenda", async(req, res) => {
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
-});
-
-app.get('/getProdutos', (req, res) => {
-    const { q } = req.query;
-    console.log(q)
-
-
-    const keys = ["primeiroNome"]
-    
-    res.json("ola")
 });
