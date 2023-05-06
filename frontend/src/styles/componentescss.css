@@ -538,7 +538,7 @@ a[target='_blank'] {
     background-image: url('../images/bebe.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:3.1em;
     
 }
@@ -547,7 +547,7 @@ a[target='_blank'] {
     background-image: url('../images/desporto.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.1em;
 }
 
@@ -555,7 +555,7 @@ a[target='_blank'] {
     background-image: url('../images/animais.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.4em;
 }
 
@@ -563,15 +563,15 @@ a[target='_blank'] {
     background-image: url('../images/beleza.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
-    padding:2.7em;
+    text-align: center;
+    padding:1.8em;
 }
 
 #butao6{
     background-image: url('../images/bricolagem.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:1.5em;
 }
 
