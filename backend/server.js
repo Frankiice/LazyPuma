@@ -74,8 +74,19 @@ const ProductDetailsSchema =  new mongoose.Schema(
     }
 )
 
-
-
+const EncomendaSchema = new mongoose.Schema(
+    {
+        idConsumidor: String,
+        preco: String,
+        dataEncomenda: String,
+        dataEnvio: String,
+        prazoCancelamento: String,
+        estadoEncomenda: String,
+    },
+    {
+        collection: "encomenda"
+    }
+)
 
 app.post("/user/registar", async(req, res) => {
     try {
@@ -252,6 +263,26 @@ app.get("/produto/search", async (req, res) => {
 		res.status(500).json({ error: true, message: "Internal Server Error" });
     }
 });
+
+app.post("/user/encomenda", async(req, res) => {
+    try{
+        const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+        const {idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda} = req.body;
+
+        await Encomenda.create({
+            idConsumidor,
+            preco,
+            dataEncomenda,
+            dataEnvio,
+            prazoCancelamento,
+            estadoEncomenda,
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+})
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
