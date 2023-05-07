@@ -10,7 +10,7 @@ function Details(props) {
     <div class="p-5 col-md-4 order-md-2 mb-4">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span >Your cart</span>
-        <span class="badge badge-secondary badge-pill">3</span>
+        <span class="badge badge-secondary badge-pill">{props.state.count}</span>
       </h4>
       <ul class="list-group mb-3">
       {/* <div class="container-cart"> */}
@@ -18,18 +18,10 @@ function Details(props) {
       { props.state.carrinho && props.state.carrinho.map(item => (
       <div class="container-cart">
         <div class="carrinho-item" key={item.nome}>
-          <div class="row align-items-center">
-            <div class="col-sm-3">
-              <img class="" style={{minHeight: "30px", minWidth: "30px"}} src={item.img} />
-            </div> 
-            <div class="col-sm-6">
+              <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
               <h6>{item.nome}</h6>
               {/* <small class="text-muted">Brief description</small> */}
-            </div>
-            <div class="col-sm-3">
               <span class="text-muted">{item.preco}</span>
-            </div>
-          </div>
         </div>
       </div>
     ))}
@@ -326,6 +318,7 @@ export default class Encomenda extends Component {
       email: "",
       phone: "",
       carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
+      count: "",
   };
   this.componentDidMount = this.componentDidMount.bind(this);
 
@@ -385,7 +378,21 @@ export default class Encomenda extends Component {
                     fName: nomeArray[0],
                     lName: nomeArray[lastIndex],
                   });
+        var count = this.countTotalProducts();
+        this.setState({count: count})
     })
+}
+
+countTotalProducts() {
+  let localStorageObj = JSON.parse(localStorage.getItem('carrinho'));
+
+  let count = 0;
+  for (let key in localStorageObj) {
+    if (localStorageObj.hasOwnProperty(key)) {
+      count += parseInt(localStorageObj[key].quantidade);
+    }
+  }
+  return count;
 }
 
 getSectionComponent(s) {
@@ -405,6 +412,7 @@ getSectionComponent(s) {
       this.state.token ?
         <React.Fragment>
         <div class="cor_header height_header">  
+          <br></br>
           <br></br>
           <Stepper
           // steps={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]}
