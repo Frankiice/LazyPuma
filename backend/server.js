@@ -88,6 +88,30 @@ const EncomendaSchema = new mongoose.Schema(
     }
 )
 
+const ProdutoSchema = new mongoose.Schema(
+    {
+      idProduto: String,
+      quantidade: Number,
+      preco: Number,
+    },
+    { _id: false }
+  );
+
+  
+const UnidadeProducaoSchema = new mongoose.Schema(
+    {
+    idFornecedor: String,
+    listaProdutos: [ProdutoSchema],
+    listaVeiculos: [String],
+    lat: String,
+    lon: String,
+    morada: String,
+    },
+    {
+    collection: "unidadeProducao",
+    }
+);
+
 app.post("/user/registar", async(req, res) => {
     try {
         const User = mongoose.model("users", UserDetailsSchema);
@@ -190,6 +214,7 @@ app.delete("/user/delete", async (req, res) => { //esste seria para eleminar um 
 
 app.get("/catalogo", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
 
     try{
         // const page = parseInt(req.query.page) - 1 || 0;
@@ -256,7 +281,46 @@ app.get("/catalogo", async (req, res) => {
                     // .limit(limit);
                     )
             )
+            
+            let productsWPrice = [];
 
+            for (let i = 0; i < products.length; i++) {
+              const result = await UnidadeProducao.findOne({
+                "listaProdutos": {
+                  "$elemMatch": {
+                    "idProduto": {
+                      "$in": [products[i]._id]
+                    }
+                  }
+                }
+              },
+              {
+                "_id": 0,
+                "listaProdutos.$": 1,
+                "lat": 1,
+                "lon": 1
+              });
+            
+              if (result) {
+                productsWPrice.push({
+                  ...products[i],
+                  price: result.listaProdutos[0].preco,
+                  lat: result.lat,
+                  lon: result.lon
+                });
+              } else {
+                productsWPrice.push({
+                  ...products[i],
+                  price: 0, // Set a default value for price
+                  lat: 0,   // Set default values for lat and lon
+                  lon: 0
+                });
+              }
+            }
+            
+            // console.log("productsWPrice", productsWPrice);
+            
+  
         // const setCategoriasA = new Set();
         // const setProdutos =  new Set();
         // for (let i = 0; i < products.length; i++) {
@@ -328,7 +392,7 @@ app.get("/catalogo", async (req, res) => {
             // page: page + 1,
             // limit,
             categorias: categoriasPossiviesB,
-            products,
+            productsWPrice,
             novoHeader,
             novoHeaderTip,
 
@@ -344,6 +408,8 @@ app.get("/catalogo", async (req, res) => {
 
 app.get("/produto/search", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+
 
     try{
         const page = parseInt(req.query.page) - 1 || 0;
@@ -391,10 +457,10 @@ app.get("/produto/search", async (req, res) => {
                 )
                 : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
                     .where("categorieB").in(categorieB)
-                    .where("brand").in(brand)
+                    .where("brand").in(brand),
                     // .skip(page * limit)
                     // .limit(limit);
-                    )
+                    console.log("entra bem"))
                 )
             :   (brand === "All"
                 ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
@@ -411,6 +477,45 @@ app.get("/produto/search", async (req, res) => {
                     // .limit(limit);
                     )
             )
+            console.log(products)
+
+            let productsWPrice = [];
+
+            for (let i = 0; i < products.length; i++) {
+              const result = await UnidadeProducao.findOne({
+                "listaProdutos": {
+                  "$elemMatch": {
+                    "idProduto": {
+                      "$in": [products[i]._id]
+                    }
+                  }
+                }
+              },
+              {
+                "_id": 0,
+                "listaProdutos.$": 1,
+                "lat": 1,
+                "lon": 1
+              });
+            
+              if (result) {
+                productsWPrice.push({
+                  ...products[i],
+                  price: result.listaProdutos[0].preco,
+                  lat: result.lat,
+                  lon: result.lon
+                });
+              } else {
+                productsWPrice.push({
+                  ...products[i],
+                  price: 0, // Set a default value for price
+                  lat: 0,   // Set default values for lat and lon
+                  lon: 0
+                });
+              }
+            }
+            
+            // console.log("productsWPrice", productsWPrice);
 
         // const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
         //     .where("categorieB")
@@ -433,7 +538,7 @@ app.get("/produto/search", async (req, res) => {
             page: page + 1,
             limit,
             categoria: categoriasPossiviesB,
-            products,
+            productsWPrice,
         };
 
         res.status(200).json(response);

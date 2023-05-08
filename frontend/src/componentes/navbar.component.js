@@ -47,8 +47,9 @@ export default class Navbar extends Component{
         obj: [],
         categoriaA: window.localStorage.getItem("categoriaA") || "", 
         categoriaB: window.localStorage.getItem("categoriaB") || "",
+        brand: window.localStorage.getItem("brand") || "",
         page: 1,
-        search: "",
+        search: window.localStorage.getItem("search") || "",
         isCartHovered: false,
         carrinho: [],
     };
@@ -86,11 +87,12 @@ export default class Navbar extends Component{
 
 
   handleSearch(){
-    const {page, categoriaA, categoriaB, search, objSearch} = this.state;
+    const {page, categoriaA, categoriaB, search,brand, objSearch} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este é a base nao sei se aceita do outro lado mais parametros aqui
-      const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&search=${search}`;
+      const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&brand=${brand}&search=${search}`;
       console.log(url);
+      window.localStorage.setItem("search", search)
       fetch( url, {
         method:"GET",
         crossDomain:true,
@@ -110,7 +112,7 @@ export default class Navbar extends Component{
     .then((data) => {
         console.log(data, "searchData");
         // this.setState({ objSearch: data.products}); //o que adicionar aqui??
-        window.localStorage.setItem("objSearch", JSON.stringify(data.products))
+        window.localStorage.setItem("objSearch", JSON.stringify(data.productsWPrice))
         window.location.href= "./catalogo"
     })
     }catch(err){
@@ -173,6 +175,8 @@ export default class Navbar extends Component{
     window.localStorage.removeItem("categoriaA");
     window.localStorage.removeItem("brand");
     window.localStorage.removeItem("produtoID");
+    window.localStorage.removeItem("objSearch");
+    window.localStorage.removeItem("search");
 
 
 }
@@ -213,7 +217,7 @@ export default class Navbar extends Component{
         </ul>
         <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
             <div className="form-group has-search">                                                                           
-              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder='Search'/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+            <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder={this.state.search === "" ? 'Search' : this.state.search}/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
         </div>
       </div>
