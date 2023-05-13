@@ -62,17 +62,26 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
+const ProductPropertiesSchema = new mongoose.Schema(
+    {
+        Color: String
+    },
+    { _id: false }
+);
+
 const ProductDetailsSchema =  new mongoose.Schema(
     {
         name: String,
         brand: String,
         categorieA: String,
         categorieB: String,
+        properties: [ProductPropertiesSchema],
     },
     {
         collection: "products"
     }
 )
+
 
 const EncomendaSchema = new mongoose.Schema(
     {
@@ -550,6 +559,8 @@ app.get("/produto/search", async (req, res) => {
 
 app.get("/produto", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+
 
     try{
         const produtoID = req.query.id;
@@ -560,10 +571,46 @@ app.get("/produto", async (req, res) => {
             _id: produtoID,
         });
 
+        let productsWPrice = [];
+
+        const result = await UnidadeProducao.findOne({
+        "listaProdutos": {
+            "$elemMatch": {
+            "idProduto": {
+                "$in": [product._id]
+            }
+            }
+        }
+        },
+        {
+        "_id": 0,
+        "listaProdutos.$": 1,
+        "lat": 1,
+        "lon": 1
+        });
+    
+        if (result) {
+        productsWPrice.push({
+            ...product,
+            price: result.listaProdutos[0].preco,
+            lat: result.lat,
+            lon: result.lon
+        });
+        } else {
+        productsWPrice.push({
+            ...product,
+            price: 0, // Set a default value for price
+            lat: 0,   // Set default values for lat and lon
+            lon: 0
+        });
+        }
+        
+        var productWPrice = productsWPrice[0];
+
         const response = {
             error: false,
             total,
-            product,
+            productWPrice,
         };
 
         res.status(200).json(response);
