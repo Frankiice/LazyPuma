@@ -327,8 +327,8 @@ export default class Navbar extends Component{
             </div>
             <p class="d-none">espaco</p>
             <p class="text-end text-dark" id="total">Total: $</p>
-              <button class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href="/user/c">Checkout</button>
-              <button  href="./cart" class="btn btn-outline-dark  col-md-12 " id="carrinho" >View Cart</button>
+              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='./user/encomenda'>Checkout</a>
+              <a class="btn btn-outline-dark  col-md-12 " id="carrinho" href='/cart'>View Cart</a>
 
 
               
