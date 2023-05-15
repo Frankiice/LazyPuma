@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import '../styles/componentescss.css';
 import { Stepper } from 'react-form-stepper';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { FarBootstrap } from "react-icons/fa";
 
 function Details(props) {
@@ -169,7 +170,7 @@ function Details(props) {
   );
 }
 
-function Payment() {
+function Payment(props) {
   return (
     <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
       <div class="p-5 col-md-4 order-md-2 mb-4">
@@ -178,52 +179,53 @@ function Payment() {
           <span class="badge badge-secondary badge-pill">3</span>
         </h4>
         <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$12</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-              <h6 class="my-0">Second product</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$8</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between lh-condensed">
-            <div>
-              <h6 class="my-0">Third item</h6>
-              <small class="text-muted">Brief description</small>
-            </div>
-            <span class="text-muted">$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between bg-light">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>EXAMPLECODE</small>
-            </div>
-            <span class="text-success">-$5</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Total (USD)</span>
-            <strong>$20</strong>
-          </li>
+        { props.state.carrinho && props.state.carrinho.map(item => (
+      <div class="container-cart">
+        <div class="carrinho-item" key={item.nome}>
+              <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
+              <h6>{item.nome}</h6>
+              {/* <small class="text-muted">Brief description</small> */}
+              <span class="text-muted">{item.preco}</span>
+        </div>
+      </div>
+       ))}
+       <li class="list-group-item d-flex justify-content-between">
+         <span>Total (USD)</span>
+         <strong>$20</strong>
+       </li>
         </ul>
 
-        <form class="card p-2" style={{height:'14%'}}>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Promo code"></input>
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-secondary">Redeem</button>
-            </div>
-          </div>
-        </form>
+
       </div>
       <div class="p-5 col-md-8 order-md-1">
         <form class="needs-validation" novalidate>
           <h4 class="mb-3">Payment</h4>
+          <PayPalScriptProvider>
+            <PayPalButtons></PayPalButtons>
+          </PayPalScriptProvider>
+
+          {/* <PayPalScriptProvider >
+            <PayPalButtons> 
+            </PayPalButtons>
+            <PayPalButtons
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: "13.99",
+                    },
+                  },
+                ],
+              });
+            }}
+            onApprove={async (data, actions) => {
+              const details = await actions.order.capture();
+              const name = details.payer.name.given_name;
+              alert("Transaction completed by " + name);
+          }}
+        />
+          </PayPalScriptProvider> */}
           <div class="d-block my-3">
             <div class="custom-control custom-radio">
               <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required></input>
@@ -399,7 +401,7 @@ getSectionComponent(s) {
   const { state } = this;
   switch(s) {
     case 0: return <Details state={state}/>;
-    case 1: return <Payment />;
+    case 1: return <Payment  state={state} />;
     case 2: return <Confirmation />;
     default: return <Details state={state}/>;
   }
