@@ -171,6 +171,13 @@ function Details(props) {
 }
 
 function Payment(props) {
+
+//   const initialOptions = {
+//     "client-id": "AS3rmVBGmMwOidTWn8ZkC-lab9AocIuWvzOtbtItPQCZRlf9jCAcW5FePQgOiR1_UY5O5UEfU14Mh8Ek",
+//     currency: "USD",
+//     intent: "capture",
+//     "data-client-token": "abc123xyz==",
+// };
   return (
     <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
       <div class="p-5 col-md-4 order-md-2 mb-4">
@@ -200,13 +207,11 @@ function Payment(props) {
       <div class="p-5 col-md-8 order-md-1">
         <form class="needs-validation" novalidate>
           <h4 class="mb-3">Payment</h4>
-          <PayPalScriptProvider>
-            <PayPalButtons></PayPalButtons>
-          </PayPalScriptProvider>
+          {/* <PayPalScriptProvider options={{ options: initialOptions}}>
+            <PayPalButtons />
+          </PayPalScriptProvider> */}
 
-          {/* <PayPalScriptProvider >
-            <PayPalButtons> 
-            </PayPalButtons>
+          <PayPalScriptProvider  options={{ "client-id": "AS3rmVBGmMwOidTWn8ZkC-lab9AocIuWvzOtbtItPQCZRlf9jCAcW5FePQgOiR1_UY5O5UEfU14Mh8Ek" }} >
             <PayPalButtons
             createOrder={(data, actions) => {
               return actions.order.create({
@@ -225,8 +230,8 @@ function Payment(props) {
               alert("Transaction completed by " + name);
           }}
         />
-          </PayPalScriptProvider> */}
-          <div class="d-block my-3">
+          </PayPalScriptProvider>
+          {/* <div class="d-block my-3">
             <div class="custom-control custom-radio">
               <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required></input>
               <label class="custom-control-label" for="credit">Credit card</label>
@@ -239,7 +244,7 @@ function Payment(props) {
               <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required></input>
               <label class="custom-control-label" for="paypal">Paypal</label>
             </div>
-          </div>
+          </div> */}
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="cc-name">Name on card</label>
