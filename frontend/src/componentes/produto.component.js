@@ -16,21 +16,30 @@ export default class Produto extends Component{
             carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
             quantidade: "1",
             propriedades: [],
+            // preco : this.state.produto.price,
+            total: 0,
+          
         };        
         this.adicionarCarrinho = this.adicionarCarrinho.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }  
 
+
 adicionarCarrinho() {
-    const novoProduto = { nome: this.state.produto.name, preco: 10, quantidade: this.state.quantidade, img:this.state.produto.img };
+    const novoProduto = { nome: this.state.produto._doc.name, preco: this.state.produto.price, quantidade: this.state.quantidade, img:this.state.produto._doc.img, preco_original:this.state.produto.price };
     let novoCarrinho = [...this.state.carrinho];
-    let existingProductIndex = novoCarrinho.findIndex(item => item.nome === this.state.produto.name);
-
+    let existingProductIndex = novoCarrinho.findIndex(item => item.nome === this.state.produto._doc.name);
+    let preco = this.state.produto.price;
     if (existingProductIndex >= 0) {
-        novoCarrinho[existingProductIndex].quantidade = +novoCarrinho[existingProductIndex].quantidade + +this.state.quantidade;
-
+        console.log("Entrei no outro ! BAD")
+        novoCarrinho[existingProductIndex].quantidade = + novoCarrinho[existingProductIndex].quantidade + +this.state.quantidade;
+        novoCarrinho[existingProductIndex].preco = novoCarrinho[existingProductIndex].quantidade * preco;
+        this.state.total = + this.state.produto.price
     } else {
-      novoCarrinho.push(novoProduto);
+        console.log("Entrei no else ! GOOD")
+        this.state.quantidade = 1;
+        novoProduto.preco = novoProduto.quantidade * preco;
+        novoCarrinho.push(novoProduto);
     }
 
     localStorage.setItem('carrinho', JSON.stringify(novoCarrinho));
