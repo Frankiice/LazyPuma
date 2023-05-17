@@ -9,13 +9,17 @@ export default class Login extends Component {
     this.state={
       email:"",
       password:"",
+      userLoginFailed: "",
+      userError: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    window.localStorage.removeItem("userUpdated");
+
   }
 
   handleSubmit(e){
     e.preventDefault();
-    const {email, password} = this.state;
+    const {email, password, userLoginFailed} = this.state;
     console.log( email, password);
     fetch("http://localhost:5000/user/login",{
             method:"POST",
@@ -43,6 +47,9 @@ export default class Login extends Component {
                 window.location.href = "./f";
               }
               
+            }else{
+              this.setState({userLoginFailed: true});
+              this.setState({userError: data.error});
             }
         })
 };
@@ -78,12 +85,14 @@ render() {
                     <div class="panel-body p-3">
                         <form onSubmit={this.handleSubmit}>
                             <div class="form-group py-2">
-                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" onChange={(e => this.setState({ email: e.target.value }))} placeholder="Insira o seu Email" required /> </div>
+                                <label>Email</label>
+                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" onChange={(e => this.setState({ email: e.target.value }))}  required /> </div>
                             </div>
                             <div class="form-group py-1 pb-2">
-                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" onChange={(e => this.setState({ password: e.target.value }))} placeholder="Insira a sua Password" required /> </div>
+                            <label>Password</label>
+                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" onChange={(e => this.setState({ password: e.target.value }))}  required /> </div>
                             </div>
-                            <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
+                            {/* <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" >Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div> */}
                             <div class="botao">
                               {/* <button className="btn btn-primary btn-block mt-3">
                                 Login
@@ -92,20 +101,27 @@ render() {
                                 Login
                               </button>
                             </div>
-                            <div class="text-center pt-4 text-muted">Ainda não possui uma conta? <a href="/user/registar">Registo</a> </div>
+                            {this.state.userLoginFailed ?
+                              <div> 
+                                  <br></br>
+                                  <p>{this.state.userError}</p>
+                              </div> : 
+                              <p></p>
+                            }
+                            <div class="text-center pt-4 text-light">Don't have an account? <a href="/user/registar">Register</a> </div>
                         </form>
                     </div>
                     <div class="mx-3 my-2 py-2 bordert">
                         <div class="text-center py-3">
-                          <a href="https://wwww.facebook.com" class="px-3"> 
+                          {/* <a href="https://wwww.facebook.com" class="px-3"> 
                             <img id="loginimg" src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="icon do facebook"/> 
-                          </a> 
+                          </a>  */}
                           <a href="https://www.google.com" class="px-2"> 
                             <img id="loginimg" src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" alt="icon do google"/> 
                           </a> 
-                          <a href="https://www.github.com" class="px-3"> 
+                          {/* <a href="https://www.github.com" class="px-3"> 
                             <img id="loginimg" src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="icon do github"/> 
-                          </a>
+                          </a> */}
                         </div>
                     </div>
                 </div>

@@ -1,15 +1,47 @@
 html, body {
-    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .navbar-height {
     height: 80px;
 }
 
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white !important;; 
+    opacity: 1;/* Firefox */
+  }
+
+   :-ms-input-placeholder { /*Internet Explorer 10-11 */
+    color: white !important;
+  }
+  
+  ::-ms-input-placeholder { /* Microsoft Edge */
+    color: white !important;
+  }
+
+a {
+    color: #84b3ff;
+}
+
+a:hover{
+    color: #84b3ff;
+}
+
 .center {
     margin: auto;
     width: 40%;
     padding: 10px;
+}
+
+.breadcrumb a{
+    color:#28242c
+}
+
+
+.scrollcontainer {
+	cursor: grab;
+	overflow: auto;
 }
 
 #imglogo {
@@ -32,7 +64,7 @@ html, body {
     margin-left: 90px;
     margin-top: 21px;
 
-    width: 71%;
+    width: 64%;
     height: 40px;
 
     border: 1.5px solid #FFFFFF;
@@ -45,11 +77,11 @@ html, body {
 
 .form-control-feedback {
     position:absolute;
-    left: 10%;
-    right: 25.62%;
+    left: 6.5%;
+    right: 10%;
     top: 20%;
-    bottom: 50.62%;
-    margin-left: 48rem;
+    bottom: 10%;
+    margin-left: 46rem;
     margin-bottom: 5em;
 }
 
@@ -113,6 +145,14 @@ body{
     width: 45%;
 }
 
+.footer {
+    position: relative;
+    margin-top: 166px; /* negative value of footer height */
+    height: 150px;
+    clear:both;
+    padding-top:20px;
+  }   
+
 .footer, .form-header{
     text-align: center;
 }
@@ -135,7 +175,6 @@ body{
     top: 0;
     bottom: 0;
     z-index: 1040;
-    padding-top: 1rem;
     overflow-y: auto;
     overflow-x: hidden;
     visibility: hidden;
@@ -160,23 +199,203 @@ body{
     transition: opacity 0.3s ease-in-out;
 }
 
-.offcanvas.show + .offcanvas-backdrop {
-    opacity: 1;
+.offcanvas-backdrop {
+    display: none !important;
 }
+
+.offcanvas-title {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.linhaSeparacaoProdutos {
+    width: 30em;
+    margin-right: 4em;
+    text-align: center;
+}
+
+/* para o CESTO */
+
+.offcanvas2-body {
+    padding: 0;
+}
+
+.offcanvas2 {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1040;
+    overflow-y: auto;
+    overflow-x: hidden;
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%);
+}
+  
+.offcanvas2.show {
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.container-fluid {
+    padding-left: 0px;
+    overflow-x: hidden;
+}
+
+.botaoProdutoDropdown {
+    width: 26.5em;
+    padding-right:0px;
+    margin-left:13px;
+    text-align: center;
+}
+
+#perfilDropdown {
+    margin-right: 3.5em;
+}
+
+
+.botaoPerfilDropdown {
+    width: -1%;
+}
+
+
+
+.botaoCart{
+    /* display: none;
+    position: absolute; */
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0.4,0.4,0.3,0.7);
+    padding: 12px 16px;
+    z-index: 1;
+  
+ 
+    /* left: 50%;
+    right: auto;
+     */
+    position: absolute;
+    left: 1800px;
+    transform: translateX(-74%) translateY(8%);
+
+    overflow-y:auto;
+    max-height: 810px;
+    min-width:400px;
+    
+    /* max-height: 400px;
+    max-width:300px; */
+}
+
+.carrinhoWrapper{
+    overflow-y:auto;
+    overflow-x:auto;
+    
+    
+}
+.items-carrinho{
+    overflow: auto;
+    max-height: 580px;
+    
+}
+.carrinho-item{
+    display:grid;
+    grid-template-columns: 3fr 6fr 1fr;
+    padding:5% 2%;
+    background-color: #ffffff;
+    /* border-style: solid; */
+    border-width: 1px;
+    border-radius: 5px;
+    max-height: 300px;
+    margin-bottom: 5px;
+}
+.carrinho-vazio{
+    
+    /* background-color: #ffffff; */
+    /* border-style: solid; */
+    border-width: 1px;
+    border-radius: 5px;
+    padding-top: 50px;
+    padding-left: 29%;
+    height: 100px;
+    margin-bottom: 5px;
+}
+.carrinho-item img{
+    width: 100%;
+    padding-right: 30px;
+}
+
+.cancel{
+    padding-left: 0px;
+    
+    
+}
+
+.card-img-top{
+    float: center;
+    max-height: 250px;
+    object-fit: center;
+}
+
+.card{
+    height: 350px;
+}
+
+.btn-checkout:hover{
+    border-color: #000000;
+}
+
+.stepsEncomenda {
+    margin-left: auto;
+    margin-right: auto;
+}
+/* .containerProduto{
+    min-height: 300px;
+    max-height: 300px;
+    width: auto;
+} */
+
+/* .crop {
+    height: 250px;
+    width: auto;
+    overflow: hidden;
+}
+.crop img {
+    height: auto;
+    width: 250px;
+} */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 1;
+    display: none;
+  }
+  
+  .dropdown-wrapper:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-wrapper:hover .overlay {
+    display: block;
+  }
+
+
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 * {
-    font-family: 'Poppins', sans-serif
+    font-family: 'Poppins', sans-serif;
 }
 
 .container {
-    margin: 50px auto
+    margin: 50px auto;
 }
 
 .panel-heading {
     text-align: center;
-    margin-bottom: 10px
+    margin-bottom: 10px;
 }
 
 #forgot {
@@ -198,7 +417,9 @@ a:hover {
 .panel {
     min-height: 380px;
     box-shadow: 20px 20px 80px rgb(218, 218, 218);
-    border-radius: 12px
+    border-radius: 12px;
+    position: relative;
+    right: 60px;
 }
 
 .input-field {
@@ -280,19 +501,31 @@ a[target='_blank'] {
     
 }
 
-div.scrollmenu {
+.scrollmenu {
     overflow: auto;
     white-space: nowrap;
     background-color: #F2F4F5;
     overflow-y:hidden;
+    cursor: grab;
 }
 
-div.scrollmenu .btn-xl {
+.scrollmenu:active {
+    cursor: grabbing;
+}
+
+.scrollmenu .btn-xl{
     display: inline-block;
 }
 
 #buttons_header{
     display: inline-block;
+}
+
+#butaoBLA{
+    /* background-image: url("https://ae01.alicdn.com/kf/H9bcc7fb7e08e4842a77427fabfe599e9j/100cm-djungelskog-urso-marrom-brinquedo-de-pel-cia-macio-animal-de-pel-cia-gigante-mr-boss.jpg_Q90.jpg_.webp");; */
+    background-size: contain;
+    background-position: 40px 20px 65px;   
+    text-align: center;
 }
 
 #butao1{
@@ -306,7 +539,7 @@ div.scrollmenu .btn-xl {
     background-image: url('../images/bebe.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:3.1em;
     
 }
@@ -315,7 +548,7 @@ div.scrollmenu .btn-xl {
     background-image: url('../images/desporto.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.1em;
 }
 
@@ -323,7 +556,7 @@ div.scrollmenu .btn-xl {
     background-image: url('../images/animais.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.4em;
 }
 
@@ -331,15 +564,15 @@ div.scrollmenu .btn-xl {
     background-image: url('../images/beleza.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
-    padding:2.7em;
+    text-align: center;
+    padding:1.8em;
 }
 
 #butao6{
     background-image: url('../images/bricolagem.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:1.5em;
 }
 
@@ -352,27 +585,35 @@ div.scrollmenu .btn-xl {
 }
 
 #butao8{
+    background-image: url('../images/informatica.jpg');
+    background-size: contain;
+    background-position: 40px 20px 65px;
+    text-align: center;
+    padding:1.2em;
+}
+
+#butao9{
     background-image: url('../images/decoracao.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
     padding:1.5em;
 }
-#butao9{
+#butao10{
     background-image: url('../images/jardim.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
     padding:1.5em;
 }
-#butao10{
+#butao11{
     background-image: url('../images/comando.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
     text-align: center;
     padding:1.5em;
 }
-#butao11{
+#butao12{
     background-image: url('../images/tv.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -380,7 +621,7 @@ div.scrollmenu .btn-xl {
     padding:1.5em;
 }
 
-#butao12{
+#butao13{
     background-image: url('../images/lego.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -388,7 +629,7 @@ div.scrollmenu .btn-xl {
     padding:1.7em;
 }
 
-#butao13{
+#butao14{
     background-image: url('../images/wm.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -396,7 +637,7 @@ div.scrollmenu .btn-xl {
     padding:0em;
 }
 
-#butao14{
+#butao15{
     background-image: url('../images/camera.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -404,7 +645,7 @@ div.scrollmenu .btn-xl {
     padding:1.7em;
 }
 
-#butao15{
+#butao16{
     background-image: url('../images/livros.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
@@ -432,6 +673,15 @@ div.scrollmenu .btn-xl {
     
 }
 
+#inputQuantity{
+    max-width: 3rem;
+}
+
+.relatedItemSale{
+    top: 0.5rem; 
+    right: 0.5rem;
+}
+
 @media(max-width: 360px) {
     #forgot {
         margin-left: 0;
@@ -449,5 +699,5 @@ div.scrollmenu .btn-xl {
     .bordert:after {
         left: 25%
     }
+    
 }
-

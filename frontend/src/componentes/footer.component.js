@@ -29,8 +29,8 @@ const ProdutosResposta = [{primeiroNome: "Bananas", quantidade:"30", tipo: "Made
 function Footer(){
     return (
     //Footer
-    <div class="d-flex flex-column min-vh-100">
-      <footer class="bg-dark py-3 mt-auto">
+    <div class="footer">
+      <footer class="bg-dark py-3 mt-auto flex-grow-1">
         <div class="container"><p class="m-0 text-center text-white">Copyright PTI/PTR &copy; LazyPuma 2023</p></div>
       </footer>
     </div>
