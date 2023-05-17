@@ -76,12 +76,12 @@ function Details(props) {
     </div>
     <div class="p-5 col-md-8 order-md-1">
       <h4 class="mb-3">Billing address</h4>
-      <form class="needs-validation" novalidate>
+      <form class="needs-validation" noValidate onSubmit={props.handleNextStep}>
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="firstName">First name</label>
             <div class="input-field bg-dark"> 
-              <input type="text" class="form-control bg-dark text-white" id="firstName" placeholder={props.state.fName} required></input>
+              <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="firstName" placeholder={props.state.fName} required></input>
             </div>
             <div class="invalid-feedback">
               Valid first name is required.
@@ -90,7 +90,7 @@ function Details(props) {
           <div class="col-md-6 mb-3">
             <label for="lastName">Last name</label>
             <div class="input-field bg-dark"> 
-              <input type="text" class="form-control bg-dark text-white" id="lastName" placeholder={props.state.lName} required></input>
+              <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="lastName" placeholder={props.state.lName} required></input>
             </div>
             <div class="invalid-feedback">
               Valid last name is required.
@@ -100,7 +100,7 @@ function Details(props) {
 
         <div class="mb-3">
           <label for="email">Email <span class="text-muted">(Optional)</span></label>
-            <input type="email" class="form-control bg-dark text-white" id="email" placeholder={props.state.email}></input>
+            <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" placeholder={props.state.email}></input>
           <div class="invalid-feedback">
             Please enter a valid email address for shipping updates.
           </div>
@@ -109,7 +109,7 @@ function Details(props) {
         <div class="mb-3">
           <label for="address">Address</label>
           <div class="input-field bg-dark"> 
-            <input type="text" class="form-control bg-dark text-white" id="address" placeholder={props.state.morada} required></input>
+            <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="address" placeholder={props.state.morada} required></input>
           </div>
           <div class="invalid-feedback">
             Please enter your shipping address.
@@ -119,14 +119,14 @@ function Details(props) {
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="firstName">NIF</label>
-              <input type="num" class="form-control bg-dark text-white" id="NIF" placeholder={props.state.nif} required></input>
+              <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="NIF" placeholder={props.state.nif} required></input>
             <div class="invalid-feedback">
               Valid NIF is required.
             </div>
           </div>
           <div class="col-md-6 mb-3">
             <label for="lastName">Phone Number</label>
-              <input type="num" class="form-control bg-dark text-white" id="phone" placeholder={props.state.phone} required></input>
+              <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="phone" placeholder={props.state.phone} required></input>
             <div class="invalid-feedback">
               Valid Phone Number is required.
             </div>
@@ -163,7 +163,7 @@ function Details(props) {
           </div>
         </div> */}
         <hr class="mb-4"></hr>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+        <button class="btn btn-primary btn-lg btn-block" type="submit" onSubmit={props.handleNextStep}>Continue to checkout</button>
       </form>
     </div>
   </div>
@@ -343,7 +343,14 @@ export default class Encomenda extends Component {
       completedTextColor: 'white',
       inactiveTextColor: 'black',
     };
+  }
 
+  handleNextStep () {
+    this.setState({ activeStep: this.state.activeStep + 1 });
+  }
+  
+  handlePreviousStep () {
+    this.setState({ activeStep: this.state.activeStep - 1 });
   }
 
   componentDidMount(){
@@ -405,10 +412,10 @@ countTotalProducts() {
 getSectionComponent(s) {
   const { state } = this;
   switch(s) {
-    case 0: return <Details state={state}/>;
-    case 1: return <Payment  state={state} />;
+    case 0: return <Details state={state} handleNextStep={state.handleNextStep}/>;
+    case 1: return <Payment  state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep}/>;
     case 2: return <Confirmation />;
-    default: return <Details state={state}/>;
+    default: return <Details state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep}/>;
   }
 }
 
