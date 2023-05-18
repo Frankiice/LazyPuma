@@ -44,7 +44,7 @@ export default class Catalogo extends Component{
         .then((res) => res.json())
         .then((data) => {
             console.log(data, "Catalogo");
-            this.setState({obj: data.products,
+            this.setState({obj: data.productsWPrice,
                             novoHeader: data.novoHeader,
                             novoHeaderTip: data.novoHeaderTip}) ;
         })
@@ -207,41 +207,42 @@ export default class Catalogo extends Component{
                              <h2>No Products Found</h2>
                             :
                             this.state.objSearch.map((produto) => (
-                                <div key={produto._id}>
-                                <div class="col mb-5">
-                                    <div class="card h-100 crop">
-                                        <img class="card-img-top" src={produto.img} alt="..." />
-                                        <div class="card-body p-4">
-                                            <div class="text-center">
-                                                <h5 class="fw-bolder">{produto.name}</h5>
-                                                $40.00 - $80.00
-                                            </div>
-                                        </div>
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> ))
-                        :
-                            this.state.obj.map((produto) => (
-                                <div key={produto._id}>
+                                <div key={produto._doc._id}>
                                     <div class="col mb-5">
                                         <div class="card h-100 crop">
-                                            <img class="card-img-top" src={produto.img} alt="..." />
+                                            <img class="card-img-top" src={produto._doc.img} alt="..." />
                                             <div class="card-body p-4">
                                                 <div class="text-center">
-                                                    <h5 class="fw-bolder">{produto.name}</h5>
-                                                    $40.00 - $80.00
+                                                    <h5 class="fw-bolder">{produto._doc.name}</h5>
+                                                    {produto.price}€
                                                 </div>
                                             </div>
                                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
+                                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._doc._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div> 
-                            ))                   
+                                ))
+                        :
+                            this.state.obj.map((produto) => (
+                                
+                                <div key={produto._doc._id}>
+                                    <div class="col mb-5">
+                                        <div class="card h-100 crop">
+                                            <img class="card-img-top" src={produto._doc.img} alt="..." />
+                                            <div class="card-body p-4">
+                                                <div class="text-center">
+                                                    <h5 class="fw-bolder">{produto._doc.name}</h5>
+                                                    {produto.price}€
+                                                </div>
+                                            </div>
+                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._doc._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> ))                   
                        }
                     </div>
                 </div>

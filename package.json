@@ -21,6 +21,7 @@
     "passport-google-oauth20": "^2.0.0",
     "popper.js": "^1.16.1",
     "react-bootstrap": "^2.7.2",
+    "react-form-stepper": "^2.0.3",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.6.0",
     "react-indiana-drag-scroll": "^2.2.0",

@@ -63,6 +63,9 @@ export default class Navbar extends Component{
     console.log(carrinho);
     this.setState({ carrinho });
   }
+  handleButtonClick() {
+    window.location.href = './cart';
+  }
 
   handleCartHover() {
     this.setState({ isCartHovered: true });
@@ -71,6 +74,20 @@ export default class Navbar extends Component{
   handleCartLeave() {
     this.setState({ isCartHovered: false });
   }
+
+  countTotalProducts() {
+    let localStorageObj = JSON.parse(localStorage.getItem('carrinho'));
+
+    let count = 0;
+    for (let key in localStorageObj) {
+      if (localStorageObj.hasOwnProperty(key)) {
+        count += parseInt(localStorageObj[key].quantidade);
+      }
+    }
+    return count;
+  }
+
+
 
   handleSearch(){
     const {page, categoriaA, categoriaB, search,brand, objSearch} = this.state;
@@ -98,7 +115,7 @@ export default class Navbar extends Component{
     .then((data) => {
         console.log(data, "searchData");
         // this.setState({ objSearch: data.products}); //o que adicionar aqui??
-        window.localStorage.setItem("objSearch", JSON.stringify(data.products))
+        window.localStorage.setItem("objSearch", JSON.stringify(data.productsWPrice))
         window.location.href= "./catalogo"
     })
     }catch(err){
@@ -135,27 +152,38 @@ export default class Navbar extends Component{
     window.location.href = "./user/login"
   }
   
-  componentDidMount(){
-
-
-    fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
-        method:"POST",
-        crossDomain:true,
-        headers:{
-            "Content-type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
+  componentDidMount() {
+    const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
+    
+    if (isGoogleLogged) {
+      const response = JSON.parse(window.localStorage.getItem("response"));
+      if (response) {
+        const { email } = response;
+        console.log("ola")
+        console.log(response)
+        console.log(email)
+        this.setState({ nickname: email });
+      }
+    } else {
+      fetch("http://localhost:5000/user/userData", {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
-        body:JSON.stringify({
-            token: window.localStorage.getItem("token"),
+        body: JSON.stringify({
+          token: window.localStorage.getItem("token"),
         }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data, "userData");
-        this.setState({ nickname: data.data.nickname,});
-    })
-}
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data, "userData");
+          this.setState({ nickname: data.data.nickname });
+        });
+    }
+  }
   handlePre(){
     window.localStorage.removeItem("categoriaB");
     window.localStorage.removeItem("categoriaA");
@@ -163,6 +191,8 @@ export default class Navbar extends Component{
     window.localStorage.removeItem("produtoID");
     window.localStorage.removeItem("objSearch");
     window.localStorage.removeItem("search");
+
+
 }
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
@@ -195,13 +225,13 @@ export default class Navbar extends Component{
           </li> */}
           <li class="nav-item">
             <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
-              Products
+              Produtos
             </button>
           </li>
         </ul>
         <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
             <div className="form-group has-search">                                                                           
-              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder={this.state.search === "" ? 'Search' : this.state.search}/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+            <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder={this.state.search === "" ? 'Search' : this.state.search}/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
         </div>
       </div>
@@ -221,20 +251,20 @@ export default class Navbar extends Component{
         // </li> 
         <li class="nav-item dropdown active px-2">
           <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="bi bi-person-circle"></i> Hey {this.state.nickname}
+            <i class="bi bi-person-circle"></i> Olá {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" href="/user/c">Profile</a></li>
+              <li><a class="dropdown-item" href="/user/c">Perfil</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" href="#">Historic</a></li>
+              <li><a class="dropdown-item" href="#">Histórico</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="/user/login">Log out</a></li>
           </ul>
         </li>:
         <li class="nav-item active px-2">
           <a href="/user/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Login/Register
+              <i class="bi bi-person-circle"></i> Login/Registo
             </button>
           </a>
         </li>}
@@ -247,12 +277,14 @@ export default class Navbar extends Component{
                 aria-haspopup="true"
                 aria-expanded="false"
                 onMouseEnter={this.handleCartHover}
+                onClick ={this.handleButtonClick}
+                
                 
                 
               >
             <i className="bi-cart-fill me-1"></i>
             Cart
-            <span className="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
         </button>
         <div
                 className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
@@ -275,7 +307,7 @@ export default class Navbar extends Component{
               <div>
               {carrinho.length === 0 ? (
                 <div class="carrinho-vazio">
-                <h3 class= "text-dark ">The cart is empty! :(</h3>
+                <p class= "text-dark ">The cart is empty!</p>
                 </div>
               ) : (
                 carrinho.map(item => (
@@ -306,8 +338,8 @@ export default class Navbar extends Component{
             </div>
             <p class="d-none">espaco</p>
             <p class="text-end text-dark" id="total">Total: $</p>
-              <button class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout">Checkout</button>
-              <button class="btn btn-outline-dark  col-md-12 " id="carrinho">View Cart</button>
+              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a>
+              <a class="btn btn-outline-dark  col-md-12 " id="carrinho" href='/cart'>View Cart</a>
 
 
               

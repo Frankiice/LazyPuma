@@ -14,7 +14,8 @@ export default class Produto extends Component{
             produtoID: window.localStorage.getItem("produtoID"),
             produto: {},
             carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
-            quantidade: '',
+            quantidade: "1",
+            propriedades: [],
         };        
         this.adicionarCarrinho = this.adicionarCarrinho.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -26,7 +27,8 @@ adicionarCarrinho() {
     let existingProductIndex = novoCarrinho.findIndex(item => item.nome === this.state.produto.name);
 
     if (existingProductIndex >= 0) {
-      novoCarrinho[existingProductIndex].quantidade = parseInt(novoCarrinho[existingProductIndex].quantidade)+parseInt(this.state.quantidade);
+        novoCarrinho[existingProductIndex].quantidade = +novoCarrinho[existingProductIndex].quantidade + +this.state.quantidade;
+
     } else {
       novoCarrinho.push(novoProduto);
     }
@@ -60,8 +62,14 @@ componentDidMount(){
         .then((res) => res.json())
         .then((data) => {
             console.log(data, "produtoData");
-            this.setState({ produto: data.product })
-            console.log(this.state.produto)
+            this.setState({ 
+                produto: data.productWPrice,
+                propriedades: data.productWPrice._doc.properties,
+              });
+              
+              console.log("this.state.produto: ", this.state.produto);
+              console.log("this.state.propriedades: ", this.state.propriedades);
+              
         }) 
     }catch(err){
         console.log(err);
@@ -77,40 +85,64 @@ componentDidMount(){
         
      <section class="py-5">
         <div class="container px-4 px-lg-5 my-5">
-            <div class="row gx-4 gx-lg-5 align-items-center">
-                <div class="col-md-6"><img class="card-img" src={this.state.produto.img} alt="..." /></div>
-                <div class="col-md-6">
-                    <div class="small mb-1">SKU: BST-498</div>
-                    <h1 class="display-5 fw-bolder">{this.state.produto.name}</h1>
-                    <div class="fs-5 mb-5">
-                        <span class="text-decoration-line-through">$45.00</span>
-                        <span>$40.00</span>
-                    </div>
-                    <p class="lead text-dark">Brand: {this.state.produto.brand}</p>
-                    <p class="lead text-dark">Caracteristicas do produto</p>
-                    <p class="lead text-dark">Caracteristicas do produto</p>
-                    <br></br>
-                    <p class="lead text-dark">Caracteristicas do Fornecedor ?</p>
-                    <br></br>
+            {this.state.produto._doc ? 
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6"><img class="card-img" src={this.state.produto._doc.img} alt="..." /></div>
+                    <div class="col-md-6">
+                        {/* <div class="small mb-1">SKU: BST-498</div> */}
+                        <h1 class="display-5 fw-bolder">{this.state.produto._doc.name}</h1>
+                        <div class="fs-5 mb-5">
+                            {/* <span class="text-decoration-line-through">$45.00</span> */}
+                            <h4 style={{ color: "#212529"}}>{this.state.produto.price}€</h4>
+                        </div>
+                        <p class="lead text-dark">Brand: {this.state.produto._doc.brand}</p>
 
+                        <h4 style={{ color: "#212529"}}>Product Caracteristics:</h4>
+                        {this.state.propriedade != [] ? 
+                            this.state.propriedades.map((propriedade, index) => {
+                                const keys = Object.keys(propriedade);
+                                return (
+                                  <div key={index}>
+                                    {keys.map((key) => (
+                                      <div key={key}>
+                                        <p class="lead text-dark" style={{ paddingLeft: "1em"}}>{key}: {propriedade[key]}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                );
+                              })
+                        :
+                            <div>
+                                <p class="lead text-dark">Caracteristicas do produto</p>
+                                <br></br>
+                            </div>
+                        }
+                        <h4 style={{ color: "#212529"}}>Supplier Caracteristics:</h4>
+                        <p class="lead text-dark">Caracteristicas do Fornecedor ?</p>
+                        <br></br>
 
-                    <div class="d-flex">
-                        <label class="lead text-dark">Quantity: &nbsp; </label>
-                       
-                        <input value={this.state.quantidade} onChange={this.handleChange}
-                        class="form-control text-center me-3"
-                         id="inputQuantity"
-                          type="num"
-                           placeholder="1" />
-                        <button onClick={this.adicionarCarrinho}
-                         class="btn btn-outline-dark flex-shrink-0" 
-                         type="button" >
-                            <i class="bi-cart-fill me-1"></i>
-                            Add to cart
-                        </button>
+                        <div class="d-flex">
+                            <label class="lead text-dark">Quantity: &nbsp; </label>
+                        
+                            <input value={this.state.quantidade} onChange={this.handleChange}
+                            class="form-control text-center me-3 quantidade_seta"
+                            id="inputQuantity"
+                            type="number"
+                            min={1}
+                            
+                                />
+                            <button onClick={this.adicionarCarrinho}
+                            class="btn btn-outline-dark flex-shrink-0" 
+                            type="button" >
+                                <i class="bi-cart-fill me-1"></i>
+                                Add to cart
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            :
+                <p></p>
+            }
         </div>
     </section> 
         {/* <!-- Related items section--> */}
