@@ -152,27 +152,38 @@ export default class Navbar extends Component{
     window.location.href = "./user/login"
   }
   
-  componentDidMount(){
-
-
-    fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
-        method:"POST",
-        crossDomain:true,
-        headers:{
-            "Content-type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
+  componentDidMount() {
+    const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
+    
+    if (isGoogleLogged) {
+      const response = JSON.parse(window.localStorage.getItem("response"));
+      if (response) {
+        const { email } = response;
+        console.log("ola")
+        console.log(response)
+        console.log(email)
+        this.setState({ nickname: email });
+      }
+    } else {
+      fetch("http://localhost:5000/user/userData", {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
-        body:JSON.stringify({
-            token: window.localStorage.getItem("token"),
+        body: JSON.stringify({
+          token: window.localStorage.getItem("token"),
         }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data, "userData");
-        this.setState({ nickname: data.data.nickname,});
-    })
-}
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data, "userData");
+          this.setState({ nickname: data.data.nickname });
+        });
+    }
+  }
   handlePre(){
     window.localStorage.removeItem("categoriaB");
     window.localStorage.removeItem("categoriaA");
@@ -247,7 +258,7 @@ export default class Navbar extends Component{
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" href="#">Histórico</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" onClick={this.logOut} href="./user/login">Log out</a></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="/user/login">Log out</a></li>
           </ul>
         </li>:
         <li class="nav-item active px-2">
@@ -327,7 +338,7 @@ export default class Navbar extends Component{
             </div>
             <p class="d-none">espaco</p>
             <p class="text-end text-dark" id="total">Total: $</p>
-              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='./user/encomenda'>Checkout</a>
+              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a>
               <a class="btn btn-outline-dark  col-md-12 " id="carrinho" href='/cart'>View Cart</a>
 
 

@@ -95,21 +95,14 @@ const ProductDetailsSchema =  new mongoose.Schema(
     {
         collection: "products"
     }
-)
+);
 
-
-const EncomendaSchema = new mongoose.Schema(
+const VeiculoSchema = new mongoose.Schema(
     {
-        idConsumidor: String,
-        preco: String,
-        dataEncomenda: String,
-        dataEnvio: String,
-        prazoCancelamento: String,
-        listaUP: [UnidadeProducaoSchema],
-        estadoEncomenda: String,
+        idVeiculo: String
     },
     {
-        collection: "encomenda"
+        collection: "veiculos"
     }
 )
 
@@ -122,20 +115,6 @@ const ProdutoSchema = new mongoose.Schema(
     { _id: false }
   );
 
-const fullProductSchema = new mongoose.Schema(
-    {
-        name: String,
-        brand: String,
-        categorieA: String,
-        categorieB: String,
-        img: String,
-        properties: [ProductPropertiesSchema],
-    },
-    {
-        collection: "products"
-    }
-)
-  
 const UnidadeProducaoSchema = new mongoose.Schema(
     {
     idFornecedor: String,
@@ -150,14 +129,34 @@ const UnidadeProducaoSchema = new mongoose.Schema(
     }
 );
 
-const VeiculoSchema = new mongoose.Schema(
+const EncomendaSchema = new mongoose.Schema(
     {
-        idVeiculo: String
+        idConsumidor: String,
+        preco: String,
+        dataEncomenda: String,
+        dataEnvio: String,
+        prazoCancelamento: String,
+        listaUP: [UnidadeProducaoSchema],
+        estadoEncomenda: String,
     },
     {
-        collection: "veiculos"
+        collection: "encomenda"
     }
-)
+);
+
+const fullProductSchema = new mongoose.Schema(
+    {
+        name: String,
+        brand: String,
+        categorieA: String,
+        categorieB: String,
+        img: String,
+        properties: [ProductPropertiesSchema],
+    },
+    {
+        collection: "products"
+    }
+);
 
 app.post("/user/registar", async(req, res) => {
     try {
