@@ -105,6 +105,7 @@ const EncomendaSchema = new mongoose.Schema(
         dataEncomenda: String,
         dataEnvio: String,
         prazoCancelamento: String,
+        listaUP: [UnidadeProducaoSchema],
         estadoEncomenda: String,
     },
     {
@@ -121,12 +122,25 @@ const ProdutoSchema = new mongoose.Schema(
     { _id: false }
   );
 
+const fullProductSchema = new mongoose.Schema(
+    {
+        name: String,
+        brand: String,
+        categorieA: String,
+        categorieB: String,
+        img: String,
+        properties: [ProductPropertiesSchema],
+    },
+    {
+        collection: "products"
+    }
+)
   
 const UnidadeProducaoSchema = new mongoose.Schema(
     {
     idFornecedor: String,
     listaProdutos: [ProdutoSchema],
-    listaVeiculos: [String],
+    listaVeiculos: [VeiculoSchema],
     lat: String,
     lon: String,
     morada: String,
@@ -135,6 +149,15 @@ const UnidadeProducaoSchema = new mongoose.Schema(
     collection: "unidadeProducao",
     }
 );
+
+const VeiculoSchema = new mongoose.Schema(
+    {
+        idVeiculo: String
+    },
+    {
+        collection: "veiculos"
+    }
+)
 
 app.post("/user/registar", async(req, res) => {
     try {
@@ -572,6 +595,7 @@ app.get("/produto/search", async (req, res) => {
     }
 });
 
+// getter
 app.get("/produto", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
     const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
@@ -635,10 +659,31 @@ app.get("/produto", async (req, res) => {
     }
 });
 
+// setter
+app.post("/produto", async (req, res) => {
+    try{
+        const Produto = mongoose.model("products", fullProductSchema);
+        const {name, brand, categorieA, categorieB, img, properties} = req.body;
+
+        await Produto.create({
+            name,
+            brand, 
+            categorieA, 
+            categorieB, 
+            img, 
+            properties
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+});
+
 app.post("/user/encomenda", async(req, res) => {
     try{
         const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-        const {idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda} = req.body;
+        const {idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, listaUP, estadoEncomenda} = req.body;
 
         await Encomenda.create({
             idConsumidor,
@@ -646,7 +691,43 @@ app.post("/user/encomenda", async(req, res) => {
             dataEncomenda,
             dataEnvio,
             prazoCancelamento,
+            listaUP,
             estadoEncomenda,
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+})
+
+app.post("/user/unidadeProducao", async(req, res) => {
+    try{
+        const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+        const {idFornecedor, listaProdutos, listaVeiculos, lat, lon, morada} = req.body;
+
+        await UnidadeProducao.create({
+            idFornecedor,
+            listaProdutos,
+            listaVeiculos,
+            lat,
+            lon,
+            morada,
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+})
+
+app.post("/user/veiculos", async(req, res) => {
+    try{
+        const Veiculo = mongoose.model("veiculos", VeiculoSchema);
+        const {idVeiculo} = req.body;
+
+        await Veiculo.create({
+            idVeiculo
         });
         res.send({ status: "ok" });
         
