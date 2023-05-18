@@ -97,6 +97,38 @@ const ProductDetailsSchema =  new mongoose.Schema(
     }
 )
 
+const ProdutoSchema = new mongoose.Schema(
+    {
+      idProduto: String,
+      quantidade: Number,
+      preco: Number,
+    },
+    { _id: false }
+  );
+
+const VeiculoSchema = new mongoose.Schema(
+    {
+        idVeiculo: String
+    },
+    {
+        collection: "veiculos"
+    }
+)
+
+const UnidadeProducaoSchema = new mongoose.Schema(
+    {
+    idFornecedor: String,
+    listaProdutos: [ProdutoSchema],
+    listaVeiculos: [VeiculoSchema],
+    lat: String,
+    lon: String,
+    morada: String,
+    },
+    {
+    collection: "unidadeProducao",
+    }
+);
+
 
 const EncomendaSchema = new mongoose.Schema(
     {
@@ -113,14 +145,6 @@ const EncomendaSchema = new mongoose.Schema(
     }
 )
 
-const ProdutoSchema = new mongoose.Schema(
-    {
-      idProduto: String,
-      quantidade: Number,
-      preco: Number,
-    },
-    { _id: false }
-  );
 
 const fullProductSchema = new mongoose.Schema(
     {
@@ -136,28 +160,7 @@ const fullProductSchema = new mongoose.Schema(
     }
 )
   
-const UnidadeProducaoSchema = new mongoose.Schema(
-    {
-    idFornecedor: String,
-    listaProdutos: [ProdutoSchema],
-    listaVeiculos: [VeiculoSchema],
-    lat: String,
-    lon: String,
-    morada: String,
-    },
-    {
-    collection: "unidadeProducao",
-    }
-);
 
-const VeiculoSchema = new mongoose.Schema(
-    {
-        idVeiculo: String
-    },
-    {
-        collection: "veiculos"
-    }
-)
 
 app.post("/user/registar", async(req, res) => {
     try {
