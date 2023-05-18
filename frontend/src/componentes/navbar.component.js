@@ -51,11 +51,68 @@ export default class Navbar extends Component{
         page: 1,
         search: window.localStorage.getItem("search") || "",
         isCartHovered: false,
+        carrinho: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCartHover = this.handleCartHover.bind(this);
     this.handleCartLeave = this.handleCartLeave.bind(this);
   }
+
+  removerProduto = (index) => {
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    carrinho.splice(index, 1);
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    this.setState({ carrinho });
+    window.location.reload();
+
+  };
+  
+  atualizarQuantidade = (index, acao) => {
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+  
+    if (acao === "incrementar") {
+      carrinho[index].quantidade++;
+      carrinho[index].preco = carrinho[index].preco_original * carrinho[index].quantidade;
+    } else if (acao === "decrementar") {
+      if (carrinho[index].quantidade > 1) {
+        carrinho[index].quantidade--;
+        carrinho[index].preco = carrinho[index].preco_original * carrinho[index].quantidade;
+      }
+    }
+  
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    this.setState({ carrinho: carrinho });
+  };
+  
+  
+  
+
+
+
+  
+  componentDidMount() {
+    const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    const total = this.calcularTotal(carrinho);
+    console.log(carrinho);
+    console.log('Total: $', total);
+    this.setState({ carrinho });
+  }
+
+
+
+  calcularTotal(carrinho) {
+    let total = 0;
+    carrinho.forEach(function(item) {
+      total += item.preco_original * item.quantidade;
+    });
+    return total;
+  }
+
+
+  handleButtonClick() {
+    window.location.href = './cart';
+  }
+
   handleCartHover() {
     this.setState({ isCartHovered: true });
   }
@@ -63,6 +120,20 @@ export default class Navbar extends Component{
   handleCartLeave() {
     this.setState({ isCartHovered: false });
   }
+
+  countTotalProducts() {
+    let localStorageObj = JSON.parse(localStorage.getItem('carrinho'));
+
+    let count = 0;
+    for (let key in localStorageObj) {
+      if (localStorageObj.hasOwnProperty(key)) {
+        count += parseInt(localStorageObj[key].quantidade);
+      }
+    }
+    return count;
+  }
+
+
 
   handleSearch(){
     const {page, categoriaA, categoriaB, search,brand, objSearch} = this.state;
@@ -90,7 +161,7 @@ export default class Navbar extends Component{
     .then((data) => {
         console.log(data, "searchData");
         // this.setState({ objSearch: data.products}); //o que adicionar aqui??
-        window.localStorage.setItem("objSearch", JSON.stringify(data.products))
+        window.localStorage.setItem("objSearch", JSON.stringify(data.productsWPrice))
         window.location.href= "./catalogo"
     })
     }catch(err){
@@ -128,6 +199,8 @@ export default class Navbar extends Component{
   }
   
   componentDidMount(){
+
+
     fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
         method:"POST",
         crossDomain:true,
@@ -153,6 +226,8 @@ export default class Navbar extends Component{
     window.localStorage.removeItem("produtoID");
     window.localStorage.removeItem("objSearch");
     window.localStorage.removeItem("search");
+
+
 }
     // const sendSearchData = (query) => {
     //   const fetchUsers = () => {
@@ -164,6 +239,9 @@ export default class Navbar extends Component{
 
     render(){
       const { isCartHovered } = this.state;
+      const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      const total = this.calcularTotal(carrinho);
+      
       return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
       
@@ -189,7 +267,7 @@ export default class Navbar extends Component{
         </ul>
         <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
             <div className="form-group has-search">                                                                           
-              <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder={this.state.search === "" ? 'Search' : this.state.search}/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+            <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder={this.state.search === "" ? 'Search' : this.state.search}/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
             </div>
         </div>
       </div>
@@ -216,7 +294,7 @@ export default class Navbar extends Component{
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" href="#">Histórico</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" onClick={this.logOut} href="./login">Log out</a></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="./user/login">Log out</a></li>
           </ul>
         </li>:
         <li class="nav-item active px-2">
@@ -235,12 +313,14 @@ export default class Navbar extends Component{
                 aria-haspopup="true"
                 aria-expanded="false"
                 onMouseEnter={this.handleCartHover}
+                onClick ={this.handleButtonClick}
+                
                 
                 
               >
             <i className="bi-cart-fill me-1"></i>
             Cart
-            <span className="badge bg-dark text-white ms-1 rounded-pill">0</span>
+            <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
         </button>
         <div
                 className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
@@ -257,128 +337,75 @@ export default class Navbar extends Component{
             
             </p>
             <div class="carrinhoWrapper pb-3" >
+
               <div class="items-carrinho">
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                  
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                  
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                     
-
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                  
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
+              
+              <div>
+  {carrinho.length === 0 ? (
+    <div class="carrinho-vazio">
+      <p class="text-dark">The cart is empty!</p>
+    </div>
+  ) : (
+    carrinho.map((item, index) => (
+      <div class="carrinho-item" key={item.nome}>
+        <img class="" src={item.img} />
+        <div class="detalhes text-dark">
+          <h5 class="text-dark">{item.nome}</h5>
+          <p class="text-dark">
+            <span class="pt-5 text-dark">{item.preco}€</span>
+            <br></br>
+           
+            <div className="quantidade">
+           
+           
+  <div className="row">
+    <div className="col d-flex align-items-center">
+      <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
+      <p className="text-secondary mb-0  "> </p>
+      <br></br>
+      <div className="d-flex flex-column">
+        <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
+        <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+      </div>
+      
+    </div>
+  </div>
 
 
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
+
+
+
+
+
+
+
+
+           
                  
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
+            
+            
+            </div>
+          </p>
+        </div>
+        <div class="cancel">
+          <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)}></i>
+        </div>
+      </div>
+    ))
+  )}
+</div>
 
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                 
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                 
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
-                <div class="carrinho-item">
-                  <img class="" src={require('../images/camera.jpg')} />
-                  <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">Item name</h5>
-                    <p class= "text-dark ">
-                 
-                      <span class= " pt-5 text-dark ">$0.00</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: 1</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                </div>
+               
+                
                 </div>
               
 
               
             </div>
             <p class="d-none">espaco</p>
-            <p class="text-end text-dark" id="total">Total: $</p>
-              <button class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout">Checkout</button>
-              <button class="btn btn-outline-dark  col-md-12 " id="carrinho">View Cart</button>
+            <p class="text-end text-dark" id="total">Total: {total}€</p>
+              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='./user/encomenda'>Checkout</a>
+              <a class="btn btn-outline-dark  col-md-12 " id="carrinho" href='/cart'>View Cart</a>
 
 
               

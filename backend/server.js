@@ -44,6 +44,21 @@ connection.once('open', () => {
 console.log("MongoDB database connection established successfully");
 })
 
+
+
+// const collection = connection.collection("products");
+// const query = { "name": "Electronics" };
+// const projection = { "subcategories": "TVs" };
+// const result = collection.findOne(query, projection);
+
+// result.then((doc) => {
+//     console.log(doc.subcategories[0].subcategories[0].name);
+// }).catch((err) => {
+//     console.error(err);
+// });
+
+
+
 const UserDetailsSchema = new mongoose.Schema(
     {
     email: String,
@@ -62,19 +77,89 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
+const ProductPropertiesSchema = new mongoose.Schema(
+    {
+        Color: String
+    },
+    { _id: false }
+);
+
 const ProductDetailsSchema =  new mongoose.Schema(
     {
         name: String,
         brand: String,
         categorieA: String,
         categorieB: String,
+        properties: [ProductPropertiesSchema],
     },
     {
         collection: "products"
     }
 )
 
+const ProdutoSchema = new mongoose.Schema(
+    {
+      idProduto: String,
+      quantidade: Number,
+      preco: Number,
+    },
+    { _id: false }
+  );
 
+const VeiculoSchema = new mongoose.Schema(
+    {
+        idVeiculo: String
+    },
+    {
+        collection: "veiculos"
+    }
+)
+
+const UnidadeProducaoSchema = new mongoose.Schema(
+    {
+    idFornecedor: String,
+    listaProdutos: [ProdutoSchema],
+    listaVeiculos: [VeiculoSchema],
+    lat: String,
+    lon: String,
+    morada: String,
+    },
+    {
+    collection: "unidadeProducao",
+    }
+);
+
+
+const EncomendaSchema = new mongoose.Schema(
+    {
+        idConsumidor: String,
+        preco: String,
+        dataEncomenda: String,
+        dataEnvio: String,
+        prazoCancelamento: String,
+        listaUP: [UnidadeProducaoSchema],
+        estadoEncomenda: String,
+    },
+    {
+        collection: "encomenda"
+    }
+)
+
+
+const fullProductSchema = new mongoose.Schema(
+    {
+        name: String,
+        brand: String,
+        categorieA: String,
+        categorieB: String,
+        img: String,
+        properties: [ProductPropertiesSchema],
+    },
+    {
+        collection: "products"
+    }
+)
+  
 
 
 app.post("/user/registar", async(req, res) => {
@@ -179,6 +264,7 @@ app.delete("/user/delete", async (req, res) => { //esste seria para eleminar um 
 
 app.get("/catalogo", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
 
     try{
         // const page = parseInt(req.query.page) - 1 || 0;
@@ -245,7 +331,46 @@ app.get("/catalogo", async (req, res) => {
                     // .limit(limit);
                     )
             )
+            
+            let productsWPrice = [];
 
+            for (let i = 0; i < products.length; i++) {
+              const result = await UnidadeProducao.findOne({
+                "listaProdutos": {
+                  "$elemMatch": {
+                    "idProduto": {
+                      "$in": [products[i]._id]
+                    }
+                  }
+                }
+              },
+              {
+                "_id": 0,
+                "listaProdutos.$": 1,
+                "lat": 1,
+                "lon": 1
+              });
+            
+              if (result) {
+                productsWPrice.push({
+                  ...products[i],
+                  price: result.listaProdutos[0].preco,
+                  lat: result.lat,
+                  lon: result.lon
+                });
+              } else {
+                productsWPrice.push({
+                  ...products[i],
+                  price: 0, // Set a default value for price
+                  lat: 0,   // Set default values for lat and lon
+                  lon: 0
+                });
+              }
+            }
+            
+            // console.log("productsWPrice", productsWPrice);
+            
+  
         // const setCategoriasA = new Set();
         // const setProdutos =  new Set();
         // for (let i = 0; i < products.length; i++) {
@@ -317,7 +442,7 @@ app.get("/catalogo", async (req, res) => {
             // page: page + 1,
             // limit,
             categorias: categoriasPossiviesB,
-            products,
+            productsWPrice,
             novoHeader,
             novoHeaderTip,
 
@@ -333,6 +458,8 @@ app.get("/catalogo", async (req, res) => {
 
 app.get("/produto/search", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+
 
     try{
         const page = parseInt(req.query.page) - 1 || 0;
@@ -372,27 +499,27 @@ app.get("/produto/search", async (req, res) => {
         let products = null;
         categorieA === "All"
             ?   (brand === "All" 
-                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
                     .where("categorieB").in(categorieB)
                     // .skip(page * limit)
 			        // .limit(limit);
                     
                 )
-                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
                     .where("categorieB").in(categorieB)
-                    .where("brand").in(brand)
+                    .where("brand").in(brand),
                     // .skip(page * limit)
                     // .limit(limit);
-                    )
+                    console.log("entra bem"))
                 )
             :   (brand === "All"
-                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
                     .where("categorieB").in(categorieB)
                     .where("categorieA").in(categorieA)
                     // .skip(page * limit)
 			        // .limit(limit);
                     )
-                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
+                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
                     .where("categorieB").in(categorieB)
                     .where("categorieA").in(categorieA)
                     .where("brand").in(brand)
@@ -400,6 +527,45 @@ app.get("/produto/search", async (req, res) => {
                     // .limit(limit);
                     )
             )
+            console.log(products)
+
+            let productsWPrice = [];
+
+            for (let i = 0; i < products.length; i++) {
+              const result = await UnidadeProducao.findOne({
+                "listaProdutos": {
+                  "$elemMatch": {
+                    "idProduto": {
+                      "$in": [products[i]._id]
+                    }
+                  }
+                }
+              },
+              {
+                "_id": 0,
+                "listaProdutos.$": 1,
+                "lat": 1,
+                "lon": 1
+              });
+            
+              if (result) {
+                productsWPrice.push({
+                  ...products[i],
+                  price: result.listaProdutos[0].preco,
+                  lat: result.lat,
+                  lon: result.lon
+                });
+              } else {
+                productsWPrice.push({
+                  ...products[i],
+                  price: 0, // Set a default value for price
+                  lat: 0,   // Set default values for lat and lon
+                  lon: 0
+                });
+              }
+            }
+            
+            // console.log("productsWPrice", productsWPrice);
 
         // const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
         //     .where("categorieB")
@@ -422,7 +588,7 @@ app.get("/produto/search", async (req, res) => {
             page: page + 1,
             limit,
             categoria: categoriasPossiviesB,
-            products,
+            productsWPrice,
         };
 
         res.status(200).json(response);
@@ -432,8 +598,11 @@ app.get("/produto/search", async (req, res) => {
     }
 });
 
+// getter
 app.get("/produto", async (req, res) => { 
     const Product = mongoose.model("products", ProductDetailsSchema);
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+
 
     try{
         const produtoID = req.query.id;
@@ -444,10 +613,46 @@ app.get("/produto", async (req, res) => {
             _id: produtoID,
         });
 
+        let productsWPrice = [];
+
+        const result = await UnidadeProducao.findOne({
+        "listaProdutos": {
+            "$elemMatch": {
+            "idProduto": {
+                "$in": [product._id]
+            }
+            }
+        }
+        },
+        {
+        "_id": 0,
+        "listaProdutos.$": 1,
+        "lat": 1,
+        "lon": 1
+        });
+    
+        if (result) {
+        productsWPrice.push({
+            ...product,
+            price: result.listaProdutos[0].preco,
+            lat: result.lat,
+            lon: result.lon
+        });
+        } else {
+        productsWPrice.push({
+            ...product,
+            price: 0, // Set a default value for price
+            lat: 0,   // Set default values for lat and lon
+            lon: 0
+        });
+        }
+        
+        var productWPrice = productsWPrice[0];
+
         const response = {
             error: false,
             total,
-            product,
+            productWPrice,
         };
 
         res.status(200).json(response);
@@ -456,6 +661,83 @@ app.get("/produto", async (req, res) => {
 		res.status(500).json({ error: true, message: "Internal Server Error" });
     }
 });
+
+// setter
+app.post("/produto", async (req, res) => {
+    try{
+        const Produto = mongoose.model("products", fullProductSchema);
+        const {name, brand, categorieA, categorieB, img, properties} = req.body;
+
+        await Produto.create({
+            name,
+            brand, 
+            categorieA, 
+            categorieB, 
+            img, 
+            properties
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+});
+
+app.post("/user/encomenda", async(req, res) => {
+    try{
+        const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+        const {idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, listaUP, estadoEncomenda} = req.body;
+
+        await Encomenda.create({
+            idConsumidor,
+            preco,
+            dataEncomenda,
+            dataEnvio,
+            prazoCancelamento,
+            listaUP,
+            estadoEncomenda,
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+})
+
+app.post("/user/unidadeProducao", async(req, res) => {
+    try{
+        const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+        const {idFornecedor, listaProdutos, listaVeiculos, lat, lon, morada} = req.body;
+
+        await UnidadeProducao.create({
+            idFornecedor,
+            listaProdutos,
+            listaVeiculos,
+            lat,
+            lon,
+            morada,
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+})
+
+app.post("/user/veiculos", async(req, res) => {
+    try{
+        const Veiculo = mongoose.model("veiculos", VeiculoSchema);
+        const {idVeiculo} = req.body;
+
+        await Veiculo.create({
+            idVeiculo
+        });
+        res.send({ status: "ok" });
+        
+    }catch (error) {
+        res.send({ status: "error", error: error })
+    }
+})
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);

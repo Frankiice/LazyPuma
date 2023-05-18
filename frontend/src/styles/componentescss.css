@@ -8,16 +8,16 @@ html, body {
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: white;
-    opacity: 1; /* Firefox */
+    color: white !important;; 
+    opacity: 1;/* Firefox */
   }
-  
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: white;
+
+   :-ms-input-placeholder { /*Internet Explorer 10-11 */
+    color: white !important;
   }
   
   ::-ms-input-placeholder { /* Microsoft Edge */
-    color: white;
+    color: white !important;
   }
 
 a {
@@ -37,6 +37,7 @@ a:hover{
 .breadcrumb a{
     color:#28242c
 }
+
 
 .scrollcontainer {
 	cursor: grab;
@@ -68,6 +69,11 @@ a:hover{
 
     border: 1.5px solid #FFFFFF;
     border-radius: 33px;
+}
+
+.detailsEncomenda::placeholder {
+    color: rgba(255, 255, 255, 0.658) !important;; 
+    opacity: 0.5;/* Firefox */
 }
 
 .has-search .form-control {
@@ -305,7 +311,17 @@ body{
     max-height: 300px;
     margin-bottom: 5px;
 }
-
+.carrinho-vazio{
+    
+    /* background-color: #ffffff; */
+    /* border-style: solid; */
+    border-width: 1px;
+    border-radius: 5px;
+    padding-top: 50px;
+    padding-left: 29%;
+    height: 100px;
+    margin-bottom: 5px;
+}
 .carrinho-item img{
     width: 100%;
     padding-right: 30px;
@@ -330,6 +346,11 @@ body{
 .btn-checkout:hover{
     border-color: #000000;
 }
+
+.stepsEncomenda {
+    margin-left: auto;
+    margin-right: auto;
+}
 /* .containerProduto{
     min-height: 300px;
     max-height: 300px;
@@ -341,7 +362,6 @@ body{
     width: auto;
     overflow: hidden;
 }
-
 .crop img {
     height: auto;
     width: 250px;
@@ -524,7 +544,7 @@ a[target='_blank'] {
     background-image: url('../images/bebe.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:3.1em;
     
 }
@@ -533,7 +553,7 @@ a[target='_blank'] {
     background-image: url('../images/desporto.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.1em;
 }
 
@@ -541,7 +561,7 @@ a[target='_blank'] {
     background-image: url('../images/animais.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.4em;
 }
 
@@ -549,15 +569,15 @@ a[target='_blank'] {
     background-image: url('../images/beleza.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
-    padding:2.7em;
+    text-align: center;
+    padding:1.8em;
 }
 
 #butao6{
     background-image: url('../images/bricolagem.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:1.5em;
 }
 
@@ -646,12 +666,6 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
-.box {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-}
-
 #butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
 }
@@ -692,4 +706,15 @@ a[target='_blank'] {
     }
     
 }
+
+.quantidade_cart{
+    height:25px;
+    width:25px;
+   
+}
+
+.quantidade_atualizar{
+    padding-left: 5px;
+}
+
 

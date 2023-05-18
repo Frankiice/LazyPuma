@@ -94,16 +94,16 @@ getCoordenadas(e) {
       .then((data) => {
         if (data && data.length > 0) {
           const { lat, lon } = data[0];
-          this.setState({ lat, lon, msgMorada: "Morada Válida, pode prosseguir" });
+          this.setState({ lat, lon, msgMorada: "Valid address, you can proceed with your registration" });
           console.log("entra no if")
         } else {
-          this.setState({ msgMorada: "Erro: Morada Inválida, por favor corrija a sua morada" });
+          this.setState({ msgMorada: "Error: Invalid address, please correct your address" });
           console.log("entra no else")
         }
       })
       .catch((error) => {
         console.log(error);
-        this.setState({ msgMorada: "Erro ao validar a morada, por favor tente novamente mais tarde" });
+        this.setState({ msgMorada: "Error validating address, please try again later" });
       });
   }
 preHandleRemove(e){
@@ -221,15 +221,15 @@ render() {
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
                         <i class="fa fa-home text-center mr-1"></i> 
-                        Conta
+                        Account
                     </a>
                     <a class="nav-link" id="encomendas-tab" data-toggle="pill" href="#encomendas" role="tab" aria-controls="encomendas" aria-selected="false">
                         <i class="fa fa-key text-center mr-1"></i> 
-                        Encomendas
+                        Orders
                     </a>
                     <a class="nav-link" id="relatorios-tab" data-toggle="pill" href="#relatorios" role="tab" aria-controls="relatorios" aria-selected="false">
                         <i class="fa fa-key text-center mr-1"></i> 
-                        Relatórios
+                        Reports
                     </a>
                     <a class="nav-link" id="logout-tab" data-toggle="pill" href="#logout" role="tab" aria-controls="logout" aria-selected="false">
                         <i class="fa fa-user text-center mr-1"></i> 
@@ -237,26 +237,26 @@ render() {
                     </a>
                     <a class="nav-link" id="remocao-tab" data-toggle="pill" href="#remocao" role="tab" aria-controls="remocao" aria-selected="false">
                         <i class="fa fa-tv text-center mr-1"></i> 
-                        Remover Conta
+                        Remove Account
                     </a>
                     <a class="nav-link" id="up-tab" data-toggle="pill" href="#up" role="tab" aria-controls="up" aria-selected="false">
                         <i class="fa fa-bell text-center mr-1"></i> 
-                        Unidades de Produção
+                        Production Units
                     </a>
                     <a class="nav-link" id="veiculos-tab" data-toggle="pill" href="#veiculos" role="tab" aria-controls="veiculos" aria-selected="false">
                         <i class="fa fa-bell text-center mr-1"></i> 
-                        Veículos
+                        Vehicles
                     </a>
                 </div>
             </div>
             <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-                    <h3 class="mb-4">Definições da Conta</h3>
+                    <h3 class="mb-4">Account Settings</h3>
                     <form onSubmit={this.handleSubmit}>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Nome Completo</label>
+                                    <label>Full name</label>
                                     <div class="input-field bg-dark"> 
                                         <input type="text" class="bg-dark text-white" id="fullname" onChange={(e => this.setState({ fullname: e.target.value }))} placeholder={this.state.userData.fullname}/>
                                     </div>
@@ -280,7 +280,7 @@ render() {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Telemóvel</label>
+                                    <label>Phone Number</label>
                                     <div class="input-field bg-dark"> 
                                         <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="phone" onChange={(e => this.setState({ phone: e.target.value }))} placeholder={this.state.userData.phone}/>
                                     </div>
@@ -288,7 +288,7 @@ render() {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Identificador Fiscal</label>
+                                    <label>NIF</label>
                                     <div class="input-field bg-dark"> 
                                         <input type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}" class="bg-dark text-white" id="nif" onChange={(e => this.setState({ nif: e.target.value }))} placeholder={this.state.userData.nif}/>
                                     </div>
@@ -298,7 +298,7 @@ render() {
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Rua</label>
+                                            <label>Street</label>
                                             <div class="input-field bg-dark"> 
                                             <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ rua: e.target.value }))} placeholder={this.state.rua}/>
                                             </div>
@@ -306,7 +306,7 @@ render() {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Localidade</label>
+                                            <label>Location</label>
                                             <div class="input-field bg-dark"> 
                                             <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ localidade: e.target.value }))} placeholder={this.state.localidade}/>
                                             </div>
@@ -314,7 +314,7 @@ render() {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Freguesia</label>
+                                            <label>Parish</label>
                                             <div class="input-field bg-dark"> 
                                             <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ freguesia: e.target.value }))} placeholder={this.state.freguesia}/>
                                             </div>
@@ -322,7 +322,7 @@ render() {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Concelho</label>
+                                            <label>County</label>
                                             <div class="input-field bg-dark"> 
                                             <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ concelho: e.target.value }))} placeholder={this.state.concelho}/>
                                             </div>
@@ -330,7 +330,7 @@ render() {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Codigo Postal</label>
+                                            <label>Postal Code</label>
                                             <div class="input-field bg-dark"> 
                                             <input type="text" pattern="\d{4}-\d{3}" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cod_postal: e.target.value }))} placeholder={this.state.cod_postal}/>
                                             </div>
@@ -338,7 +338,7 @@ render() {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Cidade</label>
+                                            <label>City</label>
                                             <div class="input-field bg-dark"> 
                                             <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cidade: e.target.value }))} placeholder={this.state.cidade}/>
                                             </div>
@@ -346,7 +346,7 @@ render() {
                                     </div>
                             </div>
                             <button onClick={this.getCoordenadas} class="btn btn-outline-light col-md-3">
-                                    Verificar Morada
+                                Verify Address
                                 </button>
                                 {this.state.msgMorada != "" ? 
                                
@@ -359,7 +359,7 @@ render() {
                             {this.state.userUpdated ?
                               <div> 
                                   <br></br>
-                                  <p>Informações foram alteradas com sucesso!</p>
+                                  <p>Information has been changed successfully!</p>
                               </div> : 
                               <p></p>
                             }
@@ -374,40 +374,40 @@ render() {
                         </div>
                         <div>
                              {this.state.msgMorada != "" ? 
-                               this.state.msgMorada == "Erro: Morada Inválida, por favor corrija a sua morada" ?
+                               this.state.msgMorada == "Error: Invalid address, please correct your address" ?
                                     <label></label>
                                     :
-                                    <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                                    <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
 
                             :
-                               <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
+                               <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
                                }
-                            {/* <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button> */}
-                            {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button> */}
+                            {/* <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Save</button> */}
+                            {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button> */}
                         </div>
                     </form>
                     
                 </div>
                 <div class="tab-pane fade" id="encomendas" role="tabpanel" aria-labelledby="encomendas-tab">
-                    <h3 class="mb-4">Histórico de Encomendas </h3>
+                    <h3 class="mb-4">Order History </h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group box">
-                                <label>Encomenda mais recente</label>
-                                <p> Encomenda Nº:</p>
-                                <p> Data da Compra:</p>
-                                <p> Valor:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+                                <label>Most recent order</label>
+                                <p> Order No.:</p>
+                                <p> Purchase Date:</p>
+                                <p> Value:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group box">
-                                <label>Encomenda mais recente</label>
-                                <p> Encomenda Nº:</p>
-                                <p> Data da Compra:</p>
-                                <p> Valor:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+                                <label>Most recent order</label>
+                                <p> Order No.:</p>
+                                <p> Purchase Date:</p>
+                                <p> Value:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
 
                             </div>
                         </div>
@@ -415,21 +415,21 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group box">
-                                <label>Encomenda mais recente</label>
-                                <p> Encomenda Nº:</p>
-                                <p> Data da Compra:</p>
-                                <p> Valor:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+                                <label>Most recent order</label>
+                                <p> Order No.:</p>
+                                <p> Purchase Date:</p>
+                                <p> Value:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group box">
-                                <label>Encomenda mais recente</label>
-                                <p> Encomenda Nº:</p>
-                                <p> Data da Compra:</p>
-                                <p> Valor:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">Ver detalhes</button>
+                                <label>Most recent order</label>
+                                <p> Order No.:</p>
+                                <p> Purchase Date:</p>
+                                <p> Value:</p>
+                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
 
                             </div>
                         </div>
@@ -439,17 +439,17 @@ render() {
                     <div>
                         
                         
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Visualizar todas as encomendas</button> 
-                        {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button> */}
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">View all orders</button> 
+                        {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button> */}
                     </div>
                 </div>
 
                 <div class="tab-pane fade" id="relatorios" role="tabpanel" aria-labelledby="relatorios-tab">
-                    <h3 class="mb-4">Os seus Relatórios</h3>
+                    <h3 class="mb-4">Your Reports</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>relatorios</label>
+                                <label>Reports</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -459,7 +459,7 @@ render() {
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>relatorios </label>
+                                <label>Reports </label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -467,7 +467,7 @@ render() {
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Confirme a Nova relatorios</label>
+                                <label>Confirme a Nova Reports</label>
                                 <div class="input-field bg-dark"> 
                                     <input type="password" class="bg-dark text-white"/>
                                 </div>
@@ -475,16 +475,16 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
-                    <h3 class="mb-4">Efetue Logout</h3>
+                    <h3 class="mb-4">Logout</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Pertende dar logout?</label>
+                                <label>Do you want to logout?</label>
                                 <div> 
                                     <br></br>
                                     <button onClick={this.logOut} class="btn btn-outline-light col-md-3 botaoPerfil">Logout</button>
@@ -494,24 +494,24 @@ render() {
                     </div>
                 </div>
                 <div class="tab-pane fade" id="remocao" role="tabpanel" aria-labelledby="remocao-tab">
-                    <h3 class="mb-4">Remoção de Conta</h3>
+                    <h3 class="mb-4">Account Removal</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <form onSubmit={this.preHandleRemove}>
-                                    <p>Atenção: Esta ação é irreversível</p>
-                                    <label>Para remover a sua conta insira a sua password</label>
+                                    <p>Attention: This action is irreversible</p>
+                                    <label>To remove your account enter your password</label>
                                     <div class="input-field bg-dark"> 
                                         <input type="password" onChange={(e => this.setState({ password: e.target.value }))} class="bg-dark text-white" id="userRemocao"/>
                                     </div>
                                     <div> 
                                         <br></br>
-                                        <button type="submit" class="btn btn-outline-light col-md-3 botaoRemover">Remover</button>
+                                        <button type="submit" class="btn btn-outline-light col-md-3 botaoRemover">Remove</button>
                                     </div>
                                     {this.state.userRemoveFailed ?
                                     <div> 
                                         <br></br>
-                                        <p>ERRO: A pass inserida não está correta</p>
+                                        <p>Error: The entered pass is not correct</p>
                                     </div> : 
                                     <div></div>
                                     }
@@ -521,7 +521,7 @@ render() {
                     </div>
                 </div>
                 <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
-                    <h3 class="mb-4">Unidades de Producao Settings</h3>
+                    <h3 class="mb-4">Production Units Settings</h3>
                     <div class="form-group">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="up1"/>
@@ -547,13 +547,13 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
 
                 <div class="tab-pane fade" id="veiculos" role="tabpanel" aria-labelledby="veiculos-tab">
-                    <h3 class="mb-4">veiculos Settings</h3>
+                    <h3 class="mb-4">Vehicles Settings</h3>
                     <div class="form-group">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="veiculos1"/>
@@ -579,8 +579,8 @@ render() {
                         </div>
                     </div>
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Guardar</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancelar</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
                     </div>
                 </div>
             </div>
