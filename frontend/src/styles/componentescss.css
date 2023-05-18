@@ -706,3 +706,15 @@ a[target='_blank'] {
     }
     
 }
+
+.quantidade_cart{
+    height:25px;
+    width:25px;
+   
+}
+
+.quantidade_atualizar{
+    padding-left: 5px;
+}
+
+

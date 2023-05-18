@@ -58,11 +58,57 @@ export default class Navbar extends Component{
     this.handleCartLeave = this.handleCartLeave.bind(this);
   }
 
+  removerProduto = (index) => {
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    carrinho.splice(index, 1);
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    this.setState({ carrinho });
+    window.location.reload();
+
+  };
+  
+  atualizarQuantidade = (index, acao) => {
+    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+  
+    if (acao === "incrementar") {
+      carrinho[index].quantidade++;
+      carrinho[index].preco = carrinho[index].preco_original * carrinho[index].quantidade;
+    } else if (acao === "decrementar") {
+      if (carrinho[index].quantidade > 1) {
+        carrinho[index].quantidade--;
+        carrinho[index].preco = carrinho[index].preco_original * carrinho[index].quantidade;
+      }
+    }
+  
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+    this.setState({ carrinho: carrinho });
+  };
+  
+  
+  
+
+
+
+  
   componentDidMount() {
     const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+    const total = this.calcularTotal(carrinho);
     console.log(carrinho);
+    console.log('Total: $', total);
     this.setState({ carrinho });
   }
+
+
+
+  calcularTotal(carrinho) {
+    let total = 0;
+    carrinho.forEach(function(item) {
+      total += item.preco_original * item.quantidade;
+    });
+    return total;
+  }
+
+
   handleButtonClick() {
     window.location.href = './cart';
   }
@@ -194,6 +240,7 @@ export default class Navbar extends Component{
     render(){
       const { isCartHovered } = this.state;
       const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      const total = this.calcularTotal(carrinho);
       
       return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
@@ -294,29 +341,59 @@ export default class Navbar extends Component{
               <div class="items-carrinho">
               
               <div>
-              {carrinho.length === 0 ? (
-                <div class="carrinho-vazio">
-                <p class= "text-dark ">The cart is empty!</p>
-                </div>
-              ) : (
-                carrinho.map(item => (
-                  <div class="carrinho-item" key={item.nome}>
-                    <img class="" src={item.img} />
-                    <div class="detalhes text-dark ">
-                    <h5 class= "text-dark ">{item.nome}</h5>
-                    <p class= "text-dark ">
-                      <span class= " pt-5 text-dark ">{item.preco}$</span>
-                      <br></br>
-                      <p class="text-secondary float-right">Quantity: {item.quantidade}</p>
-                    </p>
-                  </div>
-                  <div class="cancel">
-                  <i class="bi bi-x-square-fill"></i>
-                  </div>
-                  </div>
-                ))
-              )}
+  {carrinho.length === 0 ? (
+    <div class="carrinho-vazio">
+      <p class="text-dark">The cart is empty!</p>
+    </div>
+  ) : (
+    carrinho.map((item, index) => (
+      <div class="carrinho-item" key={item.nome}>
+        <img class="" src={item.img} />
+        <div class="detalhes text-dark">
+          <h5 class="text-dark">{item.nome}</h5>
+          <p class="text-dark">
+            <span class="pt-5 text-dark">{item.preco}€</span>
+            <br></br>
+           
+            <div className="quantidade">
+           
+           
+  <div className="row">
+    <div className="col d-flex align-items-center">
+      <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
+      <p className="text-secondary mb-0  "> </p>
+      <br></br>
+      <div className="d-flex flex-column">
+        <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
+        <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+           
+                 
+            
+            
             </div>
+          </p>
+        </div>
+        <div class="cancel">
+          <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)}></i>
+        </div>
+      </div>
+    ))
+  )}
+</div>
 
                
                 
@@ -326,7 +403,7 @@ export default class Navbar extends Component{
               
             </div>
             <p class="d-none">espaco</p>
-            <p class="text-end text-dark" id="total">Total: $</p>
+            <p class="text-end text-dark" id="total">Total: {total}€</p>
               <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='./user/encomenda'>Checkout</a>
               <a class="btn btn-outline-dark  col-md-12 " id="carrinho" href='/cart'>View Cart</a>
 
