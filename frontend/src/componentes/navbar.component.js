@@ -341,32 +341,32 @@ export default class Navbar extends Component{
               <div class="items-carrinho">
               
               <div>
-  {carrinho.length === 0 ? (
-    <div class="carrinho-vazio">
-      <p class="text-dark">The cart is empty!</p>
-    </div>
-  ) : (
-    carrinho.map((item, index) => (
-      <div class="carrinho-item" key={item.nome}>
-        <img class="" src={item.img} />
-        <div class="detalhes text-dark">
-          <h5 class="text-dark">{item.nome}</h5>
-          <p class="text-dark">
-            <span class="pt-5 text-dark">{item.preco}€</span>
-            <br></br>
+                {carrinho.length === 0 ? (
+                  <div class="carrinho-vazio">
+                    <p class="text-dark">The cart is empty!</p>
+                  </div>
+                ) : (
+                  carrinho.map((item, index) => (
+                  <div class="carrinho-item" key={item.nome}>
+                    <img class="" src={item.img} />
+                    <div class="detalhes text-dark">
+                      <h5 class="text-dark">{item.nome}</h5>
+                      <p class="text-dark">
+                        <span class="pt-5 text-dark">{item.preco_original}€</span>
+                        <br></br>
            
-            <div className="quantidade">
+                    <div className="quantidade">
            
            
-  <div className="row">
-    <div className="col d-flex align-items-center">
-      <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
-      <p className="text-secondary mb-0  "> </p>
-      <br></br>
-      <div className="d-flex flex-column">
-        <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
-        <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
-      </div>
+                    <div className="row">
+                      <div className="col d-flex align-items-center">
+                        <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
+                        <p className="text-secondary mb-0  "> </p>
+                        <br></br>
+                        <div className="d-flex flex-column">
+                          <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
+                          <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+                        </div>
       
     </div>
   </div>
