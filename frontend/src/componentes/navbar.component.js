@@ -57,7 +57,6 @@ export default class Navbar extends Component{
     this.handleCartHover = this.handleCartHover.bind(this);
     this.handleCartLeave = this.handleCartLeave.bind(this);
   }
-
   removerProduto = (index) => {
     let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
     carrinho.splice(index, 1);
@@ -198,27 +197,40 @@ export default class Navbar extends Component{
     window.location.href = "./user/login"
   }
   
-  componentDidMount(){
-
-
-    fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
-        method:"POST",
-        crossDomain:true,
-        headers:{
-            "Content-type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
+  componentDidMount() {
+    const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
+    
+    if (isGoogleLogged) {
+      const response = JSON.parse(window.localStorage.getItem("response"));
+      if (response) {
+        const { email } = response;
+        console.log("ola")
+        console.log(response)
+        console.log(email)
+        this.setState({ nickname: email });
+      }
+    } else {
+      fetch("http://localhost:5000/user/userData", {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
-        body:JSON.stringify({
-            token: window.localStorage.getItem("token"),
+        body: JSON.stringify({
+          token: window.localStorage.getItem("token"),
         }),
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data, "userData");
-        this.setState({ nickname: data.data.nickname,});
-    })
-}
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data, "userData");
+          this.setState({ nickname: data.data.nickname });
+          window.localStorage.setItem("user_lat", data.data.lat);
+          window.localStorage.setItem("user_lon", data.data.lon);
+        });
+    }
+  }
   handlePre(){
     window.localStorage.removeItem("categoriaB");
     window.localStorage.removeItem("categoriaA");
@@ -294,7 +306,7 @@ export default class Navbar extends Component{
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" href="#">Histórico</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" onClick={this.logOut} href="./user/login">Log out</a></li>
+              <li><a class="dropdown-item" onClick={this.logOut} href="/user/login">Log out</a></li>
           </ul>
         </li>:
         <li class="nav-item active px-2">

@@ -12,6 +12,8 @@ export default class Produto extends Component{
         super(props);
         this.state = {
             produtoID: window.localStorage.getItem("produtoID"),
+            categoriaA: window.localStorage.getItem("categoriaA") || "", 
+            categoriaB: window.localStorage.getItem("categoriaB") || "",
             produto: {},
             carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
             quantidade: "1",
@@ -107,6 +109,12 @@ componentDidMount(){
                         <p class="lead text-dark">Brand: {this.state.produto._doc.brand}</p>
 
                         <h4 style={{ color: "#212529"}}>Product Caracteristics:</h4>
+                        <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Main Category: {this.state.categoriaB}</p>
+                            {this.state.categoriaA != "" ? 
+                                <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Sub Category: {this.state.categoriaA}</p>
+                            :
+                                <p></p>
+                            }
                         {this.state.propriedade != [] ? 
                             this.state.propriedades.map((propriedade, index) => {
                                 const keys = Object.keys(propriedade);
