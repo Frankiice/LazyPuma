@@ -4,130 +4,241 @@ import { FarBootstrap } from "react-icons/fa";
 
 
 export default class Login extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      email:"",
-      password:"",
-      userLoginFailed: "",
-      userError: "",
+    this.state = {
+      quantity: 1
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    window.localStorage.removeItem("userUpdated");
-
   }
 
-  handleSubmit(e){
-    e.preventDefault();
-    const {email, password, userLoginFailed} = this.state;
-    console.log( email, password);
-    fetch("http://localhost:5000/user/login",{
-            method:"POST",
-            crossDomain:true,
-            headers:{
-                "Content-type":"application/json",
-                Accept:"application/json",
-                "Access-Control-Allow-Origin":"*",
-            },
-            body:JSON.stringify({
-                email,
-                password,
-            }),
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data, "userRegister");
-            if(data.status=="ok") {
-              alert("login successful");
-              window.localStorage.setItem("token", data.data);
-              window.localStorage.setItem("loggedIn", true);
-              if(data.type=="consumidor"){  //se for consumidor
-                window.location.href = "./c";
-              }else{ //se for fornecedor
-                window.location.href = "./f";
-              }
-              
-            }else{
-              this.setState({userLoginFailed: true});
-              this.setState({userError: data.error});
-            }
-        })
-};
+  handleQuantityChange(event) {
+    this.setState({
+      quantity: parseInt(event.target.value)
+    });
+  }
 
-// const Login = props => {
-
-  // const initialUserState = {
-  //   name: "",
-  //   id: ""
-  // };
-
-  // const [user, setUser] = useState(initialUserState);
-
-  // const handleInputChange = event => {
-  //   const { name, value } = event.target;
-  //   setUser({ ...user, [name]: value });
-  // };
-
-  // const login = () => { //da login no user e depois vai para a home page
-  //   props.login(user)
-  //   props.history.push('/');
-  // }
 render() {
+  const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+  const { quantity } = this.state;
   return (
- 
+    
+
     <div class="container">
-        <div class="row">
-            <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
-                <div class="panel border bg-dark">
-                    <div class="panel-heading">
-                        <h3 class="pt-3 font-weight-bold text-white">Login</h3>
+    <div class="row">
+
+      <div class="col-lg-9">
+        <div class="card border shadow-0">
+          <div class="m-4">
+            <h4 class="card-title mb-4">Your shopping cart</h4>
+            <div class="row gy-3 mb-4">
+              <div class="col-lg-5">
+                <div class="me-lg-5">
+                  <div class="d-flex">
+                    
+                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp" class="border rounded me-3" style="width: 96px; height: 96px;" />
+                    <div class="">
+                      <a href="#" class="nav-link">Winter jacket for men and lady</a>
+                      <p class="text-muted">Yellow, Jeans</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                <div class="">
+                  {/* <select style="width: 100px;" class="form-select me-4">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                  </select> */}
+                </div>
+                <div class="">
+                  <text class="h6">$1156.00</text> <br />
+                  <small class="text-muted text-nowrap"> $460.00 / per item </small>
+                </div>
+              </div>
+              <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                <div class="float-md-end">
+                  <a href="#!" class="btn btn-light border px-2 icon-hover-primary"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
+                  <a href="#" class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="row gy-3 mb-4">
+              <div class="col-lg-5">
+                <div class="me-lg-5">
+                  <div class="d-flex">
+                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/12.webp" class="border rounded me-3" style="width: 96px; height: 96px;" />
+                    <div class="">
+                      <a href="#" class="nav-link">Mens T-shirt Cotton Base</a>
+                      <p class="text-muted">Blue, Medium</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                <div class="">
+                  {/* <select style="width: 100px;" class="form-select me-4">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                  </select> */}
+                </div>
+                <div class="">
+                  <text class="h6">$44.80</text> <br />
+                  <small class="text-muted text-nowrap"> $12.20 / per item </small>
+                </div>
+              </div>
+              <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                <div class="float-md-end">
+                  <a href="#!" class="btn btn-light border px-2 icon-hover-primary"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
+                  <a href="#" class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="row gy-3">
+              <div class="col-lg-5">
+                <div class="me-lg-5">
+                  <div class="d-flex">
+                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/13.webp" class="border rounded me-3" style="width: 96px; height: 96px;" />
+                    <div class="">
+                      <a href="#" class="nav-link">Blazer Suit Dress Jacket for Men</a>
+                      <p class="text-muted">XL size, Jeans, Blue</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                <div class="">
+                  {/* <select style="width: 100px;" class="form-select me-4">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                  </select> */}
+                  
+                </div>
+                <div class="">
+                  <text class="h6">$1156.00</text> <br />
+                  <small class="text-muted text-nowrap"> $460.00 / per item </small>
+                </div>
+              </div>
+              <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                <div class="float-md-end">
+                  <a href="#!" class="btn btn-light border px-2 icon-hover-primary"><i class="fas fa-heart fa-lg px-1 text-secondary"></i></a>
+                  <a href="#" class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
+                </div>
+                
+              </div>
+              
+            </div>
+            
+          </div>
+          
+
+          {/* <div class="border-top pt-4 mx-4 mb-4">
+            <p><i class="fas fa-truck text-muted fa-lg"></i> Free Delivery within 1-2 weeks</p>
+            <p class="text-muted">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+              aliquip
+            </p>
+          </div> */}
+        </div>
+      </div>
+
+      <div class="col-lg-3">
+        {/* <div class="card mb-3 border shadow-0">
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <label class="form-label">Have coupon?</label>
+                <div class="input-group">
+                  <input type="text" class="form-control border" name="" placeholder="Coupon code" />
+                  <button class="btn btn-light border">Apply</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div> */}
+        <div class="card shadow-0 border">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Total price:</p>
+              <p class="mb-2">$329.00</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Discount:</p>
+              <p class="mb-2 text-success">-$60.00</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">TAX:</p>
+              <p class="mb-2">$14.00</p>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Total price:</p>
+              <p class="mb-2 fw-bold">$283.00</p>
+            </div>
+            
+            <div class="mt-3">
+              <a href="#" class="btn btn-success w-100 shadow-0 mb-2"> Make Purchase </a>
+              <a href="#" class="btn btn-light w-100 border mt-2"> Back to shop </a>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+
+
+/* <div class="container-fluid">
+        <div class="row justify-content-evenly">
+            <div class="col col-xl-9  ">
+                <div class="panel border bg-dark padding- ">
+                    <div class="panel-heading ">
+                        <h3 class="pt-3 font-weight-bold text-white">Shopping Cart</h3>
                     </div>
                     <div class="panel-body p-3">
-                        <form onSubmit={this.handleSubmit}>
-                            <div class="form-group py-2">
-                                <label>Email</label>
-                                <div class="input-field bg-dark"> <span class="fa fa-user px-2"></span> <input class="bg-dark text-white" type="text" onChange={(e => this.setState({ email: e.target.value }))}  required /> </div>
-                            </div>
-                            <div class="form-group py-1 pb-2">
-                            <label>Password</label>
-                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" onChange={(e => this.setState({ password: e.target.value }))}  required /> </div>
-                            </div>
-                            {/* <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" >Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div> */}
-                            <div class="botao">
-                              {/* <button className="btn btn-primary btn-block mt-3">
-                                Login
-                              </button> */}
-                              <button type="submit"  class="btn btn-outline-light col-md-3">
-                                Login
-                              </button>
-                            </div>
-                            {this.state.userLoginFailed ?
-                              <div> 
-                                  <br></br>
-                                  <p>{this.state.userError}</p>
-                              </div> : 
-                              <p></p>
-                            }
-                            <div class="text-center pt-4 text-light">Don't have an account? <a href="/user/registar">Register</a> </div>
-                        </form>
+  
                     </div>
-                    <div class="mx-3 my-2 py-2 bordert">
-                        <div class="text-center py-3">
-                          {/* <a href="https://wwww.facebook.com" class="px-3"> 
-                            <img id="loginimg" src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="icon do facebook"/> 
-                          </a>  */}
-                          <a href="https://www.google.com" class="px-2"> 
-                            <img id="loginimg" src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" alt="icon do google"/> 
-                          </a> 
-                          {/* <a href="https://www.github.com" class="px-3"> 
-                            <img id="loginimg" src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="icon do github"/> 
-                          </a> */}
-                        </div>
+  
+                </div>
+              </div> 
+              <div class=" col">
+                <div class="panel border bg-dark">
+                    <div class="panel-heading">
+                        <h3 class="pt-3 font-weight-bold text-white">Shopping Cart</h3>
                     </div>
+                    <div class="panel-body p-3">
+  
+                    </div>
+  
+                </div>
+              </div> 
+          </div> 
+         
+            <div class="row justify-content-end">
+            <div class="col col-xl-9"></div>
+            <div class="col">
+              <div class="panel border bg-dark">
+                    <div class="panel-heading">
+                        <h3 class="pt-3 font-weight-bold text-white">Shopping Cart</h3>
+                    </div>
+                    <div class="panel-body p-3">
+  
+                    </div>
+  
                 </div>
             </div>
-        </div>
-    </div>   
+         </div>
+    </div> */
+
+
+
     // <div className="submit-form">
     //  <div>
     //   <div className="form-group">
