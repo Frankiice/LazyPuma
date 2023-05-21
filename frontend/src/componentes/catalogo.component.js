@@ -96,6 +96,33 @@ export default class Catalogo extends Component{
         window.localStorage.removeItem("search");
     }
 
+    calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of the Earth in kilometers
+      
+        // Convert degrees to radians
+        const lat1Rad = degToRad(lat1);
+        const lon1Rad = degToRad(lon1);
+        const lat2Rad = degToRad(lat2);
+        const lon2Rad = degToRad(lon2);
+      
+        // Calculate the differences between the coordinates
+        const dLat = lat2Rad - lat1Rad;
+        const dLon = lon2Rad - lon1Rad;
+      
+        // Haversine formula
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c;
+      
+        return distance; // Distance in kilometers
+      }
+      
+    degToRad(degrees) {
+        return degrees * (Math.PI / 180);
+      }
+      
 
     render(){
     return (

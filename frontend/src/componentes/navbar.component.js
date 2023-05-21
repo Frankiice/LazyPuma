@@ -226,6 +226,8 @@ export default class Navbar extends Component{
         .then((data) => {
           console.log(data, "userData");
           this.setState({ nickname: data.data.nickname });
+          window.localStorage.setItem("user_lat", data.data.lat);
+          window.localStorage.setItem("user_lon", data.data.lon);
         });
     }
   }
