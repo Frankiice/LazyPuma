@@ -242,6 +242,7 @@ export default class Navbar extends Component{
       const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
       const total = this.calcularTotal(carrinho);
       
+      
       return (
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
       
@@ -287,12 +288,12 @@ export default class Navbar extends Component{
         // </li> 
         <li class="nav-item dropdown active px-2">
           <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="bi bi-person-circle"></i> Olá {this.state.nickname}
+            <i class="bi bi-person-circle"></i> Hello {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" href="/user/c">Perfil</a></li>
+              <li><a class="dropdown-item" href="/user/c">Profile</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" href="#">Histórico</a></li>
+              <li><a class="dropdown-item" href="#">Records</a></li>
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" onClick={this.logOut} href="./user/login">Log out</a></li>
           </ul>
@@ -300,7 +301,7 @@ export default class Navbar extends Component{
         <li class="nav-item active px-2">
           <a href="/user/login">
             <button class="btn btn-outline-light col-md-12" id="botaoLogin">
-              <i class="bi bi-person-circle"></i> Login/Registo
+              <i class="bi bi-person-circle"></i> Login/Register
             </button>
           </a>
         </li>}
@@ -343,7 +344,7 @@ export default class Navbar extends Component{
               <div>
                 {carrinho.length === 0 ? (
                   <div class="carrinho-vazio">
-                    <p class="text-dark">The cart is empty!</p>
+                    <p class="text-dark">Your cart is empty!</p>
                   </div>
                 ) : (
                   carrinho.map((item, index) => (
