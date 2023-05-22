@@ -14,6 +14,8 @@ export default class Produto extends Component{
             produtoID: window.localStorage.getItem("produtoID"),
             categoriaA: window.localStorage.getItem("categoriaA") || "", 
             categoriaB: window.localStorage.getItem("categoriaB") || "",
+            user_lat: window.localStorage.getItem("user_lat") || "",
+            user_lon: window.localStorage.getItem("user_lon") || "",
             produto: {},
             carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
             quantidade: "1",
@@ -87,6 +89,35 @@ componentDidMount(){
     }
 }
 
+calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+  
+    // Convert degrees to radians
+    const lat1Rad = this.degToRad(lat1);
+    const lon1Rad = this.degToRad(lon1);
+    const lat2Rad = this.degToRad(lat2);
+    const lon2Rad = this.degToRad(lon2);
+  
+    // Calculate the differences between the coordinates
+    const dLat = lat2Rad - lat1Rad;
+    const dLon = lon2Rad - lon1Rad;
+  
+    // Haversine formula
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var distance = R * c;
+
+    distance = distance.toFixed(2);
+  
+    return distance; // Distance in kilometers
+  }
+  
+degToRad(degrees) {
+    return degrees * (Math.PI / 180);
+  }
+
 
     
     render(){
@@ -135,7 +166,14 @@ componentDidMount(){
                             </div>
                         }
                         <h4 style={{ color: "#212529"}}>Supplier Caracteristics:</h4>
-                        <p class="lead text-dark">Caracteristicas do Fornecedor ?</p>
+                        
+                            <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Distance: {this.calculateDistance(
+                                                                                                    parseFloat(this.state.user_lat), // Convert to float
+                                                                                                    parseFloat(this.state.user_lon), // Convert to float
+                                                                                                    parseFloat(this.state.produto.lat), // Convert to float
+                                                                                                    parseFloat(this.state.produto.lon) // Convert to float
+                                                                                                )}Km</p>
+                            <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Address: {this.state.produto.morada}</p>
                         <br></br>
 
                         <div class="d-flex">

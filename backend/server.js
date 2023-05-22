@@ -628,7 +628,8 @@ app.get("/produto", async (req, res) => {
         "_id": 0,
         "listaProdutos.$": 1,
         "lat": 1,
-        "lon": 1
+        "lon": 1,
+        "morada": 1
         });
     
         if (result) {
@@ -636,14 +637,16 @@ app.get("/produto", async (req, res) => {
             ...product,
             price: result.listaProdutos[0].preco,
             lat: result.lat,
-            lon: result.lon
+            lon: result.lon,
+            morada: result.morada
         });
         } else {
         productsWPrice.push({
             ...product,
             price: 0, // Set a default value for price
             lat: 0,   // Set default values for lat and lon
-            lon: 0
+            lon: 0,
+            morada: ""
         });
         }
         
