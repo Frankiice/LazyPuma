@@ -580,7 +580,7 @@ render() {
                 </div>
 
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">View all Production Units</button>
+                        <a class="btn btn-outline-light col-md-3 botaoPerfil" href="/user/f/up">View all Production Units</a>
                     </div>
 
                 </div>

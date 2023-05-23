@@ -123,6 +123,7 @@ const UnidadeProducaoSchema = new mongoose.Schema(
     lat: String,
     lon: String,
     morada: String,
+    nome: String
     },
     {
     collection: "unidadeProducao",
