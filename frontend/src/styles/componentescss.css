@@ -152,7 +152,7 @@ body{
 
 .footer {
     position: relative;
-    margin-top: 166px; /* negative value of footer height */
+    /* margin-top: 166px; negative value of footer height */
     height: 150px;
     clear:both;
     padding-top:20px;
@@ -716,5 +716,19 @@ a[target='_blank'] {
 .quantidade_atualizar{
     padding-left: 5px;
 }
+.container_cart{
+    width: 100%;
+    padding-right: 50px;
+    padding-left: 30px;
+    /* margin-right: 15px; */
+    margin-left: 15px;
+    margin-top:80px;
+    
+}
 
+
+.custom-card{
+    height: 550px;;
+}
+  
 

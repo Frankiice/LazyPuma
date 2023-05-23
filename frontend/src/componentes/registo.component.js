@@ -184,7 +184,7 @@ export default class Registo extends Component {
 
 render() {
     if(this.state.flag){
-        return <div class="container " >
+        return <div class="container registo" >
         <div class="row " >
             <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3 ">
                 <div class="panel border bg-dark">
@@ -199,7 +199,7 @@ render() {
         </div>
     </div>
     }else{
-        return <div class="container " id = "teste">
+        return <div class="container registo" id = "teste">
         <div class="row " >
             <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
                 <div class="panel border bg-dark">

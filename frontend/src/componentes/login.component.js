@@ -95,7 +95,7 @@ export default class Login extends Component {
   // }
 render() {
   return (
-    <div>
+    <div class="login">
     {isLoggedIn ? (
       <h5 style={{ height: "53vh", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "80px" }}>User already logged in!</h5>
     ) : (
