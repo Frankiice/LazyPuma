@@ -46,7 +46,7 @@ body {
 	border: 5px solid #fff;
 }
 
-.encomenda label, .encomenda h4, .encomenda h3, p{
+.encomenda label, .encomenda h4, .encomenda h3, p, .perfil label, .perfil h4, .perfil h3, .login label, .login h4, .login h3, .registo label, .registo h4, .registo h3  {
 	color: #f9f9f9;
 }
 
