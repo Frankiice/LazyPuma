@@ -3,13 +3,14 @@ import '../styles/componentescss.css';
 import { FarBootstrap } from "react-icons/fa";
 // import { MDBCheckbox } from 'mdb-react-ui-kit';
 
-export default class Login extends Component {
+export default class Up extends Component {
   constructor(props) {
     super(props);
     this.state = {
       nickname: "",
       cart: JSON.parse(localStorage.getItem('carrinho')) || [],
       unidades: [],
+      unidadeID: window.localStorage.getItem("unidadeID"),
     };
   }
 
@@ -32,11 +33,12 @@ export default class Login extends Component {
         this.setState({ nickname: data.data.nickname,});
     })
 
-
-    const {id} = this.state;
+    const {unidadeID} = this.state;
+    console.log("unidadeID",unidadeID);
     try{
         const base_url = "http://localhost:5000/user/unidadeProducao"
-        const url = `${base_url}?id=${id}`;
+        const url = `${base_url}?id=${unidadeID}`;
+        console.log(url);
         fetch( url, {
         method:"GET",
         crossDomain:true,
@@ -48,8 +50,13 @@ export default class Login extends Component {
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data, "unidade de producao");
-            this.setState({ unidades: data});                
+            console.log(data, "unidadeData");
+            this.setState({ 
+                unidade: data.data,
+              });
+              
+              console.log("this.state.produto: ", this.state.unidade);
+              
         }) 
     }catch(err){
         console.log(err);

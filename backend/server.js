@@ -728,18 +728,26 @@ app.post("/user/unidadeProducao", async(req, res) => {
     }
 })
 
-app.get("/user/unidadeProducao", async (req, res) => { 
+//ir buscar todas as ups
+app.get("/user/unidadeProducao", async (req, res) => {
     const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-    
+  
     try {
-        const { id } = req.query;
-        const units = await UnidadeProducao.find({ id });
-        res.json(units);
+      const { id } = req.query;
+      console.log(id);
+      const units = await UnidadeProducao.find({
+        $or: [
+          { _id: id },
+          { idFornecedor: id }
+        ]
+      });
+      res.json(units);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "An error occurred while retrieving production units." });
+      console.error(error);
+      res.status(500).json({ error: "An error occurred while retrieving production units." });
     }
-});
+  });
+  
 
 
 app.post("/user/veiculos", async(req, res) => {
