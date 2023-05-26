@@ -30,6 +30,7 @@ export default class PerfilF extends Component{
             msgMorada: "",
             id: "",
             unidades: [],
+            unidadeID: "",
 
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -78,6 +79,14 @@ componentDidMount(){
                     cidade: moradaArray[5]});
     })
 }
+
+handleUnidade(e){
+    const {unidadeID} = this.state;
+    console.log("produto no unidadeID ",unidadeID);
+    window.localStorage.setItem("unidadeID", unidadeID);
+    window.location.href = "/user/f/up";
+};
+
 logOut = () => {
     window.localStorage.clear();
     window.location.href = "./login"
@@ -562,7 +571,7 @@ render() {
                         <p>Address: {unidade.morada}</p>
                         <p>Nº of Products: {unidade.listaProdutos.length}</p>
                         <p>Nº of Vehicles: {unidade.listaVeiculos.length}</p>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
+                        <button class="btn btn-outline-light col-md-3 botaoPerfil" value={unidade._id} onClick={(e) => {this.setState({ unidadeID: e.target.value }, this.handleUnidade)}}>View Details</button>
                         </div>
                     </div>
                     ))
@@ -580,7 +589,7 @@ render() {
                 </div>
 
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">View all Production Units</button>
+                        <a class="btn btn-outline-light col-md-3 botaoPerfil" href="/user/f/up">View all Production Units</a>
                     </div>
 
                 </div>
