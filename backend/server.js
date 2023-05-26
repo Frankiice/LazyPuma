@@ -76,15 +76,14 @@ const UserDetailsSchema = new mongoose.Schema(
         collection: "users"
     }
 );
-//const EdicaoDetailsSchema = new mongoose.Schema[
-//    {
-//        listaProdutos: Array,
-//        listaVeiculos: Array,
-//        lat: String,
-//        long: String,
-//        morada: String,
-//    }
-//]
+
+const ProductPropertiesSchema = new mongoose.Schema(
+    {
+        Color: String
+    },
+    { _id: false }
+);
+
 const ProductDetailsSchema =  new mongoose.Schema(
     {
         name: String,
@@ -161,7 +160,6 @@ const fullProductSchema = new mongoose.Schema(
         collection: "products"
     }
 )
-  
 
 
 app.post("/user/registar", async(req, res) => {
