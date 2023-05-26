@@ -98,12 +98,13 @@ render() {
                             </p>
                           </div>
                           <div className="col-lg-12">
+                          <h5>Products:</h5>
                             <hr />
                           </div>
                           <div className="col">
                             <div className="d-flex">
                               <div className="col">
-                                <h5>Products:</h5>
+                                
                                 {unidade.listaProdutos.map((item, index) => (
                                 <div className="row gy-3 mb-4 produto_carrinho" key={item.nome}>
                                     <div className="col-lg-2">

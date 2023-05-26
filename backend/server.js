@@ -90,6 +90,7 @@ const ProductDetailsSchema =  new mongoose.Schema(
         brand: String,
         categorieA: String,
         categorieB: String,
+        img: String,
         properties: [ProductPropertiesSchema],
     },
     {
@@ -146,20 +147,6 @@ const EncomendaSchema = new mongoose.Schema(
     }
 )
 
-
-const fullProductSchema = new mongoose.Schema(
-    {
-        name: String,
-        brand: String,
-        categorieA: String,
-        categorieB: String,
-        img: String,
-        properties: [ProductPropertiesSchema],
-    },
-    {
-        collection: "products"
-    }
-)
   
 
 
@@ -669,7 +656,7 @@ app.get("/produto", async (req, res) => {
 // setter
 app.post("/produto", async (req, res) => {
     try{
-        const Produto = mongoose.model("products", fullProductSchema);
+        const Produto = mongoose.model("products", ProductDetailsSchema);
         const {name, brand, categorieA, categorieB, img, properties} = req.body;
 
         await Produto.create({
@@ -730,7 +717,7 @@ app.post("/user/unidadeProducao", async(req, res) => {
 
 app.get("/user/unidadeProducao", async (req, res) => {
     const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-    const Product = mongoose.model("products", fullProductSchema); // Assuming "Product" is the model for the product details
+    const Product = mongoose.model("products", ProductDetailsSchema); // Assuming "Product" is the model for the product details
     
     try {
       const { id } = req.query;

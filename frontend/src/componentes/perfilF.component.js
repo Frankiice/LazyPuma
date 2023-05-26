@@ -562,35 +562,75 @@ render() {
                 </div>
                 <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
                 <h3 class="mb-4">Production Units Settings</h3>
-                <div class="row">
-                {this.state.unidades !== [] ? (
-                    this.state.unidades.map((unidade, index) => (
-                    <div key={unidade._id} class="col-md-6">
-                        <div class="form-group box">
-                        <label>Unit Nº: {index + 1}</label>
-                        <p>Address: {unidade.morada}</p>
-                        <p>Nº of Products: {unidade.listaProdutos.length}</p>
-                        <p>Nº of Vehicles: {unidade.listaVeiculos.length}</p>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil" value={unidade._id} onClick={(e) => {this.setState({ unidadeID: e.target.value }, this.handleUnidade)}}>View Details</button>
+                <div className="row">
+                    {this.state.unidades !== [] ? (
+                        <div className="col">
+                        {this.state.unidades.map((unidade, index) => (
+                            <div className="row gy-3 mb-4" key={unidade._id}>
+                            <div className="col-lg-12">
+                                <div className="me-lg-5">
+                                <div className="d-flex">
+                                    <div className="">
+                                    <h5>{unidade.nome}</h5>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-12">
+                                <div className="row">
+                                <div className="col-lg-6 col-sm-6 col-6">
+                                    <div className="">
+                                    <h6>Address:</h6>
+                                    <h6>{unidade.morada}</h6>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-sm-6">
+                                    <div className="form-outline">
+                                    <h6>Nº of Products:</h6>
+                                    <h6>{unidade.listaProdutos.length}</h6>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-sm-6">
+                                    <div className="form-outline">
+                                    <h6>Nº of Vehicles:</h6>
+                                    <h6>{unidade.listaVeiculos.length}</h6>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-12">
+                                <div className="row">
+                                <div className="col-lg-6 col-sm-6 col-6">
+                                    <div className="form-outline">
+                                    <button class="btn btn-outline-light col-md-3 botaoPerfil" value={unidade._id} onClick={(e) => {this.setState({ unidadeID: e.target.value }, this.handleUnidade)}}>View Details</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <hr />
+                            </div>
+                        ))}
                         </div>
+                    ) : (
+                        <div className="col-md-6">
+                        <div className="form-group box">
+                            <label>Most recent order</label>
+                            <p>Order No.:</p>
+                            <p>Purchase Date:</p>
+                            <p>Value:</p>
+                            <button className="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
+                        </div>
+                        </div>
+                    )}
                     </div>
-                    ))
-                ) : (
-                    <div class="col-md-6">
-                    <div class="form-group box">
-                        <label>Most recent order</label>
-                        <p>Order No.:</p>
-                        <p>Purchase Date:</p>
-                        <p>Value:</p>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-                    </div>
-                    </div>
-                )}
-                </div>
 
+
+
+
+{/* 
                     <div>
                         <a class="btn btn-outline-light col-md-3 botaoPerfil" href="/user/f/up">View all Production Units</a>
-                    </div>
+                    </div> */}
 
                 </div>
 
