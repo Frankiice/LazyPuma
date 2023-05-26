@@ -14,6 +14,8 @@ export default class Catalogo extends Component{
             obj: [],
             categoriaA: window.localStorage.getItem("categoriaA") || "", 
             categoriaB: window.localStorage.getItem("categoriaB") || "",
+            user_lat: window.localStorage.getItem("user_lat") || "",
+            user_lon: window.localStorage.getItem("user_lon") || "",
             brand: window.localStorage.getItem("brand") || "",
             page: 1,
             novoHeader: [],
@@ -96,6 +98,35 @@ export default class Catalogo extends Component{
         window.localStorage.removeItem("search");
     }
 
+    calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of the Earth in kilometers
+      
+        // Convert degrees to radians
+        const lat1Rad = this.degToRad(lat1);
+        const lon1Rad = this.degToRad(lon1);
+        const lat2Rad = this.degToRad(lat2);
+        const lon2Rad = this.degToRad(lon2);
+      
+        // Calculate the differences between the coordinates
+        const dLat = lat2Rad - lat1Rad;
+        const dLon = lon2Rad - lon1Rad;
+      
+        // Haversine formula
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var distance = R * c;
+
+        distance = distance.toFixed(2);
+      
+        return distance; // Distance in kilometers
+      }
+      
+    degToRad(degrees) {
+        return degrees * (Math.PI / 180);
+      }
+      
 
     render(){
     return (
@@ -214,6 +245,14 @@ export default class Catalogo extends Component{
                                             <div class="card-body p-4">
                                                 <div class="text-center">
                                                     <h5 class="fw-bolder">{produto._doc.name}</h5>
+                                                    {console.log("lat1", parseFloat(this.state.lat))}
+                                                    {this.calculateDistance(
+                                                        parseFloat(this.state.user_lat), // Convert to float
+                                                        parseFloat(this.state.user_lon), // Convert to float
+                                                        parseFloat(produto.lat), // Convert to float
+                                                        parseFloat(produto.lon) // Convert to float
+                                                    )}
+                                                    <br></br>
                                                     {produto.price}€
                                                 </div>
                                             </div>
@@ -234,6 +273,13 @@ export default class Catalogo extends Component{
                                             <div class="card-body p-4">
                                                 <div class="text-center">
                                                     <h5 class="fw-bolder">{produto._doc.name}</h5>
+                                                    {this.calculateDistance(
+                                                        parseFloat(this.state.user_lat), // Convert to float
+                                                        parseFloat(this.state.user_lon), // Convert to float
+                                                        parseFloat(produto.lat), // Convert to float
+                                                        parseFloat(produto.lon) // Convert to float
+                                                    )}Km
+                                                    <br></br>
                                                     {produto.price}€
                                                 </div>
                                             </div>

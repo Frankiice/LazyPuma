@@ -6,6 +6,285 @@
 // Select the database to use.
 use('lazypuma');
 
+// db.createCollection("products", {
+//    validator: {
+//       $jsonSchema: {
+//          bsonType: "object",
+//          required: ["name","brand","categorieA","categorieB"],
+//          properties: {
+//             name: {
+//                bsonType: "string",
+//                description: "nome do produto"
+//             },
+//             brand: {
+//                 bsonType: "string",
+//                 description: "marca do produto"
+//              },
+//             categorieA: {
+//                bsonType: "string",
+//                description: "Categoria específica do produto"
+//             },
+//             categorieB: {
+//                bsonType: "string",
+//                description: "Categoria geral do produto"
+//             },
+//          }
+//       }
+//    }
+// })
+const produtos = [
+    {
+        "name": "Art of War",
+        "author": "Sun Tzu",
+        "categorieA": "Historical",
+        "categorieB": "Books"
+    },
+    {
+        "name": "Sherlock Holmes Series",
+        "author": "Arthur Conan Doyle",
+        "categorieA": "Romance",
+        "categorieB": "Books"
+    }
+];
+
+  
+
+
+
+db.products.insertMany(produtos)
+
+// db.products.find({"categorieB": "Gardening"})
+
+
+// db.products.find({"categorieB":"Electronics"});
+
+// db.createCollection("encomenda", {
+//     validator: {
+//        $jsonSchema: {
+//           bsonType: "object",
+//           required: [ "idConsumidor", "preco", "dataEncomenda", "dataEnvio", "prazoCancelamento", "listaUP", "estadoEncomenda" ],
+//           properties: {
+//              idConsumidor: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              },
+//              preco: {
+//                 bsonType: "decimal",
+//                 description: "must be a decimal and is required"
+//              },
+//              dataEncomenda: {
+//                 bsonType: [ "date", "object" ],
+//                 description: "must be a date and is required"
+//              },
+//              dataEnvio: {
+//                 bsonType: [ "date", "object" ],
+//                 description: "must be a date and is required"
+//              },
+//              prazoCancelamento: {
+//                 bsonType: [ "date", "object" ],
+//                 description: "must be a date and is required"
+//              },
+//              listaUP: {
+//                 bsonType: "array",
+//                 description: "must be an array of objects and is required",
+//              },
+//              estadoEncomenda: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              }
+//           }
+//        }
+//     }
+//  })
+ 
+//  a = new ISODate("2022-05-01T12:00:00Z");
+//  b = new ISODate("2022-05-01T12:00:00Z");
+//  c = new ISODate("2022-05-01T12:00:00Z");
+//  db.encomenda.insertOne({
+//     idConsumidor: "6407ae24217578b28520e255",
+//     preco: 1058,
+//     dataEncomenda: a,
+//     dataEnvio: b,
+//     prazoCancelamento: c,
+//     listaUP: [
+//        { idUP: "644e98a4aa9598576ef69b13", idProduct: "642deb9f417e3c685eb237f6", quantidade: 1 },
+//        { idUP: "644e98a4aa9598576ef69b13", idProduct: "642deb9f417e3c685eb237f9", quantidade: 1 },
+//        { idUP: "644e98a4aa9598576ef69b13", idProduct: "642deb9f417e3c685eb237ed", quantidade: 1 }
+//     ],
+//     estadoEncomenda: "Pendente"
+//  })
+ 
+//  db.unidadeProducao.insertOne({
+//     idFornecedor: "644be0196e44b6fc022e11d6",
+//     listaProdutos: [
+//        { idProduto: "642deb9f417e3c685eb237f6", quantidade: 100, preco: 184.00 },
+//        { idProduto: "642deb9f417e3c685eb237f9", quantidade: 500, preco: 325.00 },
+//        { idProduto: "642deb9f417e3c685eb237ed", quantidade: 200, preco: 549.00 }
+//     ],
+//     listaVeiculos: ["644e36390c5ae06af0a5e933"],
+//     lat: "38.736998",
+//     lon: "-9.400755",
+//     morada: "Estrada Nacional 9, 2645-543 Alcabideche"
+//  })
+// db.unidadeProducao.insertOne({
+//     idFornecedor: "123456789",
+//     listaProdutos: [
+//        { idProduto: "789", quantidade: 10, preco: 2.99 },
+//        { idProduto: "456", quantidade: 5, preco: 4.99 },
+//        { idProduto: "123", quantidade: 20, preco: 1.99 }
+//     ],
+//     listaVeiculos: ["987", "654"],
+//     lat: "42.3601",
+//     lon: "-71.0589",
+//     morada: "123 Main St, Boston, MA 02110"
+//  })
+ 
+// db.createCollection("unidadeProducao", {
+//     validator: {
+//        $jsonSchema: {
+//           bsonType: "object",
+//           required: [ "idFornecedor", "listaProdutos", "listaVeiculos", "lat", "lon", "morada" ],
+//           properties: {
+//              idFornecedor: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              },
+//              listaProdutos: {
+//                 bsonType: "array",
+//                 description: "must be an array of string id's from the collection products and is required"
+//              },
+//              listaVeiculos: {
+//                 bsonType: "array",
+//                 description: "must be an array of string id's from the collection veiculos and is required"
+//              },
+//              morada: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              },
+//              lat: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              },
+//              lon: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              }
+//           }
+//        }
+//     }
+//  })
+//  db.unidadeProducao.insertOne({
+//     idFornecedor: "644be0196e44b6fc022e11d6",
+//     listaProdutos: ["642deb9f417e3c685eb237f6", "642deb9f417e3c685eb237f9", "642deb9f417e3c685eb237ed"],
+//     listaVeiculos: ["644e36390c5ae06af0a5e933"],
+//     morada: "123 Main St, Boston, MA 02110",
+//     lat: "42.3601",
+//     lon: "-71.0589"
+//  })
+ 
+// db.createCollection("unidadeProducao", {
+//     validator: {
+//        $jsonSchema: {
+//           bsonType: "object",
+//           required: [ "idFornecedor", "listaProdutos", "listaVeiculos", "lat", "lon" ],
+//           properties: {
+//              idFornecedor: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              },
+//              listaProdutos: {
+//                 bsonType: "array",
+//                 description: "must be an array of string id's from the collection products and is required"
+//              },
+//              listaVeiculos: {
+//                 bsonType: "array",
+//                 description: "must be an array of string id's from the collection veiculos and is required"
+//              },
+//              lat: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              },
+//              lon: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              }
+//           }
+//        }
+//     }
+//  })
+// db.createCollection("unidadeProducao", {
+//     validator: {
+//        $jsonSchema: {
+//           bsonType: "object",
+//           required: [ "idFornecedor", "listaProdutos", "listaVeiculos" ],
+//           properties: {
+//              idFornecedor: {
+//                 bsonType: "string",
+//                 description: "must be a string and is required"
+//              },
+//              listaProdutos: {
+//                 bsonType: "array",
+//                 description: "must be an array of string id's from the collection products and is required"
+//              },
+//              listaVeiculos: {
+//                 bsonType: "array",
+//                 description: "must be an array of string id's from the collection veiculos and is required"
+//              }
+//           }
+//        }
+//     }
+//  })
+  
+// db.products.updateMany({}, {$set: {properties: []}});
+// db.createCollection("products")
+
 // The drop() command destroys all data from a collection.
 // Make sure you run it against the correct database and collection.
-db.users.findOne({email: "testea@teste.com"})
+// db.products.insertOne({
+//   "name": "Electronics",
+//   "subcategories": [
+//     {
+//       "name": "TVs",
+//       "subcategories": [
+//         {
+//           "name": "Samsung"
+//         },
+//         {
+//           "name": "LG"
+//         },
+//         {
+//           "name": "Sony"
+//         }
+//       ]
+//     },
+//     {
+//       "name": "Computers",
+//       "subcategories": [
+//         {
+//           "name": "Laptops"
+//         },
+//         {
+//           "name": "Desktops"
+//         },
+//         {
+//           "name": "Tablets"
+//         }
+//       ]
+//     },
+//     {
+//       "name": "Video Games",
+//       "subcategories": [
+//         {
+//           "name": "Consoles"
+//         },
+//         {
+//           "name": "Games"
+//         }
+//       ]
+//     }
+//   ]
+// });
+// db.products.find();
+// db.products.find({ "name": "Electronics" });
+// db.products.find({ "subcategories.name": "TVs" });
+// db.products.find({ "subcategories.subcategories.name": "Samsung" });
