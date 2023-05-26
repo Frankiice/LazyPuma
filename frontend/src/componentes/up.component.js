@@ -9,7 +9,7 @@ export default class Up extends Component {
     this.state = {
       nickname: "",
       cart: JSON.parse(localStorage.getItem('carrinho')) || [],
-      unidades: [],
+      unidades: [],      
       unidadeID: window.localStorage.getItem("unidadeID"),
     };
   }
@@ -52,10 +52,10 @@ export default class Up extends Component {
         .then((data) => {
             console.log(data, "unidadeData");
             this.setState({ 
-                unidade: data.data,
+                unidades: data,
               });
               
-              console.log("this.state.produto: ", this.state.unidade);
+            //   console.log("this.state.unidade: ", this.state.unidades);
               
         }) 
     }catch(err){
@@ -66,6 +66,7 @@ export default class Up extends Component {
 
 render() {
   const { unidades } = this.state;
+//   console.log("dentro do render: ", unidades)
   return (
     
     <div class="container">
@@ -76,30 +77,121 @@ render() {
             <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Production Units</h2>
             <br></br>
             <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            <div class="row">
+            {/* <div class="row"> */}
                 {unidades.length === 0 ? (
                 <div class="carrinho-vazio">
                     <br></br>
-                    <h5 class="text-secondary justify-content-md-center">Don't have Production Units !</h5>
+                    <h5 class="text-secondary justify-content-md-center">You don't have Production Units!</h5>
                 </div>
                 ) : (
                     unidades.map((unidade, index) => (
-                        <div key={unidade._id} class="col-md-6">
-                            <div class="form-group box">
-                            <h5>{unidade.nome}</h5>
-                            <label>Unit Nº: {index + 1}</label>
+                        <div className="row gy-3 mb-4 produto_carrinho" key={unidade._id}>
+                          <div className="col-lg-12">
+                            <h4>{unidade.nome}</h4>
+                          </div>
+                          <div className="col-lg-6">
                             <p>Address: {unidade.morada}</p>
-                            <p>Coordenates: ({unidade.lat}, {unidade.lon})</p>
-                            <p>Nº of Products: {unidade.listaProdutos.length}</p>
-                            <p>Nº of Vehicles: {unidade.listaVeiculos.length}</p>
-                            <a class="btn-checkout btn btn-outline-light btn-dark col-md-6 mb-1" id="checkout">View Details</a>
+                          </div>
+                          <div className="col-lg-6">
+                            <p>
+                              Coordinates: ({unidade.lat}, {unidade.lon})
+                            </p>
+                          </div>
+                          <div className="col-lg-12">
+                            <hr />
+                          </div>
+                          <div className="col">
+                            <div className="d-flex">
+                              <div className="col">
+                                <h5>Products:</h5>
+                                {unidade.listaProdutos.map((item, index) => (
+                                <div className="row gy-3 mb-4 produto_carrinho" key={item.nome}>
+                                    <div className="col-lg-2">
+                                    <img
+                                        className="border rounded me-3"
+                                        src={item.img}
+                                        style={{ width: '96px', height: '96px' }}
+                                    />
+                                    </div>
+                                    <div className="col-lg-4">
+                                    <div className="me-lg-5">
+                                        <div className="d-flex">
+                                        <div className="">
+                                            <a href="#" className="nav-link">
+                                            {item.name}
+                                            </a>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                                    <div className="">
+                                        <h6>Price</h6>
+                                        <h6>{item.preco}€</h6>
+                                    </div>
+                                    </div>
+                                    <div className="col-lg-2 col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                                    <div className="form-outline">
+                                        <h6>Quantity</h6>
+                                        <input
+                                        type="number"
+                                        id="typeNumber"
+                                        className="form-control form-control-sm"
+                                        style={{
+                                            width: '60px',
+                                            backgroundColor: '#f8f9fa',
+                                            border: '1px solid #e4e8eb',
+                                            display: 'inline-block',
+                                        }}
+                                        defaultValue={item.quantidade}
+                                        min="1"
+                                        onChange={(e) => this.handleQuantityChange(item.nome, parseInt(e.target.value))}
+                                        />
+                                    </div>
+                                    </div>
+                                    <div className="col-lg-2 d-flex justify-content-end">
+                                    <div class="float-md-end">
+                                    <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
+                                    </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                                ))}                 
+                              </div>
                             </div>
+                          </div>
+                          <hr />
+                          <div className="col-lg-12">
+                            <div className="d-flex">
+                              <div className="col-lg-6">
+                                <h5>Vehicles:</h5>
+                                <ul>
+                                  {unidade.listaVeiculos.map((veiculo) => (
+                                    <li key={veiculo.id}>{veiculo.nome}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-lg-12">
+                            <hr />
+                          </div>
+                          <div className="col-lg-12">
+                            <a
+                              href="#"
+                              className="btn btn-light border text-danger icon-hover-danger"
+                              onClick={() => this.removerUnidade(index)}
+                            >
+                              Remove
+                            </a>
+                          </div>
                         </div>
+                      
                 ))
                 )}
                 </div>
                 </div>
-            </div>
+            {/* </div> */}
             </div>
         </div>
 

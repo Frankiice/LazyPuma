@@ -727,20 +727,38 @@ app.post("/user/unidadeProducao", async(req, res) => {
     }
 })
 
-//ir buscar todas as ups
 app.get("/user/unidadeProducao", async (req, res) => {
     const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-  
+    const Product = mongoose.model("products", fullProductSchema); // Assuming "Product" is the model for the product details
+    
     try {
       const { id } = req.query;
-      console.log(id);
+      //   console.log(id);
       const units = await UnidadeProducao.find({
         $or: [
           { _id: id },
           { idFornecedor: id }
         ]
       });
-      res.json(units);
+    //   console.log("units nas unidades: ", units)
+
+      const unitsWithProductDetails = await Promise.all(units.map(async (unit) => {
+        const productList = await Promise.all(unit.listaProdutos.map(async (productEntry) => {
+          const product = await Product.findById(productEntry.idProduto);
+          return {
+            ...product.toObject(),
+            quantidade: productEntry.quantidade,
+            preco: productEntry.preco
+          };
+        }));
+  
+        return {
+          ...unit.toObject(),
+          listaProdutos: productList
+        };
+      }));
+  
+      res.json(unitsWithProductDetails);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "An error occurred while retrieving production units." });
