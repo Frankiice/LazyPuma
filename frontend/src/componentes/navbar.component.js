@@ -52,6 +52,7 @@ export default class Navbar extends Component{
         search: window.localStorage.getItem("search") || "",
         isCartHovered: false,
         carrinho: [],
+        type: "",
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCartHover = this.handleCartHover.bind(this);
@@ -196,6 +197,14 @@ export default class Navbar extends Component{
     window.localStorage.clear();
     window.location.href = "./user/login"
   }
+
+  redirect = () => {
+    if(this.state.type=="consumidor"){  //se for consumidor
+      window.location.href = "/user/c";
+    }else{ //se for fornecedor
+      window.location.href = "/user/f";
+    }
+  }
   
   componentDidMount() {
     const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
@@ -225,7 +234,9 @@ export default class Navbar extends Component{
         .then((res) => res.json())
         .then((data) => {
           console.log(data, "userData");
-          this.setState({ nickname: data.data.nickname });
+          this.setState({ nickname: data.data.nickname,
+                          type: data.data.type});
+          
           window.localStorage.setItem("user_lat", data.data.lat);
           window.localStorage.setItem("user_lon", data.data.lon);
         });
@@ -303,7 +314,7 @@ export default class Navbar extends Component{
             <i class="bi bi-person-circle"></i> Hello {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" href="/user/c">Profile</a></li>
+              <li><a class="dropdown-item" onClick={this.redirect}>Profile</a></li>
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" href="#">Records</a></li>
               <li><hr class="dropdown-divider"></hr></li>

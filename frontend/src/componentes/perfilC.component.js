@@ -207,7 +207,7 @@ handleSubmit(e){
 
 render() {
     return (
-        <div class="container">
+        <div class="container perfil">
         {/* <h1 class="mb-5">Account Settings</h1> */}
         <div class="bg-dark shadow rounded d-block d-sm-flex">
             <div class="profile-tab-nav border-right">
@@ -219,23 +219,23 @@ render() {
                 </div>
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
-                        <i class="fa fa-home text-center mr-1"></i> 
+                        <i class="bi bi-person-fill"></i>
                         Account
                     </a>
                     <a class="nav-link" id="encomendas-tab" data-toggle="pill" href="#encomendas" role="tab" aria-controls="encomendas" aria-selected="false">
-                        <i class="fa fa-key text-center mr-1"></i> 
+                        <i class="bi bi-archive-fill"></i> 
                         Orders
                     </a>
                     <a class="nav-link" id="relatorios-tab" data-toggle="pill" href="#relatorios" role="tab" aria-controls="relatorios" aria-selected="false">
-                        <i class="fa fa-key text-center mr-1"></i> 
+                        <i class="bi bi-file-earmark-bar-graph"></i>
                         Reports
                     </a>
                     <a class="nav-link" id="logout-tab" data-toggle="pill" href="#logout" role="tab" aria-controls="logout" aria-selected="false">
-                        <i class="fa fa-user text-center mr-1"></i> 
+                        <i class="bi bi-box-arrow-right"></i>
                         Logout
                     </a>
                     <a class="nav-link" id="remocao-tab" data-toggle="pill" href="#remocao" role="tab" aria-controls="remocao" aria-selected="false">
-                        <i class="fa fa-tv text-center mr-1"></i> 
+                        <i class="bi bi-door-open-fill"></i> 
                         Remove Account
                     </a>
                     <a class="nav-link" id="notification-tab" data-toggle="pill" href="#notification" role="tab" aria-controls="notification" aria-selected="false">

@@ -5,8 +5,10 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { FarBootstrap } from "react-icons/fa";
 
 function Details(props) {
+  const total = props.calcularTotal(props.state.carrinho);
   return (
   console.log('props:', props),
+  <div class="encomenda">
   <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
     <div class="p-5 col-md-4 order-md-2 mb-4">
       <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -22,36 +24,14 @@ function Details(props) {
               <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
               <h6>{item.nome}</h6>
               {/* <small class="text-muted">Brief description</small> */}
-              <span class="text-muted">{item.preco}</span>
+              <span class="text-muted">{item.preco}€</span>
         </div>
       </div>
+    
     ))}
-
-        {/* </div> */}
-    {/* </div> */}
           
           
-       {/* <li class="list-group-item d-flex justify-content-between lh-condensed">
-         <div>
-           <h6 class="my-0">Product name</h6>
-           <small class="text-muted">Brief description</small>
-         </div>
-         <span class="text-muted">$12</span>
-       </li>
-       <li class="list-group-item d-flex justify-content-between lh-condensed">
-         <div>
-           <h6 class="my-0">Second product</h6>
-           <small class="text-muted">Brief description</small>
-         </div>
-         <span class="text-muted">$8</span>
-       </li>
-       <li class="list-group-item d-flex justify-content-between lh-condensed">
-         <div>
-           <h6 class="my-0">Third item</h6>
-           <small class="text-muted">Brief description</small>
-         </div>
-         <span class="text-muted">$5</span>
-       </li>
+      {/*
        <li class="list-group-item d-flex justify-content-between bg-light">
          <div class="text-success">
            <h6 class="my-0">Promo code</h6>
@@ -60,8 +40,8 @@ function Details(props) {
          <span class="text-success">-$5</span>
        </li> */}
        <li class="list-group-item d-flex justify-content-between">
-         <span>Total (USD)</span>
-         <strong>$20</strong>
+         <span>Total</span>
+         <strong>{total}€</strong>
        </li>
       </ul>
 
@@ -167,6 +147,7 @@ function Details(props) {
       </form>
     </div>
   </div>
+  </div>
   );
 }
 
@@ -178,11 +159,15 @@ function Payment(props) {
 //     intent: "capture",
 //     "data-client-token": "abc123xyz==",
 // };
+
+  const total = props.calcularTotal(props.state.carrinho);
+
   return (
+    <div class="encomenda">
     <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
       <div class="p-5 col-md-4 order-md-2 mb-4">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-muted">Your cart</span>
+          <span>Your cart</span>
           <span class="badge badge-secondary badge-pill">3</span>
         </h4>
         <ul class="list-group mb-3">
@@ -192,13 +177,13 @@ function Payment(props) {
               <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
               <h6>{item.nome}</h6>
               {/* <small class="text-muted">Brief description</small> */}
-              <span class="text-muted">{item.preco}</span>
+              <span class="text-muted">{item.preco}€</span>
         </div>
       </div>
        ))}
        <li class="list-group-item d-flex justify-content-between">
-         <span>Total (USD)</span>
-         <strong>$20</strong>
+         <span>Total</span>
+         <strong>{total}€</strong>
        </li>
         </ul>
 
@@ -284,17 +269,20 @@ function Payment(props) {
         </form>
       </div>
     </div>
+    </div>
   );
 }
 
 function Confirmation() {
   return (
+  <div class="encomenda">
   <div>
     <h2>Confirmaçao a dizer que foi sucesso ou nao!</h2>
     <h2>Ou seja, se o email for diferente ao da conta logada dá erro</h2>
     <h2>(maybe) se a morada nao existe, dá erro</h2>
     <h2>se a API de pagamento (nos tinhamos pensado em paypal) der erro, entao a "transaçao" foi mal, dá erro</h2>
     <h2>etc</h2>
+  </div>
   </div>
   );
 }
@@ -343,6 +331,14 @@ export default class Encomenda extends Component {
       completedTextColor: 'white',
       inactiveTextColor: 'black',
     };
+  }
+
+  calcularTotal(carrinho) {
+    let total = 0;
+    carrinho.forEach(function(item) {
+      total += item.preco_original * item.quantidade;
+    });
+    return total;
   }
 
   handleNextStep () {
@@ -412,10 +408,10 @@ countTotalProducts() {
 getSectionComponent(s) {
   const { state } = this;
   switch(s) {
-    case 0: return <Details state={state} handleNextStep={state.handleNextStep}/>;
-    case 1: return <Payment  state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep}/>;
+    case 0: return <Details state={state} handleNextStep={state.handleNextStep} calcularTotal={this.calcularTotal} />;
+    case 1: return <Payment  state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep} calcularTotal={this.calcularTotal} />;
     case 2: return <Confirmation />;
-    default: return <Details state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep}/>;
+    default: return <Details state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep} calcularTotal={this.calcularTotal} />;
   }
 }
 
