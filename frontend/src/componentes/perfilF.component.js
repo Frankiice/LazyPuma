@@ -82,8 +82,11 @@ componentDidMount(){
 
 handleUnidade(e){
     const {unidadeID} = this.state;
-    console.log("produto no unidadeID ",unidadeID);
     window.localStorage.setItem("unidadeID", unidadeID);
+    window.location.href = "/user/f/up";
+};
+
+handleNovaUnidade(e){
     window.location.href = "/user/f/up";
 };
 
@@ -562,7 +565,8 @@ render() {
                 </div>
                 <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
                 <h3 class="mb-4">Production Units Settings</h3>
-                <div className="row">
+                <div className="row" style={{ maxHeight: '400px', overflowY: 'auto', overflowX: 'hidden' }}>
+                    <div class="border-top border-bottom pt-2">
                     {this.state.unidades !== [] ? (
                         <div className="col">
                         {this.state.unidades.map((unidade, index) => (
@@ -622,7 +626,21 @@ render() {
                         </div>
                         </div>
                     )}
+
                     </div>
+
+                    <br></br>
+                    <div className="col-lg-12">
+                    <div className="row">
+                        <div className="col-lg-6 col-sm-6 col-6">
+                        <div className="form-outline">
+                            <button class="btn btn-outline-light col-md-3 botaoPerfil mt-3" onClick={this.handleNovaUnidade}>Add Production Unit</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+                
 
 
 

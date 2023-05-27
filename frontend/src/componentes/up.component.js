@@ -8,10 +8,32 @@ export default class Up extends Component {
     super(props);
     this.state = {
       nickname: "",
+      idFornecedor: "",
       cart: JSON.parse(localStorage.getItem('carrinho')) || [],
       unidades: [],      
       unidadeID: window.localStorage.getItem("unidadeID"),
+      listaProdutos: [],
+      listaVeiculos: [],
+      matricula: "",
+      vBrand: "",
+      vCapacity: "",
+      upName: "",
+      rua: "",
+      localidade: "",
+      freguesia: "",
+      concelho: "",
+      cod_postal: "",
+      cidade: "",
+      pais: "Portugal",
+      upAddress: "",
+      upCapacity: "",
+      lat: "",
+      lon: "",
+      msgMorada: ""
     };
+    this.getCoordenadas = this.getCoordenadas.bind(this);
+    this.handleUnidadeProducao = this.handleUnidadeProducao.bind(this);
+
   }
 
   componentDidMount(){
@@ -30,55 +52,120 @@ export default class Up extends Component {
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "userData");
-        this.setState({ nickname: data.data.nickname,});
+        this.setState({ nickname: data.data.nickname,
+                        idFornecedor: data.data._id});
     })
 
     const {unidadeID} = this.state;
-    console.log("unidadeID",unidadeID);
-    try{
-        const base_url = "http://localhost:5000/user/unidadeProducao"
-        const url = `${base_url}?id=${unidadeID}`;
-        console.log(url);
-        fetch( url, {
-        method:"GET",
-        crossDomain:true,
-        headers:{
-            "Content-type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
-        },
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data, "unidadeData");
-            this.setState({ 
-                unidades: data,
-              });
-              
-            //   console.log("this.state.unidade: ", this.state.unidades);
-              
-        }) 
-    }catch(err){
-        console.log(err);
+    if(unidadeID != null){
+      console.log("unidadeID",unidadeID);
+      try{
+          const base_url = "http://localhost:5000/user/unidadeProducao"
+          const url = `${base_url}?id=${unidadeID}`;
+          console.log(url);
+          fetch( url, {
+          method:"GET",
+          crossDomain:true,
+          headers:{
+              "Content-type":"application/json",
+              Accept:"application/json",
+              "Access-Control-Allow-Origin":"*",
+          },
+          })
+          .then((res) => res.json())
+          .then((data) => {
+              console.log(data, "unidadeData");
+              this.setState({ 
+                  unidades: data,
+                });
+                
+              //   console.log("this.state.unidade: ", this.state.unidades);
+                
+          }) 
+      }catch(err){
+          console.log(err);
+      }
+    }else{
+      console.log("unidadeID",unidadeID);
     }
 }
+
+getCoordenadas(e) {
+  e.preventDefault();
+  const { rua, localidade, freguesia, concelho, cod_postal, cidade, pais } = this.state;
+  const upAddress = `${rua}, ${localidade}, ${freguesia}, ${concelho}, ${cod_postal}, ${cidade}, ${pais}`;
+  console.log(upAddress);
+  this.setState({upAddress: upAddress})
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${encodeURIComponent(upAddress)}`;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data && data.length > 0) {
+        const { lat, lon } = data[0];
+        this.setState({ lat, lon, msgMorada: "Valid address, you can proceed with your registration" });
+        console.log("entra no if")
+      } else {
+        this.setState({ msgMorada: "Error: Invalid address, please correct your address" });
+        console.log("entra no else")
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      this.setState({ msgMorada: "Error validating address, please try again later" });
+    });
+}
+
+handleUnidadeProducao(e){
+  e.preventDefault();
+  const { idFornecedor, upName, upAddress, listaProdutos, listaVeiculos, lat, lon, upCapacity} = this.state;
+  console.log(idFornecedor, upName, upAddress, listaProdutos, listaVeiculos, lat,lon, upCapacity);
+  fetch("http://localhost:5000/user/unidadeProducao",{
+      method:"POST",
+      crossDomain:true,
+      headers:{
+          "Content-type":"application/json",
+          Accept:"application/json",
+          "Access-Control-Allow-Origin":"*",
+      },
+      body:JSON.stringify({
+          idFornecedor,
+          upName, 
+          upAddress, 
+          listaProdutos, 
+          listaVeiculos,
+          lat,
+          lon, 
+          upCapacity
+      }),
+  })
+  .then((res) => res.json())
+  .then((data) => {
+      console.log(data, "unidadeProducao");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+};
   
 
 render() {
-  const { unidades } = this.state;
+  const { unidadeID, unidades } = this.state;
 //   console.log("dentro do render: ", unidades)
   return (
     
     <div class="container">
     <div class="row">
-        <div class="col-lg-9">
         <div class="card d-flex border shadow-0 custom-card">
             <div class="m-4">
             <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Production Units</h2>
             <br></br>
             <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            {/* <div class="row"> */}
-                {unidades.length === 0 ? (
+ 
+
+             {unidadeID != null ? 
+            
+                unidades.length === 0 ? (
                 <div class="carrinho-vazio">
                     <br></br>
                     <h5 class="text-secondary justify-content-md-center">You don't have Production Units!</h5>
@@ -103,7 +190,7 @@ render() {
                           </div>
                           <div className="col">
                             <div className="d-flex">
-                              <div className="col">
+                              <div className="col" style={{ maxHeight: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
                                 
                                 {unidade.listaProdutos.map((item, index) => (
                                 <div className="row gy-3 mb-4 produto_carrinho" key={item.nome}>
@@ -189,23 +276,112 @@ render() {
                         </div>
                       
                 ))
-                )}
-                </div>
-                </div>
-            {/* </div> */}
-            </div>
-        </div>
+                )
+              :
+              <form onSubmit={this.handleSubmit}>
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label>Name</label>
+                          <div class="input-field "> 
+                          <input type="text" id="upName" onChange={(e => this.setState({ vBrand: e.target.value }))} placeholder="Renault" required/>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="border-top border-bottom pb-2">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>Street</label>
+                                  <div class="input-field "> 
+                                  <input type="text" id="rua" onChange={(e => this.setState({ rua: e.target.value }))} placeholder={this.state.rua}/>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>Location</label>
+                                  <div class="input-field "> 
+                                  <input type="text" id="localidae" onChange={(e => this.setState({ localidade: e.target.value }))} placeholder={this.state.localidade}/>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>Parish</label>
+                                  <div class="input-field "> 
+                                  <input type="text" id="freguesia" onChange={(e => this.setState({ freguesia: e.target.value }))} placeholder={this.state.freguesia}/>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>County</label>
+                                  <div class="input-field "> 
+                                  <input type="text" id="concelho" onChange={(e => this.setState({ concelho: e.target.value }))} placeholder={this.state.concelho}/>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>Postal Code</label>
+                                  <div class="input-field "> 
+                                  <input type="text" pattern="\d{4}-\d{3}" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} placeholder={this.state.cod_postal}/>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label>City</label>
+                                  <div class="input-field "> 
+                                  <input type="text" id="cidade" onChange={(e => this.setState({ cidade: e.target.value }))} placeholder={this.state.cidade}/>
+                                  </div>
+                              </div>
+                          </div>
+                  </div>
+                  <button onClick={this.getCoordenadas} class="btn btn-outline-light btn-dark col-md-3">
+                      Verify Address
+                      </button>
+                      {this.state.msgMorada != "" ? 
+                      
+                      <label><br></br>{this.state.msgMorada}</label>
+                      :
+                      <label></label>
+                      }
+                  </div>                     
 
-        <div class="col-lg-3">
-            <div class="card shadow-0 border" style={{"height": "200px"}}>
-                <div class="card-body d-flex flex-column justify-content-between">
-                <h3 class="d-flex justify-content-center">New Production Unit ?</h3>
-                <div class="mt-3">
-                    <a href="./user/encomenda" class="btn btn-success w-100 shadow-0 mb-2"><i class="bi bi-plus-circle"></i> Create</a>
+                  <div class="col-md-6">
+                      <div class="form-group">
+                          <label>Capacity (m&sup3;)  </label>
+                          <div class="input-field "> 
+                              <input type="text" id="upCapacity" onChange={(e => this.setState({ capacity: e.target.value }))} placeholder="10 U+00B3." required/>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div>
+                      {this.state.msgMorada != "" ? 
+                        this.state.msgMorada == "Error: Invalid address, please correct your address" ?
+                            <label></label>
+                            :
+                            <button type="submit" class="btn btn-outline-light btn-dark col-md-3 botaoPerfil" onClick={this.handleUnidadeProducao}>Create</button>
+
+                    :
+                        <button type="submit" class="btn btn-outline-light btn-dark col-md-3 botaoPerfil" onClick={this.handleUnidadeProducao}>Create</button>
+                        }
+
+                  </div>
+              </div>
+          </form>
+
+              
+              
+              }
                 </div>
                 </div>
+
             </div>
-            </div>
+
 
         </div>
         
@@ -214,4 +390,36 @@ render() {
   );
   }
 }
+
+// codigo para criar novo veiculo
+    //  <form onSubmit={this.handleSubmit}>
+    //           <div class="row">
+    //               <div class="col-md-6">
+    //                   <div class="form-group">
+    //                       <label>Licence Plate</label>
+    //                       <div class="input-field "> 
+    //                       <input type="text" pattern="(?:\d{2}-[A-Z]{2}-\d{2}|[A-Z]{2}-\d{2}-\d{2}|\d{2}-\d{2}-[A-Z]{2}|[A-Z]{2}-\d{2}-[A-Z]{2}|[A-Z]{2}-[A-Z]{2}-\d{2}|\d{2}-[A-Z]{2}-[A-Z]{2})" id="matricula" onChange={(e => this.setState({ matricula: e.target.value }))} placeholder="AB-12-34" required/>
+    //                       </div>
+    //                   </div>
+    //               </div>
+    //               <div class="col-md-6">
+    //                   <div class="form-group">
+    //                       <label>Vehicle Brand</label>
+    //                       <div class="input-field ">
+    //                           <input type="text" id="vBrand" onChange={(e => this.setState({ vBrand: e.target.value }))} placeholder="Renault" required/>
+    //                       </div>
+    //                   </div>
+    //               </div>
+    //               <div class="col-md-6">
+    //                   <div class="form-group">
+    //                       <label>Capacity</label><label className="text-muted">U+00B3.</label>
+    //                       <div class="input-field "> 
+    //                           <input type="text" id="vCapacity" onChange={(e => this.setState({ capacity: e.target.value }))} placeholder="10 U+00B3." required/>
+    //                       </div>
+    //                   </div>
+    //               </div>
+
+    //               <button type="submit" class="btn-checkout btn btn-outline-light btn-dark" >Create</button>
+    //           </div>
+    //       </form>
 

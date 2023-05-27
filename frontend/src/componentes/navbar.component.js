@@ -249,7 +249,9 @@ export default class Navbar extends Component{
     window.localStorage.removeItem("produtoID");
     window.localStorage.removeItem("objSearch");
     window.localStorage.removeItem("search");
-
+    window.localStorage.removeItem("unidadeID");
+    window.localStorage.removeItem("user_lat");
+    window.localStorage.removeItem("user_lon");
 
 }
     // const sendSearchData = (query) => {

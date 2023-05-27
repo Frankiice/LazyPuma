@@ -119,12 +119,13 @@ const VeiculoSchema = new mongoose.Schema(
 const UnidadeProducaoSchema = new mongoose.Schema(
     {
     idFornecedor: String,
+    nome: String,
+    morada: String,
     listaProdutos: [ProdutoSchema],
     listaVeiculos: [VeiculoSchema],
     lat: String,
     lon: String,
-    morada: String,
-    nome: String
+    capacidade: String,
     },
     {
     collection: "unidadeProducao",
@@ -698,15 +699,17 @@ app.post("/user/encomenda", async(req, res) => {
 app.post("/user/unidadeProducao", async(req, res) => {
     try{
         const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-        const {idFornecedor, listaProdutos, listaVeiculos, lat, lon, morada} = req.body;
+        const {idFornecedor, upName, upAddress, listaProdutos, listaVeiculos, lat, lon, upCapacity} = req.body;
 
         await UnidadeProducao.create({
             idFornecedor,
-            listaProdutos,
+            upName, 
+            upAddress, 
+            listaProdutos, 
             listaVeiculos,
             lat,
-            lon,
-            morada,
+            lon, 
+            upCapacity
         });
         res.send({ status: "ok" });
         
