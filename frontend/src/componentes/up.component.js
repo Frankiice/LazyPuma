@@ -147,6 +147,10 @@ handleUnidadeProducao(e){
     console.log(error);
   });
 };
+
+handleVeiculo(e){
+  window.location.href = "/user/f/veiculo";
+}
   
 
 render() {
@@ -248,32 +252,81 @@ render() {
                               </div>
                             </div>
                           </div>
-                          <hr />
                           <div className="col-lg-12">
-                            <div className="d-flex">
-                              <div className="col-lg-6">
-                                <h5>Vehicles:</h5>
-                                <ul>
-                                  {unidade.listaVeiculos.map((veiculo) => (
-                                    <li key={veiculo.id}>{veiculo.nome}</li>
-                                  ))}
-                                </ul>
-                              </div>
+                          <div className="row">
+                            <div className="col-md-9"></div>
+                            <div className="col-md-3 text-right">
+                              <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleProduto}>Create New Product</button>
                             </div>
                           </div>
-                          <div className="col-lg-12">
-                            <hr />
                           </div>
+                          <hr />
                           <div className="col-lg-12">
-                            <a
-                              href="#"
-                              className="btn btn-light border text-danger icon-hover-danger"
-                              onClick={() => this.removerUnidade(index)}
-                            >
-                              Remove
-                            </a>
+                            <h5>Vehicles:</h5>
+                            <hr />
+                            <div className="col">
+                            <div className="d-flex">
+                            <div className="col" style={{ maxHeight: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
+                            {unidade.listaVeiculos.map((veiculo, index) => (
+                            <div className="row gy-3 mb-4 produto_carrinho" key={veiculo._id}>
+                                <div className="col-lg-6">
+                                <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                                <div className="">
+                                    <h6>Licence Plate</h6>
+                                    <h6>{veiculo.matricula}€</h6>
+                                </div>
+                                </div>
+                                </div>
+
+                                <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                                <div className="">
+                                    <h6>Brand</h6>
+                                    <h6>{veiculo.marca}</h6>
+                                </div>
+                                </div>
+                                <div className="col-lg-2 col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                                <div className="form-outline">
+                                    <h6>Capacity</h6>
+                                    <input
+                                    type="number"
+                                    id="typeNumber"
+                                    className="form-control form-control-sm"
+                                    style={{
+                                        width: '60px',
+                                        backgroundColor: '#f8f9fa',
+                                        border: '1px solid #e4e8eb',
+                                        display: 'inline-block',
+                                    }}
+                                    defaultValue={veiculo.capacidade}
+                                    min="1"
+                                    onChange={(e) => this.handleQuantityChange(veiculo._id, parseInt(e.target.value))}
+                                    />
+                                </div>
+                                </div>
+                                <div className="col-lg-2 d-flex justify-content-end">
+                                <div class="float-md-end">
+                                <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
+                                </div>
+                                </div>
+                                <hr />
+                            </div>
+                            ))}
+                              
+                                
+                            </div>
                           </div>
                         </div>
+                      </div>
+                      <div className="col-lg-12">
+                      <div className="row">
+                        <div className="col-md-9"></div>
+                        <div className="col-md-3 text-right">
+                          <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleVeiculo}>Create New Vehicle</button>
+                        </div>
+                      </div>
+                      </div>
+                        
+                    </div>
                       
                 ))
                 )
@@ -284,7 +337,7 @@ render() {
                       <div class="form-group">
                           <label>Name</label>
                           <div class="input-field "> 
-                          <input type="text" id="upName" onChange={(e => this.setState({ vBrand: e.target.value }))} placeholder="Renault" required/>
+                          <input type="text" id="upName" onChange={(e => this.setState({ upName: e.target.value }))} placeholder="Renault" required/>
                           </div>
                       </div>
                   </div>
@@ -354,7 +407,7 @@ render() {
                       <div class="form-group">
                           <label>Capacity (m&sup3;)  </label>
                           <div class="input-field "> 
-                              <input type="text" id="upCapacity" onChange={(e => this.setState({ capacity: e.target.value }))} placeholder="10 U+00B3." required/>
+                              <input type="number" id="upCapacity" onChange={(e => this.setState({ upCapacity: e.target.value }))} placeholder="10 U+00B3." required/>
                           </div>
                       </div>
                   </div>
@@ -391,35 +444,5 @@ render() {
   }
 }
 
-// codigo para criar novo veiculo
-    //  <form onSubmit={this.handleSubmit}>
-    //           <div class="row">
-    //               <div class="col-md-6">
-    //                   <div class="form-group">
-    //                       <label>Licence Plate</label>
-    //                       <div class="input-field "> 
-    //                       <input type="text" pattern="(?:\d{2}-[A-Z]{2}-\d{2}|[A-Z]{2}-\d{2}-\d{2}|\d{2}-\d{2}-[A-Z]{2}|[A-Z]{2}-\d{2}-[A-Z]{2}|[A-Z]{2}-[A-Z]{2}-\d{2}|\d{2}-[A-Z]{2}-[A-Z]{2})" id="matricula" onChange={(e => this.setState({ matricula: e.target.value }))} placeholder="AB-12-34" required/>
-    //                       </div>
-    //                   </div>
-    //               </div>
-    //               <div class="col-md-6">
-    //                   <div class="form-group">
-    //                       <label>Vehicle Brand</label>
-    //                       <div class="input-field ">
-    //                           <input type="text" id="vBrand" onChange={(e => this.setState({ vBrand: e.target.value }))} placeholder="Renault" required/>
-    //                       </div>
-    //                   </div>
-    //               </div>
-    //               <div class="col-md-6">
-    //                   <div class="form-group">
-    //                       <label>Capacity</label><label className="text-muted">U+00B3.</label>
-    //                       <div class="input-field "> 
-    //                           <input type="text" id="vCapacity" onChange={(e => this.setState({ capacity: e.target.value }))} placeholder="10 U+00B3." required/>
-    //                       </div>
-    //                   </div>
-    //               </div>
 
-    //               <button type="submit" class="btn-checkout btn btn-outline-light btn-dark" >Create</button>
-    //           </div>
-    //       </form>
 

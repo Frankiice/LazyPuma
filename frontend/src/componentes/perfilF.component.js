@@ -78,6 +78,7 @@ componentDidMount(){
                     cod_postal: moradaArray[4],
                     cidade: moradaArray[5]});
     })
+    window.localStorage.removeItem("unidadeID")
 }
 
 handleUnidade(e){
@@ -565,11 +566,12 @@ render() {
                 </div>
                 <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
                 <h3 class="mb-4">Production Units Settings</h3>
-                <div className="row" style={{ maxHeight: '400px', overflowY: 'auto', overflowX: 'hidden' }}>
-                    <div class="border-top border-bottom pt-2">
+                <div className="row" style={{ maxHeight: '600px', overflowY: 'auto', overflowX: 'hidden' }}>
+                  
                     {this.state.unidades !== [] ? (
                         <div className="col">
                         {this.state.unidades.map((unidade, index) => (
+                        <div class="border-top border-bottom pt-2">
                             <div className="row gy-3 mb-4" key={unidade._id}>
                             <div className="col-lg-12">
                                 <div className="me-lg-5">
@@ -613,9 +615,12 @@ render() {
                             </div>
                             <hr />
                             </div>
+                        </div>
                         ))}
                         </div>
+                        
                     ) : (
+                        <div class="border-top border-bottom pt-2">
                         <div className="col-md-6">
                         <div className="form-group box">
                             <label>Most recent order</label>
@@ -625,9 +630,10 @@ render() {
                             <button className="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
                         </div>
                         </div>
+                    </div>
                     )}
 
-                    </div>
+                    
 
                     <br></br>
                     <div className="col-lg-12">

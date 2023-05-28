@@ -109,7 +109,10 @@ const ProdutoSchema = new mongoose.Schema(
 
 const VeiculoSchema = new mongoose.Schema(
     {
-        idVeiculo: String
+        idVeiculo: String,
+        matricula: String,
+        marca: String,
+        capacidade: String
     },
     {
         collection: "veiculos"
@@ -700,16 +703,19 @@ app.post("/user/unidadeProducao", async(req, res) => {
     try{
         const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
         const {idFornecedor, upName, upAddress, listaProdutos, listaVeiculos, lat, lon, upCapacity} = req.body;
+        var nome = upName;
+        var morada = upAddress;
+        var capacidade = upCapacity;
 
         await UnidadeProducao.create({
             idFornecedor,
-            upName, 
-            upAddress, 
+            nome, 
+            morada, 
             listaProdutos, 
             listaVeiculos,
             lat,
             lon, 
-            upCapacity
+            capacidade
         });
         res.send({ status: "ok" });
         
@@ -758,20 +764,35 @@ app.get("/user/unidadeProducao", async (req, res) => {
   
 
 
-app.post("/user/veiculos", async(req, res) => {
-    try{
-        const Veiculo = mongoose.model("veiculos", VeiculoSchema);
-        const {idVeiculo} = req.body;
-
-        await Veiculo.create({
-            idVeiculo
-        });
-        res.send({ status: "ok" });
-        
-    }catch (error) {
-        res.send({ status: "error", error: error })
+  app.post("/user/veiculos", async (req, res) => {
+    try {
+      const Veiculo = mongoose.model("veiculos", VeiculoSchema);
+      const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  
+      const { unidadeID, matricula, vBrand, vCapacity } = req.body;
+      var marca = vBrand;
+      var capacidade = vCapacity;
+  
+      const newVeiculo = await Veiculo.create({
+        matricula,
+        capacidade,
+        marca
+      });
+  
+      const unidadeProducao = await UnidadeProducao.findOne({ unidadeID: unidadeID });
+  
+      if (unidadeProducao) {
+        unidadeProducao.listaVeiculos.push(newVeiculo);
+        await unidadeProducao.save();
+      }
+  
+      res.send({ status: "ok" });
+    } catch (error) {
+      res.send({ status: "error", error: error });
     }
-})
+  });
+  
+  
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
