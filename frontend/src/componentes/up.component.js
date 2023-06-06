@@ -151,6 +151,10 @@ handleUnidadeProducao(e){
 handleVeiculo(e){
   window.location.href = "/user/f/veiculo";
 }
+
+handleProduto(e){
+  window.location.href = "/user/f/produto";
+}
   
 
 render() {
@@ -273,7 +277,7 @@ render() {
                                 <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
                                 <div className="">
                                     <h6>Licence Plate</h6>
-                                    <h6>{veiculo.matricula}€</h6>
+                                    <h6>{veiculo.matricula}</h6>
                                 </div>
                                 </div>
                                 </div>
@@ -286,7 +290,7 @@ render() {
                                 </div>
                                 <div className="col-lg-2 col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
                                 <div className="form-outline">
-                                    <h6>Capacity</h6>
+                                    <h6>Capacity (m³)</h6>
                                     <input
                                     type="number"
                                     id="typeNumber"
@@ -430,8 +434,14 @@ render() {
               
               
               }
+               <div>
+                <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/up">Back </a>
                 </div>
                 </div>
+                
+                </div>
+
+               
 
             </div>
 
