@@ -5,166 +5,147 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { FarBootstrap } from "react-icons/fa";
 
 function Details(props) {
+  const total = props.calcularTotal(props.state.carrinho);
   return (
   console.log('props:', props),
-  <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
-    <div class="p-5 col-md-4 order-md-2 mb-4">
-      <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span >Your cart</span>
-        <span class="badge badge-secondary badge-pill">{props.state.count}</span>
-      </h4>
-      <ul class="list-group mb-3">
-      {/* <div class="container-cart"> */}
-      {/* <div class="items-carrinho"> */}
-      { props.state.carrinho && props.state.carrinho.map(item => (
-      <div class="container-cart">
-        <div class="carrinho-item" key={item.nome}>
-              <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
-              <h6>{item.nome}</h6>
-              {/* <small class="text-muted">Brief description</small> */}
-              <span class="text-muted">{item.preco}</span>
+  <div class="encomenda">
+    <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
+      <div class="p-5 col-md-4 order-md-2 mb-4">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span >Your cart</span>
+          <span class="badge badge-secondary badge-pill">{props.state.count}</span>
+        </h4>
+        <ul class="list-group mb-3">
+        {/* <div class="container-cart"> */}
+        {/* <div class="items-carrinho"> */}
+        { props.state.carrinho && props.state.carrinho.map(item => (
+        <div class="container-cart">
+          <div class="carrinho-item" key={item.nome}>
+                <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
+                <h6>{item.nome}</h6>
+                {/* <small class="text-muted">Brief description</small> */}
+                <span class="text-muted">{item.preco}€</span>
+          </div>
         </div>
+      
+      ))}
+            
+            
+        {/*
+        <li class="list-group-item d-flex justify-content-between bg-light">
+          <div class="text-success">
+            <h6 class="my-0">Promo code</h6>
+            <small>EXAMPLECODE</small>
+          </div>
+          <span class="text-success">-$5</span>
+        </li> */}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Total</span>
+          <strong>{total}€</strong>
+        </li>
+        </ul>
+
+        {/* <form class="card p-2" style={{height:'10%'}}>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Promo code"></input>
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-secondary">Redeem</button>
+            </div>
+          </div>
+        </form> */}
       </div>
-    ))}
-
-        {/* </div> */}
-    {/* </div> */}
-          
-          
-       {/* <li class="list-group-item d-flex justify-content-between lh-condensed">
-         <div>
-           <h6 class="my-0">Product name</h6>
-           <small class="text-muted">Brief description</small>
-         </div>
-         <span class="text-muted">$12</span>
-       </li>
-       <li class="list-group-item d-flex justify-content-between lh-condensed">
-         <div>
-           <h6 class="my-0">Second product</h6>
-           <small class="text-muted">Brief description</small>
-         </div>
-         <span class="text-muted">$8</span>
-       </li>
-       <li class="list-group-item d-flex justify-content-between lh-condensed">
-         <div>
-           <h6 class="my-0">Third item</h6>
-           <small class="text-muted">Brief description</small>
-         </div>
-         <span class="text-muted">$5</span>
-       </li>
-       <li class="list-group-item d-flex justify-content-between bg-light">
-         <div class="text-success">
-           <h6 class="my-0">Promo code</h6>
-           <small>EXAMPLECODE</small>
-         </div>
-         <span class="text-success">-$5</span>
-       </li> */}
-       <li class="list-group-item d-flex justify-content-between">
-         <span>Total (USD)</span>
-         <strong>$20</strong>
-       </li>
-      </ul>
-
-      {/* <form class="card p-2" style={{height:'10%'}}>
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Promo code"></input>
-          <div class="input-group-append">
-            <button type="submit" class="btn btn-secondary">Redeem</button>
+      <div class="p-5 col-md-8 order-md-1">
+        <h4 class="mb-3">Billing address</h4>
+        <form class="needs-validation" onSubmit={props.handleNextStep}>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstName">First name</label>
+              <div class="input-field bg-dark"> 
+                <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="firstName" placeholder={props.state.fName} required></input>
+              </div>
+              <div class="invalid-feedback">
+                Valid first name is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lastName">Last name</label>
+              <div class="input-field bg-dark"> 
+                <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="lastName" placeholder={props.state.lName} required></input>
+              </div>
+              <div class="invalid-feedback">
+                Valid last name is required.
+              </div>
+            </div>
           </div>
-        </div>
-      </form> */}
-    </div>
-    <div class="p-5 col-md-8 order-md-1">
-      <h4 class="mb-3">Billing address</h4>
-      <form class="needs-validation" noValidate onSubmit={props.handleNextStep}>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="firstName">First name</label>
+
+          <div class="mb-3">
+            <label for="email">Email <span class="text-muted">(Optional)</span></label>
+              <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" placeholder={props.state.email}></input>
+            <div class="invalid-feedback">
+              Please enter a valid email address for shipping updates.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="address">Address</label>
             <div class="input-field bg-dark"> 
-              <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="firstName" placeholder={props.state.fName} required></input>
+              <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="address" placeholder={props.state.morada} required></input>
             </div>
             <div class="invalid-feedback">
-              Valid first name is required.
+              Please enter your shipping address.
             </div>
           </div>
-          <div class="col-md-6 mb-3">
-            <label for="lastName">Last name</label>
-            <div class="input-field bg-dark"> 
-              <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="lastName" placeholder={props.state.lName} required></input>
-            </div>
-            <div class="invalid-feedback">
-              Valid last name is required.
-            </div>
-          </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="email">Email <span class="text-muted">(Optional)</span></label>
-            <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" placeholder={props.state.email}></input>
-          <div class="invalid-feedback">
-            Please enter a valid email address for shipping updates.
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="firstName">NIF</label>
+                <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="NIF" placeholder={props.state.nif} required></input>
+              <div class="invalid-feedback">
+                Valid NIF is required.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="lastName">Phone Number</label>
+                <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="phone" placeholder={props.state.phone} required></input>
+              <div class="invalid-feedback">
+                Valid Phone Number is required.
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="address">Address</label>
-          <div class="input-field bg-dark"> 
-            <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="address" placeholder={props.state.morada} required></input>
-          </div>
-          <div class="invalid-feedback">
-            Please enter your shipping address.
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label for="firstName">NIF</label>
-              <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="NIF" placeholder={props.state.nif} required></input>
-            <div class="invalid-feedback">
-              Valid NIF is required.
+          {/* <div class="row">
+            <div class="col-md-5 mb-3">
+              <label for="country">Country</label>
+              <select class="custom-select d-block w-100 rounded" id="country" required>
+                <option value="">Choose...</option>
+                <option>Portugal</option>
+              </select>
+              <div class="invalid-feedback">
+                Please select a valid country.
+              </div>
             </div>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label for="lastName">Phone Number</label>
-              <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="phone" placeholder={props.state.phone} required></input>
-            <div class="invalid-feedback">
-              Valid Phone Number is required.
+            <div class="col-md-4 mb-3">
+              <label for="state">State</label>
+              <select class="custom-select d-block w-100 rounded" id="state" required>
+                <option value="">Choose...</option>
+                <option>California</option>
+              </select>
+              <div class="invalid-feedback">
+                Please provide a valid state.
+              </div>
             </div>
-          </div>
-        </div>
-
-        {/* <div class="row">
-          <div class="col-md-5 mb-3">
-            <label for="country">Country</label>
-            <select class="custom-select d-block w-100 rounded" id="country" required>
-              <option value="">Choose...</option>
-              <option>Portugal</option>
-            </select>
-            <div class="invalid-feedback">
-              Please select a valid country.
+            <div class="col-md-3 mb-3">
+              <label for="zip">Zip</label>
+              <input type="text" class="form-control" id="zip" placeholder="" required></input>
+              <div class="invalid-feedback">
+                Zip code required.
+              </div>
             </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="state">State</label>
-            <select class="custom-select d-block w-100 rounded" id="state" required>
-              <option value="">Choose...</option>
-              <option>California</option>
-            </select>
-            <div class="invalid-feedback">
-              Please provide a valid state.
-            </div>
-          </div>
-          <div class="col-md-3 mb-3">
-            <label for="zip">Zip</label>
-            <input type="text" class="form-control" id="zip" placeholder="" required></input>
-            <div class="invalid-feedback">
-              Zip code required.
-            </div>
-          </div>
-        </div> */}
-        <hr class="mb-4"></hr>
-        <button class="btn btn-primary btn-lg btn-block" type="submit" onSubmit={props.handleNextStep}>Continue to checkout</button>
-      </form>
+          </div> */}
+          <hr class="mb-4"></hr>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+        </form>
+      </div>
     </div>
   </div>
   );
@@ -178,11 +159,15 @@ function Payment(props) {
 //     intent: "capture",
 //     "data-client-token": "abc123xyz==",
 // };
+
+  const total = props.calcularTotal(props.state.carrinho);
+
   return (
+    <div class="encomenda">
     <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
       <div class="p-5 col-md-4 order-md-2 mb-4">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span class="text-muted">Your cart</span>
+          <span>Your cart</span>
           <span class="badge badge-secondary badge-pill">3</span>
         </h4>
         <ul class="list-group mb-3">
@@ -192,13 +177,13 @@ function Payment(props) {
               <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
               <h6>{item.nome}</h6>
               {/* <small class="text-muted">Brief description</small> */}
-              <span class="text-muted">{item.preco}</span>
+              <span class="text-muted">{item.preco}€</span>
         </div>
       </div>
        ))}
        <li class="list-group-item d-flex justify-content-between">
-         <span>Total (USD)</span>
-         <strong>$20</strong>
+         <span>Total</span>
+         <strong>{total}€</strong>
        </li>
         </ul>
 
@@ -227,6 +212,7 @@ function Payment(props) {
             onApprove={async (data, actions) => {
               const details = await actions.order.capture();
               const name = details.payer.name.given_name;
+              props.state.paymentSuccess = true;
               alert("Transaction completed by " + name);
           }}
         />
@@ -280,21 +266,32 @@ function Payment(props) {
             </div>
           </div>
           <hr class="mb-4"></hr> */}
+          <button class="btn btn-primary btn-lg btn-block" type="button" onClick={props.handlePreviousStep}>Go back</button>
           <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
         </form>
       </div>
     </div>
+    </div>
   );
 }
 
-function Confirmation() {
+function Confirmation(props) {
   return (
-  <div>
+  <div class="encomenda">
+  {/* <div>
     <h2>Confirmaçao a dizer que foi sucesso ou nao!</h2>
     <h2>Ou seja, se o email for diferente ao da conta logada dá erro</h2>
     <h2>(maybe) se a morada nao existe, dá erro</h2>
     <h2>se a API de pagamento (nos tinhamos pensado em paypal) der erro, entao a "transaçao" foi mal, dá erro</h2>
     <h2>etc</h2>
+  </div> */}
+  <div className="encomenda">
+    {props.state.paymentSuccess ? (
+      <h2>Payment was successful!</h2>
+    ) : (
+      <h2>Payment failed. Please try again.</h2>
+    )}
+  </div>
   </div>
   );
 }
@@ -326,6 +323,7 @@ export default class Encomenda extends Component {
       phone: "",
       carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
       count: "",
+      paymentSuccess: false,
   };
   this.componentDidMount = this.componentDidMount.bind(this);
 
@@ -345,12 +343,28 @@ export default class Encomenda extends Component {
     };
   }
 
-  handleNextStep () {
+  calcularTotal(carrinho) {
+    let total = 0;
+    carrinho.forEach(function(item) {
+      total += item.preco_original * item.quantidade;
+    });
+    return total;
+  }
+
+  handleNextStep = () => {
     this.setState({ activeStep: this.state.activeStep + 1 });
   }
   
-  handlePreviousStep () {
+  handlePreviousStep = () => {
     this.setState({ activeStep: this.state.activeStep - 1 });
+  }
+
+  handlePaymentSuccess = () => {
+    this.setState({ paymentSuccess: true }); // Update paymentSuccess to true
+  }
+
+  handlePaymentFailure = () => {
+    this.setState({ paymentSuccess: false }); // Update paymentSuccess to false
   }
 
   componentDidMount(){
@@ -412,10 +426,10 @@ countTotalProducts() {
 getSectionComponent(s) {
   const { state } = this;
   switch(s) {
-    case 0: return <Details state={state} handleNextStep={state.handleNextStep}/>;
-    case 1: return <Payment  state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep}/>;
-    case 2: return <Confirmation />;
-    default: return <Details state={state} handleNextStep={state.handleNextStep} handlePreviousStep={state.handlePreviousStep}/>;
+    case 0: return <Details state={state} handleNextStep={this.handleNextStep} calcularTotal={this.calcularTotal} />;
+    case 1: return <Payment  state={state} handleNextStep={this.handleNextStep} handlePreviousStep={this.handlePreviousStep} calcularTotal={this.calcularTotal} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} />;
+    case 2: return <Confirmation state={state} handlePreviousStep={this.handlePreviousStep} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} />;
+    default: return <Details state={state} handleNextStep={this.handleNextStep} handlePreviousStep={this.handlePreviousStep} calcularTotal={this.calcularTotal} />;
   }
 }
 

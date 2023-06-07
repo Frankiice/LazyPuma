@@ -19,6 +19,9 @@ import Catalogo from "./componentes/catalogo.component";
 import Produto from "./componentes/produto.component";
 import Encomenda from "./componentes/encomenda.component";
 import Cart from "./componentes/cart.component";
+import Up from "./componentes/up.component";
+import Fveiculo from "./componentes/fVeiculo.component";
+import Fproduto from "./componentes/fProduto.component";
 
 
 
@@ -44,6 +47,12 @@ function App() {
         <Route path="/produto" element={<Produto/>}/>
         <Route path="/user/encomenda" element={<Encomenda/>}/>
         <Route path ="/cart" element={<Cart/>}/>
+        <Route path ="/user/f/up" element={<Up/>}/>
+        <Route path ="/user/f/veiculo" element={<Fveiculo/>}/>
+        <Route path ="/user/f/produto" element={<Fproduto/>}/>
+
+
+
 
 
 

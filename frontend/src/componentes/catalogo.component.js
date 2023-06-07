@@ -241,7 +241,12 @@ export default class Catalogo extends Component{
                                 <div key={produto._doc._id}>
                                     <div class="col mb-5">
                                         <div class="card h-100 crop">
-                                            <img class="card-img-top" src={produto._doc.img} alt="..." />
+                                        {produto._doc.img.startsWith('http') ? (
+                                            <img class="card-img" src={produto._doc.img} alt="..." />
+                                        ) : (
+                                            <img class="card-img" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
+
+                                        )}
                                             <div class="card-body p-4">
                                                 <div class="text-center">
                                                     <h5 class="fw-bolder">{produto._doc.name}</h5>
@@ -269,7 +274,12 @@ export default class Catalogo extends Component{
                                 <div key={produto._doc._id}>
                                     <div class="col mb-5">
                                         <div class="card h-100 crop">
-                                            <img class="card-img-top" src={produto._doc.img} alt="..." />
+                                            {produto._doc.img.startsWith('http') ? (
+                                                <img class="card-img" src={produto._doc.img} alt="..." />
+                                            ) : (
+                                                <img class="card-img" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
+
+                                            )}
                                             <div class="card-body p-4">
                                                 <div class="text-center">
                                                     <h5 class="fw-bolder">{produto._doc.name}</h5>

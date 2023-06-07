@@ -6,6 +6,7 @@ const passport = require("passport");
 const cookieSession = require("cookie-session");
 const passportSetup = require("./passport");
 const authRoute = require("./routes/auth");
+const multer = require('multer');
 
 const app = express();
 
@@ -90,6 +91,7 @@ const ProductDetailsSchema =  new mongoose.Schema(
         brand: String,
         categorieA: String,
         categorieB: String,
+        img: String,
         properties: [ProductPropertiesSchema],
     },
     {
@@ -108,7 +110,10 @@ const ProdutoSchema = new mongoose.Schema(
 
 const VeiculoSchema = new mongoose.Schema(
     {
-        idVeiculo: String
+        idVeiculo: String,
+        matricula: String,
+        marca: String,
+        capacidade: String
     },
     {
         collection: "veiculos"
@@ -118,11 +123,13 @@ const VeiculoSchema = new mongoose.Schema(
 const UnidadeProducaoSchema = new mongoose.Schema(
     {
     idFornecedor: String,
+    nome: String,
+    morada: String,
     listaProdutos: [ProdutoSchema],
     listaVeiculos: [VeiculoSchema],
     lat: String,
     lon: String,
-    morada: String,
+    capacidade: String,
     },
     {
     collection: "unidadeProducao",
@@ -145,20 +152,6 @@ const EncomendaSchema = new mongoose.Schema(
     }
 )
 
-
-const fullProductSchema = new mongoose.Schema(
-    {
-        name: String,
-        brand: String,
-        categorieA: String,
-        categorieB: String,
-        img: String,
-        properties: [ProductPropertiesSchema],
-    },
-    {
-        collection: "products"
-    }
-)
   
 
 
@@ -628,7 +621,8 @@ app.get("/produto", async (req, res) => {
         "_id": 0,
         "listaProdutos.$": 1,
         "lat": 1,
-        "lon": 1
+        "lon": 1,
+        "morada": 1
         });
     
         if (result) {
@@ -636,14 +630,16 @@ app.get("/produto", async (req, res) => {
             ...product,
             price: result.listaProdutos[0].preco,
             lat: result.lat,
-            lon: result.lon
+            lon: result.lon,
+            morada: result.morada
         });
         } else {
         productsWPrice.push({
             ...product,
             price: 0, // Set a default value for price
             lat: 0,   // Set default values for lat and lon
-            lon: 0
+            lon: 0,
+            morada: ""
         });
         }
         
@@ -662,26 +658,102 @@ app.get("/produto", async (req, res) => {
     }
 });
 
-// setter
-app.post("/produto", async (req, res) => {
-    try{
-        const Produto = mongoose.model("products", fullProductSchema);
-        const {name, brand, categorieA, categorieB, img, properties} = req.body;
 
-        await Produto.create({
-            name,
-            brand, 
-            categorieA, 
-            categorieB, 
-            img, 
-            properties
+
+// Configure multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const uploadDir = 'public/images'; // Specify the destination folder where the uploaded files will be stored
+      fs.mkdirSync(uploadDir, { recursive: true }); // Create the destination directory if it doesn't exist
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      // Generate a unique filename for the uploaded file
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      cb(null, file.fieldname + '-' + uniqueSuffix);
+    },
+  });
+  
+  const upload = multer({ storage });
+  
+const path = require('path');
+
+// Other server configurations and routes...
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+  
+
+// setter
+const fs = require('fs');
+app.post('/produto', upload.single('img'), async (req, res) => {
+    try {
+      const file = req.file;
+
+      const { unidadeID, name, pBrand, categorieA, categorieB, quantity, price } = req.body;
+      const filePath = `public/images/${file.filename}`;
+      console.log(unidadeID, name, pBrand, categorieA, categorieB, quantity, price);
+  
+      // Save the file to the storage system
+      fs.rename(file.path, filePath, (err) => {
+        if (err) {
+          // Handle error if the file couldn't be saved
+          console.error(err);
+          res.status(500).json({ status: 'error', error: 'Failed to save the file' });
+          return;
+        }
+      
+        const Produto = mongoose.model('products', ProductDetailsSchema);
+  
+        // Create a new product document
+        const newProduct = new Produto({
+          name,
+          brand: pBrand,
+          categorieA,
+          categorieB,
+          img: filePath,
+          properties: [],
         });
-        res.send({ status: "ok" });
-        
-    }catch (error) {
-        res.send({ status: "error", error: error })
+   
+  
+        // Save the new product to the database
+        newProduct.save(async (error, product) => {
+          if (error) {
+            res.send({ status: 'error', error });
+
+          } else {
+     
+            const UnidadeProducao = mongoose.model('unidadeProducao', UnidadeProducaoSchema);
+  
+            try {
+              // Find the UnidadeProducao document by ID
+              const unidade = await UnidadeProducao.findById(unidadeID);
+  
+              // Add the new product to the listaProdutos array with quantity and price
+              unidade.listaProdutos.push({
+                idProduto: product._id,
+                quantidade: parseInt(quantity),
+                preco: parseInt(price),
+              });
+  
+              // Save the updated UnidadeProducao document
+              await unidade.save();
+  
+              res.send({ status: 'ok' });
+            } catch (error) {
+              res.send({ status: 'error', error });
+            }
+          }
+        });
+      });
+    } catch (error) {
+      res.send({ status: 'error', error });
     }
-});
+  });
+  
+  
+
 
 app.post("/user/encomenda", async(req, res) => {
     try{
@@ -707,15 +779,20 @@ app.post("/user/encomenda", async(req, res) => {
 app.post("/user/unidadeProducao", async(req, res) => {
     try{
         const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-        const {idFornecedor, listaProdutos, listaVeiculos, lat, lon, morada} = req.body;
+        const {idFornecedor, upName, upAddress, listaProdutos, listaVeiculos, lat, lon, upCapacity} = req.body;
+        var nome = upName;
+        var morada = upAddress;
+        var capacidade = upCapacity;
 
         await UnidadeProducao.create({
             idFornecedor,
-            listaProdutos,
+            nome, 
+            morada, 
+            listaProdutos, 
             listaVeiculos,
             lat,
-            lon,
-            morada,
+            lon, 
+            capacidade
         });
         res.send({ status: "ok" });
         
@@ -724,20 +801,75 @@ app.post("/user/unidadeProducao", async(req, res) => {
     }
 })
 
-app.post("/user/veiculos", async(req, res) => {
-    try{
-        const Veiculo = mongoose.model("veiculos", VeiculoSchema);
-        const {idVeiculo} = req.body;
+app.get("/user/unidadeProducao", async (req, res) => {
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+    const Product = mongoose.model("products", ProductDetailsSchema); // Assuming "Product" is the model for the product details
+    
+    try {
+      const { id } = req.query;
+      //   console.log(id);
+      const units = await UnidadeProducao.find({
+        $or: [
+          { _id: id },
+          { idFornecedor: id }
+        ]
+      });
+    //   console.log("units nas unidades: ", units)
 
-        await Veiculo.create({
-            idVeiculo
-        });
-        res.send({ status: "ok" });
-        
-    }catch (error) {
-        res.send({ status: "error", error: error })
+      const unitsWithProductDetails = await Promise.all(units.map(async (unit) => {
+        const productList = await Promise.all(unit.listaProdutos.map(async (productEntry) => {
+          const product = await Product.findById(productEntry.idProduto);
+          return {
+            ...product.toObject(),
+            quantidade: productEntry.quantidade,
+            preco: productEntry.preco
+          };
+        }));
+  
+        return {
+          ...unit.toObject(),
+          listaProdutos: productList
+        };
+      }));
+  
+      res.json(unitsWithProductDetails);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "An error occurred while retrieving production units." });
     }
-})
+  });
+  
+
+
+  app.post("/user/veiculos", async (req, res) => {
+    try {
+      const Veiculo = mongoose.model("veiculos", VeiculoSchema);
+      const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  
+      const { unidadeID, matricula, vBrand, vCapacity } = req.body;
+      var marca = vBrand;
+      var capacidade = vCapacity;
+  
+      const newVeiculo = await Veiculo.create({
+        matricula,
+        capacidade,
+        marca
+      });
+  
+      const unidadeProducao = await UnidadeProducao.findOne({ unidadeID: unidadeID });
+  
+      if (unidadeProducao) {
+        unidadeProducao.listaVeiculos.push(newVeiculo);
+        await unidadeProducao.save();
+      }
+  
+      res.send({ status: "ok" });
+    } catch (error) {
+      res.send({ status: "error", error: error });
+    }
+  });
+  
+  
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);

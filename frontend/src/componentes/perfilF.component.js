@@ -28,6 +28,9 @@ export default class PerfilF extends Component{
             userRemoveFailed: "",
             userUpdated: window.localStorage.getItem("userUpdated"),
             msgMorada: "",
+            id: "",
+            unidades: [],
+            unidadeID: "",
 
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +38,7 @@ export default class PerfilF extends Component{
         this.preHandleRemove = this.preHandleRemove.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
         this.getCoordenadas = this.getCoordenadas.bind(this);
-
+        this.getUnidades = this.getUnidades.bind(this);
 
     }
 
@@ -64,7 +67,8 @@ componentDidMount(){
                     nif: data.data.nif,
                     email: data.data.email,
                     phone: data.data.phone,
-                    password: data.data.password,});
+                    password: data.data.password,
+                    id: data.data._id});
         var moradaArray = data.data.morada.split(",");
         this.setState({
                     rua: moradaArray[0],
@@ -74,7 +78,19 @@ componentDidMount(){
                     cod_postal: moradaArray[4],
                     cidade: moradaArray[5]});
     })
+    window.localStorage.removeItem("unidadeID")
 }
+
+handleUnidade(e){
+    const {unidadeID} = this.state;
+    window.localStorage.setItem("unidadeID", unidadeID);
+    window.location.href = "/user/f/up";
+};
+
+handleNovaUnidade(e){
+    window.location.href = "/user/f/up";
+};
+
 logOut = () => {
     window.localStorage.clear();
     window.location.href = "./login"
@@ -204,47 +220,75 @@ handleSubmit(e){
         window.location.reload();
     })
 };
+
+getUnidades(e){
+    const {id} = this.state;
+    // var id = idFornecedor
+    try{
+        const base_url = "http://localhost:5000/user/unidadeProducao"
+        const url = `${base_url}?id=${id}`;
+        fetch( url, {
+        method:"GET",
+        crossDomain:true,
+        headers:{
+            "Content-type":"application/json",
+            Accept:"application/json",
+            "Access-Control-Allow-Origin":"*",
+        },
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data, "unidade de producao");
+            this.setState({ 
+                unidades: data,
+                });                
+        }) 
+    }catch(err){
+        console.log(err);
+    }
+}
       //AO CARREGAR NO UPDATE ENVIA PARA USER/UPDATE
 
 render() {
     return (
-        <div class="container">
+      
+        <div class="container perfil">
         {/* <h1 class="mb-5">Account Settings</h1> */}
         <div class="bg-dark shadow rounded d-block d-sm-flex">
             <div class="profile-tab-nav border-right">
                 <div class="p-4">
                     <div class="img-circle text-center mb-3">
-                    <button class="btn btn-outline-dark btn-xl rounded-circle" id="butaoPerfil" title="perfil">bebé</button> 
+                    <button class="btn btn-outline-dark btn-xl rounded-circle" id="butaoPerfil" title="perfil"></button> 
                     </div>
                     <h4 class="text-center">{this.state.userData.nickname}</h4>
                 </div>
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
-                        <i class="fa fa-home text-center mr-1"></i> 
+                        <i class="bi bi-person-fill"></i>
                         Account
                     </a>
                     <a class="nav-link" id="encomendas-tab" data-toggle="pill" href="#encomendas" role="tab" aria-controls="encomendas" aria-selected="false">
-                        <i class="fa fa-key text-center mr-1"></i> 
+                        <i class="bi bi-archive-fill"></i> 
                         Orders
                     </a>
                     <a class="nav-link" id="relatorios-tab" data-toggle="pill" href="#relatorios" role="tab" aria-controls="relatorios" aria-selected="false">
-                        <i class="fa fa-key text-center mr-1"></i> 
+                        <i class="bi bi-file-earmark-bar-graph"></i>
                         Reports
                     </a>
                     <a class="nav-link" id="logout-tab" data-toggle="pill" href="#logout" role="tab" aria-controls="logout" aria-selected="false">
-                        <i class="fa fa-user text-center mr-1"></i> 
+                        <i class="bi bi-box-arrow-right"></i>
                         Logout
                     </a>
                     <a class="nav-link" id="remocao-tab" data-toggle="pill" href="#remocao" role="tab" aria-controls="remocao" aria-selected="false">
-                        <i class="fa fa-tv text-center mr-1"></i> 
+                        <i class="bi bi-door-open-fill"></i>
                         Remove Account
                     </a>
-                    <a class="nav-link" id="up-tab" data-toggle="pill" href="#up" role="tab" aria-controls="up" aria-selected="false">
-                        <i class="fa fa-bell text-center mr-1"></i> 
+                    <a class="nav-link" id="up-tab" data-toggle="pill" href="#up" role="tab" aria-controls="up" aria-selected="false" onClick={() => this.getUnidades()}>
+                        <i class="fa fa-home text-center mr-1"></i> 
                         Production Units
                     </a>
                     <a class="nav-link" id="veiculos-tab" data-toggle="pill" href="#veiculos" role="tab" aria-controls="veiculos" aria-selected="false">
-                        <i class="fa fa-bell text-center mr-1"></i> 
+                        <i class="fa fa-fw fa-bus"></i>
                         Vehicles
                     </a>
                 </div>
@@ -300,7 +344,7 @@ render() {
                                         <div class="form-group">
                                             <label>Street</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ rua: e.target.value }))} placeholder={this.state.rua}/>
+                                            <input type="text" class="bg-dark text-white" id="rua" onChange={(e => this.setState({ rua: e.target.value }))} placeholder={this.state.rua}/>
                                             </div>
                                         </div>
                                     </div>
@@ -308,7 +352,7 @@ render() {
                                         <div class="form-group">
                                             <label>Location</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ localidade: e.target.value }))} placeholder={this.state.localidade}/>
+                                            <input type="text" class="bg-dark text-white" id="localidae" onChange={(e => this.setState({ localidade: e.target.value }))} placeholder={this.state.localidade}/>
                                             </div>
                                         </div>
                                     </div>
@@ -316,7 +360,7 @@ render() {
                                         <div class="form-group">
                                             <label>Parish</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ freguesia: e.target.value }))} placeholder={this.state.freguesia}/>
+                                            <input type="text" class="bg-dark text-white" id="freguesia" onChange={(e => this.setState({ freguesia: e.target.value }))} placeholder={this.state.freguesia}/>
                                             </div>
                                         </div>
                                     </div>
@@ -324,7 +368,7 @@ render() {
                                         <div class="form-group">
                                             <label>County</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ concelho: e.target.value }))} placeholder={this.state.concelho}/>
+                                            <input type="text" class="bg-dark text-white" id="concelho" onChange={(e => this.setState({ concelho: e.target.value }))} placeholder={this.state.concelho}/>
                                             </div>
                                         </div>
                                     </div>
@@ -332,7 +376,7 @@ render() {
                                         <div class="form-group">
                                             <label>Postal Code</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" pattern="\d{4}-\d{3}" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cod_postal: e.target.value }))} placeholder={this.state.cod_postal}/>
+                                            <input type="text" pattern="\d{4}-\d{3}" class="bg-dark text-white" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} placeholder={this.state.cod_postal}/>
                                             </div>
                                         </div>
                                     </div>
@@ -340,7 +384,7 @@ render() {
                                         <div class="form-group">
                                             <label>City</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cidade: e.target.value }))} placeholder={this.state.cidade}/>
+                                            <input type="text" class="bg-dark text-white" id="cidade" onChange={(e => this.setState({ cidade: e.target.value }))} placeholder={this.state.cidade}/>
                                             </div>
                                         </div>
                                     </div>
@@ -521,35 +565,97 @@ render() {
                     </div>
                 </div>
                 <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
-                    <h3 class="mb-4">Production Units Settings</h3>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="up1"/>
-                            <label class="form-check-label" for="up1">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum accusantium accusamus, neque cupiditate quis
-                            </label>
+                <h3 class="mb-4">Production Units Settings</h3>
+                <div className="row" style={{ maxHeight: '600px', overflowY: 'auto', overflowX: 'hidden' }}>
+                  
+                    {this.state.unidades !== [] ? (
+                        <div className="col">
+                        {this.state.unidades.map((unidade, index) => (
+                        <div class="border-top border-bottom pt-2">
+                            <div className="row gy-3 mb-4" key={unidade._id}>
+                            <div className="col-lg-12">
+                                <div className="me-lg-5">
+                                <div className="d-flex">
+                                    <div className="">
+                                    <h5>{unidade.nome}</h5>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-12">
+                                <div className="row">
+                                <div className="col-lg-6 col-sm-6 col-6">
+                                    <div className="">
+                                    <h6>Address:</h6>
+                                    <h6>{unidade.morada}</h6>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-sm-6">
+                                    <div className="form-outline">
+                                    <h6>Nº of Products:</h6>
+                                    <h6>{unidade.listaProdutos.length}</h6>
+                                    </div>
+                                </div>
+                                <div className="col-lg-3 col-sm-6">
+                                    <div className="form-outline">
+                                    <h6>Nº of Vehicles:</h6>
+                                    <h6>{unidade.listaVeiculos.length}</h6>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-12">
+                                <div className="row">
+                                <div className="col-lg-6 col-sm-6 col-6">
+                                    <div className="form-outline">
+                                    <button class="btn btn-outline-light col-md-3 botaoPerfil" value={unidade._id} onClick={(e) => {this.setState({ unidadeID: e.target.value }, this.handleUnidade)}}>View Details</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <hr />
+                            </div>
+                        </div>
+                        ))}
+                        </div>
+                        
+                    ) : (
+                        <div class="border-top border-bottom pt-2">
+                        <div className="col-md-6">
+                        <div className="form-group box">
+                            <label>Most recent order</label>
+                            <p>Order No.:</p>
+                            <p>Purchase Date:</p>
+                            <p>Value:</p>
+                            <button className="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
+                        </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="up2"/>
-                            <label class="form-check-label" for="up2">
-                                hic nesciunt repellat perferendis voluptatum totam porro eligendi.
-                            </label>
+                    )}
+
+                    
+
+                    <br></br>
+                    <div className="col-lg-12">
+                    <div className="row">
+                        <div className="col-lg-6 col-sm-6 col-6">
+                        <div className="form-outline">
+                            <button class="btn btn-outline-light col-md-3 botaoPerfil mt-3" onClick={this.handleNovaUnidade}>Add Production Unit</button>
+                        </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="up3"/>
-                            <label class="form-check-label" for="up3">
-                                commodi fugiat molestiae tempora corporis. Sed dignissimos suscipit
-                            </label>
-                        </div>
                     </div>
+            </div>
+                
+
+
+
+
+{/* 
                     <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
-                    </div>
+                        <a class="btn btn-outline-light col-md-3 botaoPerfil" href="/user/f/up">View all Production Units</a>
+                    </div> */}
+
                 </div>
 
                 <div class="tab-pane fade" id="veiculos" role="tabpanel" aria-labelledby="veiculos-tab">
