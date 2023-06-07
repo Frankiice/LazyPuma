@@ -10,11 +10,12 @@ export default class Fproduto extends Component {
       nickname: "",
       idFornecedor: "",   
       unidadeID: window.localStorage.getItem("unidadeID"),
-      img: "",
+      img: null,
+      previewImage: null,
       name: "",
       pBrand: "",
-      categoriaA: "",
-      categoriaB: "",
+      categorieA: "",
+      categorieB: "",
       categorias:[],
       subcategorias: [],
       quantity: "",
@@ -23,6 +24,7 @@ export default class Fproduto extends Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
 
 
 
@@ -52,45 +54,48 @@ export default class Fproduto extends Component {
 }
 
 
-handleSubmit(e){
-  e.preventDefault();
-  const {unidadeID, img,  name,  pBrand,  categoriaA, categoriaB, quantity,  price} = this.state;
-  console.log(unidadeID, img,  name,  pBrand,  categoriaA, categoriaB, quantity,  price);
-  fetch("http://localhost:5000/produto",{
-      method:"POST",
-      crossDomain:true,
-      headers:{
-          "Content-type":"application/json",
-          Accept:"application/json",
-          "Access-Control-Allow-Origin":"*",
-      },
-      body:JSON.stringify({
-        unidadeID, 
-        img,  
-        name,  
-        pBrand,  
-        categoriaA, 
-        categoriaB, 
-        quantity,  
-        price
-      }),
-  })
-  .then((res) => res.json())
-  .then((data) => {
-      console.log(data, "veiculo");
-      this.setState({ msg: "Vehicle added Successfully"});
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-};
+handleSubmit(e) {
+    e.preventDefault();
+    const { unidadeID, img, name, pBrand, categorieA, categorieB, quantity, price } = this.state;
+    console.log(unidadeID, img, name, pBrand, categorieA, categorieB, quantity, price);
+
+    const formData = new FormData();
+    formData.append('unidadeID', unidadeID);
+    formData.append('name', name);
+    formData.append('pBrand', pBrand);
+    formData.append('categorieA', categorieA);
+    formData.append('categorieB', categorieB);
+    formData.append('quantity', quantity);
+    formData.append('price', price);
+    formData.append('img', img); // 'img' should match the field name specified in the backend (upload.single('img'))
+  
+    fetch("http://localhost:5000/produto", {
+      method: "POST",
+      crossDomain: true,
+      body: formData
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, "produto");
+        if (data.status === "error") {
+          throw new Error(data.error); // Throw an error if the response has the status "error"
+        }
+        this.setState({ msg: "Product added Successfully" });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ msg: "Error adding Product" }); // Set the error message in the state
+      });
+  }
+  
+  
 
 handleCategoryChange(e) {
     const selectedCategory = e.target.value;
     const subcategoryList = this.getSubcategories(selectedCategory);
     this.setState({
-      categoriaB: selectedCategory,
-      categoriaA: '',
+      categorieB: selectedCategory,
+      categorieA: '',
       subcategorias: subcategoryList  // Reset subcategory options when category changes
       
     });
@@ -104,18 +109,24 @@ const subcategoryMap = {
     Animals: ['Furniture', 'Accessories', 'Supplies', 'Apparel', 'Toys'],
     Cosmetics: ['Brows', 'Skincare', 'Lipstick', 'Foundation', 'Eye Shadow', 'Concealer', 'Setting Spray'],
     DIY: ['Power Tools', 'Measuring Tools', 'Woodworking Tools', 'Cutting Tools', 'Sanders', 'Rotary Tools', 'Baby Food', 'Drill Bits'],
-    Smartphones: ['Smartphones'],
+    Smartphones: ['Smartphones', 'Accessories', 'Smartwatches', 'Telephones', 'Sound Accessories'],
     Decoration: ['Home Textiles', 'Lighting', 'Plant Hanger', 'Wall Decor'],
     Gardening: ['Hoses', 'Pruning Shears', 'Fertilizers', 'Hedge Trimmers', 'Raised Garden Beds', 'Indoor Gardening', 'String Trimmers', 'Garden Kneelers', 'Soil'],
-    Gaming: ['Console'],
-    TVs: ['TVs'],
+    Gaming: ['Console', 'Games', 'Gaming PC', 'Gaming Accessories'],
+    TVs: ['TVs', 'SoundBars', 'Projectors' ,'TV Accessories'],
     Toys: ['Building Toys', 'Dolls and Accessories', 'Preschool Toys', 'Vehicles', 'Outdoor Toys', 'Arts and Crafts', 'Card Games', 'Blaster Guns', 'Stacking Games', 'Collectibles', 'Preschool Playsets', 'Play Dough Sets', 'Kids Electronics'],
     Appliances: ['Refrigerators', 'Vacuum Cleaners', 'Kitchen Appliances', 'Washing Machines', 'Dryers'],
-    Photography: ['Cameras'],
-    Books: [],
+    Photography: ['Cameras', 'Drones', 'Video', 'Lenses', 'Photography Accessories'],
+    Books: ['Romance', "Children's and Youth Literature", 'Self help', 'Manga', 'Technical books'],
    };
 return subcategoryMap[selectedCategory] || [];
 }
+
+handleImageChange(event) {
+    const file = event.target.files[0];
+    this.setState({ img: file,
+                    previewImage: URL.createObjectURL(file) });
+  }
   
 
 render() {
@@ -130,112 +141,128 @@ render() {
             <br></br>
             <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
             <form onSubmit={this.handleSubmit}>
+            <div className="row">
+            <div className="col-md-6">
+                <div className="form-group">
+                <label>Image</label>
+                <div className="input-field ">
+                    <input
+                    type="file"
+                    accept="image/*"
+                    onChange={this.handleImageChange}
+                    />
+                    {this.state.previewImage && (
+                    <img src={this.state.previewImage} alt="Preview" />
+                    )}
+                </div>
+                </div>
+            </div>
+            
                 <div className="row">
-                    <div className="col-md-6">
+                <div className="col-md-6">
                     <div className="form-group">
-                        <label>Name</label>
-                        <div className="input-field ">
+                    <label>Name</label>
+                    <div className="input-field">
                         <input
-                            type="text"
-                            id="name"
-                            onChange={(e) => this.setState({ name: e.target.value })}
-                            required
+                        type="text"
+                        id="name"
+                        onChange={(e) => this.setState({ name: e.target.value })}
+                        required
                         />
-                        </div>
                     </div>
                     </div>
-                    <div className="col-md-6">
+                </div>
+                <div className="col-md-6">
                     <div className="form-group">
-                        <label>Brand</label>
-                        <div className="input-field ">
+                    <label>Brand</label>
+                    <div className="input-field">
                         <input
-                            type="text"
-                            id="pBrand"
-                            onChange={(e) => this.setState({ pBrand: e.target.value })}
-                            required
+                        type="text"
+                        id="pBrand"
+                        onChange={(e) => this.setState({ pBrand: e.target.value })}
+                        required
                         />
-                        </div>
                     </div>
                     </div>
-
-                    <div className="col-md-6">
+                </div>
+                </div>
+                <div className="row">
+                <div className="col-md-6">
                     <div className="form-group">
-                        <label>Category</label>
-                        <div className="input-field ">
+                    <label>Category</label>
+                    <div className="input-field">
                         <select
                         id="category"
-                        value={this.state.categoriaB}
+                        value={this.state.categorieB}
                         onChange={this.handleCategoryChange}
                         required
                         >
                         <option value="">Select category</option>
                         {this.state.categorias.map((category) => (
-                        <option value={category}>
-                        {category}
-                        </option>
-                        )
-                        )}
-
-                        
-                        </select>
-                        </div>
-                    </div>
-                    </div>
-                    <div className="col-md-6">
-                    <div className="form-group">
-                        <label>Subcategory</label>
-                        <div className="input-field ">
-                        <select
-                        id="subcategory"
-                        value={this.state.categoriaA}
-                        onChange={(e) => this.setState({ categoriaA: e.target.value })}
-                        required
-                        disabled={!this.state.categoriaB} 
-                        >
-                        <option value="">Select subcategory</option>
-                        {this.state.subcategorias.map((subcategory) => (
-                            <option value={subcategory}>
-                                {subcategory}
-                            </option>
+                            <option value={category}>{category}</option>
                         ))}
                         </select>
-                        </div>
-                    </div>
-                    </div>
-
-                    <div className="col-md-6">
-                    <div className="form-group">
-                        <label>Price (€)</label>
-                        <div className="input-field ">
-                        <input
-                            type="number"
-                            id="price"
-                            onChange={(e) => this.setState({ price: e.target.value })}
-                            required
-                        />
-                        </div>
-                    </div>
-                    </div>
-
-                    <div className="col-md-6">
-                    <div className="form-group">
-                        <label>Quantity</label>
-                        <div className="input-field ">
-                        <input
-                            type="number"
-                            id="quantity"
-                            onChange={(e) => this.setState({ quantity: e.target.value })}
-                            placeholder="10 m³"
-                            required
-                        />
-                        </div>
                     </div>
                     </div>
                 </div>
-                <button type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil">
-                    Create
-                </button>
-                </form>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label>Subcategory</label>
+                    <div className="input-field">
+                        <select
+                        id="subcategory"
+                        value={this.state.categorieA}
+                        onChange={(e) => this.setState({ categorieA: e.target.value })}
+                        required
+                        disabled={!this.state.categorieB}
+                        >
+                        <option value="">Select subcategory</option>
+                        {this.state.subcategorias.map((subcategory) => (
+                            <option value={subcategory}>{subcategory}</option>
+                        ))}
+                        </select>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div className="row">
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label>Price (€)</label>
+                    <div className="input-field">
+                        <input
+                        type="number"
+                        id="price"
+                        onChange={(e) => this.setState({ price: e.target.value })}
+                        required
+                        />
+                    </div>
+                    </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="form-group">
+                    <label>Quantity</label>
+                    <div className="input-field">
+                        <input
+                        type="number"
+                        id="quantity"
+                        onChange={(e) => this.setState({ quantity: e.target.value })}
+                        required
+                        />
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+  
+            <button
+            type="submit"
+            className="btn btn-outline-light btn-dark col-md-3 botaoPerfil"
+            >
+            Create
+            </button>
+            </form>
+
 
 
             </div>

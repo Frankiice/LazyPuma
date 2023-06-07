@@ -435,7 +435,7 @@ render() {
               
               }
                <div>
-                <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/up">Back </a>
+                <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f">Back </a>
                 </div>
                 </div>
                 

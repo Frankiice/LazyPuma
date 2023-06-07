@@ -6,6 +6,7 @@ const passport = require("passport");
 const cookieSession = require("cookie-session");
 const passportSetup = require("./passport");
 const authRoute = require("./routes/auth");
+const multer = require('multer');
 
 const app = express();
 
@@ -657,26 +658,102 @@ app.get("/produto", async (req, res) => {
     }
 });
 
-// setter
-app.post("/produto", async (req, res) => {
-    try{
-        const Produto = mongoose.model("products", ProductDetailsSchema);
-        const {name, brand, categorieA, categorieB, img, properties} = req.body;
 
-        await Produto.create({
-            name,
-            brand, 
-            categorieA, 
-            categorieB, 
-            img, 
-            properties
+
+// Configure multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const uploadDir = 'public/images'; // Specify the destination folder where the uploaded files will be stored
+      fs.mkdirSync(uploadDir, { recursive: true }); // Create the destination directory if it doesn't exist
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      // Generate a unique filename for the uploaded file
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      cb(null, file.fieldname + '-' + uniqueSuffix);
+    },
+  });
+  
+  const upload = multer({ storage });
+  
+const path = require('path');
+
+// Other server configurations and routes...
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+  
+
+// setter
+const fs = require('fs');
+app.post('/produto', upload.single('img'), async (req, res) => {
+    try {
+      const file = req.file;
+
+      const { unidadeID, name, pBrand, categorieA, categorieB, quantity, price } = req.body;
+      const filePath = `public/images/${file.filename}`;
+      console.log(unidadeID, name, pBrand, categorieA, categorieB, quantity, price);
+  
+      // Save the file to the storage system
+      fs.rename(file.path, filePath, (err) => {
+        if (err) {
+          // Handle error if the file couldn't be saved
+          console.error(err);
+          res.status(500).json({ status: 'error', error: 'Failed to save the file' });
+          return;
+        }
+      
+        const Produto = mongoose.model('products', ProductDetailsSchema);
+  
+        // Create a new product document
+        const newProduct = new Produto({
+          name,
+          brand: pBrand,
+          categorieA,
+          categorieB,
+          img: filePath,
+          properties: [],
         });
-        res.send({ status: "ok" });
-        
-    }catch (error) {
-        res.send({ status: "error", error: error })
+   
+  
+        // Save the new product to the database
+        newProduct.save(async (error, product) => {
+          if (error) {
+            res.send({ status: 'error', error });
+
+          } else {
+     
+            const UnidadeProducao = mongoose.model('unidadeProducao', UnidadeProducaoSchema);
+  
+            try {
+              // Find the UnidadeProducao document by ID
+              const unidade = await UnidadeProducao.findById(unidadeID);
+  
+              // Add the new product to the listaProdutos array with quantity and price
+              unidade.listaProdutos.push({
+                idProduto: product._id,
+                quantidade: parseInt(quantity),
+                preco: parseInt(price),
+              });
+  
+              // Save the updated UnidadeProducao document
+              await unidade.save();
+  
+              res.send({ status: 'ok' });
+            } catch (error) {
+              res.send({ status: 'error', error });
+            }
+          }
+        });
+      });
+    } catch (error) {
+      res.send({ status: 'error', error });
     }
-});
+  });
+  
+  
+
 
 app.post("/user/encomenda", async(req, res) => {
     try{

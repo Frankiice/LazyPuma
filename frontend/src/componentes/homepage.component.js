@@ -251,20 +251,18 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="telemoveis" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Telemóveis e Smartwatches
+                                Smartphones
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="telemoveis">
-                                <li><a class="dropdown-item" href="#">Telemóveis e Smartphones</a></li>
+                                <li><a class="dropdown-item" value="Smartphones">Smartphones</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de Telemóvel</a></li>
+                                <li><a class="dropdown-item" value="Accessories">Accessories</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Smartwatches</a></li>
+                                <li><a class="dropdown-item" value="Smartwatches">Smartwatches</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Telefones Fixos</a></li>
+                                <li><a class="dropdown-item" value="Telephones">Telephones</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de Som</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Telefones Fixos</a></li>
+                                <li><a class="dropdown-item" value="Sound Accessories">Sound Accessories</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -324,13 +322,13 @@ export default class Homepage extends Component{
                                 Gaming
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="gaming">
-                                <li><a class="dropdown-item" href="#">Consolas</a></li>
+                                <li><a class="dropdown-item" value="Consoles">Consoles</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Jogos</a></li>
+                                <li><a class="dropdown-item" value="Games">Games</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Gaming PC</a></li>
+                                <li><a class="dropdown-item" value="Gaming PC">Gaming PC</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios Gaming</a></li>
+                                <li><a class="dropdown-item" value="Gaming Accessories">Gaming Accessories</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -339,18 +337,16 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="televisoes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                TVs e Som
+                                TVs
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="TVS">
-                                <li><a class="dropdown-item" href="#">Televisões</a></li>
+                                <li><a class="dropdown-item"  value="TVs">TVs</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">SoundBars</a></li>
+                                <li><a class="dropdown-item"  value="SoundBars">SoundBars</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Projetores de imagem</a></li>
+                                <li><a class="dropdown-item"  value="Projectors">Projectors</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de TV</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Auriculares</a></li>
+                                <li><a class="dropdown-item"  value="TV Accessories"> TV Accessories</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="TVs" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -417,17 +413,17 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="fotografia" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Fotografia</a>
+                                Photography </a>
                                 <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="fotografia">
-                                <li><a class="dropdown-item" href="#">Máquinas Fotográficas</a></li>
+                                <li><a class="dropdown-item"value="Cameras">Cameras</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Drones</a></li>
+                                <li><a class="dropdown-item"value="Drones">Drones</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Vídeo</a></li>
+                                <li><a class="dropdown-item"value="Video">Video</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Objetivas</a></li>
+                                <li><a class="dropdown-item"value="Lenses">Lenses</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de Fotografia</a></li>
+                                <li><a class="dropdown-item"value="Photography Accessories">Photography Accessories</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -436,18 +432,18 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="livros" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Livros
+                                Books
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="livros">
-                                <li><a class="dropdown-item" href="#">Romance</a></li>
+                                <li><a class="dropdown-item" value="Romance">Romance</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Literatura infantil e juvenil</a></li>
+                                <li><a class="dropdown-item" value="Children's and Youth Literature">Children's and Youth Literature</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Autoajuda</a></li>
+                                <li><a class="dropdown-item" value="Self help">Self help</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Manga</a></li>
+                                <li><a class="dropdown-item" value="Manga">Manga</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Livros técnicos</a></li>
+                                <li><a class="dropdown-item" value="Technical books">Technical books</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><a class="dropdown-item" value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
                                 <li><hr class="dropdown-divider"></hr></li>
