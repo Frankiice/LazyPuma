@@ -249,7 +249,9 @@ export default class Navbar extends Component{
     window.localStorage.removeItem("produtoID");
     window.localStorage.removeItem("objSearch");
     window.localStorage.removeItem("search");
-
+    window.localStorage.removeItem("unidadeID");
+    window.localStorage.removeItem("user_lat");
+    window.localStorage.removeItem("user_lon");
 
 }
     // const sendSearchData = (query) => {
@@ -314,7 +316,7 @@ export default class Navbar extends Component{
             <i class="bi bi-person-circle"></i> Hello {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" onClick={this.redirect}>Profile</a></li>
+              <li><a class="dropdown-item" onClick={this.redirect} href="#">Profile</a></li>
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" href="#">Records</a></li>
               <li><hr class="dropdown-divider"></hr></li>

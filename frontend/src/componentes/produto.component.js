@@ -129,7 +129,14 @@ degToRad(degrees) {
         <div class="container px-4 px-lg-5 my-5">
             {this.state.produto._doc ? 
                 <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="col-md-6"><img class="card-img" src={this.state.produto._doc.img} alt="..." /></div>
+                   <div class="col-md-6">
+                    {this.state.produto._doc.img.startsWith('http') ? (
+                        <img class="card-img" src={this.state.produto._doc.img} alt="..." />
+                    ) : (
+                        <img class="card-img" src={`http://localhost:5000/images/${this.state.produto._doc.img.replace('public/images/', '')}`} alt="..." />
+
+                    )}
+                    </div>
                     <div class="col-md-6">
                         {/* <div class="small mb-1">SKU: BST-498</div> */}
                         <h1 class="display-5 fw-bolder">{this.state.produto._doc.name}</h1>
