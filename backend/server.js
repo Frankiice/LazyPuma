@@ -152,6 +152,17 @@ const EncomendaSchema = new mongoose.Schema(
     }
 )
 
+
+app.get("/encomenda", async (req, res) => {
+  const Encomenda = mongoose.model("Encomenda", EncomendaSchema);
+  try {
+    const encomendas = await Encomenda.find();
+    res.status(200).json(encomendas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
   
 
 

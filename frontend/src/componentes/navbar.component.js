@@ -205,6 +205,13 @@ export default class Navbar extends Component{
       window.location.href = "/user/f";
     }
   }
+  redirect_records = () => {
+    if(this.state.type=="consumidor"){  //se for consumidor e quiser aceder aos seus relatorios
+      window.location.href = "/user/c/records";
+    }else{ //se for fornecedor e quiser aceder aos seus relatorios
+      window.location.href = "/user/f/records";
+    }
+  }
   
   componentDidMount() {
     const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
@@ -318,7 +325,7 @@ export default class Navbar extends Component{
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
               <li><a class="dropdown-item" onClick={this.redirect} href="#">Profile</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" href="#">Records</a></li>
+              <li><a class="dropdown-item" onClick={this.redirect_records}>Records</a></li>
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" onClick={this.logOut} href="/user/login">Log out</a></li>
           </ul>

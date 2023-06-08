@@ -141,9 +141,7 @@ render() {
                               <img id="loginimg" src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="icon do facebook"/> 
                             </a>  */}
                             <GoogleOAuthProvider clientId="321901519881-mem1hi5v20imtotsdme9s2qujgl96e6n.apps.googleusercontent.com">
-                                {/* <a href="https://www.google.com" class="px-2"> 
-                                  <img id="loginimg" src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" alt="icon do google"/> 
-                                </a>  */}
+                                
                                 <div>
                                   {isLoggedIn ? (
                                     <h5 class="center">Logged in</h5>
@@ -156,7 +154,7 @@ render() {
                                     </div>
                                   )}
                                 </div>
-                            </GoogleOAuthProvider>
+                            </GoogleOAuthProvider> 
                             {/* <a href="https://www.github.com" class="px-3"> 
                               <img id="loginimg" src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="icon do github"/> 
                             </a> */}
