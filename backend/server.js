@@ -629,6 +629,7 @@ app.get("/produto", async (req, res) => {
         productsWPrice.push({
             ...product,
             price: result.listaProdutos[0].preco,
+            quantity: result.listaProdutos[0].quantidade,
             lat: result.lat,
             lon: result.lon,
             morada: result.morada
@@ -637,6 +638,7 @@ app.get("/produto", async (req, res) => {
         productsWPrice.push({
             ...product,
             price: 0, // Set a default value for price
+            quanity: 0,
             lat: 0,   // Set default values for lat and lon
             lon: 0,
             morada: ""
@@ -687,71 +689,86 @@ app.use('/images', express.static(path.join(__dirname, 'public/images')));
 
 // setter
 const fs = require('fs');
+const { faLayerGroup } = require('@fortawesome/free-solid-svg-icons');
 app.post('/produto', upload.single('img'), async (req, res) => {
-    try {
-      const file = req.file;
+  try {
+    const { unidadeID, name, pBrand, categorieA, categorieB, quantity, price, produtoID } = req.body;
+    const file = req.file;
 
-      const { unidadeID, name, pBrand, categorieA, categorieB, quantity, price } = req.body;
-      const filePath = `public/images/${file.filename}`;
-      console.log(unidadeID, name, pBrand, categorieA, categorieB, quantity, price);
-  
-      // Save the file to the storage system
-      fs.rename(file.path, filePath, (err) => {
-        if (err) {
-          // Handle error if the file couldn't be saved
-          console.error(err);
-          res.status(500).json({ status: 'error', error: 'Failed to save the file' });
-          return;
-        }
-      
-        const Produto = mongoose.model('products', ProductDetailsSchema);
-  
-        // Create a new product document
-        const newProduct = new Produto({
-          name,
-          brand: pBrand,
-          categorieA,
-          categorieB,
-          img: filePath,
-          properties: [],
-        });
-   
-  
-        // Save the new product to the database
-        newProduct.save(async (error, product) => {
-          if (error) {
-            res.send({ status: 'error', error });
+    const filePath = file ? `public/images/${file.filename}` : null;
 
-          } else {
-     
-            const UnidadeProducao = mongoose.model('unidadeProducao', UnidadeProducaoSchema);
-  
-            try {
-              // Find the UnidadeProducao document by ID
-              const unidade = await UnidadeProducao.findById(unidadeID);
-  
-              // Add the new product to the listaProdutos array with quantity and price
-              unidade.listaProdutos.push({
-                idProduto: product._id,
-                quantidade: parseInt(quantity),
-                preco: parseInt(price),
-              });
-  
-              // Save the updated UnidadeProducao document
-              await unidade.save();
-  
-              res.send({ status: 'ok' });
-            } catch (error) {
-              res.send({ status: 'error', error });
-            }
-          }
-        });
+    const Produto = mongoose.model('products', ProductDetailsSchema);
+
+    let product;
+
+    if (produtoID) {
+      // Update existing product
+      product = await Produto.findById(produtoID);
+
+      if (!product) {
+        res.send({ status: 'error', error: 'Product not found' });
+        return;
+      }
+
+      // Update the product details
+      product.name = name;
+      product.brand = pBrand;
+      product.categorieA = categorieA;
+      product.categorieB = categorieB;
+
+      if (file) {
+        product.img = filePath;
+      }
+    } else {
+      // Create a new product
+      product = new Produto({
+        name,
+        brand: pBrand,
+        categorieA,
+        categorieB,
+        img: filePath,
       });
+    }
+
+    // Save the product to the database
+    await product.save();
+
+    const UnidadeProducao = mongoose.model('unidadeProducao', UnidadeProducaoSchema);
+
+    try {
+      // Find the UnidadeProducao document by ID
+      const unidade = await UnidadeProducao.findById(unidadeID);
+
+      // Update or add the product in the listaProdutos array
+      const productIndex = unidade.listaProdutos.findIndex(
+        (produto) => produto.idProduto.toString() === product._id.toString()
+      );
+
+      if (productIndex >= 0) {
+        // Update existing product in listaProdutos array
+        unidade.listaProdutos[productIndex].quantidade = parseInt(quantity);
+        unidade.listaProdutos[productIndex].preco = parseInt(price);
+      } else {
+        // Add new product to listaProdutos array
+        unidade.listaProdutos.push({
+          idProduto: product._id,
+          quantidade: parseInt(quantity),
+          preco: parseInt(price),
+        });
+      }
+
+      // Save the updated UnidadeProducao document
+      await unidade.save();
+
+      res.send({ status: 'ok' });
     } catch (error) {
       res.send({ status: 'error', error });
     }
-  });
-  
+  } catch (error) {
+    res.send({ status: 'error', error });
+  }
+});
+
   
 
 
@@ -840,34 +857,112 @@ app.get("/user/unidadeProducao", async (req, res) => {
   });
   
 
+  app.get("/user/veiculos", async (req, res) => {
+    try {
+      const Veiculo = mongoose.model("veiculos", VeiculoSchema);
+      const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+    
+      // Extract the veiculoID from the query parameters
+      const veiculoID = req.query.id;
+    
+      // Find the veiculo by veiculoID
+      const veiculo = await Veiculo.findById(veiculoID);
 
-  app.post("/user/veiculos", async (req, res) => {
+    
+      if (!veiculo) {
+        return res.send({ status: "error", error: "Veiculo not found" });
+      }
+    
+      // Find the UnidadeProducao that contains the veiculo
+      const unidadeProducao = await UnidadeProducao.findOne({ "listaVeiculos._id": veiculoID });
+
+    
+      if (!unidadeProducao) {
+        return res.send({ status: "error", error: "UnidadeProducao not found" });
+      }
+    
+      // Prepare the response object
+      const response = {
+        unidadeID: unidadeProducao.unidadeID,
+        matricula: veiculo.matricula,
+        marca: veiculo.marca,
+        capacidade: veiculo.capacidade,
+      };
+    
+      res.send(response);
+    } catch (error) {
+      res.send({ status: "error", error: error.message });
+    }
+  });
+  
+
+  app.post("/user/veiculos", upload.none(), async (req, res) => {
     try {
       const Veiculo = mongoose.model("veiculos", VeiculoSchema);
       const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   
-      const { unidadeID, matricula, vBrand, vCapacity } = req.body;
-      var marca = vBrand;
-      var capacidade = vCapacity;
+      const { veiculoID, unidadeID, matricula, vBrand, vCapacity, flag } = req.body;
+      console.log(veiculoID, unidadeID, matricula, vBrand, vCapacity, flag);
   
-      const newVeiculo = await Veiculo.create({
-        matricula,
-        capacidade,
-        marca
-      });
+      let updatedVeiculo;
+      // se for true é para dar update
+      if (flag === "true") {
+        // Update existing veiculo
+        console.log("entra aqui?")
+        updatedVeiculo = await Veiculo.findByIdAndUpdate(
+          veiculoID,
+          {
+            matricula,
+            marca: vBrand,
+            capacidade: vCapacity
+          },
+          { new: true }
+        );
   
-      const unidadeProducao = await UnidadeProducao.findOne({ unidadeID: unidadeID });
-  
-      if (unidadeProducao) {
-        unidadeProducao.listaVeiculos.push(newVeiculo);
-        await unidadeProducao.save();
+        if (!updatedVeiculo) {
+          res.send({ status: "error", error: "Veiculo not found" });
+          return;
+        }
+      } else {
+        // Create a new veiculo
+        updatedVeiculo = await Veiculo.create({
+          matricula,
+          marca: vBrand,
+          capacidade: vCapacity
+        });
       }
   
-      res.send({ status: "ok" });
+      const unidadeProducao = await UnidadeProducao.findById(unidadeID);
+      console.log("unidadeProducao", unidadeProducao);
+  
+      if (unidadeProducao) {
+        const veiculoIndex = unidadeProducao.listaVeiculos.findIndex(
+          (veiculo) => veiculo._id && updatedVeiculo._id && veiculo._id.toString() === updatedVeiculo._id.toString()
+        );
+        
+  
+        if (veiculoIndex >= 0) {
+          // Update existing veiculo in listaVeiculos array
+          unidadeProducao.listaVeiculos[veiculoIndex] = updatedVeiculo;
+        } else {
+          // Add new veiculo to listaVeiculos array
+          unidadeProducao.listaVeiculos.push(updatedVeiculo);
+        }
+  
+        // Save the updated UnidadeProducao document
+        await unidadeProducao.save();
+  
+        res.send({ status: "ok" });
+      } else {
+        res.send({ status: "error", error: "UnidadeProducao not found" });
+      }
     } catch (error) {
-      res.send({ status: "error", error: error });
+      res.send({ status: "error", error });
     }
   });
+  
+  
+  
   
   
 

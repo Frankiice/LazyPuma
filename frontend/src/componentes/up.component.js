@@ -29,10 +29,15 @@ export default class Up extends Component {
       upCapacity: "",
       lat: "",
       lon: "",
-      msgMorada: ""
+      msgMorada: "",
+      produtoID: "",
+      veiculoID: "",
     };
     this.getCoordenadas = this.getCoordenadas.bind(this);
     this.handleUnidadeProducao = this.handleUnidadeProducao.bind(this);
+    this.handleProduto= this.handleProduto.bind(this);
+    this.handleVeiculo= this.handleVeiculo.bind(this);
+
 
   }
 
@@ -54,6 +59,9 @@ export default class Up extends Component {
         console.log(data, "userData");
         this.setState({ nickname: data.data.nickname,
                         idFornecedor: data.data._id});
+        window.localStorage.removeItem("produtoID");
+        window.localStorage.removeItem("veiculoID");
+        
     })
 
     const {unidadeID} = this.state;
@@ -148,13 +156,27 @@ handleUnidadeProducao(e){
   });
 };
 
-handleVeiculo(e){
+
+handleNovoVeiculo(e){
   window.location.href = "/user/f/veiculo";
 }
 
-handleProduto(e){
+handleVeiculo(veiculoID) {
+  window.localStorage.setItem("veiculoID", veiculoID);
+  window.location.href = "/user/f/veiculo";
+  console.log("veiculoID", veiculoID)
+}
+
+
+handleNovoProduto(e){
   window.location.href = "/user/f/produto";
 }
+
+handleProduto(produtoID) {
+  window.localStorage.setItem("produtoID", produtoID);
+  window.location.href = "/user/f/produto";
+}
+
   
 
 render() {
@@ -203,11 +225,12 @@ render() {
                                 {unidade.listaProdutos.map((item, index) => (
                                 <div className="row gy-3 mb-4 produto_carrinho" key={item.nome}>
                                     <div className="col-lg-2">
-                                    <img
-                                        className="border rounded me-3"
-                                        src={item.img}
-                                        style={{ width: '96px', height: '96px' }}
-                                    />
+                                     {item.img.startsWith('http') ? (
+                                            <img className="border rounded me-3" style={{ width: '96px', height: '96px' }} src={item.img} alt="..." />
+                                        ) : (
+                                            <img className="border rounded me-3" style={{ width: '96px', height: '96px' }} src={`http://localhost:5000/images/${item.img.replace('public/images/', '')}`} alt="..." />
+
+                                        )}
                                     </div>
                                     <div className="col-lg-4">
                                     <div className="me-lg-5">
@@ -246,10 +269,17 @@ render() {
                                     </div>
                                     </div>
                                     <div className="col-lg-2 d-flex justify-content-end">
-                                    <div class="float-md-end">
-                                    <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
+                                    <div className="row">
+                                      <div className="float-md-end">
+                                        <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}>Remove</a>
+                                      </div>
+                                      <div className="float-md-end mt-2">
+                                        <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => this.handleProduto(item._id)}>Edit</a>
+                                      </div>
                                     </div>
-                                    </div>
+                                  </div>
+
+
                                     <hr />
                                 </div>
                                 ))}                 
@@ -260,7 +290,7 @@ render() {
                           <div className="row">
                             <div className="col-md-9"></div>
                             <div className="col-md-3 text-right">
-                              <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleProduto}>Create New Product</button>
+                              <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleNovoProduto}>Create New Product</button>
                             </div>
                           </div>
                           </div>
@@ -308,10 +338,15 @@ render() {
                                 </div>
                                 </div>
                                 <div className="col-lg-2 d-flex justify-content-end">
-                                <div class="float-md-end">
-                                <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
-                                </div>
-                                </div>
+                                    <div className="row">
+                                      <div class="float-md-end">
+                                        <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerVeiculo(index)}> Remove</a>
+                                      </div>
+                                      <div class="float-md-end mt-2">
+                                        <a href="#" class="btn btn-light border icon-hover-danger" onClick={() => this.handleVeiculo(veiculo._id)}> Edit</a>
+                                      </div>
+                                    </div>
+                                  </div>
                                 <hr />
                             </div>
                             ))}
@@ -325,7 +360,7 @@ render() {
                       <div className="row">
                         <div className="col-md-9"></div>
                         <div className="col-md-3 text-right">
-                          <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleVeiculo}>Create New Vehicle</button>
+                          <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleNovoVeiculo}>Create New Vehicle</button>
                         </div>
                       </div>
                       </div>
@@ -341,7 +376,7 @@ render() {
                       <div class="form-group">
                           <label>Name</label>
                           <div class="input-field "> 
-                          <input type="text" id="upName" onChange={(e => this.setState({ upName: e.target.value }))} placeholder="Renault" required/>
+                          <input type="text" id="upName" onChange={(e => this.setState({ upName: e.target.value }))} placeholder="Factory" required/>
                           </div>
                       </div>
                   </div>
