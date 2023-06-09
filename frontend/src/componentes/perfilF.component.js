@@ -79,11 +79,14 @@ componentDidMount(){
                     cidade: moradaArray[5]});
     })
     window.localStorage.removeItem("unidadeID")
+    window.localStorage.removeItem("editUP")
 }
 
 handleUnidade(e){
     const {unidadeID} = this.state;
+    const editUP = false;
     window.localStorage.setItem("unidadeID", unidadeID);
+    window.localStorage.setItem("editUP", editUP);
     window.location.href = "/user/f/up";
 };
 
@@ -144,7 +147,7 @@ preHandleRemove(e){
         .then((res) => res.json())
         .then((data) => {
             console.log(data, "userRegister");
-            if(data.status=="ok") {
+            if(data.status==="ok") {
               this.handleRemove(e);   
             }else{
                 this.setState({ userRemoveFailed: true });
@@ -175,7 +178,7 @@ handleRemove(e){
     .then((res) => res.json())
     .then((data) => {
         console.log(data, "userDelete");
-        if (data.status=="ok"){
+        if (data.status==="ok"){
             window.localStorage.clear();
             window.location.href = "./login"
         }else{
@@ -287,10 +290,6 @@ render() {
                         <i class="fa fa-home text-center mr-1"></i> 
                         Production Units
                     </a>
-                    <a class="nav-link" id="veiculos-tab" data-toggle="pill" href="#veiculos" role="tab" aria-controls="veiculos" aria-selected="false">
-                        <i class="fa fa-fw fa-bus"></i>
-                        Vehicles
-                    </a>
                 </div>
             </div>
             <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
@@ -392,7 +391,7 @@ render() {
                             <button onClick={this.getCoordenadas} class="btn btn-outline-light col-md-3">
                                 Verify Address
                                 </button>
-                                {this.state.msgMorada != "" ? 
+                                {this.state.msgMorada !== "" ? 
                                
                                 <label><br></br>{this.state.msgMorada}</label>
                                 :
@@ -417,8 +416,8 @@ render() {
                             </div> */}
                         </div>
                         <div>
-                             {this.state.msgMorada != "" ? 
-                               this.state.msgMorada == "Error: Invalid address, please correct your address" ?
+                             {this.state.msgMorada !== "" ? 
+                               this.state.msgMorada === "Error: Invalid address, please correct your address" ?
                                     <label></label>
                                     :
                                     <button type="submit" class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
@@ -646,49 +645,11 @@ render() {
                     </div>
                     </div>
             </div>
-                
-
-
-
-
-{/* 
-                    <div>
-                        <a class="btn btn-outline-light col-md-3 botaoPerfil" href="/user/f/up">View all Production Units</a>
-                    </div> */}
+            
 
                 </div>
 
-                <div class="tab-pane fade" id="veiculos" role="tabpanel" aria-labelledby="veiculos-tab">
-                    <h3 class="mb-4">Vehicles Settings</h3>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="veiculos1"/>
-                            <label class="form-check-label" for="veiculos1">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum accusantium accusamus, neque cupiditate quis
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="veiculos2"/>
-                            <label class="form-check-label" for="veiculos2">
-                                hic nesciunt repellat perferendis voluptatum totam porro eligendi.
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="veiculos3"/>
-                            <label class="form-check-label" for="veiculos3">
-                                commodi fugiat molestiae tempora corporis. Sed dignissimos suscipit
-                            </label>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
-                    </div>
-                </div>
+               
             </div>
         </div>
         <Helmet>
