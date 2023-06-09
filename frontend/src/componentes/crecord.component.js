@@ -11,7 +11,6 @@ export default class Login extends Component {
     super(props);
     this.state = {
       nickname: "",
-      cart: JSON.parse(localStorage.getItem('carrinho')) || [],
       distancia: 0,
       arrastando: false,
       encomendas: [],
@@ -20,6 +19,7 @@ export default class Login extends Component {
       categories: ["Baby","Sports","Animals","Cosmetics","DIY","Smartphones","Tech","Decoration","Gardening","Gaming","TVs","Toys","Appliances","Photography","Books"], 
       searchValue: "", 
       selectedCategories: [], 
+      
       
 
     };
@@ -113,75 +113,48 @@ export default class Login extends Component {
   };
 
 
-
-
-  //cenas que já estavam do carrinho (apagar)
-  handleQuantityChange(itemnome, newQuantity) {
-    const { cart } = this.state;
-  
-    const updatedCart = cart.map((item) => {
-      if (item.nome === itemnome) {
-        return {
-          ...item,
-          quantidade: newQuantity,
-          preco: item.preco_original * newQuantity
-        };
-      }
-      return item;
-    });
-  
-    this.setState({ cart: updatedCart });
-  
-    // Atualizar o carrinho na Local Storage
-    localStorage.setItem('carrinho', JSON.stringify(updatedCart));
-  }
-  calcularTotal(carrinho) {
-    let total = 0;
-    carrinho.forEach(function(item) {
-      total += item.preco_original * item.quantidade;
-    });
-    return total;
-  }
-  removerProduto = (index) => {
-    let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-    carrinho.splice(index, 1);
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-    this.setState({ carrinho });
-    window.location.reload();
-
-  };
-  componentDidMount(){
-
-
-    fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
-        method:"POST",
-        crossDomain:true,
-        headers:{
-            "Content-type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
-        },
-        body:JSON.stringify({
-            token: window.localStorage.getItem("token"),
-        }),
+  componentDidMount() {
+    fetch("http://localhost:5000/user/userData", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+      }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data, "userData");
-        this.setState({ nickname: data.data.nickname,});
-    })
-}
+      .then((res) => res.json())
+      .then((data) => {
+        
+        this.setState({ nickname: data.data.nickname, id_consumidor: data.data._id });
+        
+        fetch(`http://localhost:5000/encomenda/consumidor/${data.data._id}`)
+          .then((response) => response.json())
+          .then((data1) => {
+            console.log(data1, "EncomendaData");
+            this.setState({ encomendas: data1 });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+  }
+  
   
 
 render() {
-  const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-  const { cart } = this.state;
-  const total = this.calcularTotal(carrinho);
+  
+
+
   const { distancia } = this.state;
   const maxDistancia = 1010;
   const distanciaFormatada = distancia <= 1000 ? `${distancia} km` : "more than 1000 km";
   const { startDate, endDate } = this.state;
   const { searchValue, selectedCategories } = this.state;
+  const { encomendas } = this.state;
   
   return (
     
@@ -193,27 +166,40 @@ render() {
           <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
           <br></br>
           <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            {carrinho.length === 0 ? (
+            {encomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>
-                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't placed any orders yet</h5>
+                <h5 class="text-secondary justify-content-md-center">{this.state.id_consumidor} hasn't placed any orders yet 
+               </h5>
                 
       
               </div>
+
+              
             ) : (
-              carrinho.map((item,index) => (
+              encomendas.map((encomenda) => (
                 
-                <div class="row gy-3 mb-4 produto_carrinho" key={item.nome}>
-                  <div class="col-lg-5">
+                <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.id_encomenda}>
+                  <div class="">
                     <div class="me-lg-5">
-                      <div class="d-flex">
-                        <img class="border rounded me-3" src={item.img} style={{ width: '96px', height: '96px' }}/>
-                        <div class="">
-                          <a href="#" class="nav-link">{item.nome}</a>
-                          <p class="text-muted">Yellow, Jeans</p>
-                          
-                        </div>
-                      </div>
+                    <h4 class="d-flex justify-content-sm-center">Order ID: {encomenda.id_encomenda}</h4>
+                    
+                    <h5 class="">Products:</h5>
+                    <br></br>
+                    {encomenda.produtos.map((produto) => 
+                    (
+          <div class="d-flex" key={produto.idProduto}>
+            <img
+              class="border rounded me-3"
+              src={produto.foto}
+              style={{ width: '96px', height: '96px' }}
+            />
+            <div>
+              <a href="#" class="nav-link">{produto.nome}</a>
+              <p class="text-muted">{produto.marca}</p>
+            </div>
+          </div>
+        ))}
                     </div>
                   </div>
                   <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
@@ -221,22 +207,22 @@ render() {
 
                     </div>
                     <div class="">
-                      <text class="h6">{item.preco}€</text> <br />
-                      <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
+                      {/* <text class="h6">{item.preco}€</text> <br />
+                      <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small> */}
                       
                     </div>
                     
                     
                   </div>
                   <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                  <div class="form-outline">
+                  {/* <div class="form-outline">
                   <text class="h6">Quantity</text>  &nbsp;
                       <input type="number" id="typeNumber" class="form-control form-control-sm " style={{ width: '48px', backgroundColor: '#f8f9fa', border: '1px solid #e4e8eb',display: 'inline-block'  }} defaultValue={item.quantidade} min="1" onChange={(e) => this.handleQuantityChange(item.nome, parseInt(e.target.value))} /> 
-                  </div>
-                  &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                  </div> */}
+                  {/* &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
                     <div class="float-md-end">
                       <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
-                    </div>
+                    </div> */}
                   </div>
                   <hr />
                 </div>
