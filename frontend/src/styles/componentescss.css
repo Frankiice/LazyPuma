@@ -731,4 +731,149 @@ a[target='_blank'] {
     height: 550px;;
 }
   
+.barra-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .barra {
+    width: 400px;
+    height: 20px;
+    background-color: #e0e0e0;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .bola {
+    width: 20px;
+    height: 20px;
+    background-color: #ff4081;
+    border-radius: 50%;
+    position: absolute;
+    top: -10px;
+    transform: translateX(-50%);
+  }
+.barra-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 
+.barra {
+border-radius: 10px;
+  width: 280px;
+  height: 20px;
+  background-color: #e0e0e0;
+  position: relative;
+  cursor: pointer;
+}
+
+.bola {
+  width: 20px;
+  height: 20px;
+  background-color: rgb(53, 52, 52);
+  border-radius: 50%;
+  position: absolute;
+  top: -1px;
+  transform: translateX(-50%);
+}
+  
+
+/* Css do Date Range do relatorio de encomendas */
+.react-datepicker {
+    /* font-family: Arial, sans-serif; */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+  }
+  
+  .react-datepicker__header {
+    background-color: #f0f0f0;
+    border-bottom: none;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .react-datepicker__month {
+    margin: 0;
+  }
+  
+  .react-datepicker__day-names {
+    margin-top: 10px;
+  }
+  
+  .react-datepicker__day-name {
+    color: #999;
+  }
+  
+  .react-datepicker__day {
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .react-datepicker__day:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #0099ff;
+    color: #fff;
+  }
+  
+  .react-datepicker__day--disabled {
+    cursor: default;
+    color: #999;
+  }
+  
+  .react-datepicker__input-container {
+    display: inline-block;
+  }
+  
+  .react-datepicker__input-container input {
+    width: 110px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .label_date{
+    transform: translateY(20%);
+  }
+  
+  
+
+  .card-height{
+    height: 620px;
+}
+
+.autosuggest-wrapper {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+    width: 200px;
+  }
+
+  .output_categories{
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 4px;
+  }
+
+  .delete_category_button {
+    display: none;
+    
+  }
+  
+  .category_span:hover .delete_category_button {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+
+    font-size:10px;
+  }
+  
+  
+  
+  

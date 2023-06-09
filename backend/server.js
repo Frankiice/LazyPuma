@@ -152,6 +152,17 @@ const EncomendaSchema = new mongoose.Schema(
     }
 )
 
+
+app.get("/encomenda", async (req, res) => {
+  const Encomenda = mongoose.model("Encomenda", EncomendaSchema);
+  try {
+    const encomendas = await Encomenda.find();
+    res.status(200).json(encomendas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
   
 
 
@@ -969,3 +980,20 @@ app.get("/user/unidadeProducao", async (req, res) => {
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
 });
+
+//app.get("/Unidade_Producao", async (req,res) => {
+//    try{
+//        const Edicao = mongoose.model("unidadeProducao", EdicaoDetailsSchema);
+//        const {listaProdutos, listaVeiculos, lat, long, morada} = req.body;
+//        await Edicao.findOneAndUpdate({}
+//        (err,result)=>{
+//            res.json({status: "ok", data:"Update success"})
+//            })
+//
+//    }catch(error) {
+//        res.send({ status: "error", error: error })
+//   }
+//
+//
+//
+//});

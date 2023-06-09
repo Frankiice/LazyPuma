@@ -22,7 +22,8 @@ import Cart from "./componentes/cart.component";
 import Up from "./componentes/up.component";
 import Fveiculo from "./componentes/fVeiculo.component";
 import Fproduto from "./componentes/fProduto.component";
-
+import Frecords from "./componentes/frecord.component";
+import Crecords from "./componentes/crecord.component";
 
 
 function App() {
@@ -50,6 +51,8 @@ function App() {
         <Route path ="/user/f/up" element={<Up/>}/>
         <Route path ="/user/f/veiculo" element={<Fveiculo/>}/>
         <Route path ="/user/f/produto" element={<Fproduto/>}/>
+        <Route path ="/user/c/records" element={<Crecords/>}/>
+        <Route path ="/user/f/recors" element={<Frecords/>}/>
 
 
 
