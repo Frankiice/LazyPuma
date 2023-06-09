@@ -467,8 +467,8 @@ app.get("/produto/search", async (req, res) => {
 
     try{
         const page = parseInt(req.query.page) - 1 || 0;
-		const limit = parseInt(req.query.limit) || 5;
-		const search = req.query.search || "";
+        const limit = parseInt(req.query.limit) || 5;
+        const search = req.query.search || "";
         let categorieA = req.query.categoriaA || "All";
         let categorieB = req.query.categoriaB || "All";
         let brand = req.query.brand || "All";
@@ -549,7 +549,8 @@ app.get("/produto/search", async (req, res) => {
                 "_id": 0,
                 "listaProdutos.$": 1,
                 "lat": 1,
-                "lon": 1
+                "lon": 1,
+                "morada": 1
               });
             
               if (result) {
@@ -557,14 +558,16 @@ app.get("/produto/search", async (req, res) => {
                   ...products[i],
                   price: result.listaProdutos[0].preco,
                   lat: result.lat,
-                  lon: result.lon
+                  lon: result.lon,
+                  morada: result.morada
                 });
               } else {
                 productsWPrice.push({
                   ...products[i],
                   price: 0, // Set a default value for price
                   lat: 0,   // Set default values for lat and lon
-                  lon: 0
+                  lon: 0,
+                  morada: ""
                 });
               }
             }
@@ -629,11 +632,12 @@ app.get("/produto", async (req, res) => {
         }
         },
         {
-        "_id": 0,
+        "_id": 1,
         "listaProdutos.$": 1,
         "lat": 1,
         "lon": 1,
-        "morada": 1
+        "morada": 1,
+        "nome": 1,
         });
     
         if (result) {
@@ -643,7 +647,9 @@ app.get("/produto", async (req, res) => {
             quantity: result.listaProdutos[0].quantidade,
             lat: result.lat,
             lon: result.lon,
-            morada: result.morada
+            morada: result.morada,
+            nome: result.nome,
+            idUP: result._id
         });
         } else {
         productsWPrice.push({
@@ -652,7 +658,9 @@ app.get("/produto", async (req, res) => {
             quanity: 0,
             lat: 0,   // Set default values for lat and lon
             lon: 0,
-            morada: ""
+            morada: "",
+            nome: "",
+            idUP: ""
         });
         }
         
@@ -669,6 +677,67 @@ app.get("/produto", async (req, res) => {
         console.log(error);
 		res.status(500).json({ error: true, message: "Internal Server Error" });
     }
+});
+
+app.get('/unidadeProducao/:id', async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Product = mongoose.model("products", ProductDetailsSchema);
+
+  try {
+    const productsWPrice = [];
+    const unidadeProducao = await UnidadeProducao.findOne({ _id: req.params.id });
+
+    if (unidadeProducao) {
+      const listaProdutos = unidadeProducao.listaProdutos.slice(0, 4); // Get the first 4 products
+      for (const produto of listaProdutos) {
+        const productDetails = await Product.findOne({ _id: produto.idProduto });
+        console.log(productDetails)
+        if (productDetails) {
+          productsWPrice.push({
+            ...produto,
+            name: productDetails.name,
+            img: productDetails.img,
+            brand: productDetails.brand,
+            categorieA: productDetails.categorieA,
+            categorieB: productDetails.categorieB,
+            properties: productDetails.properties,
+          });
+        } else {
+          productsWPrice.push({
+            ...produto,
+            name: "",
+            img: "",
+            brand: "",
+            categorieA: "",
+            categorieB: "",
+            properties: [],
+          });
+        }
+      }
+    } else {
+      productsWPrice.push({
+        price: 0, // Set a default value for price
+        lat: 0, // Set default values for lat and lon
+        lon: 0,
+      });
+    }
+    
+    const response = {
+      error: false,
+      total: productsWPrice.length,
+      productsWPrice,
+    };
+    console.log(response);
+    
+    res.status(200).json(response);
+    
+    if (!unidadeProducao) {
+      return res.status(404).json({ message: 'Unidade de produção not found' });
+    }      
+ 
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving products' });
+  }
 });
 
 

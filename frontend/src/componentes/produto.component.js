@@ -22,6 +22,7 @@ export default class Produto extends Component{
             propriedades: [],
             // preco : this.state.produto.price,
             total: 0,
+            listaProdutos: []
           
         };        
         this.adicionarCarrinho = this.adicionarCarrinho.bind(this);
@@ -56,38 +57,64 @@ handleChange(event) {
     this.setState({ quantidade: event.target.value });
   }
 
-componentDidMount(){
-    const {produtoID} = this.state;
-    console.log("produtoID",produtoID);
-    try{
-        const base_url = "http://localhost:5000/produto"
-        const url = `${base_url}?id=${produtoID}`;
-        console.log(url);
-        fetch( url, {
-        method:"GET",
-        crossDomain:true,
-        headers:{
-            "Content-type":"application/json",
-            Accept:"application/json",
-            "Access-Control-Allow-Origin":"*",
+  componentDidMount() {
+    const { produtoID } = this.state;
+    console.log("produtoID", produtoID);
+    try {
+      const base_url = "http://localhost:5000/produto";
+      const url = `${base_url}?id=${produtoID}`;
+      console.log(url);
+      fetch(url, {
+        method: "GET",
+        crossDomain: true,
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
-        })
+      })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data, "produtoData");
-            this.setState({ 
-                produto: data.productWPrice,
-                propriedades: data.productWPrice._doc.properties,
+          console.log(data, "produtoData");
+          this.setState({
+            produto: data.productWPrice,
+            propriedades: data.productWPrice._doc.properties,
+          });
+  
+          console.log("this.state.produto: ", this.state.produto);
+          console.log("this.state.propriedades: ", this.state.propriedades);
+  
+          // Second fetch request
+          try {
+            const base_url = "http://localhost:5000/unidadeProducao";
+            const url = `${base_url}/${this.state.produto.idUP}`;
+            console.log(url);
+            fetch(url, {
+              method: "GET",
+              crossDomain: true,
+              headers: {
+                "Content-type": "application/json",
+                Accept: "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data, "produtoData");
+                this.setState({
+                  listaProdutos: data.productsWPrice,
+                });
               });
-              
-              console.log("this.state.produto: ", this.state.produto);
-              console.log("this.state.propriedades: ", this.state.propriedades);
-              
-        }) 
-    }catch(err){
-        console.log(err);
+          } catch (err) {
+            console.log(err);
+          }
+        });
+    } catch (err) {
+      console.log(err);
     }
-}
+
+  }
+  
 
 calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in kilometers
@@ -147,9 +174,9 @@ degToRad(degrees) {
                         <p class="lead text-dark">Brand: {this.state.produto._doc.brand}</p>
 
                         <h4 style={{ color: "#212529"}}>Product Caracteristics:</h4>
-                        <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Main Category: {this.state.categoriaB}</p>
-                            {this.state.categoriaA != "" ? 
-                                <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Sub Category: {this.state.categoriaA}</p>
+                        <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Main Category: {this.state.produto._doc.categorieB}</p>
+                            {this.state.produto._doc.categorieA != "" ? 
+                                <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Sub Category: {this.state.produto._doc.categorieA }</p>
                             :
                                 <p></p>
                             }
@@ -173,7 +200,7 @@ degToRad(degrees) {
                             </div>
                         }
                         <h4 style={{ color: "#212529"}}>Supplier Caracteristics:</h4>
-                        
+                            <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Name: {this.state.produto.nome}</p>
                             <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Distance: {this.calculateDistance(
                                                                                                     parseFloat(this.state.user_lat), // Convert to float
                                                                                                     parseFloat(this.state.user_lon), // Convert to float
@@ -208,109 +235,46 @@ degToRad(degrees) {
         </div>
     </section> 
         {/* <!-- Related items section--> */}
-    <section class="py-5 bg-light">
+        <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <h2 class="fw-bolder mb-4">Related products</h2>
+        <h2 class="fw-bolder mb-4">More Products from the Supplier</h2>
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                       
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                               
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                               
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                       
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                       
-                        <div class="badge bg-dark text-white position-absolute relatedItemSale" >Sale</div>
-                        
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                       
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                
-                                <h5 class="fw-bolder">Special Item</h5>
-                                
-                                <div class="d-flex justify-content-center small text-warning mb-2">
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
+            {this.state.listaProdutos ?
+                this.state.listaProdutos.map((produto) => (
+                    <div key={produto._doc.idProduto}>
+                        <div class="col mb-5">
+                            <div class="card h-100 crop">
+                            {produto.img.startsWith('http') ? (
+                                <img class="card-img" src={produto.img} alt="..." />
+                            ) : (
+                                <img class="card-img" src={`http://localhost:5000/images/${produto.img.replace('public/images/', '')}`} alt="..." />
+
+                            )}
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <h5 class="fw-bolder">{produto.name}</h5>
+                                        {this.calculateDistance(
+                                            parseFloat(this.state.user_lat), // Convert to float
+                                            parseFloat(this.state.user_lon), // Convert to float
+                                            parseFloat(this.state.produto.lat), // Convert to float
+                                            parseFloat(this.state.produto.lon) // Convert to float
+                                        )}Km
+                                        <br></br>
+                                        {produto._doc.preco}€
+                                    </div>
                                 </div>
-                                
-                                <span class="text-muted text-decoration-line-through">$20.00</span>
-                                $18.00
-                            </div>
-                        </div>
-                        
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        
-                        <div class="badge bg-dark text-white position-absolute relatedItemSale" >Sale</div>
-                        
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                       
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                               
-                                <h5 class="fw-bolder">Sale Item</h5>
-                              
-                                <span class="text-muted text-decoration-line-through">$50.00</span>
-                                $25.00
-                            </div>
-                        </div>
-                        
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                       
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                       
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                
-                                <h5 class="fw-bolder">Popular Item</h5>
-                                
-                                <div class="d-flex justify-content-center small text-warning mb-2">
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
-                                    <div class="bi-star-fill"></div>
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._doc._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
                                 </div>
-                               
-                                $40.00
                             </div>
                         </div>
-                        
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    </div> 
+                    ))
+                    
+            :
+                <h4 class="text-secondary justify-content-center">This supplier doesn't have more products!</h4>
+            }
+            </div>    
         </div>
     </section>
     </React.Fragment>
