@@ -180,25 +180,29 @@ degToRad(degrees) {
                             :
                                 <p></p>
                             }
-                        {this.state.propriedade != [] ? 
-                            this.state.propriedades.map((propriedade, index) => {
-                                const keys = Object.keys(propriedade);
-                                return (
-                                  <div key={index}>
-                                    {keys.map((key) => (
-                                      <div key={key}>
-                                        <p class="lead text-dark" style={{ paddingLeft: "1em"}}>{key}: {propriedade[key]}</p>
-                                      </div>
-                                    ))}
-                                  </div>
-                                );
-                              })
-                        :
-                            <div>
-                                <p class="lead text-dark">Caracteristicas do produto</p>
-                                <br></br>
-                            </div>
-                        }
+                       {this.state.propriedades.length !== 0 ? (
+                        <div>
+                          {this.state.propriedades.map((propriedade, index) => {
+                            const { _id, name, value } = propriedade;
+
+                            return (
+                              <div key={index}>
+                                <p className="lead text-dark" style={{ paddingLeft: "1em" }}>
+                                  {name}: {value}
+                                </p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="lead text-dark">Caracteristicas do produto</p>
+                          <br />
+                        </div>
+                      )}
+
+
+
                         <h4 style={{ color: "#212529"}}>Supplier Caracteristics:</h4>
                             <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Name: {this.state.produto.nome}</p>
                             <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Distance: {this.calculateDistance(

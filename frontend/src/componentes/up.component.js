@@ -217,18 +217,25 @@ render() {
                 ) : (
                     unidades.map((unidade, index) => (
                         <div className="row gy-3 mb-4 produto_carrinho" key={unidade._id}>
-                          <div className="col-lg-12">
-                            <h4>{unidade.nome}</h4>
+                        <div className="col-lg-12">
+                          <h4>{unidade.nome}</h4>
+                        </div>
+                        <div className="col-lg-4">
+                          <p>Address: {unidade.morada}</p>
+                        </div>
+                        <div className="col-lg-4">
+                          <p>Coordinates: ({unidade.lat}, {unidade.lon})</p>
+                        </div>
+                        <div className="col-lg-2 d-flex justify-content-end">
+                          <div className="row">
+                            <div className="col-md-auto">
+                              <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}>Remove Production Unit</a>
+                            </div>
+                            <div className="col-md-auto mt-2">
+                              <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => this.handleEditUP(unidadeID)}>Edit Production Unit</a>
+                            </div>
                           </div>
-                          <div className="col-lg-4">
-                            <p>Address: {unidade.morada}</p>
-                          </div>
-                          <div className="col-lg-4">
-                            <p>Coordinates: ({unidade.lat}, {unidade.lon})</p>
-                          </div>
-                          <div className="col-lg-4">
-                            <a href="#" class="btn btn-light border icon-hover-danger" onClick={() => this.handleEditUP(unidadeID)}> Edit Production Unit</a>
-                          </div>
+                        </div>                    
                           <div className="col-lg-12">
                           <h5>Products:</h5>
                             <hr />
@@ -267,20 +274,7 @@ render() {
                                     <div className="col-lg-2 col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
                                     <div className="form-outline">
                                         <h6>Quantity</h6>
-                                        <input
-                                        type="number"
-                                        id="typeNumber"
-                                        className="form-control form-control-sm"
-                                        style={{
-                                            width: '60px',
-                                            backgroundColor: '#f8f9fa',
-                                            border: '1px solid #e4e8eb',
-                                            display: 'inline-block',
-                                        }}
-                                        defaultValue={item.quantidade}
-                                        min="1"
-                                        onChange={(e) => this.handleQuantityChange(item.nome, parseInt(e.target.value))}
-                                        />
+                                        <h6>{item.quantidade}</h6>
                                     </div>
                                     </div>
                                     <div className="col-lg-2 d-flex justify-content-end">
@@ -336,21 +330,8 @@ render() {
                                 <div className="col-lg-2 col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
                                 <div className="form-outline">
                                     <h6>Capacity (m³)</h6>
-                                    <input
-                                    type="number"
-                                    id="typeNumber"
-                                    className="form-control form-control-sm"
-                                    style={{
-                                        width: '60px',
-                                        backgroundColor: '#f8f9fa',
-                                        border: '1px solid #e4e8eb',
-                                        display: 'inline-block',
-                                    }}
-                                    defaultValue={veiculo.capacidade}
-                                    min="1"
-                                    onChange={(e) => this.handleQuantityChange(veiculo._id, parseInt(e.target.value))}
-                                    />
-                                </div>
+                                    <h6>{veiculo.capacidade}</h6>
+                                    </div>
                                 </div>
                                 <div className="col-lg-2 d-flex justify-content-end">
                                     <div className="row">
