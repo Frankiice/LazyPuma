@@ -182,49 +182,55 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
   const Produto = mongoose.model("products", ProdutoSchema2);
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-  
+
   try {
     const idConsumidor = req.params.idConsumidor;
 
-    // Busca todas as encomendas do consumidor 
+    // Busca todas as encomendas do consumidor
     const encomendas = await Encomenda.find({ idConsumidor });
 
     // Array para armazenar todas as informações das encomendas e produtos relacionados
     const result = [];
-    
-    count = 0;
-    for (const encomenda of encomendas) {//vai encomenda a encomenda
+
+    let count = 0;
+
+    for (const encomenda of encomendas) {
+      console.log(`Encomenda: ${encomenda._id}`);
       const produtosEncomenda = [];
       count++;
 
-      for (const item of encomenda.listaUP) { //iterar a listaUP de cada encomenda
-        
-        const produto = await Produto.findOne({ _id: { $eq: item.idProduct } });
-        // const produto = await Produto.findOne({ _id: produtoId });
-        
-        
+      for (const item of encomenda.listaUP) {
+        console.log(`objecto da listaUp da encomenda atual: ${item}`);
+        console.log(`id do produto: ${item.idProduct}`);
+        // const produto = await Produto.findById(item.idProduct);
+
+        const idProduto = mongoose.Types.ObjectId(item.idProduct);
+        const produto = await Produto.findById(idProduto);
+
+
+        console.log(`Produto: ${produto}`);
+
         if (produto) {
           const productInfo = {
-            idProduto: produto._id,
+            
             nome: produto.name,
             marca: produto.brand,
             categoria: produto.categorieB,
             foto: produto.img,
             propriedades: produto.properties,
-            //------------------------------------
             
           };
           produtosEncomenda.push(productInfo);
+          console.log(`produtosEncomenda: ${produtosEncomenda}`);
         }
       }
 
       result.push({
         produtos: produtosEncomenda,
-        encomenda_count:count,
-        preco_encomenda:encomenda.preco,
-        id_encomenda:encomenda.id,
-        quantidade:encomenda.listaUP[0].quantidade,
-        
+        encomenda_count: count,
+        preco_encomenda: encomenda.preco,
+        id_encomenda: encomenda._id,
+        quantidade: encomenda.listaUP[0].quantidade,
         
       });
     }
@@ -235,6 +241,7 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
 
 
 
