@@ -20,6 +20,7 @@ import Produto from "./componentes/produto.component";
 import Encomenda from "./componentes/encomenda.component";
 import Cart from "./componentes/cart.component";
 import Up from "./componentes/up.component";
+import Fup from "./componentes/fUp.component";
 import Fveiculo from "./componentes/fVeiculo.component";
 import Fproduto from "./componentes/fProduto.component";
 import Frecords from "./componentes/frecord.component";
@@ -49,6 +50,7 @@ function App() {
         <Route path="/user/encomenda" element={<Encomenda/>}/>
         <Route path ="/cart" element={<Cart/>}/>
         <Route path ="/user/f/up" element={<Up/>}/>
+        <Route path ="/user/f/up/edit" element={<Fup/>}/>
         <Route path ="/user/f/veiculo" element={<Fveiculo/>}/>
         <Route path ="/user/f/produto" element={<Fproduto/>}/>
         <Route path ="/user/c/records" element={<Crecords/>}/>

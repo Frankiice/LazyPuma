@@ -113,7 +113,7 @@ const VeiculoSchema = new mongoose.Schema(
         idVeiculo: String,
         matricula: String,
         marca: String,
-        capacidade: String
+        capacidade: Number
     },
     {
         collection: "veiculos"
@@ -129,7 +129,7 @@ const UnidadeProducaoSchema = new mongoose.Schema(
     listaVeiculos: [VeiculoSchema],
     lat: String,
     lon: String,
-    capacidade: String,
+    capacidade: Number,
     },
     {
     collection: "unidadeProducao",
@@ -873,30 +873,52 @@ app.post("/user/encomenda", async(req, res) => {
     }
 })
 
-app.post("/user/unidadeProducao", async(req, res) => {
-    try{
-        const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-        const {idFornecedor, upName, upAddress, listaProdutos, listaVeiculos, lat, lon, upCapacity} = req.body;
-        var nome = upName;
-        var morada = upAddress;
-        var capacidade = upCapacity;
+app.post("/user/unidadeProducao", async (req, res) => {
+  try {
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+    const { unidadeID, idFornecedor, upName, upAddress, listaProdutos, listaVeiculos, lat, lon, upCapacity } = req.body;
+    var nome = upName;
+    var morada = upAddress;
+    var capacidade = upCapacity;
 
-        await UnidadeProducao.create({
-            idFornecedor,
-            nome, 
-            morada, 
-            listaProdutos, 
-            listaVeiculos,
-            lat,
-            lon, 
-            capacidade
-        });
-        res.send({ status: "ok" });
-        
-    }catch (error) {
-        res.send({ status: "error", error: error })
+    // Find the existing UnidadeProducao using the unidadeID
+    let existingUnidadeProducao;
+
+    if (unidadeID) {
+      existingUnidadeProducao = await UnidadeProducao.findOne({ _id: unidadeID });
     }
-})
+
+    if (existingUnidadeProducao) {
+      // If the UnidadeProducao already exists, update its properties
+      existingUnidadeProducao.idFornecedor = idFornecedor;
+      existingUnidadeProducao.nome = nome;
+      existingUnidadeProducao.morada = morada;
+      existingUnidadeProducao.lat = lat;
+      existingUnidadeProducao.lon = lon;
+      existingUnidadeProducao.capacidade = capacidade;
+
+      await existingUnidadeProducao.save(); // Save the updated UnidadeProducao
+    } else {
+      // If the UnidadeProducao doesn't exist, create a new one
+      await UnidadeProducao.create({
+        idFornecedor,
+        nome,
+        morada,
+        listaProdutos,
+        listaVeiculos,
+        lat,
+        lon,
+        capacidade
+      });
+    }
+
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error", error: error });
+  }
+});
+
+
 
 app.get("/user/unidadeProducao", async (req, res) => {
     const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
@@ -919,7 +941,7 @@ app.get("/user/unidadeProducao", async (req, res) => {
           return {
             ...product.toObject(),
             quantidade: productEntry.quantidade,
-            preco: productEntry.preco
+            preco: productEntry.preco,
           };
         }));
   

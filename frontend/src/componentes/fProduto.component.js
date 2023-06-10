@@ -124,8 +124,9 @@ export default class Fproduto extends Component {
         console.log(data, "produto");
         if (data.status === "error") {
           throw new Error(data.error); // Throw an error if the response has the status "error"
+        }else{
+            this.setState({ msg: "Product added/updated successfully" });
         }
-        this.setState({ msg: "Product added/updated successfully" });
       })
       .catch((error) => {
         console.log(error);
