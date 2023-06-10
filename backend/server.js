@@ -79,10 +79,10 @@ const UserDetailsSchema = new mongoose.Schema(
 );
 
 const ProductPropertiesSchema = new mongoose.Schema(
-    {
-        Color: String
-    },
-    { _id: false }
+  {
+      name: String,
+      value: String,
+  }
 );
 
 const ProductDetailsSchema =  new mongoose.Schema(
@@ -772,7 +772,16 @@ const fs = require('fs');
 const { faLayerGroup } = require('@fortawesome/free-solid-svg-icons');
 app.post('/produto', upload.single('img'), async (req, res) => {
   try {
-    const { unidadeID, name, pBrand, categorieA, categorieB, quantity, price, produtoID } = req.body;
+    const { unidadeID, name, pBrand, categorieA, categorieB, quantity, price, produtoID, flag, properties } = req.body;
+
+    const parsedProperties = JSON.parse(properties);
+    console.log('Request body:', req.body);
+    console.log('Type of properties:', typeof parsedProperties);
+    console.log('Received properties:');
+    parsedProperties.forEach((property, index) => {
+      console.log(`Property ${index}:`, property);
+    });
+
     const file = req.file;
 
     const filePath = file ? `public/images/${file.filename}` : null;
@@ -781,8 +790,10 @@ app.post('/produto', upload.single('img'), async (req, res) => {
 
     let product;
 
-    if (produtoID) {
+    if (flag === "true") {
       // Update existing product
+      console.log("ProdutoID dentro do IF", produtoID)
+      
       product = await Produto.findById(produtoID);
 
       if (!product) {
@@ -799,6 +810,7 @@ app.post('/produto', upload.single('img'), async (req, res) => {
       if (file) {
         product.img = filePath;
       }
+      product.properties = parsedProperties;
     } else {
       // Create a new product
       product = new Produto({
@@ -807,6 +819,7 @@ app.post('/produto', upload.single('img'), async (req, res) => {
         categorieA,
         categorieB,
         img: filePath,
+        parsedProperties
       });
     }
 

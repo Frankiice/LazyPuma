@@ -147,6 +147,8 @@ export default class Homepage extends Component{
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="desporto">
                                 <li><button class="dropdown-item" value="Running Shoes" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Running Shoes</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Gym" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Gym</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Football" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Football</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Badminton" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Badminton</button></li>

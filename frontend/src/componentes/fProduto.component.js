@@ -23,11 +23,16 @@ export default class Fproduto extends Component {
       price: "",
       msg: "",
       produto: "",
-      propriedades: "",
+      propriedades: [],
+      properties: [], 
+      propName: "",
+      propValue: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
+    this.addProperty = this.addProperty.bind(this);
+
   }
 
   componentDidMount(){
@@ -97,8 +102,14 @@ export default class Fproduto extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const { unidadeID, img, name, pBrand, categorieA, categorieB, quantity, price, produtoID } = this.state;
-    console.log(unidadeID, img, name, pBrand, categorieA, categorieB, quantity, price, produtoID);
+    const { unidadeID, img, name, pBrand, categorieA, categorieB, quantity, price, produtoID, properties } = this.state;
+    console.log(unidadeID, img, name, pBrand, categorieA, categorieB, quantity, price, produtoID, properties);
+    var flag = false;
+    console.log("properties", properties)
+    // se for true é para dar update
+    if(produtoID){
+        flag = true;
+    }
   
     const formData = new FormData();
     formData.append('produtoID', produtoID);
@@ -110,6 +121,10 @@ export default class Fproduto extends Component {
     formData.append('quantity', quantity);
     formData.append('price', price);
     formData.append('img', img); // 'img' should match the field name specified in the backend (upload.single('img'))
+    formData.append('flag', flag);
+    formData.append('properties', JSON.stringify(properties));
+
+
   
     let url = "http://localhost:5000/produto";
     let method = "POST";
@@ -151,7 +166,7 @@ handleCategoryChange(e) {
 getSubcategories(selectedCategory) {
 const subcategoryMap = {
     Baby: ['Playards', 'Rockers and Bouncers', 'Bath', 'Car Seats', 'Activity Center', 'Baby Bottles', 'Baby Food', 'Feeding Set', 'Breast Pumps', 'Diapers', 'Wipes'],
-    Sports: [ 'Running Shoes', 'Football', 'Badminton', 'Golf', 'Baseball', 'Hunting', 'Table Tennis', 'Basketball', 'Boxing', 'Hockey', 'Footwear', 'Clothing', 'Wearable Technology', 'Accessories'],
+    Sports: [ 'Running Shoes', 'Gym', 'Football', 'Badminton', 'Golf', 'Baseball', 'Hunting', 'Table Tennis', 'Basketball', 'Boxing', 'Hockey', 'Footwear', 'Clothing', 'Wearable Technology', 'Accessories'],
     Animals: ['Furniture', 'Accessories', 'Supplies', 'Apparel', 'Toys'],
     Cosmetics: ['Brows', 'Skincare', 'Lipstick', 'Foundation', 'Eye Shadow', 'Concealer', 'Setting Spray'],
     DIY: ['Power Tools', 'Measuring Tools', 'Woodworking Tools', 'Cutting Tools', 'Sanders', 'Rotary Tools', 'Baby Food', 'Drill Bits'],
@@ -176,6 +191,31 @@ handleImageChange(event) {
     });
     console.log(this.state.img)
   }
+
+addProperty(e) {
+    e.preventDefault();
+    const { propName, propValue } = this.state;
+
+    // Create a new property object
+    const newProperty = {
+        name: propName,
+        value: propValue,
+    };
+
+    this.setState({
+        properties: this.state.propriedades
+    })
+
+    // Add the new property to the properties array in state
+    this.setState((prevState) => ({
+        properties: [...prevState.properties, newProperty],
+        propName: '', // Clear the input fields
+        propValue: '',
+    }));
+
+    console.log(this.state.properties)
+};
+  
 
 render() {
   return (
@@ -210,11 +250,19 @@ render() {
                         )}
                     </div>
                     ) : (
+                    <div>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={this.handleImageChange}
                     />
+                        {this.state.previewImage ? (
+                        <img src={this.state.previewImage} style={{ width: '200px', height: '200px' }} alt="Preview" />
+                        ) : (
+                        <img src={this.state.img} style={{ width: '200px', height: '200px' }} alt="Fetched" />
+                        )}
+                    </div>
+
                     )}
 
                         </div>
@@ -319,6 +367,60 @@ render() {
                         </div>
                         </div>
                     </div>
+                    <div className="col-md-6">
+                    <div className="form-group">
+                        <label>Additional Property Name</label>
+                        <div className="input-field">
+                        <input
+                            type="text"
+                            id="propName"
+                            value={this.state.propName}
+                            onChange={(e) => this.setState({ propName: e.target.value })}
+                        />
+                        </div>
+                    </div>
+                    </div>
+                    <div className="col-md-6">
+                    <div className="form-group">
+                        <label>Additional Property Value</label>
+                        <div className="input-field">
+                        <input
+                            type="text"
+                            id="propValue"
+                            value={this.state.propValue}
+                            onChange={(e) => this.setState({ propValue: e.target.value })}
+                        />
+                        </div>
+                    </div>
+                    </div>
+                    <div className="col-md-12">
+                    <button className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" onClick={this.addProperty}>Add Property</button>
+                    </div>
+                    {/* é a lista de novas propriedades que ja vinham */}
+                    <div className="row">
+                        {this.state.propriedades.length !== 0 && this.state.properties.length === 0 && this.state.propriedades.map((property, index) => (
+                            <div className="col-md-6" key={index}>
+                            <div className="form-group">
+                                <label>{property.name}</label>
+                                <div className="input-field">
+                                <input type="text" value={property.value} readOnly />
+                                </div>
+                            </div>
+                            </div>
+                        ))}
+
+                        {this.state.properties.length !== 0 && this.state.properties.map((property, index) => (
+                            <div className="col-md-6" key={index}>
+                            <div className="form-group">
+                            <label>{property.name}</label>
+                            <div className="input-field">
+                                <input type="text" value={property.value} readOnly />
+                            </div>
+                            </div>
+                            </div>
+                        ))}
+                        </div>
+          
                     </div>
                 </div>
     
@@ -442,6 +544,47 @@ render() {
                             />
                         </div>
                         </div>
+                    </div>
+                    <div className="col-md-6">
+                    <div className="form-group">
+                        <label>Additional Property Name</label>
+                        <div className="input-field">
+                        <input
+                            type="text"
+                            id="propName"
+                            value={this.state.propName}
+                            onChange={(e) => this.setState({ propName: e.target.value })}
+                        />
+                        </div>
+                    </div>
+                    </div>
+                    <div className="col-md-6">
+                    <div className="form-group">
+                        <label>Additional Property Value</label>
+                        <div className="input-field">
+                        <input
+                            type="text"
+                            id="propValue"
+                            value={this.state.propValue}
+                            onChange={(e) => this.setState({ propValue: e.target.value })}
+                        />
+                        </div>
+                    </div>
+                    </div>
+                    <div className="col-md-12">
+                        <button className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" onClick={this.addProperty}>Add Property</button>
+                    </div>
+                    <div className="row">
+                        {this.state.propriedades.map((property, index) => (
+                                <div className="col-md-6" key={index}>
+                                <div className="form-group">
+                                    <label>{property.name}</label>
+                                    <div className="input-field">
+                                    <input type="text" value={property.value} readOnly />
+                                    </div>
+                                </div>
+                                </div>
+                            ))}
                     </div>
                     </div>
                 </div>
