@@ -108,6 +108,21 @@ const ProdutoSchema = new mongoose.Schema(
     { _id: false }
   );
 
+  const ProdutoSchema2 = new mongoose.Schema(
+    {
+      name: String, // correspondente a "name" em ProductDetailsSchema
+      brand: String, // correspondente a "brand" em ProductDetailsSchema
+      categorieA: String, // correspondente a "categorieA" em ProductDetailsSchema
+      categorieB: String, // correspondente a "categorieB" em ProductDetailsSchema
+      img: String, // correspondente a "img" em ProductDetailsSchema
+      properties: [ProductPropertiesSchema], // correspondente a "properties" em ProductDetailsSchema
+      quantidade: Number,
+      preco: Number,
+    },
+    { _id: false }
+  );
+  
+
 const VeiculoSchema = new mongoose.Schema(
     {
         idVeiculo: String,
@@ -153,17 +168,82 @@ const EncomendaSchema = new mongoose.Schema(
 )
 
 
-app.get("/encomenda", async (req, res) => {
-  const Encomenda = mongoose.model("Encomenda", EncomendaSchema);
+// app.get("/encomenda", async (req, res) => {
+//   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+//   try {
+//     const encomendas = await Encomenda.find();
+//     res.status(200).json(encomendas);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: true, message: "Internal Server Error" });
+//   }
+// });
+app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProdutoSchema2);
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+
   try {
-    const encomendas = await Encomenda.find();
-    res.status(200).json(encomendas);
+    const idConsumidor = req.params.idConsumidor;
+
+    // Busca todas as encomendas do consumidor
+    const encomendas = await Encomenda.find({ idConsumidor });
+
+    // Array para armazenar todas as informações das encomendas e produtos relacionados
+    const result = [];
+
+    let count = 0;
+
+    for (const encomenda of encomendas) {
+      console.log(`Encomenda: ${encomenda._id}`);
+      const produtosEncomenda = [];
+      count++;
+
+      for (const item of encomenda.listaUP) {
+        console.log(`objecto da listaUp da encomenda atual: ${item}`);
+        console.log(`id do produto: ${item.idProduct}`);
+        // const produto = await Produto.findById(item.idProduct);
+
+        const idProduto = mongoose.Types.ObjectId(item.idProduct);
+        const produto = await Produto.findById(idProduto);
+
+
+        console.log(`Produto: ${produto}`);
+
+        if (produto) {
+          const productInfo = {
+            
+            nome: produto.name,
+            marca: produto.brand,
+            categoria: produto.categorieB,
+            foto: produto.img,
+            propriedades: produto.properties,
+            
+          };
+          produtosEncomenda.push(productInfo);
+          console.log(`produtosEncomenda: ${produtosEncomenda}`);
+        }
+      }
+
+      result.push({
+        produtos: produtosEncomenda,
+        encomenda_count: count,
+        preco_encomenda: encomenda.preco,
+        id_encomenda: encomenda._id,
+        quantidade: encomenda.listaUP[0].quantidade,
+        
+      });
+    }
+
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
-  
+
+
+
 
 
 app.post("/user/registar", async(req, res) => {
