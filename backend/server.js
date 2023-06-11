@@ -151,6 +151,15 @@ const UnidadeProducaoSchema = new mongoose.Schema(
     }
 );
 
+const EncomendaUPSchema = new mongoose.Schema(
+  {
+  idUP: String,
+  idProduct: String,
+  quantidade: Number,
+  },
+);
+
+
 
 const EncomendaSchema = new mongoose.Schema(
     {
@@ -159,7 +168,7 @@ const EncomendaSchema = new mongoose.Schema(
         dataEncomenda: String,
         dataEnvio: String,
         prazoCancelamento: String,
-        listaUP: [UnidadeProducaoSchema],
+        listaUP: [EncomendaUPSchema],
         estadoEncomenda: String,
     },
     {
@@ -180,7 +189,7 @@ const EncomendaSchema = new mongoose.Schema(
 // });
 app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-  const Produto = mongoose.model("products", ProdutoSchema2);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
 
   try {
@@ -250,15 +259,16 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
 app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-  const Produto = mongoose.model("products", ProdutoSchema2);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
 
   try {
     const idFornecedor = req.params.idFornecedor;
+    // console.log("idFornecedor", idFornecedor)
 
     // Passo 1: Recuperar todas as unidades de produção do fornecedor
     const unidadesProducao = await UnidadeProducao.find({ idFornecedor });//certo
     const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());//certo 
-    //console.log(unidadesProducaoIds);
+    // console.log("unidadesProducaoIds", unidadesProducaoIds);
 
     // Passo 2: Filtrar os produtos do fornecedor nas encomendas
     const produtosVendidos = [];
@@ -267,7 +277,8 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
     
     for (const encomenda of encomendas) {
       for (const item of encomenda.listaUP) {
-        console.log(item._id);
+        // console.log({ _id: item.idUP });
+        // console.log("item.idUP", item.idUP);
         if (unidadesProducaoIds.includes(item.idUP)) {
           const produto = await Produto.findById(item.idProduct);
           if (produto) {
@@ -288,7 +299,7 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
 
 app.get("/administrador/relatorios", async (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-  const Produto = mongoose.model("products", ProdutoSchema2);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
 
   try {
     const encomendas = await Encomenda.find().lean();
@@ -296,7 +307,7 @@ app.get("/administrador/relatorios", async (req, res) => {
 
     for (let encomenda of encomendas) {
       for (let item of encomenda.listaUP) {
-        //console.log({ _id: item.idProduct });
+        // console.log({ _id: item.idProduct });
 
          let produto = await Produto.findById(item.idProduct);
          //let produto = await Produto.findOne({ _id: item.idProduct });

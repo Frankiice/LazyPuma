@@ -131,7 +131,7 @@ export default class Login extends Component {
         
         this.setState({ nickname: data.data.nickname, id_consumidor: data.data._id });
 
-        //fetch(`http://localhost:5000/administrador/relatorios`)
+        // fetch(`http://localhost:5000/administrador/relatorios`)
         fetch(`http://localhost:5000/fornecedor/relatorios/${data.data._id}`)
           .then((response) => response.json())
           .then((data1) => {
@@ -189,18 +189,18 @@ render() {
                     <br></br>
                     {encomenda.produtos.map((produto) => 
                     (
-          <div class="d-flex" key={produto.idProduto}>
-            <img
-              class="border rounded me-3"
-              src={produto.foto}
-              style={{ width: '96px', height: '96px' }}
-            />
-            <div>
-              <a href="#" class="nav-link">{produto.nome}</a>
-              <p class="text-muted">{produto.marca}</p>
-            </div>
-          </div>
-        ))}
+                      <div class="d-flex" key={produto.idProduto}>
+                        <img
+                          class="border rounded me-3"
+                          src={produto.foto}
+                          style={{ width: '96px', height: '96px' }}
+                        />
+                        <div>
+                          <a href="#" class="nav-link">{produto.nome}</a>
+                          <p class="text-muted">{produto.marca}</p>
+                        </div>
+                      </div>
+                    ))}
                     </div>
                   </div>
                   <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
