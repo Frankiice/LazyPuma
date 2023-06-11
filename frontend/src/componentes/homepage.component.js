@@ -502,71 +502,72 @@ export default class Homepage extends Component {
     <h1> &nbsp;{this.state.nickname}'s Production Units</h1>
 
         <div class="container px-4 px-lg-5 mt-5">
-        
-        {this.state.unidades.map((unidade) => (
-        <>
-            <h2>{unidade.nome}</h2>
-            <br></br>
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {unidade.listaProdutos.length > 0 ? (
-                unidade.listaProdutos.map((produto) => (
-                <div key={produto._id}>
-                    <div class="col mb-5">
-                    <div class="card h-100 crop">
-                        {produto.img ? (
-                        produto.img.startsWith("http") ? (
-                            <img class="card-img" src={produto.img} alt="..." />
-                        ) : (
-                            <img
-                            class="card-img"
-                            src={`http://localhost:5000/images/${produto.img.replace(
-                                "public/images/",
-                                ""
-                            )}`}
-                            alt="..."
-                            />
-                        )
-                        ) : (
-                        <img class="card-img" alt="..." />
-                        )}
-                        <div class="card-body p-4">
-                        <div class="text-center">
-                            <h5 class="fw-bolder">{produto.name}</h5>
-                            {produto.preco}€
-                        </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">
-                            <button
-                            class="btn btn-outline-dark mt-auto"
-                            value={produto._id}
-                            onClick={(e) => {
-                                this.setState(
-                                { produtoID: e.target.value },
-                                this.handleProduto
-                                );
-                            }}
-                            >
-                            View options
-                            </button>
+        {this.state.tipoUser === "fornecedor" ?
+            this.state.unidades.map((unidade) => (
+            <>
+                <h2>{unidade.nome}</h2>
+                <br></br>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                {unidade.listaProdutos.length > 0 ? (
+                    unidade.listaProdutos.map((produto) => (
+                    <div key={produto._id}>
+                        <div class="col mb-5">
+                        <div class="card h-100 crop">
+                            {produto.img ? (
+                            produto.img.startsWith("http") ? (
+                                <img class="card-img" src={produto.img} alt="..." />
+                            ) : (
+                                <img
+                                class="card-img"
+                                src={`http://localhost:5000/images/${produto.img.replace(
+                                    "public/images/",
+                                    ""
+                                )}`}
+                                alt="..."
+                                />
+                            )
+                            ) : (
+                            <img class="card-img" alt="..." />
+                            )}
+                            <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">{produto.name}</h5>
+                                {produto.preco}€
+                            </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <button
+                                class="btn btn-outline-dark mt-auto"
+                                value={produto._id}
+                                onClick={(e) => {
+                                    this.setState(
+                                    { produtoID: e.target.value },
+                                    this.handleProduto
+                                    );
+                                }}
+                                >
+                                View options
+                                </button>
+                            </div>
+                            </div>
                         </div>
                         </div>
                     </div>
-                    </div>
+                    ))
+                ) : (
+            
+                    <h3>This unit doesn't have any products yet.</h3>
+                
+                )}
                 </div>
-                ))
-            ) : (
-        
-                <h3>This unit doesn't have any products yet.</h3>
-              
-            )}
-            </div>
-        </>
-        ))}
+            </>
+            ))
+        : 
+        <>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
-
-
-                {/* <div class="col mb-5">
+                <div class="col mb-5">
                     <div class="card h-100">
                         <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
                         <div class="card-body p-4">
@@ -691,7 +692,15 @@ export default class Homepage extends Component {
                             <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
                         </div>
                     </div>
-                </div> */}
+                </div>
+                </div>
+
+                </>
+        }
+
+
+
+                
             {/* </div> */}
         </div>
     </section>
