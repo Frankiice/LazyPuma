@@ -244,6 +244,79 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
 
 
 
+//relatorios do fornecedor!
+
+// Recuperar todos os produtos vendidos por um fornecedor
+app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProdutoSchema2);
+
+  try {
+    const idFornecedor = req.params.idFornecedor;
+
+    // Passo 1: Recuperar todas as unidades de produção do fornecedor
+    const unidadesProducao = await UnidadeProducao.find({ idFornecedor });//certo
+    const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());//certo 
+    //console.log(unidadesProducaoIds);
+
+    // Passo 2: Filtrar os produtos do fornecedor nas encomendas
+    const produtosVendidos = [];
+
+    const encomendas = await Encomenda.find();//vai buscar todas as encomendas
+    
+    for (const encomenda of encomendas) {
+      for (const item of encomenda.listaUP) {
+        console.log(item._id);
+        if (unidadesProducaoIds.includes(item.idUP)) {
+          const produto = await Produto.findById(item.idProduct);
+          if (produto) {
+            produtosVendidos.push(produto);
+          }
+        }
+      }
+    }
+
+    res.status(200).json(produtosVendidos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+//Relatorios do administrador
+
+app.get("/administrador/relatorios", async (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProdutoSchema2);
+
+  try {
+    const encomendas = await Encomenda.find().lean();
+    let produtosVendidos = [];
+
+    for (let encomenda of encomendas) {
+      for (let item of encomenda.listaUP) {
+        //console.log({ _id: item.idProduct });
+
+         let produto = await Produto.findById(item.idProduct);
+         //let produto = await Produto.findOne({ _id: item.idProduct });
+
+        console.log(produto);
+        if (produto) {
+          produtosVendidos.push(produto);
+        }
+      }
+    }
+
+    res.status(200).json(produtosVendidos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
+
 
 
 app.post("/user/registar", async(req, res) => {

@@ -208,9 +208,10 @@ export default class Navbar extends Component{
   redirect_records = () => {
     if(this.state.type=="consumidor"){  //se for consumidor e quiser aceder aos seus relatorios
       window.location.href = "/user/c/records";
-    }else{ //se for fornecedor e quiser aceder aos seus relatorios
+    }else if(this.state.type=="fornecedor"){ //se for fornecedor e quiser aceder aos seus relatorios
       window.location.href = "/user/f/records";
     }
+    
   }
   
   componentDidMount() {
