@@ -8,27 +8,85 @@ import 'bootstrap';
 import { useRef } from "react";
 import ScrollContainer from 'react-indiana-drag-scroll'
 
-export default class Homepage extends Component{
+export default class Homepage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      categoriaB: "",
+      categoriaA: "",
+      objSearch: window.localStorage.getItem("objSearch") || [],
+      produtoID: "",
+      tipoUser: window.localStorage.getItem("tipoUser"),
+      idUser: "",
+      nickname: "",
+      unidades: [], // Initialize unidades as an empty array
+    };
+    this.handleClick = this.handleClick.bind(this);
+    this.handleProduto = this.handleProduto.bind(this);
+    window.localStorage.removeItem("userUpdated");
+    window.localStorage.removeItem("categoriaB");
+    window.localStorage.removeItem("categoriaA");
+    window.localStorage.removeItem("produtoID");
+    window.localStorage.removeItem("objSearch");
+  }
 
-    constructor(props){
-        super(props);
-        this.state = {
-            categoriaB: "",
-            categoriaA: "",
-            objSearch: window.localStorage.getItem("objSearch") || [],
-            produtoID: "",
+  componentDidMount() {
+    fetch("http://localhost:5000/user/userData", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, "userData");
+        this.setState(
+          {
+            nickname: data.data.nickname,
+            tipoUser: data.data.type,
+            idUser: data.data._id,
+          },
+          () => {
+            const { tipoUser, idUser } = this.state;
+            console.log("tipoUser", tipoUser);
+            if (tipoUser === "fornecedor") {
+              try {
+                console.log("IdUser dentro do try", idUser);
+                const base_url = "http://localhost:5000/user/unidadeProducao";
+                const url = `${base_url}?id=${idUser}`;
+                fetch(url, {
+                  method: "GET",
+                  crossDomain: true,
+                  headers: {
+                    "Content-type": "application/json",
+                    Accept: "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                  },
+                })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    console.log(data, "unidade de producao");
+                    this.setState({
+                      unidades: data,
+                    });
+                  });
+              } catch (err) {
+                console.log(err);
+              }
+            }
+          }
+        );
+      });
+  }
 
-        };
-        this.handleClick = this.handleClick.bind(this);
-        this.handleProduto = this.handleClick.bind(this);
-        window.localStorage.removeItem("userUpdated");
-        window.localStorage.removeItem("categoriaB");
-        window.localStorage.removeItem("categoriaA");
-        window.localStorage.removeItem("produtoID");
-        window.localStorage.removeItem("objSearch");
 
-
-    }
+          //AO CARREGAR NO UPDATE ENVIA PARA USER/
 
 
     handleClick(e){
@@ -74,27 +132,6 @@ export default class Homepage extends Component{
             </ScrollContainer>
         </header>
     </div>
-
-
-    {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <p>Try scrolling the rest of the page to see this option in action.</p>
-        </div>
-    </div> */}
-    {/* <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="myOffcanvasLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="myOffcanvasLabel">Offcanvas</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            swag
-        </div>
-    </div> */}
-
 
 
     
@@ -457,36 +494,79 @@ export default class Homepage extends Component{
             </nav>
         </div>
     </div>
-    {/* <ul class="dropdown-menu" aria-labelledby="cartDropdown">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-    </ul> */}
+
     
     <script src="../scripts/sliderProdutos.js"></script>
     {/* //<!-- Section --> */}
     <section class="py-5">
+    <h1> &nbsp;{this.state.nickname}'s Production Units</h1>
+
         <div class="container px-4 px-lg-5 mt-5">
+        
+        {this.state.unidades.map((unidade) => (
+        <>
+            <h2>{unidade.nome}</h2>
+            <br></br>
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {/* {this.state.objSearch.map((produto) => (
-                            <div key={produto._id}>
-                                <div class="col mb-5">
-                                    <div class="card h-100 crop">
-                                        <img class="card-img-top" src={produto.img} alt="..." />
-                                        <div class="card-body p-4">
-                                            <div class="text-center">
-                                                <h5 class="fw-bolder">{produto.name}</h5>
-                                                $40.00 - $80.00
-                                            </div>
-                                        </div>
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-                        ))} */}
-                <div class="col mb-5">
+            {unidade.listaProdutos.length > 0 ? (
+                unidade.listaProdutos.map((produto) => (
+                <div key={produto._id}>
+                    <div class="col mb-5">
+                    <div class="card h-100 crop">
+                        {produto.img ? (
+                        produto.img.startsWith("http") ? (
+                            <img class="card-img" src={produto.img} alt="..." />
+                        ) : (
+                            <img
+                            class="card-img"
+                            src={`http://localhost:5000/images/${produto.img.replace(
+                                "public/images/",
+                                ""
+                            )}`}
+                            alt="..."
+                            />
+                        )
+                        ) : (
+                        <img class="card-img" alt="..." />
+                        )}
+                        <div class="card-body p-4">
+                        <div class="text-center">
+                            <h5 class="fw-bolder">{produto.name}</h5>
+                            {produto.preco}€
+                        </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <button
+                            class="btn btn-outline-dark mt-auto"
+                            value={produto._id}
+                            onClick={(e) => {
+                                this.setState(
+                                { produtoID: e.target.value },
+                                this.handleProduto
+                                );
+                            }}
+                            >
+                            View options
+                            </button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                ))
+            ) : (
+        
+                <h3>This unit doesn't have any products yet.</h3>
+              
+            )}
+            </div>
+        </>
+        ))}
+
+
+
+                {/* <div class="col mb-5">
                     <div class="card h-100">
                         <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
                         <div class="card-body p-4">
@@ -611,8 +691,8 @@ export default class Homepage extends Component{
                             <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div> */}
+            {/* </div> */}
         </div>
     </section>
     </React.Fragment>

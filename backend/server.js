@@ -1019,7 +1019,7 @@ app.get("/user/unidadeProducao", async (req, res) => {
     
     try {
       const { id } = req.query;
-      //   console.log(id);
+      // console.log(id);
       const units = await UnidadeProducao.find({
         $or: [
           { _id: id },

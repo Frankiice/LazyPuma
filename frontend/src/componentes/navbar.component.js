@@ -7,7 +7,6 @@ import { FaBootstrap } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa"
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import ExercisesList from './exercises-list.component';
 import 'bootstrap';
 
 // const navigate = useNavigate();

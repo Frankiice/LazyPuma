@@ -46,9 +46,10 @@ export default class Login extends Component {
         .then((data) => {
             console.log(data, "userRegister");
             if(data.status=="ok") {
-              alert("login successful");
+              // alert("login successful");
               window.localStorage.setItem("token", data.data);
               window.localStorage.setItem("loggedIn", true);
+              window.localStorage.setItem("tipoUser", data.type);
               if(data.type=="consumidor"){  //se for consumidor
                 window.location.href = "./c";
               }else{ //se for fornecedor
