@@ -1026,6 +1026,41 @@ app.post('/produto', upload.single('img'), async (req, res) => {
   }
 });
 
+app.delete("/produto", async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Produto = mongoose.model('products', ProductDetailsSchema);
+  try {
+    const { id, unidadeProducaoId } = req.query;
+    console.log("id no produto", id);
+    console.log("unidadeProducaoId", unidadeProducaoId);
+
+    // Find the document in UnidadeProducao collection and remove the matching veiculo
+    UnidadeProducao.findOneAndUpdate(
+      { _id: unidadeProducaoId },
+      { $pull: { listaProdutos: { idProduto: id } } },
+      { new: true }
+    )
+      .then(async (data) => {
+        if (data) {
+          // If the document is found and updated successfully
+          // Remove the veiculo document from the veiculos collection
+          await Produto.findOneAndRemove({ _id: id });
+          res.send({ status: "ok", data: data });
+        } else {
+          // If the document is not found
+          res.send({ status: "error", message: "UnidadeProducao not found" });
+        }
+      })
+      .catch((error) => {
+        // If an error occurs during the update
+        res.send({ status: "error", data: error });
+      });
+  } catch (error) {
+    // Handle any errors that may occur
+    res.send({ status: "error", error: error })
+  }
+});
+
   
 
 
@@ -1098,42 +1133,44 @@ app.post("/user/unidadeProducao", async (req, res) => {
 
 
 app.get("/user/unidadeProducao", async (req, res) => {
-    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-    const Product = mongoose.model("products", ProductDetailsSchema); // Assuming "Product" is the model for the product details
-    
-    try {
-      const { id } = req.query;
-      // console.log(id);
-      const units = await UnidadeProducao.find({
-        $or: [
-          { _id: id },
-          { idFornecedor: id }
-        ]
-      });
-    //   console.log("units nas unidades: ", units)
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Product = mongoose.model("products", ProductDetailsSchema); // Assuming "Product" is the model for the product details
 
-      const unitsWithProductDetails = await Promise.all(units.map(async (unit) => {
+  try {
+    const { id } = req.query;
+    console.log(id);
+    const units = await UnidadeProducao.find({
+      $or: [
+        { _id: id },
+        { idFornecedor: id }
+      ]
+    });
+
+    const unitsWithProductDetails = await Promise.all(units.map(async (unit) => {
+      if (unit) {
         const productList = await Promise.all(unit.listaProdutos.map(async (productEntry) => {
           const product = await Product.findById(productEntry.idProduto);
           return {
-            ...product.toObject(),
+            ...(product ? product.toObject() : {}),
             quantidade: productEntry.quantidade,
             preco: productEntry.preco,
           };
         }));
-  
+
         return {
-          ...unit.toObject(),
+          ...(unit ? unit.toObject() : {}),
           listaProdutos: productList
         };
-      }));
-  
-      res.json(unitsWithProductDetails);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "An error occurred while retrieving production units." });
-    }
-  });
+      }
+    }));
+
+    res.json(unitsWithProductDetails.filter(unit => unit));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while retrieving production units." });
+  }
+});
+
 
 app.delete("/user/unidadeProducao", async (req, res) => {
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
@@ -1148,7 +1185,9 @@ app.delete("/user/unidadeProducao", async (req, res) => {
         .catch((error) => {
             res.send({status: "error", data: error})
         });
-  }catch(error){}
+  }catch(error){
+    res.send({ status: "error", error: error })
+  }
 });
   
   
@@ -1256,6 +1295,42 @@ app.delete("/user/unidadeProducao", async (req, res) => {
       res.send({ status: "error", error });
     }
   });
+
+  app.delete("/user/veiculos", async (req, res) => {
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+    const Veiculo = mongoose.model("veiculos", VeiculoSchema);
+    try {
+      const { id, unidadeProducaoId } = req.query;
+      console.log("id nos veiculos", id);
+      console.log("unidadeProducaoId", unidadeProducaoId);
+  
+      // Find the document in UnidadeProducao collection and remove the matching veiculo
+      UnidadeProducao.findOneAndUpdate(
+        { _id: unidadeProducaoId },
+        { $pull: { listaVeiculos: { _id: id } } },
+        { new: true }
+      )
+        .then(async (data) => {
+          if (data) {
+            // If the document is found and updated successfully
+            // Remove the veiculo document from the veiculos collection
+            await Veiculo.findOneAndRemove({ _id: id });
+            res.send({ status: "ok", data: data });
+          } else {
+            // If the document is not found
+            res.send({ status: "error", message: "UnidadeProducao not found" });
+          }
+        })
+        .catch((error) => {
+          // If an error occurs during the update
+          res.send({ status: "error", data: error });
+        });
+    } catch (error) {
+      // Handle any errors that may occur
+      res.send({ status: "error", error: error })
+    }
+  });
+  
   
   
   

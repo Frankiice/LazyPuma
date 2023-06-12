@@ -34,7 +34,9 @@ export default class Up extends Component {
       veiculoID: "",
       msg: "",
       showConfirmationDialog: false,
-      msgUPremoved: ""
+      msgRemoved: "",
+      remove: "",
+      confirmationDialogId: ""
     };
     this.getCoordenadas = this.getCoordenadas.bind(this);
     this.handleUnidadeProducao = this.handleUnidadeProducao.bind(this);
@@ -43,6 +45,8 @@ export default class Up extends Component {
     this.showConfirmationDialog = this.showConfirmationDialog.bind(this);
     this.hideConfirmationDialog = this.hideConfirmationDialog.bind(this);
     this.handleRemoveUP = this.handleRemoveUP.bind(this);
+    this.handleRemoveVeiculo = this.handleRemoveVeiculo.bind(this);
+    this.handleRemoveProduto = this.handleRemoveProduto.bind(this);
   }
 
   componentDidMount(){
@@ -168,6 +172,16 @@ handleUnidadeProducao(e){
   });
 };
 
+// Method to show the confirmation dialog
+showConfirmationDialog() {
+  this.setState({ showConfirmationDialog: true });
+}
+
+// Method to hide the confirmation dialog
+hideConfirmationDialog() {
+  this.setState({ showConfirmationDialog: false });
+}
+
 
 handleNovoVeiculo(e){
   window.location.href = "/user/f/veiculo";
@@ -179,6 +193,34 @@ handleVeiculo(veiculoID) {
   console.log("veiculoID", veiculoID)
 }
 
+handleRemoveVeiculo(){
+  const { confirmationDialogId, unidadeID } = this.state
+  console.log("confirmationDialogId", confirmationDialogId)
+  const base_url = "http://localhost:5000/user/veiculos"
+  const url = `${base_url}?id=${confirmationDialogId}&unidadeProducaoId=${unidadeID}`;
+  fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 'ok') {
+        console.log('Document deleted:', data.data);
+        this.setState({ msgRemoved: "Vehicle Was Deleted" });
+
+      } else {
+        console.log('Error:', data.data);
+        // Handle the error case appropriately
+      }
+    })
+    .catch((error) => {
+      console.log('Error:', error);
+      // Handle any network or fetch-related errors
+    });
+  };
+
 
 handleNovoProduto(e){
   window.location.href = "/user/f/produto";
@@ -189,19 +231,37 @@ handleProduto(produtoID) {
   window.location.href = "/user/f/produto";
 }
 
+handleRemoveProduto(){
+  const { confirmationDialogId, unidadeID } = this.state
+  console.log("confirmationDialogId", confirmationDialogId)
+  const base_url = "http://localhost:5000/produto"
+  const url = `${base_url}?id=${confirmationDialogId}&unidadeProducaoId=${unidadeID}`;
+  fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 'ok') {
+        console.log('Document deleted:', data.data);
+        this.setState({ msgRemoved: "Product Was Deleted" });
+
+      } else {
+        console.log('Error:', data.data);
+        // Handle the error case appropriately
+      }
+    })
+    .catch((error) => {
+      console.log('Error:', error);
+      // Handle any network or fetch-related errors
+    });
+  };
+
 handleEditUP(unidadeID){
   window.localStorage.setItem("unidadeID", unidadeID);
   window.location.href = "/user/f/up/edit";
-}
-
-// Method to show the confirmation dialog
-showConfirmationDialog() {
-  this.setState({ showConfirmationDialog: true });
-}
-
-// Method to hide the confirmation dialog
-hideConfirmationDialog() {
-  this.setState({ showConfirmationDialog: false });
 }
 
 handleRemoveUP(){
@@ -219,7 +279,7 @@ handleRemoveUP(){
     .then((data) => {
       if (data.status === 'ok') {
         console.log('Document deleted:', data.data);
-        this.setState({ msgUPremoved: "Produtcion Unit Was Deleted" });
+        this.setState({ msgRemoved: "Produtcion Unit Was Deleted" });
         
       } else {
         console.log('Error:', data.data);
@@ -247,7 +307,7 @@ render() {
             <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
  
 
-             {this.state.msgUPremoved === "" ?
+             {this.state.msgRemoved === "" ?
             
              (unidadeID != null ? 
             
@@ -274,7 +334,7 @@ render() {
                             <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.showConfirmationDialog()}>
                               Remove Production Unit
                             </a> */}
-                            {this.state.showConfirmationDialog ? (
+                            {this.state.showConfirmationDialog && this.state.remove === "up" && this.state.confirmationDialogId === unidade._id  ? (
                               
                               <div className="confirmation-dialog">
                                 <h6>Are you sure you want to remove this Production Unit?</h6>
@@ -290,7 +350,7 @@ render() {
                             )
                           :
                           (<div className="col-md-auto">
-                          <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.showConfirmationDialog()}>
+                          <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ remove: "up" , confirmationDialogId: unidade._id}); this.showConfirmationDialog();}}>
                             Remove Production Unit
                           </a>
                           </div>
@@ -345,10 +405,27 @@ render() {
                                     </div>
                                     <div className="col-lg-2 d-flex justify-content-end">
                                     <div className="row">
-                                      <div className="float-md-end">
-                                      <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.handleRemoveProduct(item._id)}>Remove</a>
-                                   
+                                    {this.state.showConfirmationDialog && this.state.remove === "produto" && this.state.confirmationDialogId === item._id ? (
+                                      <div className="confirmation-dialog">
+                                        <h6>Are you sure you want to remove this Product</h6>
+                                        <div>
+                                          <button className="btn btn-danger" onClick={() => this.handleRemoveProduto(item._id)}>
+                                            Confirm
+                                          </button>
+                                          <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
+                                            Cancel
+                                          </button>
+                                        </div>
                                       </div>
+                                    )
+                                  :
+                                  (<div className="col-md-auto">
+                                  <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ remove: "produto", confirmationDialogId: item._id}); this.showConfirmationDialog();}}>
+                                    Remove 
+                                  </a>
+                                  </div>
+                                  )
+                                  }
                                       <div className="float-md-end mt-2">
                                         <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => this.handleProduto(item._id)}>Edit</a>
                                       </div>
@@ -402,9 +479,27 @@ render() {
                                 </div>
                                 <div className="col-lg-2 d-flex justify-content-end">
                                     <div className="row">
-                                      <div class="float-md-end">
-                                        <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerVeiculo(index)}> Remove</a>
+                                    {this.state.showConfirmationDialog && this.state.remove === "veiculo" && this.state.confirmationDialogId === veiculo._id ? (
+                                    <div className="confirmation-dialog">
+                                      <h6>Are you sure you want to remove this Vehicle?</h6>
+                                      <div>
+                                        <button className="btn btn-danger" onClick={() => this.handleRemoveVeiculo(veiculo._id)}>
+                                          Confirm
+                                        </button>
+                                        <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
+                                          Cancel
+                                        </button>
                                       </div>
+                                    </div>
+                                  )
+                                :
+                                (<div className="col-md-auto">
+                                <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ remove: "veiculo", confirmationDialogId: veiculo._id }); this.showConfirmationDialog();}}>
+                                  Remove
+                                </a>
+                                </div>
+                                )
+                                }
                                       <div class="float-md-end mt-2">
                                         <a href="#" class="btn btn-light border icon-hover-danger" onClick={() => this.handleVeiculo(veiculo._id)}> Edit</a>
                                       </div>
@@ -553,7 +648,7 @@ render() {
                       <div class="m-4">
                       <div class="carrinho-vazio">
                       <br></br>
-                          <h4 class="text-secondary justify-content-md-center">{this.state.msgUPremoved}!</h4>
+                          <h4 class="text-secondary justify-content-md-center">{this.state.msgRemoved}!</h4>
                       </div>
                       <div>
                       <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f">Back </a>

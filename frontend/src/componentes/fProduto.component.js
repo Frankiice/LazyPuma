@@ -575,16 +575,27 @@ render() {
                         <button className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" onClick={this.addProperty}>Add Property</button>
                     </div>
                     <div className="row">
-                        {this.state.propriedades.map((property, index) => (
-                                <div className="col-md-6" key={index}>
-                                <div className="form-group">
-                                    <label>{property.name}</label>
-                                    <div className="input-field">
-                                    <input type="text" value={property.value} readOnly />
-                                    </div>
+                        {this.state.propriedades.length !== 0 && this.state.properties.length === 0 && this.state.propriedades.map((property, index) => (
+                            <div className="col-md-6" key={index}>
+                            <div className="form-group">
+                                <label>{property.name}</label>
+                                <div className="input-field">
+                                <input type="text" value={property.value} readOnly />
                                 </div>
-                                </div>
-                            ))}
+                            </div>
+                            </div>
+                        ))}
+
+                        {this.state.properties.length !== 0 && this.state.properties.map((property, index) => (
+                            <div className="col-md-6" key={index}>
+                            <div className="form-group">
+                            <label>{property.name}</label>
+                            <div className="input-field">
+                                <input type="text" value={property.value} readOnly />
+                            </div>
+                            </div>
+                            </div>
+                        ))}
                     </div>
                     </div>
                 </div>
