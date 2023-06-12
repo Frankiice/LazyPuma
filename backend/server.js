@@ -1134,6 +1134,23 @@ app.get("/user/unidadeProducao", async (req, res) => {
       res.status(500).json({ error: "An error occurred while retrieving production units." });
     }
   });
+
+app.delete("/user/unidadeProducao", async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  try {
+    const { id } = req.query;
+    console.log("id", id)
+
+    UnidadeProducao.findOneAndRemove({_id: id})
+        .then((data) => {
+            res.send({status: "ok", data: data})
+        })
+        .catch((error) => {
+            res.send({status: "error", data: error})
+        });
+  }catch(error){}
+});
+  
   
 
   app.get("/user/veiculos", async (req, res) => {

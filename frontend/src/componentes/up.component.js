@@ -33,13 +33,16 @@ export default class Up extends Component {
       produtoID: "",
       veiculoID: "",
       msg: "",
+      showConfirmationDialog: false,
+      msgUPremoved: ""
     };
     this.getCoordenadas = this.getCoordenadas.bind(this);
     this.handleUnidadeProducao = this.handleUnidadeProducao.bind(this);
     this.handleProduto= this.handleProduto.bind(this);
     this.handleVeiculo= this.handleVeiculo.bind(this);
-
-
+    this.showConfirmationDialog = this.showConfirmationDialog.bind(this);
+    this.hideConfirmationDialog = this.hideConfirmationDialog.bind(this);
+    this.handleRemoveUP = this.handleRemoveUP.bind(this);
   }
 
   componentDidMount(){
@@ -191,7 +194,44 @@ handleEditUP(unidadeID){
   window.location.href = "/user/f/up/edit";
 }
 
-  
+// Method to show the confirmation dialog
+showConfirmationDialog() {
+  this.setState({ showConfirmationDialog: true });
+}
+
+// Method to hide the confirmation dialog
+hideConfirmationDialog() {
+  this.setState({ showConfirmationDialog: false });
+}
+
+handleRemoveUP(){
+  const { unidadeID } = this.state
+  console.log("unidadeID", unidadeID)
+  const base_url = "http://localhost:5000/user/unidadeProducao"
+  const url = `${base_url}?id=${unidadeID}`;
+  fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === 'ok') {
+        console.log('Document deleted:', data.data);
+        this.setState({ msgUPremoved: "Produtcion Unit Was Deleted" });
+        
+      } else {
+        console.log('Error:', data.data);
+        // Handle the error case appropriately
+      }
+    })
+    .catch((error) => {
+      console.log('Error:', error);
+      // Handle any network or fetch-related errors
+    });
+  };
+ 
 
 render() {
   const { unidadeID, unidades } = this.state;
@@ -207,7 +247,9 @@ render() {
             <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
  
 
-             {unidadeID != null ? 
+             {this.state.msgUPremoved === "" ?
+            
+             (unidadeID != null ? 
             
                 unidades.length === 0 ? (
                 <div class="carrinho-vazio">
@@ -228,9 +270,33 @@ render() {
                         </div>
                         <div className="col-lg-2 d-flex justify-content-end">
                           <div className="row">
-                            <div className="col-md-auto">
-                              <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}>Remove Production Unit</a>
-                            </div>
+                            {/* <div className="col-md-auto">
+                            <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.showConfirmationDialog()}>
+                              Remove Production Unit
+                            </a> */}
+                            {this.state.showConfirmationDialog ? (
+                              
+                              <div className="confirmation-dialog">
+                                <h6>Are you sure you want to remove this Production Unit?</h6>
+                                <div>
+                                  <button className="btn btn-danger" onClick={() => this.handleRemoveUP(unidade._id)}>
+                                    Confirm
+                                  </button>
+                                  <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
+                                    Cancel
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          :
+                          (<div className="col-md-auto">
+                          <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.showConfirmationDialog()}>
+                            Remove Production Unit
+                          </a>
+                          </div>
+                          )
+                          }
+                            {/* </div> */}
                             <div className="col-md-auto mt-2">
                               <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => this.handleEditUP(unidadeID)}>Edit Production Unit</a>
                             </div>
@@ -280,7 +346,8 @@ render() {
                                     <div className="col-lg-2 d-flex justify-content-end">
                                     <div className="row">
                                       <div className="float-md-end">
-                                        <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}>Remove</a>
+                                      <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => this.handleRemoveProduct(item._id)}>Remove</a>
+                                   
                                       </div>
                                       <div className="float-md-end mt-2">
                                         <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => this.handleProduto(item._id)}>Edit</a>
@@ -481,6 +548,19 @@ render() {
                       </div>
                   </div>
                 )
+             ) : (
+              <div class="card d-flex border shadow-0 custom-card">
+                      <div class="m-4">
+                      <div class="carrinho-vazio">
+                      <br></br>
+                          <h4 class="text-secondary justify-content-md-center">{this.state.msgUPremoved}!</h4>
+                      </div>
+                      <div>
+                      <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f">Back </a>
+                      </div>
+                      </div>
+                  </div>
+             )
               }
                
                 </div>
