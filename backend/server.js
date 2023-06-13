@@ -1330,6 +1330,21 @@ app.delete("/user/unidadeProducao", async (req, res) => {
       res.send({ status: "error", error: error })
     }
   });
+
+app.get("/users", async (req, res) => {
+  const User = mongoose.model("users", UserDetailsSchema);
+
+  try {
+    const users = await User.find();
+    return res.json({ status: "ok", data: users });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occured during the connection to the data base",
+    });
+  }
+});
+  
   
   
   

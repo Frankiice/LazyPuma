@@ -341,7 +341,7 @@ render() {
                                 <div>
                                   <button className="btn btn-danger" onClick={() => this.handleRemoveUP(unidade._id)}>
                                     Confirm
-                                  </button>
+                                  </button>&nbsp;
                                   <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
                                     Cancel
                                   </button>
@@ -411,7 +411,7 @@ render() {
                                         <div>
                                           <button className="btn btn-danger" onClick={() => this.handleRemoveProduto(item._id)}>
                                             Confirm
-                                          </button>
+                                          </button>&nbsp;
                                           <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
                                             Cancel
                                           </button>
@@ -485,7 +485,7 @@ render() {
                                       <div>
                                         <button className="btn btn-danger" onClick={() => this.handleRemoveVeiculo(veiculo._id)}>
                                           Confirm
-                                        </button>
+                                        </button>&nbsp;
                                         <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
                                           Cancel
                                         </button>
