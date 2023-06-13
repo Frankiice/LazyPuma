@@ -172,8 +172,6 @@ render() {
                 <br></br>
                 <h5 class="text-secondary justify-content-md-center">{this.state.id_consumidor} hasn't placed any orders yet 
                </h5>
-                
-      
               </div>
 
               
