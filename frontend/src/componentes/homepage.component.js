@@ -20,6 +20,9 @@ export default class Homepage extends Component {
       idUser: "",
       nickname: "",
       unidades: [], // Initialize unidades as an empty array
+      produtos: [],
+      user_lat: window.localStorage.getItem("user_lat") || "",
+      user_lon: window.localStorage.getItem("user_lon") || "",
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleProduto = this.handleProduto.bind(this);
@@ -31,6 +34,8 @@ export default class Homepage extends Component {
   }
 
   componentDidMount() {
+    const token = window.localStorage.getItem("token")
+    if (token){
     fetch("http://localhost:5000/user/userData", {
       method: "POST",
       crossDomain: true,
@@ -79,12 +84,90 @@ export default class Homepage extends Component {
               } catch (err) {
                 console.log(err);
               }
+              
+            }else{
+                try {
+                  console.log("IdUser dentro do try", idUser);
+                  const base_url = "http://localhost:5000/user/homepage";
+                  const url = `${base_url}?id=${idUser}`;
+                  fetch(url, {
+                    method: "GET",
+                    crossDomain: true,
+                    headers: {
+                      "Content-type": "application/json",
+                      Accept: "application/json",
+                      "Access-Control-Allow-Origin": "*",
+                    },
+                  })
+                    .then((res) => res.json())
+                    .then((data) => {
+                      console.log(data, "Produtos For you");
+                      this.setState({
+                        produtos: data,
+                      });
+                    });
+                } catch (err) {
+                  console.log(err);
+                }
             }
           }
         );
       });
+    }else{
+        try {
+            const base_url = "http://localhost:5000/user/homepage";
+            const url = `${base_url}`;
+            fetch(url, {
+              method: "GET",
+              crossDomain: true,
+              headers: {
+                "Content-type": "application/json",
+                Accept: "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data, "Produtos For you");
+                this.setState({
+                    produtos: data,
+                });
+              });
+          } catch (err) {
+            console.log(err);
+          }
+
+    }
   }
 
+  calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+  
+    // Convert degrees to radians
+    const lat1Rad = this.degToRad(lat1);
+    const lon1Rad = this.degToRad(lon1);
+    const lat2Rad = this.degToRad(lat2);
+    const lon2Rad = this.degToRad(lon2);
+  
+    // Calculate the differences between the coordinates
+    const dLat = lat2Rad - lat1Rad;
+    const dLon = lon2Rad - lon1Rad;
+  
+    // Haversine formula
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var distance = R * c;
+
+    distance = distance.toFixed(2);
+  
+    return distance; // Distance in kilometers
+  }
+  
+degToRad(degrees) {
+    return degrees * (Math.PI / 180);
+  }
 
           //AO CARREGAR NO UPDATE ENVIA PARA USER/
 
@@ -570,138 +653,63 @@ export default class Homepage extends Component {
             </>
             ))
         : 
-        <>
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <>
+            <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {this.state.produtos.length > 0 ? (
+                this.state.produtos.map((produto, index) => (
+                     <div key={produto._id}>
+                     <div class="col mb-5">
+                        <div class="card h-100 crop">
+                        {produto.img ? (
+                            produto.img.startsWith("http") ? (
+                                <img class="card-img" src={produto.img} style={{ height: '200px' }} alt="..." />
+                            ) : (
+                                <img
+                                class="card-img"
+                                src={`http://localhost:5000/images/${produto.img.replace(
+                                    "public/images/",
+                                    ""
+                                )}`}
+                                style={{ height: '200px' }}
+                                alt="..."
+                                />
+                            )
+                            ) : (
+                            <img class="card-img" alt="..." style={{ height: '200px' }} />
+                        )}
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder">{produto.name}</h5>
+                                    {this.state.tipoUser === "consumidor" ?
+                                        this.calculateDistance(
+                                            parseFloat(this.state.user_lat), // Convert to float
+                                            parseFloat(this.state.user_lon), // Convert to float
+                                            parseFloat(produto.lat), // Convert to float
+                                            parseFloat(produto.lon) // Convert to float
+                                        )
+                                    :
+                                        <></>}
+                                    <br></br>
+                                    {produto.preco}€
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                ))
+            ) : (
+            
+                <h3>There are no products yet</h3>
+                
+            )}
+            </div>
 
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/produto">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                </div>
+            
 
-                </>
+            </>
         }
 
 

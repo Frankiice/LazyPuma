@@ -1149,7 +1149,7 @@ app.post("/user/unidadeProducao", async (req, res) => {
 });
 
 
-
+//vai buscar as unidades e os produtos para a homepage do fornecedor
 app.get("/user/unidadeProducao", async (req, res) => {
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   const Product = mongoose.model("products", ProductDetailsSchema); // Assuming "Product" is the model for the product details
@@ -1207,6 +1207,77 @@ app.delete("/user/unidadeProducao", async (req, res) => {
     res.send({ status: "error", error: error })
   }
 });
+
+//vai buscar as informações para fazer uma homepage para o consumidor
+app.get("/user/homepage", async (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Product = mongoose.model("products", ProductDetailsSchema);
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+
+  try {
+    const { id } = req.query;
+    let productList;
+
+    if (id) {
+      const encomendas = await Encomenda.find({
+        $or: [
+          { _id: id },
+          { idConsumidor: id }
+        ]
+      });
+
+      if (encomendas.length > 0) {
+        // User has placed orders
+        const categories = encomendas.flatMap(unit => unit.listaProdutos.map(productEntry => productEntry.categorieB));
+        productList = await Product.find({ categorieB: { $in: categories } });
+      } else {
+        // User has no orders
+        const categories = await Product.distinct("categorieB");
+        productList = await Promise.all(categories.map(async (category) => {
+          const product = await Product.findOne({ categorieB: category });
+          return product.toObject();
+        }));
+      }
+    } else {
+      const categories = await Product.distinct("categorieB");
+      productList = await Promise.all(categories.map(async (category) => {
+        const product = await Product.findOne({ categorieB: category });
+        return product.toObject();
+      }));
+    }
+
+    // Fetch price, lat, and lon from UnidadesProdução table for each product
+    productList = await Promise.all(productList.map(async (product) => {
+      const unidadeProducao = await UnidadeProducao.findOne({ "listaProdutos.idProduto": product._id });
+      if (unidadeProducao) {
+        const productEntry = unidadeProducao.listaProdutos.find(entry => entry.idProduto === product._id.toString());
+        if (productEntry) {
+          product.preco = productEntry.preco;
+          product.lat = unidadeProducao.lat;
+          product.lon = unidadeProducao.lon;
+        } else {
+          // Set default values when product is not found in UnidadesProdução
+          product.preco = 0;
+          product.lat = 0;
+          product.lon = 0;
+        }
+      } else {
+        // Set default values when product is not found in UnidadesProdução
+        product.preco = 0;
+        product.lat = 0;
+        product.lon = 0;
+      }
+      return product;
+    }));
+
+    res.json(productList);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while retrieving products." });
+  }
+});
+
+
   
   
 
