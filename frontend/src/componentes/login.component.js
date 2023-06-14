@@ -53,7 +53,11 @@ export default class Login extends Component {
               if(data.type=="consumidor"){  //se for consumidor
                 window.location.href = "./c";
               }else{ //se for fornecedor
+                if(data.type==="fornecedor"){
                 window.location.href = "./f";
+                }else{
+                  window.location.href = "./admin";
+                }
               }
               
             }else{

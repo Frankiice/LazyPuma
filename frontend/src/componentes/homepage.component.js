@@ -499,7 +499,13 @@ export default class Homepage extends Component {
     <script src="../scripts/sliderProdutos.js"></script>
     {/* //<!-- Section --> */}
     <section class="py-5">
-    <h1> &nbsp;{this.state.nickname}'s Production Units</h1>
+    {this.state.tipoUser === "fornecedor" ?
+        <h1> &nbsp;{this.state.nickname}'s Production Units</h1>
+    :   
+        <>
+        <h1> &nbsp;Products for You</h1>
+        </>
+    }
 
         <div class="container px-4 px-lg-5 mt-5">
         {this.state.tipoUser === "fornecedor" ?

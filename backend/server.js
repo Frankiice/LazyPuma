@@ -78,6 +78,24 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
+const UserDeactivetedDetailsSchema = new mongoose.Schema(
+  {
+  email: String,
+  type: String,
+  fullname: String,
+  nickname: String,
+  phone: String,
+  morada: String,
+  lat: String,
+  lon: String,
+  nif: Number,
+  password: String,
+  },
+  {
+      collection: "usersD"
+  }
+);
+
 const ProductPropertiesSchema = new mongoose.Schema(
   {
       name: String,
@@ -1045,6 +1063,41 @@ app.post('/produto', upload.single('img'), async (req, res) => {
   }
 });
 
+app.delete("/produto", async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Produto = mongoose.model('products', ProductDetailsSchema);
+  try {
+    const { id, unidadeProducaoId } = req.query;
+    console.log("id no produto", id);
+    console.log("unidadeProducaoId", unidadeProducaoId);
+
+    // Find the document in UnidadeProducao collection and remove the matching veiculo
+    UnidadeProducao.findOneAndUpdate(
+      { _id: unidadeProducaoId },
+      { $pull: { listaProdutos: { idProduto: id } } },
+      { new: true }
+    )
+      .then(async (data) => {
+        if (data) {
+          // If the document is found and updated successfully
+          // Remove the veiculo document from the veiculos collection
+          await Produto.findOneAndRemove({ _id: id });
+          res.send({ status: "ok", data: data });
+        } else {
+          // If the document is not found
+          res.send({ status: "error", message: "UnidadeProducao not found" });
+        }
+      })
+      .catch((error) => {
+        // If an error occurs during the update
+        res.send({ status: "error", data: error });
+      });
+  } catch (error) {
+    // Handle any errors that may occur
+    res.send({ status: "error", error: error })
+  }
+});
+
   
 
 
@@ -1117,42 +1170,63 @@ app.post("/user/unidadeProducao", async (req, res) => {
 
 
 app.get("/user/unidadeProducao", async (req, res) => {
-    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
-    const Product = mongoose.model("products", ProductDetailsSchema); // Assuming "Product" is the model for the product details
-    
-    try {
-      const { id } = req.query;
-      // console.log(id);
-      const units = await UnidadeProducao.find({
-        $or: [
-          { _id: id },
-          { idFornecedor: id }
-        ]
-      });
-    //   console.log("units nas unidades: ", units)
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Product = mongoose.model("products", ProductDetailsSchema); // Assuming "Product" is the model for the product details
 
-      const unitsWithProductDetails = await Promise.all(units.map(async (unit) => {
+  try {
+    const { id } = req.query;
+    console.log(id);
+    const units = await UnidadeProducao.find({
+      $or: [
+        { _id: id },
+        { idFornecedor: id }
+      ]
+    });
+
+    const unitsWithProductDetails = await Promise.all(units.map(async (unit) => {
+      if (unit) {
         const productList = await Promise.all(unit.listaProdutos.map(async (productEntry) => {
           const product = await Product.findById(productEntry.idProduto);
           return {
-            ...product.toObject(),
+            ...(product ? product.toObject() : {}),
             quantidade: productEntry.quantidade,
             preco: productEntry.preco,
           };
         }));
-  
+
         return {
-          ...unit.toObject(),
+          ...(unit ? unit.toObject() : {}),
           listaProdutos: productList
         };
-      }));
+      }
+    }));
+
+    res.json(unitsWithProductDetails.filter(unit => unit));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred while retrieving production units." });
+  }
+});
+
+
+app.delete("/user/unidadeProducao", async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  try {
+    const { id } = req.query;
+    console.log("id", id)
+
+    UnidadeProducao.findOneAndRemove({_id: id})
+        .then((data) => {
+            res.send({status: "ok", data: data})
+        })
+        .catch((error) => {
+            res.send({status: "error", data: error})
+        });
+  }catch(error){
+    res.send({ status: "error", error: error })
+  }
+});
   
-      res.json(unitsWithProductDetails);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "An error occurred while retrieving production units." });
-    }
-  });
   
 
   app.get("/user/veiculos", async (req, res) => {
@@ -1258,11 +1332,148 @@ app.get("/user/unidadeProducao", async (req, res) => {
       res.send({ status: "error", error });
     }
   });
+
+  app.delete("/user/veiculos", async (req, res) => {
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+    const Veiculo = mongoose.model("veiculos", VeiculoSchema);
+    try {
+      const { id, unidadeProducaoId } = req.query;
+      console.log("id nos veiculos", id);
+      console.log("unidadeProducaoId", unidadeProducaoId);
   
-  
-  
-  
-  
+      // Find the document in UnidadeProducao collection and remove the matching veiculo
+      UnidadeProducao.findOneAndUpdate(
+        { _id: unidadeProducaoId },
+        { $pull: { listaVeiculos: { _id: id } } },
+        { new: true }
+      )
+        .then(async (data) => {
+          if (data) {
+            // If the document is found and updated successfully
+            // Remove the veiculo document from the veiculos collection
+            await Veiculo.findOneAndRemove({ _id: id });
+            res.send({ status: "ok", data: data });
+          } else {
+            // If the document is not found
+            res.send({ status: "error", message: "UnidadeProducao not found" });
+          }
+        })
+        .catch((error) => {
+          // If an error occurs during the update
+          res.send({ status: "error", data: error });
+        });
+    } catch (error) {
+      // Handle any errors that may occur
+      res.send({ status: "error", error: error })
+    }
+  });
+
+app.get("/users", async (req, res) => {
+  const User = mongoose.model("users", UserDetailsSchema);
+
+  try {
+    const users = await User.find();
+    return res.json({ status: "ok", data: users });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occured during the connection to the data base",
+    });
+  }
+});
+
+app.get("/usersD", async (req, res) => {
+  const UserD = mongoose.model("usersD", UserDeactivetedDetailsSchema);
+
+
+  try {
+    const users = await UserD.find();
+    return res.json({ status: "ok", data: users });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occured during the connection to the data base",
+    });
+  }
+});
+
+//usado para dar delete de um user dos users Activos e passa para os desativos
+app.delete("/user", async (req, res) => {
+  const User = mongoose.model("users", UserDetailsSchema);
+  const UserD = mongoose.model("usersD", UserDeactivetedDetailsSchema);
+
+  const userId = req.body.userId; // Assuming the user ID is provided in the request body
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.json({ status: "error", error: "User not found" });
+    }
+
+    const userD = new UserD({
+      // Copy the relevant user information to the UserD model
+      email: user.email,
+      type: user.type,
+      fullname: user.fullname,
+      nickname: user.nickname,
+      phone: user.phone,
+      morada: user.morada,
+      lat: user.lat,
+      lon: user.lon,
+      nif: user.nif,
+      password: user.password
+    });
+
+    await userD.save();
+    await User.findByIdAndDelete(userId); // Delete the user from the User table
+    return res.json({ status: "ok", data: userD });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occurred during the connection to the database",
+    });
+  }
+});
+
+//usado para dar delete de um user dos users Desativos e passa para os Ativos
+app.delete("/userD", async (req, res) => {
+  const User = mongoose.model("users", UserDetailsSchema);
+  const UserD = mongoose.model("usersD", UserDeactivetedDetailsSchema);
+
+  const userId = req.body.userId; // Assuming the user ID is provided in the request body
+
+  try {
+    const userD = await UserD.findById(userId);
+
+    if (!userD) {
+      return res.json({ status: "error", error: "User not found" });
+    }
+
+    const user = new User({
+      // Copy the relevant user information to the UserD model
+      email: userD.email,
+      type: userD.type,
+      fullname: userD.fullname,
+      nickname: userD.nickname,
+      phone: userD.phone,
+      morada: userD.morada,
+      lat: userD.lat,
+      lon: userD.lon,
+      nif: userD.nif,
+      password: userD.password
+    });
+
+    await user.save();
+    await UserD.findByIdAndDelete(userId); // Delete the user from the UserD table
+    return res.json({ status: "ok", data: user });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occurred during the connection to the database",
+    });
+  }
+});
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);

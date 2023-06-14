@@ -338,6 +338,13 @@ export default class Navbar extends Component{
           </a>
         </li>}
       </ul>
+      {this.state.type !== "fornecedor" ? 
+        this.state.type === "admin" ? 
+        <>
+        <form class="d-flex px-3 nav-item " >
+        <div></div></form>
+        </>
+        :
        <form class="d-flex px-3 nav-item " >
        <button
                 className="btn btn-outline-light col-md-12 dropdown-hover"
@@ -445,6 +452,10 @@ export default class Navbar extends Component{
           </div>
           <div class="overlay"></div>
       </form>
+    : 
+    <>
+    <form class="d-flex px-3 nav-item " >
+      <div></div></form></>} 
       
 
 
