@@ -78,6 +78,24 @@ const UserDetailsSchema = new mongoose.Schema(
     }
 );
 
+const UserDeactivetedDetailsSchema = new mongoose.Schema(
+  {
+  email: String,
+  type: String,
+  fullname: String,
+  nickname: String,
+  phone: String,
+  morada: String,
+  lat: String,
+  lon: String,
+  nif: Number,
+  password: String,
+  },
+  {
+      collection: "usersD"
+  }
+);
+
 const ProductPropertiesSchema = new mongoose.Schema(
   {
       name: String,
@@ -1344,13 +1362,99 @@ app.get("/users", async (req, res) => {
     });
   }
 });
-  
-  
-  
-  
-  
-  
-  
+
+app.get("/usersD", async (req, res) => {
+  const UserD = mongoose.model("usersD", UserDeactivetedDetailsSchema);
+
+
+  try {
+    const users = await UserD.find();
+    return res.json({ status: "ok", data: users });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occured during the connection to the data base",
+    });
+  }
+});
+
+//usado para dar delete de um user dos users Activos e passa para os desativos
+app.delete("/user", async (req, res) => {
+  const User = mongoose.model("users", UserDetailsSchema);
+  const UserD = mongoose.model("usersD", UserDeactivetedDetailsSchema);
+
+  const userId = req.body.userId; // Assuming the user ID is provided in the request body
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.json({ status: "error", error: "User not found" });
+    }
+
+    const userD = new UserD({
+      // Copy the relevant user information to the UserD model
+      email: user.email,
+      type: user.type,
+      fullname: user.fullname,
+      nickname: user.nickname,
+      phone: user.phone,
+      morada: user.morada,
+      lat: user.lat,
+      lon: user.lon,
+      nif: user.nif,
+      password: user.password
+    });
+
+    await userD.save();
+    await User.findByIdAndDelete(userId); // Delete the user from the User table
+    return res.json({ status: "ok", data: userD });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occurred during the connection to the database",
+    });
+  }
+});
+
+//usado para dar delete de um user dos users Desativos e passa para os Ativos
+app.delete("/userD", async (req, res) => {
+  const User = mongoose.model("users", UserDetailsSchema);
+  const UserD = mongoose.model("usersD", UserDeactivetedDetailsSchema);
+
+  const userId = req.body.userId; // Assuming the user ID is provided in the request body
+
+  try {
+    const userD = await UserD.findById(userId);
+
+    if (!userD) {
+      return res.json({ status: "error", error: "User not found" });
+    }
+
+    const user = new User({
+      // Copy the relevant user information to the UserD model
+      email: userD.email,
+      type: userD.type,
+      fullname: userD.fullname,
+      nickname: userD.nickname,
+      phone: userD.phone,
+      morada: userD.morada,
+      lat: userD.lat,
+      lon: userD.lon,
+      nif: userD.nif,
+      password: userD.password
+    });
+
+    await user.save();
+    await UserD.findByIdAndDelete(userId); // Delete the user from the UserD table
+    return res.json({ status: "ok", data: user });
+  } catch (error) {
+    return res.json({
+      status: "error",
+      error: "An error occurred during the connection to the database",
+    });
+  }
+});
 
 app.listen(port, () => {
 console.log(`Server is running on port: ${port}`);
