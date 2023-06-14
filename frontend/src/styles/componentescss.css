@@ -874,6 +874,12 @@ border-radius: 10px;
     font-size:10px;
   }
   
+  .produtos-vendidos-scrollbar {
+    
+    max-height: 300px; 
+    overflow-y: auto; 
+  }
+  
   
   
   

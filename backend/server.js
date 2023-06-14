@@ -297,40 +297,70 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
   const Produto = mongoose.model("products", ProductDetailsSchema);
+  const User = mongoose.model("users", UserDetailsSchema);
 
   try {
     const idFornecedor = req.params.idFornecedor;
-    // console.log("idFornecedor", idFornecedor)
+    console.log("idFornecedor", idFornecedor);
 
-    // Passo 1: Recuperar todas as unidades de produção do fornecedor
-    const unidadesProducao = await UnidadeProducao.find({ idFornecedor });//certo
-    const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());//certo 
-    // console.log("unidadesProducaoIds", unidadesProducaoIds);
+    const unidadesProducao = await UnidadeProducao.find({ idFornecedor });
+    const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());
 
-    // Passo 2: Filtrar os produtos do fornecedor nas encomendas
-    const produtosVendidos = [];
+    const result = [];
 
-    const encomendas = await Encomenda.find();//vai buscar todas as encomendas
-    
-    for (const encomenda of encomendas) {
-      for (const item of encomenda.listaUP) {
-        // console.log({ _id: item.idUP });
-        // console.log("item.idUP", item.idUP);
-        if (unidadesProducaoIds.includes(item.idUP)) {
-          const produto = await Produto.findById(item.idProduct);
-          if (produto) {
-            produtosVendidos.push(produto);
+    const encomendas = await Encomenda.find();
+
+    for (const unidadeProducao of unidadesProducao) {
+      const produtosVendidos = [];
+
+      for (const encomenda of encomendas) {
+        const consumidorId = encomenda.idConsumidor;
+        const consumidor = await User.findById(consumidorId);
+        const data_encomenda = encomenda.dataEncomenda;
+        const partes = data_encomenda.split(" ");
+      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+
+        for (const item of encomenda.listaUP) {
+          if (item.idUP === unidadeProducao._id.toString()) {
+            const produto = await Produto.findById(item.idProduct);
+            const quantidade = item.quantidade;
+
+            if (produto) {
+              produtosVendidos.push({
+                consumidor_id: consumidorId,
+                consumidor_name:consumidor.fullname,
+                consumidor_lat:consumidor.lat,
+                consumidor_lon:consumidor.lon,
+                produto: {
+                  produto,
+                  quantidade,
+                  data,
+                }
+              });
+            }
           }
         }
       }
+
+      if (produtosVendidos.length > 0) {
+        result.push({
+          UP: {
+            nome: unidadeProducao.nome,
+            lat: unidadeProducao.lat,
+            lon: unidadeProducao.lon,
+            produtos_vendidos: produtosVendidos,
+          },
+        });
+      }
     }
 
-    res.status(200).json(produtosVendidos);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
 
 //Relatorios do administrador
 
