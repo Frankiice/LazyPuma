@@ -340,19 +340,21 @@ body{
    
 } */
 
-
+.cardP-body{
+    overflow-x: hidden;
+}
   
   .card {
     flex: 0 0 300px;
     margin: 10px;
-    height: 460px !important;
+    height: 520px !important;
   }
   
 
 
   
   .img-fluid {
-    height: 200px;
+    height: 280px;
     object-fit: contain;
     width: auto;
   }
@@ -929,8 +931,5 @@ border-radius: 10px;
   }
   
   
-.container_catalogo{
-    margin: 50px auto;
-    max-width: 1800px;
-}
+  
   
