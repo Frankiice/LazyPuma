@@ -397,6 +397,9 @@ body{
 .container {
     margin: 50px auto;
 }
+.filters {
+    text-align: left;
+  }
 
 .panel-heading {
     text-align: center;

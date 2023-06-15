@@ -658,6 +658,7 @@ app.get("/produto/search", async (req, res) => {
         console.log("categoriaA",categorieA);
         console.log("categorieB",categorieB);
         console.log("brand",brand);
+        console.log("search", search)
 
 
         const categoriasPossiviesB = [
@@ -685,13 +686,13 @@ app.get("/produto/search", async (req, res) => {
         let products = null;
         categorieA === "All"
             ?   (brand === "All" 
-                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
+                ? (products = await Product.find({ $or: [{ name: { $regex: `.*${search}.*`, $options: "i" } }, { brand: { $regex: `.*${search}.*` , $options: "i"} }, { categorieA: { $regex: `.*${search}.*` , $options: "i"} }, { categorieB: { $regex: `.*${search}.*` , $options: "i"} }] })
                     .where("categorieB").in(categorieB)
                     // .skip(page * limit)
 			        // .limit(limit);
                     
                 )
-                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
+                : (products = await Product.find({ $or: [{ name: { $regex: `.*${search}.*`, $options: "i" } }, { brand: { $regex: `.*${search}.*` , $options: "i"} }, { categorieA: { $regex: `.*${search}.*` , $options: "i"} }, { categorieB: { $regex: `.*${search}.*` , $options: "i"} }] })
                     .where("categorieB").in(categorieB)
                     .where("brand").in(brand),
                     // .skip(page * limit)
@@ -699,13 +700,13 @@ app.get("/produto/search", async (req, res) => {
                     console.log("entra bem"))
                 )
             :   (brand === "All"
-                ? (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
+                ? (products = await Product.find({ $or: [{ name: { $regex: `.*${search}.*`, $options: "i" } }, { brand: { $regex: `.*${search}.*` , $options: "i"} }, { categorieA: { $regex: `.*${search}.*` , $options: "i"} }, { categorieB: { $regex: `.*${search}.*` , $options: "i"} }] })
                     .where("categorieB").in(categorieB)
                     .where("categorieA").in(categorieA)
                     // .skip(page * limit)
 			        // .limit(limit);
                     )
-                : (products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }, {"properties.Color": { $exists: true, $regex: search, $options: "i" }}] })
+                : (products = await Product.find({ $or: [{ name: { $regex: `.*${search}.*`, $options: "i" } }, { brand: { $regex: `.*${search}.*` , $options: "i"} }, { categorieA: { $regex: `.*${search}.*` , $options: "i"} }, { categorieB: { $regex: `.*${search}.*` , $options: "i"} }] })
                     .where("categorieB").in(categorieB)
                     .where("categorieA").in(categorieA)
                     .where("brand").in(brand)
@@ -753,18 +754,7 @@ app.get("/produto/search", async (req, res) => {
                 });
               }
             }
-            
-            // console.log("productsWPrice", productsWPrice);
 
-        // const products = await Product.find({ $or: [{ name: { $regex: search, $options: "i" } }, { brand: { $regex: search , $options: "i"} }, { categorieA: { $regex: search , $options: "i"} }, { categorieB: { $regex: search , $options: "i"} }] })
-        //     .where("categorieB")
-		// 	.in(categorieB)
-        //     .where("categorieA")
-        //     .in(categorieA)
-        //     .where("brand")
-        //     .in(brand)
-		// 	.skip(page * limit)
-		// 	.limit(limit);
         
         const total = await Product.countDocuments({
             categorieB: { $in: categorieB },
