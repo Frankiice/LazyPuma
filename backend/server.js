@@ -209,8 +209,10 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
   const Produto = mongoose.model("products", ProductDetailsSchema);
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  
 
   try {
+
     const idConsumidor = req.params.idConsumidor;
 
     // Busca todas as encomendas do consumidor
@@ -220,23 +222,28 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
     const result = [];
 
     let count = 0;
-
+    let lat;
+    let lon;
+    let nome_UP;
     for (const encomenda of encomendas) {
       console.log(`Encomenda: ${encomenda._id}`);
       const produtosEncomenda = [];
       count++;
 
       for (const item of encomenda.listaUP) {
-        console.log(`objecto da listaUp da encomenda atual: ${item}`);
-        console.log(`id do produto: ${item.idProduct}`);
+        // console.log(`objecto da listaUp da encomenda atual: ${item}`);
+        // console.log(`id do produto: ${item.idProduct}`);
         // const produto = await Produto.findById(item.idProduct);
-
+        console.log(`id da UP:${item.idUP}`);
         const idProduto = mongoose.Types.ObjectId(item.idProduct);
         const produto = await Produto.findById(idProduto);
-
-
-        console.log(`Produto: ${produto}`);
-
+        const idUP = mongoose.Types.ObjectId(item.idUP);
+        const UP = await UnidadeProducao.findById(idUP);
+        console.log(`UP: ${UP}`);
+        // console.log(`Produto: ${produto}`);
+        lat = UP.lat;
+        lon = UP.lon;
+        nome_UP =UP.nome;
         if (produto) {
           const productInfo = {
             
@@ -245,19 +252,31 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
             categoria: produto.categorieB,
             foto: produto.img,
             propriedades: produto.properties,
+            quantidade: item.quantidade,
+            lat_UP:lat,
+            lon_UP:lon,
+            name_UP:nome_UP,
             
           };
           produtosEncomenda.push(productInfo);
           console.log(`produtosEncomenda: ${produtosEncomenda}`);
         }
       }
+      const dataEncomenda = encomenda.dataEncomenda;
+      const partes = dataEncomenda.split(" ");
+      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+        
 
       result.push({
         produtos: produtosEncomenda,
-        encomenda_count: count,
+        encomenda: {data_encomenda: data,
         preco_encomenda: encomenda.preco,
         id_encomenda: encomenda._id,
-        quantidade: encomenda.listaUP[0].quantidade,
+        preco:encomenda.preco,
+        
+        }
+        
+        
         
       });
     }
@@ -278,63 +297,126 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
   const Produto = mongoose.model("products", ProductDetailsSchema);
+  const User = mongoose.model("users", UserDetailsSchema);
 
   try {
     const idFornecedor = req.params.idFornecedor;
-    // console.log("idFornecedor", idFornecedor)
+    console.log("idFornecedor", idFornecedor);
 
-    // Passo 1: Recuperar todas as unidades de produção do fornecedor
-    const unidadesProducao = await UnidadeProducao.find({ idFornecedor });//certo
-    const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());//certo 
-    // console.log("unidadesProducaoIds", unidadesProducaoIds);
+    const unidadesProducao = await UnidadeProducao.find({ idFornecedor });
+    const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());
 
-    // Passo 2: Filtrar os produtos do fornecedor nas encomendas
-    const produtosVendidos = [];
+    const result = [];
 
-    const encomendas = await Encomenda.find();//vai buscar todas as encomendas
-    
-    for (const encomenda of encomendas) {
-      for (const item of encomenda.listaUP) {
-        // console.log({ _id: item.idUP });
-        // console.log("item.idUP", item.idUP);
-        if (unidadesProducaoIds.includes(item.idUP)) {
-          const produto = await Produto.findById(item.idProduct);
-          if (produto) {
-            produtosVendidos.push(produto);
+    const encomendas = await Encomenda.find();
+
+    for (const unidadeProducao of unidadesProducao) {
+      const produtosVendidos = [];
+
+      for (const encomenda of encomendas) {
+        const consumidorId = encomenda.idConsumidor;
+        const consumidor = await User.findById(consumidorId);
+        const data_encomenda = encomenda.dataEncomenda;
+        const partes = data_encomenda.split(" ");
+      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+
+        for (const item of encomenda.listaUP) {
+          if (item.idUP === unidadeProducao._id.toString()) {
+            const produto = await Produto.findById(item.idProduct);
+            const quantidade = item.quantidade;
+
+            if (produto) {
+              produtosVendidos.push({
+                consumidor_id: consumidorId,
+                consumidor_name:consumidor.fullname,
+                consumidor_lat:consumidor.lat,
+                consumidor_lon:consumidor.lon,
+                produto: {
+                  produto,
+                  quantidade,
+                  data,
+                }
+              });
+            }
           }
         }
       }
+
+      if (produtosVendidos.length > 0) {
+        result.push({
+          UP: {
+            nome: unidadeProducao.nome,
+            lat: unidadeProducao.lat,
+            lon: unidadeProducao.lon,
+            produtos_vendidos: produtosVendidos,
+          },
+        });
+      }
     }
 
-    res.status(200).json(produtosVendidos);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
 
 //Relatorios do administrador
 
 app.get("/administrador/relatorios", async (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
   const Produto = mongoose.model("products", ProductDetailsSchema);
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const User = mongoose.model("users", UserDetailsSchema);
 
   try {
     const encomendas = await Encomenda.find().lean();
     let produtosVendidos = [];
 
-    for (let encomenda of encomendas) {
+    for (const encomenda of encomendas) {
+      const consumidorId = encomenda.idConsumidor;
+      const consumidor = await User.findById(consumidorId);
+      console.log(encomenda);
+
+      const data_encomenda = new Date(encomenda.dataEncomenda);
+      const options = { month: 'short', day: '2-digit', year: 'numeric' };
+      const formattedDate = data_encomenda.toLocaleString('en-US', options).replace(',', '');;
+
       for (let item of encomenda.listaUP) {
-        // console.log({ _id: item.idProduct });
+        let produto = await Produto.findById(item.idProduct);
+        const quantidade = item.quantidade;
+        const id_UP = item.idUP;
+        const UP = await UnidadeProducao.findById(id_UP);
+        const fornecedorId =UP.idFornecedor;
+        const fornecedor = await User.findById(fornecedorId);
 
-         let produto = await Produto.findById(item.idProduct);
-         //let produto = await Produto.findOne({ _id: item.idProduct });
+        
 
-        console.log(produto);
         if (produto) {
-          produtosVendidos.push(produto);
+          produtosVendidos.push({
+            encomeda:{
+            
+            produto: {
+              produto,
+              quantidade: quantidade,
+              data: formattedDate,
+              consumidor_nome: consumidor.fullname,
+              consumidor_lat: consumidor.lat,
+              consumidor_lon: consumidor.lon,
+              consumidor_email: consumidor.email,
+              UP_name: UP.nome,
+              UP_lat:UP.lat,
+              UP_lon:UP.lon,
+              fornecedor_nome: fornecedor.fullname,
+              fornecedor_email: fornecedor.email,
+            }
+          }
+          });
         }
       }
+
+      
     }
 
     res.status(200).json(produtosVendidos);
@@ -343,6 +425,7 @@ app.get("/administrador/relatorios", async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
 
 
 

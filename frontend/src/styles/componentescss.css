@@ -333,15 +333,30 @@ body{
     
 }
 
-.card-img-top{
+/* .card-img-top{
     float: center;
     max-height: 250px;
     object-fit: center;
-}
+   
+} */
 
-.card{
-    height: 350px;
-}
+
+  
+  .card {
+    flex: 0 0 300px;
+    margin: 10px;
+    height: 520px !important;
+  }
+  
+
+
+  
+  .img-fluid {
+    height: 280px;
+    object-fit: contain;
+    width: auto;
+  }
+  
 
 .btn-checkout:hover{
     border-color: #000000;
@@ -905,6 +920,12 @@ border-radius: 10px;
     height: 20px;
 
     font-size:10px;
+  }
+  
+  .produtos-vendidos-scrollbar {
+    
+    max-height: 300px; 
+    overflow-y: auto; 
   }
   
   

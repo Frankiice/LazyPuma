@@ -210,6 +210,9 @@ export default class Navbar extends Component{
     }else if(this.state.type=="fornecedor"){ //se for fornecedor e quiser aceder aos seus relatorios
       window.location.href = "/user/f/records";
     }
+    else{
+      window.location.href = "/user/admin/records";
+    }
     
   }
   

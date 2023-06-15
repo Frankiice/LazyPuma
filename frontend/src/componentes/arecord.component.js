@@ -32,50 +32,45 @@ export default class Login extends Component {
     const { encomendas, startDate, endDate, selectedCategories } = this.state;
     const distancia = this.state.distancia;
   
-  // Filtrar por intervalo de datas
-  const filteredByDate = encomendas.map((encomenda) => {
-    const produtosVendidos = encomenda.UP.produtos_vendidos;
-    const filteredProdutos = produtosVendidos.filter((venda) => {
-      const dataEncomenda = new Date(venda.produto.data);
-      return (
+    // Filtrar por intervalo de datas
+    const filteredByDate = [];
+    for (const encomenda of encomendas) {
+      const dataEncomenda = new Date(encomenda.encomeda.produto.data);
+      if (
         (!startDate || dataEncomenda >= startDate) &&
         (!endDate || dataEncomenda <= endDate)
-      );
-    });
-
-    // Criar uma nova encomenda apenas com os produtos filtrados
-    return { ...encomenda, UP: { ...encomenda.UP, produtos_vendidos: filteredProdutos } };
-  });
-    // Filtrar por categorias
-    const filteredByCategory = filteredByDate.filter((encomenda) => {
-      if (selectedCategories.length === 0) {
-        return true; // Inclui todas as encomendas quando não há categorias selecionadas
+      ) {
+        filteredByDate.push(encomenda);
       }
+    }
   
-      const produtosVendidos = encomenda.UP.produtos_vendidos;
-      return produtosVendidos.some((venda) =>
-        selectedCategories.includes(venda.produto.produto.categorieB)
+    // Filtrar por categorias
+    const filteredByCategory = [];
+    for (const encomenda of filteredByDate) {
+      const produto = encomenda.encomeda.produto;
+      if (selectedCategories.length === 0 || selectedCategories.includes(produto.produto.categorieB)) {
+        filteredByCategory.push(encomenda);
+      }
+    }
+  
+    // Filtrar por distância
+    const filteredByDistance = [];
+    for (const encomenda of filteredByCategory) {
+      const produto = encomenda.encomeda.produto;
+      const proximity = this.calculateDistance(
+        parseFloat(produto.consumidor_lat),
+        parseFloat(produto.consumidor_lon),
+        parseFloat(produto.UP_lat),
+        parseFloat(produto.UP_lon)
       );
-    });
-  
-    const filteredByDistance = filteredByCategory.filter((encomenda) => {
-      const produtosVendidos = encomenda.UP.produtos_vendidos;
-      const filteredProdutos = produtosVendidos.filter((venda) => {
-        const proximity = this.calculateDistance(
-          parseFloat(this.state.lat_user), // Convert to float
-          parseFloat(this.state.lon_user), // Convert to float
-          parseFloat(venda.consumidor_lat), // Convert to float
-          parseFloat(venda.consumidor_lon) // Convert to float
-        );
-        venda.produto.proximity = proximity; // Adicionando a propriedade "proximity" ao objeto produto
-        return proximity <= distancia;
-      });
-      return filteredProdutos.length > 0;
-    });
+      produto.proximity = proximity; // Adicionando a propriedade "proximity" ao objeto produto
+      if (proximity <= distancia) {
+        filteredByDistance.push(encomenda);
+      }
+    }
   
     this.setState({ filteredEncomendas: filteredByDistance });
   };
-  
   
   
 
@@ -217,8 +212,8 @@ degToRad(degrees) {
       .then((data) => {
         
         this.setState({ nickname: data.data.nickname, id_consumidor: data.data._id, lat_user:data.data.lat, lon_user: data.data.lon});
-        // fetch(`http://localhost:5000/administrador/relatorios`)
-        fetch(`http://localhost:5000/fornecedor/relatorios/${data.data._id}`)
+        
+        fetch(`http://localhost:5000/administrador/relatorios`)
           .then((response) => response.json())
           .then((data1) => {
             console.log(data1, "EncomendaData");
@@ -252,13 +247,14 @@ render() {
     <div class="col-lg-8">
       <div class="card d-flex border shadow-0 custom-card" style={{ height: '621px'}}>
         <div class="m-4">
-          <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
+          <h2 class="card-title mb-4 text-dark">Administrator Local Impact Report  </h2>
+          <h4 class="card-title mb-4 text-dark">All transactions between consumers and suppliers </h4>
           <br></br>
-          <div class="card-body" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+          <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
             {filteredEncomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>
-                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't sold any products yet 
+                <h5 class="text-secondary justify-content-md-center">Transactions between consumers and suppliers with the defined search filter have not yet been carried out.
                </h5>
                 
       
@@ -266,56 +262,56 @@ render() {
 
               
             ) : (
+                
               filteredEncomendas.map((encomenda) => (
                 
-                <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.UP}>
+                <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.encomeda.produto.produto._id}>
                   <div class="">
                     <div class="me-lg-5">
-                    <h4 class="d-flex justify-content-sm-left "><i class="bi bi-building"></i>&nbsp; UP NAME: {encomenda.UP.nome} </h4>
-                    {/* <h5 class="d-flex justify-content-sm-left text-muted">Date: {encomenda.encomenda.data_encomenda}</h5>
-                    <h5 class="d-flex justify-content-sm-left text-muted">Total: {encomenda.encomenda.preco}€</h5> */}
-                  
+                    {/* <h4 class="d-flex justify-content-sm-left "><i class="bi bi-bag-check-fill"></i>&nbsp;Product Details </h4> */}
+                    {/* <h7 class="d-flex justify-content-sm-left text-muted">Consumer email: {encomenda.encomeda.consumidor_email}€</h7> */}
+                    {/* <h5 class="d-flex justify-content-sm-left ">Consumer name: {encomenda.encomeda.consumidor_nome}</h5>
+                    <h7 class="d-flex justify-content-sm-left text-muted">Consumer email: {encomenda.encomeda.consumidor_email}€</h7>
+
+                    <br></br>
+                    <h5 class="d-flex justify-content-sm-left ">Production unit: {encomenda.encomeda.UP_name}</h5>
+                    <h7 class="d-flex justify-content-sm-left text-muted">Supplier name: {encomenda.encomeda.fornecedor_nome}</h7>
+                    <h7 class="d-flex justify-content-sm-left text-muted">Supplier email: {encomenda.encomeda.fornecedor_email}€</h7> */}
+                    <div class="d-flex" >
+                    <img
+                        class="border rounded me-3"
+                        src={encomenda.encomeda.produto.produto.img}
+                        style={{ width: '96px', height: '96px' }}
+                        />
+                        <div>
+                        <a href="#" class="nav-link">{encomenda.encomeda.produto.produto.name}</a>
+                        {/* <p class="text-muted">{produto.marca}</p> */}
+                        <p class="text-muted">
+                            Brand: {encomenda.encomeda.produto.produto.brand}<br></br>
+                            Categorie: {encomenda.encomeda.produto.produto.categorieB} <br></br>
+                            Quantity: {encomenda.encomeda.produto.quantidade}<br></br> 
+                            Purchase Date: {encomenda.encomeda.produto.data}<br></br> <br></br>
+                            Consumer name:{encomenda.encomeda.produto.consumidor_nome}<br></br>
+                            Consumer email:{encomenda.encomeda.produto.consumidor_email}<br></br>
+                            Production unit: {encomenda.encomeda.produto.UP_name}<br></br>
+                            Suplier name: {encomenda.encomeda.produto.fornecedor_nome}<br></br>
+                            Suplier email: {encomenda.encomeda.produto.fornecedor_email}<br></br>
+                            Proximity: &nbsp;
+                            
+                            {this.calculateDistance(
+                                                                    parseFloat(encomenda.encomeda.produto.consumidor_lat), // Convert to float
+                                                                    parseFloat(encomenda.encomeda.produto.consumidor_lon), // Convert to float
+                                                                    parseFloat(encomenda.encomeda.produto.UP_lat), // Convert to float
+                                                                    parseFloat(encomenda.encomeda.produto.UP_lon) // Convert to float
+                                                                )} Km 
+                        
+                        </p>
+            </div>
                     
                      <br></br>
-                    <h5 class="">Products sold from this Production Unit:</h5>
+                    
                     <br></br>
-                    <div class="produtos-vendidos-scrollbar">
-                    {encomenda.UP.produtos_vendidos.map((venda) => (
-
-
-
-          <div class="d-flex" key={venda}>
-            
-            <img
-              class="border rounded me-3"
-              src={venda.produto.produto.img}
-              style={{ width: '96px', height: '96px' }}
-            />
-            <div>
-              <a href="#" class="nav-link">{venda.produto.produto.name}</a>
-              
-              <p class="text-muted">
-                Brand: {venda.produto.produto.brand}<br></br>
-                Categorie: {venda.produto.produto.categorieB} <br></br>
-                Quantity: {venda.produto.quantidade}<br></br> <br></br>
-                Buyer: {venda.consumidor_name}<br></br>
-                Date: {venda.produto.data}<br></br>
-                UP Proximity to the buyer: &nbsp;
-                
-                {this.calculateDistance(
-                                                        parseFloat(this.state.lat_user), // Convert to float
-                                                        parseFloat(this.state.lon_user), // Convert to float
-                                                        parseFloat(venda.consumidor_lat), // Convert to float
-                                                        parseFloat(venda.consumidor_lon) // Convert to float
-                                                    )} Km 
-                  <br></br><br></br>
-              
-               </p>
-            </div>
-          </div>
-          
-        ))}
-        </div>
+                    </div>
                     </div>
                   </div>
                   <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
@@ -323,14 +319,22 @@ render() {
 
                     </div>
                     <div class="">
-                     
+                      {/* <text class="h6">{item.preco}€</text> <br />
+                      <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small> */}
                       
                     </div>
                     
                     
                   </div>
                   <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                 
+                  {/* <div class="form-outline">
+                  <text class="h6">Quantity</text>  &nbsp;
+                      <input type="number" id="typeNumber" class="form-control form-control-sm " style={{ width: '48px', backgroundColor: '#f8f9fa', border: '1px solid #e4e8eb',display: 'inline-block'  }} defaultValue={item.quantidade} min="1" onChange={(e) => this.handleQuantityChange(item.nome, parseInt(e.target.value))} /> 
+                  </div> */}
+                  {/* &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                    <div class="float-md-end">
+                      <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
+                    </div> */}
                   </div>
                   <hr />
                 </div>
