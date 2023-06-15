@@ -345,14 +345,14 @@ body{
   .card {
     flex: 0 0 300px;
     margin: 10px;
-    height: 520px !important;
+    height: 460px !important;
   }
   
 
 
   
   .img-fluid {
-    height: 280px;
+    height: 200px;
     object-fit: contain;
     width: auto;
   }
@@ -929,5 +929,8 @@ border-radius: 10px;
   }
   
   
-  
+.container_catalogo{
+    margin: 50px auto;
+    max-width: 1800px;
+}
   

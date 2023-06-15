@@ -266,7 +266,7 @@ export default class Catalogo extends Component{
     </div>
 
     {this.state.tipoUser === "consumidor" ?
-        <div className="container">
+        <div className="container_catalogo">
         <div className="row gx-4 gx-lg-5">
             <div className="col-lg-3 order-lg-first">
             <div className="filters">
@@ -299,10 +299,10 @@ export default class Catalogo extends Component{
                     <div key={produto._doc._id} className="col mb-5">
                         <div className="card h-100 crop">
                         {produto._doc.img.startsWith('http') ? (
-                            <img className="card-img" src={produto._doc.img} alt="..." />
+                            <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
                         ) : (
                             <img
-                            className="card-img"
+                            className="card-img img-fluid"
                             src={`http://localhost:5000/images/${produto._doc.img.replace(
                                 'public/images/',
                                 ''
@@ -347,10 +347,10 @@ export default class Catalogo extends Component{
                     <div className="card h-100 crop">
                         {produto._doc.img ? (
                         produto._doc.img.startsWith('http') ? (
-                            <img className="card-img" src={produto._doc.img} alt="..." />
+                            <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
                         ) : (
                             <img
-                            className="card-img"
+                            className="card-img img-fluid"
                             src={`http://localhost:5000/images/${produto._doc.img.replace(
                                 'public/images/',
                                 ''
@@ -359,7 +359,7 @@ export default class Catalogo extends Component{
                             />
                         )
                         ) : (
-                        <img className="card-img" alt="..." />
+                        <img className="card-img img-fluid" alt="..." />
                         )}
                         <div className="card-body p-4">
                         <div className="text-center">
