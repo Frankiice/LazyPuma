@@ -8,27 +8,168 @@ import 'bootstrap';
 import { useRef } from "react";
 import ScrollContainer from 'react-indiana-drag-scroll'
 
-export default class Homepage extends Component{
+export default class Homepage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      categoriaB: "",
+      categoriaA: "",
+      objSearch: window.localStorage.getItem("objSearch") || [],
+      produtoID: "",
+      tipoUser: window.localStorage.getItem("tipoUser"),
+      idUser: "",
+      nickname: "",
+      unidades: [], // Initialize unidades as an empty array
+      produtos: [],
+      user_lat: window.localStorage.getItem("user_lat") || "",
+      user_lon: window.localStorage.getItem("user_lon") || "",
+    };
+    this.handleClick = this.handleClick.bind(this);
+    this.handleProduto = this.handleProduto.bind(this);
+    window.localStorage.removeItem("userUpdated");
+    window.localStorage.removeItem("categoriaB");
+    window.localStorage.removeItem("categoriaA");
+    window.localStorage.removeItem("produtoID");
+    window.localStorage.removeItem("objSearch");
+  }
 
-    constructor(props){
-        super(props);
-        this.state = {
-            categoriaB: "",
-            categoriaA: "",
-            objSearch: window.localStorage.getItem("objSearch") || [],
-            produtoID: "",
-
-        };
-        this.handleClick = this.handleClick.bind(this);
-        this.handleProduto = this.handleClick.bind(this);
-        window.localStorage.removeItem("userUpdated");
-        window.localStorage.removeItem("categoriaB");
-        window.localStorage.removeItem("categoriaA");
-        window.localStorage.removeItem("produtoID");
-        window.localStorage.removeItem("objSearch");
-
+  componentDidMount() {
+    const token = window.localStorage.getItem("token")
+    if (token){
+    fetch("http://localhost:5000/user/userData", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data, "userData");
+        this.setState(
+          {
+            nickname: data.data.nickname,
+            tipoUser: data.data.type,
+            idUser: data.data._id,
+          },
+          () => {
+            const { tipoUser, idUser } = this.state;
+            console.log("tipoUser", tipoUser);
+            if (tipoUser === "fornecedor") {
+              try {
+                console.log("IdUser dentro do try", idUser);
+                const base_url = "http://localhost:5000/user/unidadeProducao";
+                const url = `${base_url}?id=${idUser}`;
+                fetch(url, {
+                  method: "GET",
+                  crossDomain: true,
+                  headers: {
+                    "Content-type": "application/json",
+                    Accept: "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                  },
+                })
+                  .then((res) => res.json())
+                  .then((data) => {
+                    console.log(data, "unidade de producao");
+                    this.setState({
+                      unidades: data,
+                    });
+                  });
+              } catch (err) {
+                console.log(err);
+              }
+              
+            }else{
+                try {
+                  console.log("IdUser dentro do try", idUser);
+                  const base_url = "http://localhost:5000/user/homepage";
+                  const url = `${base_url}?id=${idUser}`;
+                  fetch(url, {
+                    method: "GET",
+                    crossDomain: true,
+                    headers: {
+                      "Content-type": "application/json",
+                      Accept: "application/json",
+                      "Access-Control-Allow-Origin": "*",
+                    },
+                  })
+                    .then((res) => res.json())
+                    .then((data) => {
+                      console.log(data, "Produtos For you");
+                      this.setState({
+                        produtos: data,
+                      });
+                    });
+                } catch (err) {
+                  console.log(err);
+                }
+            }
+          }
+        );
+      });
+    }else{
+        try {
+            const base_url = "http://localhost:5000/user/homepage";
+            const url = `${base_url}`;
+            fetch(url, {
+              method: "GET",
+              crossDomain: true,
+              headers: {
+                "Content-type": "application/json",
+                Accept: "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data, "Produtos For you");
+                this.setState({
+                    produtos: data,
+                });
+              });
+          } catch (err) {
+            console.log(err);
+          }
 
     }
+  }
+
+  calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in kilometers
+  
+    // Convert degrees to radians
+    const lat1Rad = this.degToRad(lat1);
+    const lon1Rad = this.degToRad(lon1);
+    const lat2Rad = this.degToRad(lat2);
+    const lon2Rad = this.degToRad(lon2);
+  
+    // Calculate the differences between the coordinates
+    const dLat = lat2Rad - lat1Rad;
+    const dLon = lon2Rad - lon1Rad;
+  
+    // Haversine formula
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var distance = R * c;
+
+    distance = distance.toFixed(2);
+  
+    return distance; // Distance in kilometers
+  }
+  
+degToRad(degrees) {
+    return degrees * (Math.PI / 180);
+  }
+
+          //AO CARREGAR NO UPDATE ENVIA PARA USER/
 
 
     handleClick(e){
@@ -53,47 +194,107 @@ export default class Homepage extends Component{
     return (
     //<!-- Header -->
     <React.Fragment>
+    <div class="scrollmenu-container">
     <div class="scrollmenu">
         <header class="cor_header height_header">
-            <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">      {/*onClick{() => this.setState({ count: 1})}             Telemóveis <br></br>e<br></br> Smartphones*/}
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Baby</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Sports</button> 
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Animals</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="Cosmetics" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Cosmetics</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao6" title="bricolagem" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>DIY</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao7" title="telemóveis e smartphones"value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Smartphones</button>
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao8" title="informatica"value="Tech" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Tech </button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao9" title="decoração"value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Decoration</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao10" title="jardinagem"value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gardening</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao11" title="gaming"value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gaming</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao12" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>TVs</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="jogos e brinquedos"value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Toys</button>   
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="eletrodomesticos"value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Appliances</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="fotografia"value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Photography</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Books</button>
+            <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">      {/*onClick{() => this.setState({ count: 1})}             Telemóveis <br></br>e<br></br> Smartphones*/}  
+            <div class="row">
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Baby</button>
+                    <div className="button-name">Baby</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Sports</button>
+                    <div className="button-name">Sports</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Animals</button>  
+                    <div className="button-name">Animals</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="Cosmetics" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Cosmetics</button>  
+                    <div className="button-name">Cosmetics</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao6" title="bricolagem" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>DIY</button>  
+                    <div className="button-name">DIY</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao7" title="telemóveis e smartphones"value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Smartphones</button>
+                    <div className="button-name">Smartphones</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao8" title="informatica"value="Tech" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Tech </button>  
+                    <div className="button-name">Tech</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao9" title="decoração"value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Decoration</button>
+                    <div className="button-name">Decoration</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao10" title="jardinagem"value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gardening</button>  
+                    <div className="button-name">Gardening</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao11" title="gaming"value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gaming</button> 
+                    <div className="button-name">Gaming</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao12" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>TVs</button>
+                    <div className="button-name">TVs</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="jogos e brinquedos"value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Toys</button>
+                    <div className="button-name">Toys</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="eletrodomesticos"value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Appliances</button>
+                    <div className="button-name">Appliances</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="fotografia"value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Photography</button>
+                    <div className="button-name">Photography</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Books</button>
+                    <div className="button-name">Books</div>
+                </div>
+                </div>
+            </div>
+            
             </ScrollContainer>
         </header>
     </div>
-
-
-    {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <p>Try scrolling the rest of the page to see this option in action.</p>
-        </div>
-    </div> */}
-    {/* <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="myOffcanvasLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="myOffcanvasLabel">Offcanvas</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            swag
-        </div>
-    </div> */}
+    </div>
 
 
 
@@ -146,6 +347,8 @@ export default class Homepage extends Component{
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="desporto">
                                 <li><button class="dropdown-item" value="Running Shoes" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Running Shoes</button></li>
+                                <li><hr class="dropdown-divider"></hr></li>
+                                <li><button class="dropdown-item" value="Gym" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Gym</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                                 <li><button class="dropdown-item" value="Football" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Football</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
@@ -251,22 +454,20 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="telemoveis" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Telemóveis e Smartwatches
+                                Smartphones
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="telemoveis">
-                                <li><a class="dropdown-item" href="#">Telemóveis e Smartphones</a></li>
+                                <li><button class="dropdown-item" value="Smartphones" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Smartphones</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de Telemóvel</a></li>
+                                <li><button class="dropdown-item" value="Accessories" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Smartwatches</a></li>
+                                <li><button class="dropdown-item" value="Smartwatches" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Smartwatches</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Telefones Fixos</a></li>
+                                <li><button class="dropdown-item" value="Telephones" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Telephones</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de Som</a></li>
+                                <li><button class="dropdown-item" value="Sound Accessories" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Sound Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Telefones Fixos</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -324,35 +525,33 @@ export default class Homepage extends Component{
                                 Gaming
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="gaming">
-                                <li><a class="dropdown-item" href="#">Consolas</a></li>
+                                <li><button class="dropdown-item" value="Consoles" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Consoles</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Jogos</a></li>
+                                <li><button class="dropdown-item" value="Games" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Games</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Gaming PC</a></li>
+                                <li><button class="dropdown-item" value="Gaming PC" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Gaming PC</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios Gaming</a></li>
+                                <li><button class="dropdown-item" value="Gaming Accessories" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Gaming Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="televisoes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                TVs e Som
+                                TVs
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="TVS">
-                                <li><a class="dropdown-item" href="#">Televisões</a></li>
+                                <li><button class="dropdown-item"  value="TVs" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}>TVs</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">SoundBars</a></li>
+                                <li><button class="dropdown-item"  value="SoundBars" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}>SoundBars</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Projetores de imagem</a></li>
+                                <li><button class="dropdown-item"  value="Projectors" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}>Projectors</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de TV</a></li>
+                                <li><button class="dropdown-item"  value="TV Accessories" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}> TV Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Auriculares</a></li>
-                                <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="TVs" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="TVs" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -417,39 +616,39 @@ export default class Homepage extends Component{
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="fotografia" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Fotografia</a>
+                                Photography </a>
                                 <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="fotografia">
-                                <li><a class="dropdown-item" href="#">Máquinas Fotográficas</a></li>
+                                <li><button class="dropdown-item"value="Cameras" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Cameras</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Drones</a></li>
+                                <li><button class="dropdown-item"value="Drones" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Drones</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Vídeo</a></li>
+                                <li><button class="dropdown-item"value="Video" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Video</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Objetivas</a></li>
+                                <li><button class="dropdown-item"value="Lenses" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Lenses</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Acessórios de Fotografia</a></li>
+                                <li><button class="dropdown-item"value="Photography Accessories" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Photography Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
                         <hr class="linhaSeparacaoProdutos"></hr>
                         <li class="nav-item">
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="livros" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Livros
+                                Books
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="livros">
-                                <li><a class="dropdown-item" href="#">Romance</a></li>
+                                <li><button class="dropdown-item" value="Romance" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Romance</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Literatura infantil e juvenil</a></li>
+                                <li><button class="dropdown-item" value="Children's and Youth Literature" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Children's and Youth Literature</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Autoajuda</a></li>
+                                <li><button class="dropdown-item" value="Self help" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Self help</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Manga</a></li>
+                                <li><button class="dropdown-item" value="Manga" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Manga</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" href="#">Livros técnicos</a></li>
+                                <li><button class="dropdown-item" value="Technical books" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Technical books</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
 
                             </ul>
@@ -459,162 +658,145 @@ export default class Homepage extends Component{
             </nav>
         </div>
     </div>
-    {/* <ul class="dropdown-menu" aria-labelledby="cartDropdown">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-    </ul> */}
+
     
     <script src="../scripts/sliderProdutos.js"></script>
     {/* //<!-- Section --> */}
     <section class="py-5">
+    {this.state.tipoUser === "fornecedor" ?
+        <h1> &nbsp;{this.state.nickname}'s Production Units</h1>
+    :   
+        <>
+        <h1> &nbsp;Products for You</h1>
+        </>
+    }
+
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {/* {this.state.objSearch.map((produto) => (
-                            <div key={produto._id}>
-                                <div class="col mb-5">
-                                    <div class="card h-100 crop">
-                                        <img class="card-img-top" src={produto.img} alt="..." />
-                                        <div class="card-body p-4">
-                                            <div class="text-center">
-                                                <h5 class="fw-bolder">{produto.name}</h5>
-                                                $40.00 - $80.00
-                                            </div>
-                                        </div>
-                                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                            <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
-                                        </div>
-                                    </div>
+        {this.state.tipoUser === "fornecedor" ?
+            this.state.unidades.map((unidade) => (
+            <>
+                <h2>{unidade.nome}</h2>
+                <br></br>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                {unidade.listaProdutos.length > 0 ? (
+                    unidade.listaProdutos.map((produto) => (
+                    <div key={produto._id}>
+                        <div class="col mb-5">
+                        <div class="card h-100 crop">
+                            {produto.img ? (
+                            produto.img.startsWith("http") ? (
+                                <img class="card-img" src={produto.img} alt="..." />
+                            ) : (
+                                <img
+                                class="card-img"
+                                src={`http://localhost:5000/images/${produto.img.replace(
+                                    "public/images/",
+                                    ""
+                                )}`}
+                                alt="..."
+                                />
+                            )
+                            ) : (
+                            <img class="card-img" alt="..." />
+                            )}
+                            <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">{produto.name}</h5>
+                                {produto.preco}€
+                            </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <button
+                                class="btn btn-outline-dark mt-auto"
+                                value={produto._id}
+                                onClick={(e) => {
+                                    this.setState(
+                                    { produtoID: e.target.value },
+                                    this.handleProduto
+                                    );
+                                }}
+                                >
+                                View options
+                                </button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    ))
+                ) : (
+            
+                    <h3>This unit doesn't have any products yet.</h3>
+                
+                )}
+                </div>
+            </>
+            ))
+        : 
+            <>
+            <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {this.state.produtos.length > 0 ? (
+                this.state.produtos.map((produto, index) => (
+                     <div key={produto._id}>
+                     <div class="col mb-5">
+                        <div class="card h-100 crop">
+                        {produto.img ? (
+                            produto.img.startsWith("http") ? (
+                                <img class="card-img" src={produto.img} style={{ height: '200px' }} alt="..." />
+                            ) : (
+                                <img
+                                class="card-img"
+                                src={`http://localhost:5000/images/${produto.img.replace(
+                                    "public/images/",
+                                    ""
+                                )}`}
+                                style={{ height: '200px' }}
+                                alt="..."
+                                />
+                            )
+                            ) : (
+                            <img class="card-img" alt="..." style={{ height: '200px' }} />
+                        )}
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <h5 class="fw-bolder">{produto.name}</h5>
+                                    {this.state.tipoUser === "consumidor" ?
+                                        this.calculateDistance(
+                                            parseFloat(this.state.user_lat), // Convert to float
+                                            parseFloat(this.state.user_lon), // Convert to float
+                                            parseFloat(produto.lat), // Convert to float
+                                            parseFloat(produto.lon) // Convert to float
+                                        )
+                                    :
+                                        <></>}km
+                                    <br></br>
+                                    {produto.preco}€
                                 </div>
-                            </div> 
-                        ))} */}
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
                             </div>
                         </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/produto">View options</a></div>
-                        </div>
                     </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
+                 </div>
+                ))
+            ) : (
+            
+                <h3>There are no products yet</h3>
+                
+            )}
             </div>
+
+            
+
+            </>
+        }
+
+
+
+                
+            {/* </div> */}
         </div>
     </section>
     </React.Fragment>

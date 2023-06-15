@@ -7,18 +7,18 @@ html, body {
     height: 80px;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+/* ::placeholder { 
     color: white !important;; 
-    opacity: 1;/* Firefox */
+    opacity: 1;
   }
 
-   :-ms-input-placeholder { /*Internet Explorer 10-11 */
+   :-ms-input-placeholder { 
     color: white !important;
   }
   
-  ::-ms-input-placeholder { /* Microsoft Edge */
+  ::-ms-input-placeholder { 
     color: white !important;
-  }
+  } */
 
 a {
     color: #84b3ff;
@@ -333,15 +333,30 @@ body{
     
 }
 
-.card-img-top{
+/* .card-img-top{
     float: center;
     max-height: 250px;
     object-fit: center;
-}
+   
+} */
 
-.card{
-    height: 350px;
-}
+
+  
+  .card {
+    flex: 0 0 300px;
+    margin: 10px;
+    /* height: 460px !important; */
+  }
+  
+
+
+  
+  .img-fluid {
+    height: 200px;
+    object-fit: contain;
+    width: auto;
+  }
+  
 
 .btn-checkout:hover{
     border-color: #000000;
@@ -397,6 +412,9 @@ body{
 .container {
     margin: 50px auto;
 }
+.filters {
+    text-align: left;
+  }
 
 .panel-heading {
     text-align: center;
@@ -465,68 +483,79 @@ input[type='password'] {
 
 a[target='_blank'] {
     position: relative;
-    transition: all 0.1s ease-in-out
-}
-
-.bordert {
+    transition: all 0.1s ease-in-out;
+  }
+  
+  .bordert {
     border-top: 1px solid #aaa;
-    position: relative
-}
-
-.bordert:after {
+    position: relative;
+  }
+  
+  .bordert:after {
     content: "or connect with";
     position: absolute;
     top: -13px;
     left: 33%;
     background-color: #fff;
-    padding: 0px 8px
-}
-
-.btn-xl {
-    padding: 50px;
-    width:10%;
-    display:block;
+    padding: 0px 8px;
+  }
+  
+  .btn-xl {
+    padding: 0;
     height: 140px;
     width: 140px;
     border-radius: 50%;
-    margin:20px 20px 20px 20px; 
+    margin: 20px;
     border: none;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease 0s;
     cursor: pointer;
     outline: none;
     font-size: 0;
-}
+  }
 
-.btn-xl:hover {
+  
+  .btn-xl:hover {
     box-shadow: 0px 15px 20px rgba(53, 52, 52, 0.4);
-    color: #ffffff;
+    /* color: #ffffff; */
     transform: translateY(-7px);
-    font-size: 16px;
-    
-}
+    /* font-size: 16px; */
+  }
+  
 
-.scrollmenu {
-    overflow: auto;
+  .scrollmenu {
     white-space: nowrap;
     background-color: #F2F4F5;
-    overflow-y:hidden;
+    overflow-y: hidden;
     cursor: grab;
-}
+    flex-wrap: nowrap;
+    transition: transform 0.3s ease; /* Add a transition for smooth sliding */
+  }
+  
+  .scrollmenu:hover {
+    cursor: grabbing; /* Change cursor to a grabbing hand when dragging */
+  }
+  
+  .scrollmenu.dragging {
+    cursor: grabbing; /* Change cursor to a grabbing hand when actively dragging */
+  }
+  
+  .scrollmenu .row {
+    flex-wrap: nowrap;
+  }
+  .btn-toolbar{
+    display: block;
+  }
 
-.scrollmenu:active {
-    cursor: grabbing;
-}
-
-.scrollmenu .btn-xl{
+/* .scrollmenu .btn-xl{
     display: inline-block;
-}
+} */
 
-#buttons_header{
+/* #buttons_header{
     display: inline-block;
-}
+} */
 
-#butaoBLA{
+.butaoBLA{
     /* background-image: url("https://ae01.alicdn.com/kf/H9bcc7fb7e08e4842a77427fabfe599e9j/100cm-djungelskog-urso-marrom-brinquedo-de-pel-cia-macio-animal-de-pel-cia-gigante-mr-boss.jpg_Q90.jpg_.webp");; */
     background-size: contain;
     background-position: 40px 20px 65px;   
@@ -666,17 +695,36 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
-#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
+/* #butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
-}
+} */
 
 .cor_header{
     background-color: #F2F4F5;
 }
+
 .height_header{
-    height: 183px;
+    height: 200px;
     
 }
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+  }
+  
+  .button-container .btn {
+    margin-bottom: 10px;
+  }
+  
+  .button-name {
+    font-size: 14px;
+  }
+  
 
 #inputQuantity{
     max-width: 3rem;
@@ -731,4 +779,158 @@ a[target='_blank'] {
     height: 550px;;
 }
   
+.barra-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .barra {
+    width: 400px;
+    height: 20px;
+    background-color: #e0e0e0;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .bola {
+    width: 20px;
+    height: 20px;
+    background-color: #ff4081;
+    border-radius: 50%;
+    position: absolute;
+    top: -10px;
+    transform: translateX(-50%);
+  }
+.barra-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 
+.barra {
+border-radius: 10px;
+  width: 280px;
+  height: 20px;
+  background-color: #e0e0e0;
+  position: relative;
+  cursor: pointer;
+}
+
+.bola {
+  width: 20px;
+  height: 20px;
+  background-color: rgb(53, 52, 52);
+  border-radius: 50%;
+  position: absolute;
+  top: -1px;
+  transform: translateX(-50%);
+}
+  
+
+/* Css do Date Range do relatorio de encomendas */
+.react-datepicker {
+    /* font-family: Arial, sans-serif; */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+  }
+  
+  .react-datepicker__header {
+    background-color: #f0f0f0;
+    border-bottom: none;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .react-datepicker__month {
+    margin: 0;
+  }
+  
+  .react-datepicker__day-names {
+    margin-top: 10px;
+  }
+  
+  .react-datepicker__day-name {
+    color: #999;
+  }
+  
+  .react-datepicker__day {
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .react-datepicker__day:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #0099ff;
+    color: #fff;
+  }
+  
+  .react-datepicker__day--disabled {
+    cursor: default;
+    color: #999;
+  }
+  
+  .react-datepicker__input-container {
+    display: inline-block;
+  }
+  
+  .react-datepicker__input-container input {
+    width: 110px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .label_date{
+    transform: translateY(20%);
+  }
+  
+  
+
+  .card-height{
+    height: 620px;
+}
+
+.autosuggest-wrapper {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+    width: 200px;
+  }
+
+  .output_categories{
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 4px;
+  }
+
+  .delete_category_button {
+    display: none;
+    
+  }
+  
+  .category_span:hover .delete_category_button {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+
+    font-size:10px;
+  }
+  
+  .produtos-vendidos-scrollbar {
+    
+    max-height: 300px; 
+    overflow-y: auto; 
+  }
+  
+  
+.container_catalogo{
+    margin: 50px auto;
+    max-width: 1800px;
+}
+  

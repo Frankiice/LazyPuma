@@ -17,11 +17,18 @@ export default class Catalogo extends Component{
             user_lat: window.localStorage.getItem("user_lat") || "",
             user_lon: window.localStorage.getItem("user_lon") || "",
             brand: window.localStorage.getItem("brand") || "",
+            tipoUser: window.localStorage.getItem("tipoUser") || "",
             page: 1,
             novoHeader: [],
             novoHeaderTip: "",
             produtoID: "",
             objSearch: JSON.parse(window.localStorage.getItem("objSearch")),
+            filteredProducts: [], // Add this property
+            brands: [],
+            subCategories: [],
+            brandFilter: null,
+            subCategoryFilter: null,
+            colorFilter: null,
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleProduto = this.handleProduto.bind(this);
@@ -46,9 +53,16 @@ export default class Catalogo extends Component{
         .then((res) => res.json())
         .then((data) => {
             console.log(data, "Catalogo");
+            const brands = [...new Set(data.productsWPrice.map((product) => product._doc.brand))];
+            const subCategories = [...new Set(data.productsWPrice.map((product) => product._doc.categorieA))];
             this.setState({obj: data.productsWPrice,
                             novoHeader: data.novoHeader,
-                            novoHeaderTip: data.novoHeaderTip}) ;
+                            novoHeaderTip: data.novoHeaderTip,
+                            filteredProducts: data.productsWPrice,
+                            brands,
+                            subCategories
+                        });
+            
         })
     }
     
@@ -126,7 +140,47 @@ export default class Catalogo extends Component{
     degToRad(degrees) {
         return degrees * (Math.PI / 180);
       }
-      
+
+    handleBrandFilterChange = (event) => {
+    const brand = event.target.value;
+    this.setState({ brandFilter: brand }, () => {
+        this.filterProducts();
+    });
+    };
+    
+    handleSubCategoryFilterChange = (event) => {
+    const subCategory = event.target.value;
+    this.setState({ subCategoryFilter: subCategory }, () => {
+        this.filterProducts();
+    });
+    };
+    
+    filterProducts = () => {
+    const { obj, brandFilter, subCategoryFilter } = this.state;
+    let filteredProducts = obj;
+    
+    if (brandFilter && subCategoryFilter) {
+        filteredProducts = obj.filter(
+        (product) =>
+            product._doc.brand === brandFilter &&
+            product._doc.categorieA === subCategoryFilter
+        );
+    } else {
+        if (brandFilter) {
+        filteredProducts = obj.filter(
+            (product) => product._doc.brand === brandFilter
+        );
+        }
+    
+        if (subCategoryFilter) {
+        filteredProducts = obj.filter(
+            (product) => product._doc.categorieA === subCategoryFilter
+        );
+        }
+    }
+    
+    this.setState({ filteredProducts });
+    };
 
     render(){
     return (
@@ -138,41 +192,39 @@ export default class Catalogo extends Component{
         </header>
         :
         
-    <div class="scrollmenu">
-    <header class="cor_header height_header">  
-        
-        <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
-                <div class="row">
-                    {this.state.novoHeader.map((product, index) =>  {
-                        return <div  key={product._id} class="col">   
-                        {this.state.novoHeaderTip == "brand"
-                        ?                
-                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" 
-                            style={{backgroundImage: `url(${product.img})`}} value={ product.brand} 
-                            onMouseEnter={(e) => {
-                                e.target.style.backgroundImage = "none";
-                              }}
-                            onMouseLeave={(e) => {
-                                e.target.style.backgroundImage = `url(${product.img})`;
-                              }}
-                            onClick={(e) => {this.setState({ brand: e.target.value }, this.handleClick)}}> {product.brand }</button> 
-                        :
-                            <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butaoBLA" 
-                            style={{ backgroundImage: `url(${product.img})` }} value={ product.categorieA} 
-                            onMouseEnter={(e) => {
-                                e.target.style.backgroundImage = "none";
-                              }}
-                            onMouseLeave={(e) => {
-                                e.target.style.backgroundImage = `url(${product.img})`;
-                              }}
-                            onClick={(e) => {this.setState({ categoriaA: e.target.value }, this.handleClick)}}> {product.categorieA }</button> 
-
-                        }     
-                        </div> 
-                    })}
+        <div className="scrollmenu">
+        <header className="cor_header height_header">
+          <ScrollContainer className="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
+            <div className="row">
+              {this.state.novoHeader.map((product, index) => (
+                <div key={product._id} className="col">
+                  <div className="button-container">
+                    <button
+                      className="btn btn-outline-dark btn-xl rounded-circle section butaoBLA"
+                      style={{ backgroundImage: `url(${product.img})` }}
+                      value={this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundImage = `url(${product.img})`;
+                      }}
+                      onClick={(e) => {
+                        this.setState(
+                          this.state.novoHeaderTip === "brand"
+                            ? { brand: e.target.value }
+                            : { categoriaA: e.target.value },
+                          this.handleClick
+                        );
+                      }}
+                    >
+                      {this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
+                    </button>
+                    <div className="button-name">
+                      {this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
+                    </div>
+                  </div>
                 </div>
-                     
-        </ScrollContainer>
+              ))}
+            </div>
+          </ScrollContainer>  
    
     </header>
     </div> 
@@ -194,24 +246,7 @@ export default class Catalogo extends Component{
 
         }
     </div>
-    {/* <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="1" id="sidebar" aria-labelledby="produtos">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <p>Try scrolling the rest of the page to see this option in action.</p>
-        </div>
-    </div> */}
-    {/* <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="myOffcanvasLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="myOffcanvasLabel">Offcanvas</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            swag
-        </div>
-    </div> */}
+
     <div class="offcanvas offcanvas-left" data-bs-scroll="true" tabindex="-1" id="sidebar">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Produtos</h5>
@@ -229,9 +264,142 @@ export default class Catalogo extends Component{
             </nav>
         </div>
     </div>
-    {/* //<!-- Section --> */}
-    <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
+
+    {this.state.tipoUser === "consumidor" ?
+        <div className="container_catalogo">
+        <div className="row gx-4 gx-lg-5">
+            <div className="col-lg-3 order-lg-first">
+            <div className="filters">
+                <h3>Filters</h3>
+                <label htmlFor="brandFilter">Brand:</label>
+                <select id="brandFilter" onChange={this.handleBrandFilterChange}>
+                <option value="">All</option> {/* Add an option to show all brands */}
+                {this.state.brands.map((brand) => (
+                    <option key={brand} value={brand}>{brand}</option>
+                ))}
+                </select>
+
+                <label htmlFor="subCategoryFilter">Subcategory:</label>
+                <select id="subCategoryFilter" onChange={this.handleSubCategoryFilterChange}>
+                <option value="">All</option> {/* Add an option to show all brands */}
+                {this.state.subCategories.map((subcategory) => (
+                    <option key={subcategory} value={subcategory}>{subcategory}</option>
+                ))}
+                </select>
+                {/* Add other filter options */}
+            </div>
+            </div>
+            <div className="col-lg-9">
+            <div className="row row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                {this.state.objSearch ? (
+                this.state.objSearch.length === 0 ? (
+                    <h2>No Products Found</h2>
+                ) : (
+                    this.state.objSearch.map((produto) => (
+                    <div key={produto._doc._id} className="col mb-5">
+                        <div className="card h-100 crop">
+                        {produto._doc.img.startsWith('http') ? (
+                            <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
+                        ) : (
+                            <img
+                            className="card-img img-fluid"
+                            src={`http://localhost:5000/images/${produto._doc.img.replace(
+                                'public/images/',
+                                ''
+                            )}`}
+                            alt="..."
+                            />
+                        )}
+                        <div className="card-body p-4">
+                            <div className="text-center">
+                            <h5 className="fw-bolder">{produto._doc.name}</h5>
+                            {console.log('lat1', parseFloat(this.state.lat))}
+                            {this.calculateDistance(
+                                parseFloat(this.state.user_lat), // Convert to float
+                                parseFloat(this.state.user_lon), // Convert to float
+                                parseFloat(produto.lat), // Convert to float
+                                parseFloat(produto.lon) // Convert to float
+                            )}
+                            <br />
+                            {produto.price}€
+                            </div>
+                        </div>
+                        <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div className="text-center">
+                            <button
+                                className="btn btn-outline-dark mt-auto"
+                                value={produto._doc._id}
+                                onClick={(e) => {
+                                this.setState({ produtoID: e.target.value }, this.handleProduto);
+                                }}
+                            >
+                                View options
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    ))
+                )
+                ) : (
+                this.state.filteredProducts.map((produto) => (
+                    <div key={produto._doc._id} className="col mb-5">
+                    <div className="card h-100 crop">
+                        {produto._doc.img ? (
+                        produto._doc.img.startsWith('http') ? (
+                            <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
+                        ) : (
+                            <img
+                            className="card-img img-fluid"
+                            src={`http://localhost:5000/images/${produto._doc.img.replace(
+                                'public/images/',
+                                ''
+                            )}`}
+                            alt="..."
+                            />
+                        )
+                        ) : (
+                        <img className="card-img img-fluid" alt="..." />
+                        )}
+                        <div className="card-body p-4">
+                        <div className="text-center">
+                            <h5 className="fw-bolder">{produto._doc.name}</h5>
+                            {this.calculateDistance(
+                            parseFloat(this.state.user_lat), // Convert to float
+                            parseFloat(this.state.user_lon), // Convert to float
+                            parseFloat(produto.lat), // Convert to float
+                            parseFloat(produto.lon) // Convert to float
+                            )}
+                            Km
+                            <br />
+                            {produto.price}€
+                        </div>
+                        </div>
+                        <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div className="text-center">
+                            <button
+                            className="btn btn-outline-dark mt-auto"
+                            value={produto._doc._id}
+                            onClick={(e) => {
+                                this.setState({ produtoID: e.target.value }, this.handleProduto);
+                            }}
+                            >
+                            View options
+                            </button>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                ))
+                )}
+            </div>
+            </div>
+        </div>
+    </div> 
+
+    :
+
+    <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                         {this.state.objSearch ?
                             this.state.objSearch.length === 0 ? 
@@ -241,7 +409,12 @@ export default class Catalogo extends Component{
                                 <div key={produto._doc._id}>
                                     <div class="col mb-5">
                                         <div class="card h-100 crop">
-                                            <img class="card-img-top" src={produto._doc.img} alt="..." />
+                                        {produto._doc.img.startsWith('http') ? (
+                                            <img class="card-img  img-fluid" src={produto._doc.img} alt="..." />
+                                        ) : (
+                                            <img class="card-img img-fluid" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
+
+                                        )}
                                             <div class="card-body p-4">
                                                 <div class="text-center">
                                                     <h5 class="fw-bolder">{produto._doc.name}</h5>
@@ -269,7 +442,17 @@ export default class Catalogo extends Component{
                                 <div key={produto._doc._id}>
                                     <div class="col mb-5">
                                         <div class="card h-100 crop">
-                                            <img class="card-img-top" src={produto._doc.img} alt="..." />
+                                            {
+                                            produto._doc.img ? 
+                                                produto._doc.img.startsWith('http') ? (
+                                                    <img class="card-img img-fluid"  src={produto._doc.img} alt="..." />
+                                                ) : (
+                                                    <img class="card-img img-fluid" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
+
+                                                )
+                                            :
+                                            <img class="card-img img-fluid" alt="..." />
+                                            }
                                             <div class="card-body p-4">
                                                 <div class="text-center">
                                                     <h5 class="fw-bolder">{produto._doc.name}</h5>
@@ -292,115 +475,10 @@ export default class Catalogo extends Component{
                        }
                     </div>
                 </div>
-    </section>
 
+    }
+   
 
-
-
-    {/* <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">CATALOGO Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <h5 class="fw-bolder">Fancy Product</h5>
-                                $40.00 - $80.00
-                            </div>
-                        </div>
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </section> */}
     </React.Fragment>
     );
   }

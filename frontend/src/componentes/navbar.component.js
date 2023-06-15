@@ -7,7 +7,6 @@ import { FaBootstrap } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa"
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import ExercisesList from './exercises-list.component';
 import 'bootstrap';
 
 // const navigate = useNavigate();
@@ -205,6 +204,17 @@ export default class Navbar extends Component{
       window.location.href = "/user/f";
     }
   }
+  redirect_records = () => {
+    if(this.state.type=="consumidor"){  //se for consumidor e quiser aceder aos seus relatorios
+      window.location.href = "/user/c/records";
+    }else if(this.state.type=="fornecedor"){ //se for fornecedor e quiser aceder aos seus relatorios
+      window.location.href = "/user/f/records";
+    }
+    else{
+      window.location.href = "/user/admin/records";
+    }
+    
+  }
   
   componentDidMount() {
     const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
@@ -316,9 +326,9 @@ export default class Navbar extends Component{
             <i class="bi bi-person-circle"></i> Hello {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
-              <li><a class="dropdown-item" onClick={this.redirect}>Profile</a></li>
+              <li><a class="dropdown-item" onClick={this.redirect} href="#">Profile</a></li>
               <li><hr class="dropdown-divider"></hr></li>
-              <li><a class="dropdown-item" href="#">Records</a></li>
+              <li><a class="dropdown-item" onClick={this.redirect_records} href="#">Records</a></li>
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" onClick={this.logOut} href="/user/login">Log out</a></li>
           </ul>
@@ -331,6 +341,13 @@ export default class Navbar extends Component{
           </a>
         </li>}
       </ul>
+      {this.state.type !== "fornecedor" ? 
+        this.state.type === "admin" ? 
+        <>
+        <form class="d-flex px-3 nav-item " >
+        <div></div></form>
+        </>
+        :
        <form class="d-flex px-3 nav-item " >
        <button
                 className="btn btn-outline-light col-md-12 dropdown-hover"
@@ -378,8 +395,9 @@ export default class Navbar extends Component{
                     <div class="detalhes text-dark">
                       <h5 class="text-dark">{item.nome}</h5>
                       <p class="text-dark">
-                        <span class="pt-5 text-dark">{item.preco_original}€</span>
-                        <br></br>
+                        <span class="pt-4 text-dark">{item.preco}€</span><br></br>
+                        <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
+                        
            
                     <div className="quantidade">
            
@@ -430,14 +448,22 @@ export default class Navbar extends Component{
             </div>
             <p class="d-none">espaco</p>
             <p class="text-end text-dark" id="total">Total: {total}€</p>
-              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a>
-              <a class="btn btn-outline-dark  col-md-12 " id="carrinho" href='/cart'>View Cart</a>
+            {carrinho.length > 0 && (
+        <a class="btn btn-success w-100 shadow-0 mb-2" id="checkout" href='/user/encomenda'>Checkout</a>
+      )}
+              {/* <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a> */}
+              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="carrinho" href='/cart'>View Cart</a>
+              
 
 
               
           </div>
           <div class="overlay"></div>
       </form>
+    : 
+    <>
+    <form class="d-flex px-3 nav-item " >
+      <div></div></form></>} 
       
 
 
