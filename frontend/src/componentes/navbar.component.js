@@ -395,8 +395,9 @@ export default class Navbar extends Component{
                     <div class="detalhes text-dark">
                       <h5 class="text-dark">{item.nome}</h5>
                       <p class="text-dark">
-                        <span class="pt-5 text-dark">{item.preco_original}€</span>
-                        <br></br>
+                        <span class="pt-4 text-dark">{item.preco}€</span><br></br>
+                        <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
+                        
            
                     <div className="quantidade">
            
@@ -447,8 +448,12 @@ export default class Navbar extends Component{
             </div>
             <p class="d-none">espaco</p>
             <p class="text-end text-dark" id="total">Total: {total}€</p>
-              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a>
-              <a class="btn btn-outline-dark  col-md-12 " id="carrinho" href='/cart'>View Cart</a>
+            {carrinho.length > 0 && (
+        <a class="btn btn-success w-100 shadow-0 mb-2" id="checkout" href='/user/encomenda'>Checkout</a>
+      )}
+              {/* <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a> */}
+              <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="carrinho" href='/cart'>View Cart</a>
+              
 
 
               
