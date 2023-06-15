@@ -194,27 +194,108 @@ degToRad(degrees) {
     return (
     //<!-- Header -->
     <React.Fragment>
+    <div class="scrollmenu-container">
     <div class="scrollmenu">
         <header class="cor_header height_header">
-            <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">      {/*onClick{() => this.setState({ count: 1})}             Telemóveis <br></br>e<br></br> Smartphones*/}
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Baby</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Sports</button> 
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Animals</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="Cosmetics" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Cosmetics</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao6" title="bricolagem" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>DIY</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao7" title="telemóveis e smartphones"value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Smartphones</button>
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao8" title="informatica"value="Tech" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Tech </button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao9" title="decoração"value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Decoration</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao10" title="jardinagem"value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gardening</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao11" title="gaming"value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gaming</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao12" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>TVs</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="jogos e brinquedos"value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Toys</button>   
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="eletrodomesticos"value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Appliances</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="fotografia"value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Photography</button>  
-                <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Books</button>
+            <ScrollContainer class="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">      {/*onClick{() => this.setState({ count: 1})}             Telemóveis <br></br>e<br></br> Smartphones*/}  
+            <div class="row">
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao2" title="bebé" value="Baby" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Baby</button>
+                    <div className="button-name">Baby</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao3" title="desporto" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Sports</button>
+                    <div className="button-name">Sports</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao4" title="animais" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Animals</button>  
+                    <div className="button-name">Animals</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao5" title="beleza" value="Cosmetics" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Cosmetics</button>  
+                    <div className="button-name">Cosmetics</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao6" title="bricolagem" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>DIY</button>  
+                    <div className="button-name">DIY</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao7" title="telemóveis e smartphones"value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Smartphones</button>
+                    <div className="button-name">Smartphones</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao8" title="informatica"value="Tech" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Tech </button>  
+                    <div className="button-name">Tech</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao9" title="decoração"value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Decoration</button>
+                    <div className="button-name">Decoration</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao10" title="jardinagem"value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gardening</button>  
+                    <div className="button-name">Gardening</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao11" title="gaming"value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Gaming</button> 
+                    <div className="button-name">Gaming</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao12" title="TVs" value="TVs"onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>TVs</button>
+                    <div className="button-name">TVs</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao13" title="jogos e brinquedos"value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Toys</button>
+                    <div className="button-name">Toys</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao14" title="eletrodomesticos"value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Appliances</button>
+                    <div className="button-name">Appliances</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao15" title="fotografia"value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Photography</button>
+                    <div className="button-name">Photography</div>
+                </div>
+                </div>
+                <div class="col">
+                <div className="button-container">
+                    <button class="btn btn-outline-dark btn-xl rounded-circle section" id="butao16" title="livros"value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value }, this.handleClick)}}>Books</button>
+                    <div className="button-name">Books</div>
+                </div>
+                </div>
+            </div>
+            
             </ScrollContainer>
         </header>
     </div>
+    </div>
+
 
 
     
@@ -376,17 +457,17 @@ degToRad(degrees) {
                                 Smartphones
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="telemoveis">
-                                <li><a class="dropdown-item" value="Smartphones">Smartphones</a></li>
+                                <li><button class="dropdown-item" value="Smartphones" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Smartphones</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Accessories">Accessories</a></li>
+                                <li><button class="dropdown-item" value="Accessories" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Smartwatches">Smartwatches</a></li>
+                                <li><button class="dropdown-item" value="Smartwatches" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Smartwatches</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Telephones">Telephones</a></li>
+                                <li><button class="dropdown-item" value="Telephones" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Telephones</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Sound Accessories">Sound Accessories</a></li>
+                                <li><button class="dropdown-item" value="Sound Accessories" onClick={(e) => {this.setState({ categoriaB: "Smartphones", categoriaA: e.target.value}, this.handleClick)}} >Sound Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Smartphones" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -444,15 +525,15 @@ degToRad(degrees) {
                                 Gaming
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="gaming">
-                                <li><a class="dropdown-item" value="Consoles">Consoles</a></li>
+                                <li><button class="dropdown-item" value="Consoles" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Consoles</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Games">Games</a></li>
+                                <li><button class="dropdown-item" value="Games" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Games</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Gaming PC">Gaming PC</a></li>
+                                <li><button class="dropdown-item" value="Gaming PC" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Gaming PC</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Gaming Accessories">Gaming Accessories</a></li>
+                                <li><button class="dropdown-item" value="Gaming Accessories" onClick={(e) => {this.setState({ categoriaB: "Gaming", categoriaA: e.target.value}, this.handleClick)}}>Gaming Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Gaming" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -462,15 +543,15 @@ degToRad(degrees) {
                                 TVs
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="TVS">
-                                <li><a class="dropdown-item"  value="TVs">TVs</a></li>
+                                <li><button class="dropdown-item"  value="TVs" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}>TVs</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item"  value="SoundBars">SoundBars</a></li>
+                                <li><button class="dropdown-item"  value="SoundBars" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}>SoundBars</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item"  value="Projectors">Projectors</a></li>
+                                <li><button class="dropdown-item"  value="Projectors" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}>Projectors</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item"  value="TV Accessories"> TV Accessories</a></li>
+                                <li><button class="dropdown-item"  value="TV Accessories" onClick={(e) => {this.setState({ categoriaB: "TVs", categoriaA: e.target.value}, this.handleClick)}}> TV Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="TVs" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="TVs" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -537,17 +618,17 @@ degToRad(degrees) {
                             <a class="nav-link dropdown-toggle botaoProdutoDropdown" href="#" id="fotografia" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Photography </a>
                                 <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="fotografia">
-                                <li><a class="dropdown-item"value="Cameras">Cameras</a></li>
+                                <li><button class="dropdown-item"value="Cameras" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Cameras</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item"value="Drones">Drones</a></li>
+                                <li><button class="dropdown-item"value="Drones" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Drones</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item"value="Video">Video</a></li>
+                                <li><button class="dropdown-item"value="Video" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Video</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item"value="Lenses">Lenses</a></li>
+                                <li><button class="dropdown-item"value="Lenses" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Lenses</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item"value="Photography Accessories">Photography Accessories</a></li>
+                                <li><button class="dropdown-item"value="Photography Accessories" onClick={(e) => {this.setState({ categoriaB: "Photography", categoriaA: e.target.value}, this.handleClick)}}>Photography Accessories</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Photography" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
                             </ul>
                         </li>
@@ -557,17 +638,17 @@ degToRad(degrees) {
                                 Books
                             </a>
                             <ul class="dropdown-menu botaoProdutoDropdown" aria-labelledby="livros">
-                                <li><a class="dropdown-item" value="Romance">Romance</a></li>
+                                <li><button class="dropdown-item" value="Romance" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Romance</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Children's and Youth Literature">Children's and Youth Literature</a></li>
+                                <li><button class="dropdown-item" value="Children's and Youth Literature" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Children's and Youth Literature</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Self help">Self help</a></li>
+                                <li><button class="dropdown-item" value="Self help" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Self help</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Manga">Manga</a></li>
+                                <li><button class="dropdown-item" value="Manga" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Manga</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Technical books">Technical books</a></li>
+                                <li><button class="dropdown-item" value="Technical books" onClick={(e) => {this.setState({ categoriaB: "Books", categoriaA: e.target.value}, this.handleClick)}}>Technical books</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
-                                <li><a class="dropdown-item" value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                                <li><button class="dropdown-item" value="Books" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                                 <li><hr class="dropdown-divider"></hr></li>
 
                             </ul>
@@ -688,7 +769,7 @@ degToRad(degrees) {
                                             parseFloat(produto.lon) // Convert to float
                                         )
                                     :
-                                        <></>}
+                                        <></>}km
                                     <br></br>
                                     {produto.preco}€
                                 </div>
