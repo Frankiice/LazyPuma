@@ -75,6 +75,7 @@ render() {
   const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
   const { cart } = this.state;
   const total = this.calcularTotal(carrinho);
+  
   return (
     
 <div class="container">
@@ -101,7 +102,11 @@ render() {
                         <img class="border rounded me-3" src={item.img} style={{ width: '96px', height: '96px' }}/>
                         <div class="">
                           <a href="#" class="nav-link">{item.nome}</a>
-                          <p class="text-muted">Yellow, Jeans</p>
+
+                          {item.propriedades.map((propriedade, propIndex) => (
+                <p key={propIndex} className="text-muted">{propriedade.name}: {propriedade.value}</p>
+              ))}
+       
                           
                         </div>
                       </div>
@@ -219,7 +224,10 @@ render() {
             <hr />
             
             <div class="mt-3">
-              <a href='./user/encomenda' class="btn btn-success w-100 shadow-0 mb-2" > Proceed to checkout </a>
+            {carrinho.length > 0 && (
+        <a href='./user/encomenda' class="btn btn-success w-100 shadow-0 mb-2" > Proceed to checkout </a>
+      )}
+              
               
               <a href="./" class="btn btn-light w-100 border mt-2"> Back to shop </a>
             </div>

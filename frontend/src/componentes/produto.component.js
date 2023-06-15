@@ -31,7 +31,7 @@ export default class Produto extends Component{
 
 
 adicionarCarrinho() {
-    const novoProduto = { nome: this.state.produto._doc.name, preco: this.state.produto.price, quantidade: this.state.quantidade, img:this.state.produto._doc.img, preco_original:this.state.produto.price };
+    const novoProduto = { nome: this.state.produto._doc.name, preco: this.state.produto.price, quantidade: this.state.quantidade, img:this.state.produto._doc.img, preco_original:this.state.produto.price, propriedades: this.state.propriedades};
     let novoCarrinho = [...this.state.carrinho];
     let existingProductIndex = novoCarrinho.findIndex(item => item.nome === this.state.produto._doc.name);
     let preco = this.state.produto.price;
