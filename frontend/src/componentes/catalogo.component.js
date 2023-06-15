@@ -242,9 +242,9 @@ export default class Catalogo extends Component{
                                     <div class="col mb-5">
                                         <div class="card h-100 crop">
                                         {produto._doc.img.startsWith('http') ? (
-                                            <img class="card-img" src={produto._doc.img} alt="..." />
+                                            <img class="card-img  img-fluid" src={produto._doc.img} alt="..." />
                                         ) : (
-                                            <img class="card-img" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
+                                            <img class="card-img img-fluid" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
 
                                         )}
                                             <div class="card-body p-4">
@@ -277,13 +277,13 @@ export default class Catalogo extends Component{
                                             {
                                             produto._doc.img ? 
                                                 produto._doc.img.startsWith('http') ? (
-                                                    <img class="card-img" src={produto._doc.img} alt="..." />
+                                                    <img class="card-img img-fluid"  src={produto._doc.img} alt="..." />
                                                 ) : (
-                                                    <img class="card-img" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
+                                                    <img class="card-img img-fluid" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
 
                                                 )
                                             :
-                                            <img class="card-img" alt="..." />
+                                            <img class="card-img img-fluid" alt="..." />
                                             }
                                             <div class="card-body p-4">
                                                 <div class="text-center">
