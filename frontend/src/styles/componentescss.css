@@ -345,7 +345,7 @@ body{
   .card {
     flex: 0 0 300px;
     margin: 10px;
-    height: 460px !important;
+    /* height: 460px !important; */
   }
   
 
