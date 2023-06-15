@@ -23,6 +23,7 @@ import Fveiculo from "./componentes/fVeiculo.component";
 import Fproduto from "./componentes/fProduto.component";
 import Frecords from "./componentes/frecord.component";
 import Crecords from "./componentes/crecord.component";
+import Arecords from "./componentes/arecord.component";
 import Admin from "./componentes/admin.component";
 
 
@@ -52,7 +53,9 @@ function App() {
         <Route path ="/user/f/produto" element={<Fproduto/>}/>
         <Route path ="/user/c/records" element={<Crecords/>}/>
         <Route path ="/user/f/records" element={<Frecords/>}/>
+        <Route path ="/user/admin/records" element={<Arecords/>}/>
         <Route path ="/user/admin" element={<Admin/>}/>
+
 
 
 
