@@ -1301,8 +1301,26 @@ app.get("/user/homepage", async (req, res) => {
 
       if (encomendas.length > 0) {
         // User has placed orders
-        const categories = encomendas.flatMap(unit => unit.listaProdutos.map(productEntry => productEntry.categorieB));
-        productList = await Product.find({ categorieB: { $in: categories } });
+        const productIds = encomendas.flatMap(encomenda => encomenda.listaUP.map(productEntry => productEntry.idProduct));
+
+        const productListForCategories = await Product.find({ _id: { $in: productIds } });
+
+        // Get unique categories from the productListForCategories
+        const categories = [...new Set(productListForCategories.map(product => product.categorieB))];
+
+        productList = await Promise.all(categories.map(async (category) => {
+          // Retrieve products with the same category, excluding the ones in productListForCategories
+          const productsWithCategory = await Product.find({
+            categorieB: category,
+            _id: { $nin: productIds }
+          });
+
+          return productsWithCategory.map(product => product.toObject());
+        }));
+
+        // Flatten the array of arrays into a single array
+        productList = productList.flat();  
+
       } else {
         // User has no orders
         const categories = await Product.distinct("categorieB");
