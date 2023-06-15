@@ -300,11 +300,11 @@ render() {
     
     <div class="container">
     <div class="row">
-        <div class="card d-flex border shadow-0 custom-card">
+        <div class="cardP d-flex border shadow-0 custom-card">
             <div class="m-4">
             <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Production Units</h2>
             <br></br>
-            <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <div class="cardP-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
  
 
              {this.state.msgRemoved === "" ?
