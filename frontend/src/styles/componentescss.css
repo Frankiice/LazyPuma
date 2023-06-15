@@ -505,19 +505,29 @@ a[target='_blank'] {
   }
   
 
-.scrollmenu {
-    overflow: auto;
+  .scrollmenu {
     white-space: nowrap;
     background-color: #F2F4F5;
-    overflow-y:hidden;
+    overflow-y: hidden;
     cursor: grab;
-    display: flex; /* Use flexbox */
-    flex-wrap: nowrap; /* Prevent wrapping */
-}
-
-.scrollmenu:active {
-    cursor: grabbing;
-}
+    flex-wrap: nowrap;
+    transition: transform 0.3s ease; /* Add a transition for smooth sliding */
+  }
+  
+  .scrollmenu:hover {
+    cursor: grabbing; /* Change cursor to a grabbing hand when dragging */
+  }
+  
+  .scrollmenu.dragging {
+    cursor: grabbing; /* Change cursor to a grabbing hand when actively dragging */
+  }
+  
+  .scrollmenu .row {
+    flex-wrap: nowrap;
+  }
+  .btn-toolbar{
+    display: block;
+  }
 
 /* .scrollmenu .btn-xl{
     display: inline-block;
@@ -527,7 +537,7 @@ a[target='_blank'] {
     display: inline-block;
 } */
 
-#butaoBLA{
+.butaoBLA{
     /* background-image: url("https://ae01.alicdn.com/kf/H9bcc7fb7e08e4842a77427fabfe599e9j/100cm-djungelskog-urso-marrom-brinquedo-de-pel-cia-macio-animal-de-pel-cia-gigante-mr-boss.jpg_Q90.jpg_.webp");; */
     background-size: contain;
     background-position: 40px 20px 65px;   
@@ -667,9 +677,9 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
-#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
+/* #butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
-}
+} */
 
 .cor_header{
     background-color: #F2F4F5;

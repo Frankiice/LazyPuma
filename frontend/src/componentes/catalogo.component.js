@@ -138,42 +138,39 @@ export default class Catalogo extends Component{
         </header>
         :
         
-    <div class="scrollmenu">
-    <header class="cor_header height_header">  
-
-    <ScrollContainer className="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
-    <div className="row">
-        {this.state.novoHeader.map((product, index) => (
-        <div key={product._id} className="col">   
-            <div className="button-container">
-            <button
-                className="btn btn-outline-dark btn-xl rounded-circle section"
-                id="butaoBLA"
-                style={{ backgroundImage: `url(${product.img})` }}
-                value={this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
-                onMouseLeave={(e) => {
-                e.target.style.backgroundImage = `url(${product.img})`;
-                }}
-                onClick={(e) => {
-                this.setState(
-                    this.state.novoHeaderTip === "brand"
-                    ? { brand: e.target.value }
-                    : { categoriaA: e.target.value },
-                    this.handleClick
-                );
-                }}
-            >
-                {this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
-            </button> 
-            <div className="button-name">
-                {this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
+        <div className="scrollmenu">
+        <header className="cor_header height_header">
+          <ScrollContainer className="btn-toolbar col-lg-12 justify-content-center scrollcontainer" id="buttons_header" role="toolbar">
+            <div className="row">
+              {this.state.novoHeader.map((product, index) => (
+                <div key={product._id} className="col">
+                  <div className="button-container">
+                    <button
+                      className="btn btn-outline-dark btn-xl rounded-circle section butaoBLA"
+                      style={{ backgroundImage: `url(${product.img})` }}
+                      value={this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundImage = `url(${product.img})`;
+                      }}
+                      onClick={(e) => {
+                        this.setState(
+                          this.state.novoHeaderTip === "brand"
+                            ? { brand: e.target.value }
+                            : { categoriaA: e.target.value },
+                          this.handleClick
+                        );
+                      }}
+                    >
+                      {this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
+                    </button>
+                    <div className="button-name">
+                      {this.state.novoHeaderTip === "brand" ? product.brand : product.categorieA}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            </div>
-        </div> 
-        ))}
-    </div>
-    </ScrollContainer>
-
+          </ScrollContainer>  
    
     </header>
     </div> 
