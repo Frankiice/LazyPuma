@@ -225,7 +225,7 @@ componentDidMount() {
           lon_user: data.data.lon,
         });
 
-        fetch(`http://localhost:5000/encomenda/consumidor/${data.data._id}`)
+        fetch(`http://localhost:5000/relatorios/consumidor/${data.data._id}`)
           .then((response) => response.json())
           .then((data1) => {
             console.log(data1, 'EncomendaData');
@@ -234,7 +234,7 @@ componentDidMount() {
             // Processar os dados para o gráfico
             const chartData = data1.map((item, index) => {
                 const distances = item.produtos.map((produto) => ({
-                  price: parseFloat(item.encomenda.preco),
+                  price: parseFloat(produto.preco),
                   distance: this.calculateDistance(
                     this.state.lat_user,
                     this.state.lon_user,
