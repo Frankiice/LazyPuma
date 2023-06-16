@@ -207,7 +207,8 @@ const EncomendaSchema = new mongoose.Schema(
 // });
 
 
-//REPORTS CONSUMIDOR
+
+//HISTORICO DE ENCOMENDAS DO CONSUMIDOR
 app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
   const Produto = mongoose.model("products", ProductDetailsSchema);
@@ -291,8 +292,8 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   }
 });
 
-//HISTORICO DE ENCOMENDAS DO CONSUMIDOR
-app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
+//REPORTS CONSUMIDOR
+app.get("/relatorios/consumidor/:idConsumidor", async (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
   const Produto = mongoose.model("products", ProductDetailsSchema);
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
@@ -318,32 +319,41 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
       count++;
 
       for (const item of encomenda.listaUP) {
-        // console.log(`objecto da listaUp da encomenda atual: ${item}`);
-        // console.log(`id do produto: ${item.idProduct}`);
-        // const produto = await Produto.findById(item.idProduct);
-        console.log(`id da UP:${item.idUP}`);
+        console.log(`id da UP: ${item.idUP}`);
         const idProduto = mongoose.Types.ObjectId(item.idProduct);
         const produto = await Produto.findById(idProduto);
         const idUP = mongoose.Types.ObjectId(item.idUP);
         const UP = await UnidadeProducao.findById(idUP);
+      
+        let preco = null; // Inicializa a variável preco com um valor padrão
+      
+        for (const objeto of UP.listaProdutos) {
+          console.log(produto._id);
+          const id_objeto = objeto.idProduto;
+          const objectId = mongoose.Types.ObjectId(id_objeto);
+          if (objectId.equals(produto._id)) {
+            preco = objeto.preco; // Atribui o valor real de objeto.preco à variável preco
+            console.log("preco",preco);
+          }
+        }
+      
         console.log(`UP: ${UP}`);
-        // console.log(`Produto: ${produto}`);
         lat = UP.lat;
         lon = UP.lon;
-        nome_UP =UP.nome;
+        nome_UP = UP.nome;
+      
         if (produto) {
           const productInfo = {
-            
             nome: produto.name,
             marca: produto.brand,
             categoria: produto.categorieB,
             foto: produto.img,
             propriedades: produto.properties,
             quantidade: item.quantidade,
-            lat_UP:lat,
-            lon_UP:lon,
-            name_UP:nome_UP,
-            
+            lat_UP: lat,
+            lon_UP: lon,
+            name_UP: nome_UP,
+            preco: preco,
           };
           produtosEncomenda.push(productInfo);
           console.log(`produtosEncomenda: ${produtosEncomenda}`);
