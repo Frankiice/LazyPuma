@@ -247,7 +247,6 @@ function Payment(props) {
               const name = details.payer.name.given_name;
               props.state.paymentSuccess = true;
               props.handleNextStep();
-              alert("Transaction completed by " + props.state.nickname);
           }}
         />
           </PayPalScriptProvider>
@@ -309,6 +308,7 @@ function Payment(props) {
 }
 
 function Confirmation(props) {
+  const total = props.calcularTotal(props.state.carrinho);
 
   useEffect(() => {
     if (props.state.paymentSuccess) {
@@ -317,7 +317,9 @@ function Confirmation(props) {
   }, [props.state.paymentSuccess]);
 
   const createOrder = () => {
-    const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, listaUP, estadoEncomenda } = getOrderData();
+    const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, idProdutos} = getOrderData();
+
+    console.log(getOrderData())
 
     fetch("http://localhost:5000/user/encomenda", {
       method: "POST",
@@ -330,8 +332,8 @@ function Confirmation(props) {
         dataEncomenda,
         dataEnvio,
         prazoCancelamento,
-        listaUP,
         estadoEncomenda,
+        idProdutos,
       }),
     })
       .then((res) => res.json())
@@ -342,12 +344,12 @@ function Confirmation(props) {
           // Perform any additional actions here
         } else {
           // Order creation failed
-          console.log("Erro ao criar encomenda");
+          console.log("Erro ao criar encomenda", data.error);
           // Handle the error or display an error message
         }
       })
       .catch((error) => {
-        console.log("Error creating order:", error);
+        console.log("Erro ao criar encomenda:", error);
         // Handle the error or display an error message
       });
   };
@@ -355,38 +357,32 @@ function Confirmation(props) {
   const getOrderData = () => {
     // Replace with the actual order data from your app's state
     const {
-      _id,
-      total,
+      userData,
       carrinho,
     } = props.state;
   
     const currentDate = new Date();
     const dataEncomenda = currentDate.toISOString(); // Get the current time as the dataEncomenda
   
-    const prazoCancelamento = new Date(currentDate.getTime() + (30 * 24 * 60 * 60 * 1000)); // Set prazoCancelamento 30 days after dataEncomenda
+    const prazoCancelamento = (new Date(currentDate.getTime() + (30 * 24 * 60 * 60 * 1000))).toISOString(); // Set prazoCancelamento 30 days after dataEncomenda
   
-    const listaUP = carrinho.map(item => {
-      return {
-        id: item.id, // Assuming each item in carrinho has an "id" property
-        ups: item.ups, // Assuming each item in carrinho has an "ups" property that contains the list of UPS
-      };
-    });
+    const idProdutos = carrinho.map(item => item.id_produto); // Extracting the id_produto from each item in carrinho
   
     return {
-      idConsumidor: _id,
+      idConsumidor: userData._id,
       preco: total,
       dataEncomenda,
-      dataEnvio: null, // Set dataEnvio to null by default
+      dataEnvio: null,
       prazoCancelamento,
-      listaUP,
       estadoEncomenda: "Pendente",
+      idProdutos,
     };
   };
 
   return (
     <div className="encomenda">
       {props.state.paymentSuccess ? (
-        <h2>Payment was successful!</h2>
+        <h2>Payment was successful by {props.state.nickname}!</h2>
       ) : (
         <h2>Payment failed. Please try again.</h2>
       )}
@@ -526,7 +522,7 @@ getSectionComponent(s) {
   switch(s) {
     case 0: return <Details state={state} handleNextStep={this.handleNextStep} calcularTotal={this.calcularTotal} />;
     case 1: return <Payment  state={state} handleNextStep={this.handleNextStep} handlePreviousStep={this.handlePreviousStep} calcularTotal={this.calcularTotal} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} />;
-    case 2: return <Confirmation state={state} handlePreviousStep={this.handlePreviousStep} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} />;
+    case 2: return <Confirmation state={state} handlePreviousStep={this.handlePreviousStep} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} calcularTotal={this.calcularTotal}/>;
     default: return <Details state={state} handleNextStep={this.handleNextStep} handlePreviousStep={this.handlePreviousStep} calcularTotal={this.calcularTotal} />;
   }
 }
