@@ -358,6 +358,10 @@ export default class Navbar extends Component{
                 <li><hr class="dropdown-divider"></hr></li>
                 </>
                 :
+                this.state.type === "admin" ?
+                <>
+                </>
+                :
                 <>
                 </>
               }

@@ -282,7 +282,7 @@ render() {
                                 <i class="bi bi-chevron-right"></i>
                             )}
                             </button>
-                            UP NAME: {encomenda.UP.nome}
+                            <i class="bi bi-building"></i>&nbsp; UP NAME: {encomenda.UP.nome}
                         </h4>
                         {this.state.showProducts[encomenda.UP.nome] && (
                             <div>

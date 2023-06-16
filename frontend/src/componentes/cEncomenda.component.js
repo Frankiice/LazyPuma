@@ -21,7 +21,8 @@ export default class EncomendasC extends Component {
       selectedCategories: [], 
       filteredEncomendas: [],
       orderID: "",
-      confirmationDialogId: false
+      confirmationDialogId: false,
+      showProducts: {},  
     };
   }
   //Aplicação do filtro
@@ -257,7 +258,14 @@ degToRad(degrees) {
       });
     };
   
-  
+  toggleProducts = (upName) => {
+    this.setState((prevState) => ({
+      showProducts: {
+        ...prevState.showProducts,
+        [upName]: !prevState.showProducts[upName],
+      },
+    }));
+  };  
 
 render() {
   
@@ -277,148 +285,133 @@ render() {
 <div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <div class="card d-flex border shadow-0 custom-card" style={{ height: '621px'}}>
+      <div class="cardP border shadow-0 custom-cardUP">
         <div class="m-4">
-          <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
+          <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report</h2>
           <br></br>
-          <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          <div class="cardP-body" style={{ overflowY: 'auto' }}>
             {filteredEncomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>
-                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't placed any orders yet 
-               </h5>
-                
-      
+                <h5 class="text-secondary justify-content-md-center">
+                  {this.state.nickname} hasn't placed any orders yet
+                </h5>
               </div>
-
-              
             ) : (
               filteredEncomendas.map((encomenda) => (
-                
                 <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.encomenda.id_encomenda}>
                   <div class="">
                     <div class="me-lg-5">
-                    <div>
-                    <div className="row">
-                      <div className="col-md-8">
-                        <h4 className="d-flex justify-content-start">
-                          <i className="bi bi-bag-check-fill"></i>&nbsp; Order ID: {encomenda.encomenda.id_encomenda} &nbsp;&nbsp;
-                        </h4>
-                        <h5 className="d-flex justify-content-start text-muted">Date: {encomenda.encomenda.data_encomenda}</h5>
-                        <h5 className="d-flex justify-content-start text-muted">Total: {encomenda.encomenda.preco}€</h5>
-                        <h5 className="d-flex justify-content-start text-muted">State: {encomenda.encomenda.estado}</h5>
-                      </div>
-                      <div className="col-md-4">
-                        {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" ? (
-                          new Date(encomenda.encomenda.prazoCancelamento) < new Date() && 
-                          this.state.showConfirmationDialog && this.state.confirmationDialogId === encomenda.encomenda.id_encomenda ? (
-                            <div className="confirmation-dialog">
-                              <h6>Are you sure you want to Cancel this Order?</h6>
-                              <div>
-                                <button className="btn btn-danger" onClick={() => this.handleRemoveOrder(encomenda.encomenda.id_encomenda)}>
-                                  Confirm
-                                </button>&nbsp;
-                                <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
-                                  Cancel
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="d-flex justify-content-end">
-                              <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda }); this.showConfirmationDialog();}}>
-                                Cancel Order
-                              </a>
-                            </div>
-                          )
-                        ) : null}
-                        <div className="d-flex justify-content-end">
-                        {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" ?
-                          <div style={{ marginTop: '10px' }}> 
-                            <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda }); this.showConfirmationDialog();}}>
-                              Confirm Delivery
-                            </a>
+                      <div>
+                        <div className="row">
+                          <div className="col-md-8">
+                            <h4 className="d-flex justify-content-start">
+                              <button
+                                className="btn btn-link"
+                                onClick={() => this.toggleProducts(encomenda.encomenda.id_encomenda)}
+                              >
+                                {this.state.showProducts[encomenda.encomenda.id_encomenda] ? (
+                                  <i class="bi bi-chevron-down"></i>
+                                ) : (
+                                  <i class="bi bi-chevron-right"></i>
+                                )}
+                              </button>
+                              <i className="bi bi-bag-check-fill"></i>&nbsp; Order ID: {encomenda.encomenda.id_encomenda} &nbsp;&nbsp;
+                            </h4>
+                            <h5 className="d-flex justify-content-start text-muted">Date: {encomenda.encomenda.data_encomenda}</h5>
+                            <h5 className="d-flex justify-content-start text-muted">Total: {encomenda.encomenda.preco}€</h5>
+                            <h5 className="d-flex justify-content-start text-muted">State: {encomenda.encomenda.estado}</h5>
                           </div>
-                        : null
-                        }
+                          <div className="col-md-4">
+                            {/* Cancel Order */}
+                            {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" ? (
+                              new Date(encomenda.encomenda.prazoCancelamento) < new Date() && 
+                              this.state.showConfirmationDialog && this.state.confirmationDialogId === encomenda.encomenda.id_encomenda ? (
+                                <div className="confirmation-dialog">
+                                  <h6>Are you sure you want to Cancel this Order?</h6>
+                                  <div>
+                                    <button className="btn btn-danger" onClick={() => this.handleRemoveOrder(encomenda.encomenda.id_encomenda)}>
+                                      Confirm
+                                    </button>&nbsp;
+                                    <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
+                                      Cancel
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="d-flex justify-content-end">
+                                  <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda }); this.showConfirmationDialog();}}>
+                                    Cancel Order
+                                  </a>
+                                </div>
+                              )
+                            ) : null}
+                            {/* Confirm Delivery */}
+                            <div className="d-flex justify-content-end">
+                              {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" && (
+                                <div style={{ marginTop: '10px' }}>
+                                  <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda }); this.showConfirmationDialog();}}>
+                                    Confirm Delivery
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-
-                  
-                    
-                     <br></br>
-                    <h5 class="">Purchased products:</h5>
-                    <br></br>
-                    {encomenda.produtos.map((produto) => (
-
-
-
-          <div class="d-flex" key={produto.idProduto}>
-            
-            <img
-              class="border rounded me-3"
-              src={produto.foto}
-              style={{ width: '96px', height: '96px' }}
-            />
-            <div>
-              <a href="#" class="nav-link">{produto.nome}</a>
-              {/* <p class="text-muted">{produto.marca}</p> */}
-              <p class="text-muted">
-                Brand: {produto.marca}<br></br>
-                Categorie: {produto.categoria} <br></br>
-                Quantity: {produto.quantidade}<br></br> <br></br>
-                Suplier: {produto.name_UP}<br></br>
-                Proximity: &nbsp;
-                
-                {this.calculateDistance(
-                    parseFloat(this.state.lat_user), // Convert to float
-                    parseFloat(this.state.lon_user), // Convert to float
-                    parseFloat(produto.lat_UP), // Convert to float
-                    parseFloat(produto.lon_UP) // Convert to float
-                )} Km 
-              
-               </p>
-            </div>
-          </div>
-        ))}
+                      <br></br>
+                      {/* Purchased products */}
+                      {this.state.showProducts[encomenda.encomenda.id_encomenda] && (
+                        <div>
+                          <h5 class="">Purchased products:</h5>
+                          <br></br>
+                          {encomenda.produtos.map((produto) => (
+                            <div class="d-flex" key={produto.idProduto}>
+                              <img
+                                class="border rounded me-3"
+                                src={produto.foto}
+                                style={{ width: '96px', height: '96px' }}
+                              />
+                              <div>
+                                <a href="#" class="nav-link">{produto.nome}</a>
+                                <p class="text-muted">
+                                  Brand: {produto.marca}<br></br>
+                                  Categorie: {produto.categoria} <br></br>
+                                  Quantity: {produto.quantidade}<br></br> <br></br>
+                                  Suplier: {produto.name_UP}<br></br>
+                                  Proximity: &nbsp;
+                                  
+                                  {this.calculateDistance(
+                                      parseFloat(this.state.lat_user), // Convert to float
+                                      parseFloat(this.state.lon_user), // Convert to float
+                                      parseFloat(produto.lat_UP), // Convert to float
+                                      parseFloat(produto.lon_UP) // Convert to float
+                                  )} Km 
+                                
+                                 </p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                    <div class="">
-
-                    </div>
-                    <div class="">
-                      {/* <text class="h6">{item.preco}€</text> <br />
-                      <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small> */}
-                      
-                    </div>
-                    
-                    
+                    <div class=""></div>
+                    <div class=""></div>
                   </div>
                   <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                  {/* <div class="form-outline">
-                  <text class="h6">Quantity</text>  &nbsp;
-                      <input type="number" id="typeNumber" class="form-control form-control-sm " style={{ width: '48px', backgroundColor: '#f8f9fa', border: '1px solid #e4e8eb',display: 'inline-block'  }} defaultValue={item.quantidade} min="1" onChange={(e) => this.handleQuantityChange(item.nome, parseInt(e.target.value))} /> 
-                  </div> */}
-                  {/* &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-                    <div class="float-md-end">
-                      <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
-                    </div> */}
                   </div>
                   <hr />
                 </div>
               ))
             )}
-
-            </div>
-
           </div>
-          
-
         </div>
       </div>
+    </div>
+
 
       <div class="col-lg-4">
  
