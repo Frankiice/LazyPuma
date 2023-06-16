@@ -1155,26 +1155,35 @@ app.delete("/produto", async (req, res) => {
   
 
 
-app.post("/user/encomenda", async(req, res) => {
-    try{
-        const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-        const {idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, listaUP, estadoEncomenda} = req.body;
-
-        await Encomenda.create({
-            idConsumidor,
-            preco,
-            dataEncomenda,
-            dataEnvio,
-            prazoCancelamento,
-            listaUP,
-            estadoEncomenda,
-        });
-        res.send({ status: "ok" });
-        
-    }catch (error) {
-        res.send({ status: "error", error: error })
+app.post("/user/encomenda", async (req, res) => {
+    try {
+      const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+      const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  
+      const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, idProdutos } = req.body;
+  
+      console.log(req.body);
+  
+      const listaUP = await UnidadeProducao.find({ "listaProdutos.idProduto": { $in: idProdutos } });
+  
+      console.log("ENCOMENDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      console.log(listaUP);
+  
+      await Encomenda.create({
+        idConsumidor,
+        preco,
+        dataEncomenda,
+        dataEnvio,
+        prazoCancelamento,
+        listaUP,
+        estadoEncomenda,
+      });
+  
+      res.send({ status: "ok" });
+    } catch (error) {
+      res.send({ status: "error", error: error });
     }
-})
+  });
 
 app.post("/user/unidadeProducao", async (req, res) => {
   try {

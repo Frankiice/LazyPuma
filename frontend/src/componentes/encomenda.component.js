@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import '../styles/componentescss.css';
 import { Stepper } from 'react-form-stepper';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
@@ -6,149 +6,178 @@ import { FarBootstrap } from "react-icons/fa";
 
 function Details(props) {
   const total = props.calcularTotal(props.state.carrinho);
-  return (
-  console.log('props:', props),
-  <div class="encomenda">
-    <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
-      <div class="p-5 col-md-4 order-md-2 mb-4">
-        <h4 class="d-flex justify-content-between align-items-center mb-3">
-          <span >Your cart</span>
-          <span class="badge badge-secondary badge-pill">{props.state.count}</span>
-        </h4>
-        <ul class="list-group mb-3">
-        {/* <div class="container-cart"> */}
-        {/* <div class="items-carrinho"> */}
-        { props.state.carrinho && props.state.carrinho.map(item => (
-        <div class="container-cart">
-          <div class="carrinho-item" key={item.nome}>
-                <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
-                <h6>{item.nome}</h6>
-                {/* <small class="text-muted">Brief description</small> */}
-                <span class="text-muted">{item.preco}€</span>
+
+  // Function to check if the cart is empty or the full price is 0
+  const CheckCartEmpty = () => {
+    if (isCartEmpty() || total === 0) {
+      // Redirect to the initial page after 5 seconds
+      setTimeout(() => {
+        window.location.href = "/"; // Replace with your desired initial page URL
+      }, 5000);
+      return (
+        <div>
+          <h1>The cart is empty or the full price of the items is 0 or FREE</h1>
+          <p>Redirecting in 5 seconds...</p>
+        </div>
+      );
+    } else {
+      return (
+        console.log('props:', props),
+        <div class="encomenda">
+          <div class="row p-5 mx-5 bg-dark shadow rounded d-block d-sm-flex">
+            <div class="p-5 col-md-4 order-md-2 mb-4">
+              <h4 class="d-flex justify-content-between align-items-center mb-3">
+                <span >Your cart</span>
+                <span class="badge badge-secondary badge-pill">{props.state.count}</span>
+              </h4>
+              <ul class="list-group mb-3">
+              {/* <div class="container-cart"> */}
+              {/* <div class="items-carrinho"> */}
+              { props.state.carrinho && props.state.carrinho.map(item => (
+              <div class="container-cart">
+                <div class="carrinho-item" key={item.nome}>
+                      <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
+                      <h6>{item.nome}</h6>
+                      {/* <small class="text-muted">Brief description</small> */}
+                      <span class="text-muted">{item.preco}€</span>
+                </div>
+              </div>
+            
+            ))}
+                  
+                  
+              {/*
+              <li class="list-group-item d-flex justify-content-between bg-light">
+                <div class="text-success">
+                  <h6 class="my-0">Promo code</h6>
+                  <small>EXAMPLECODE</small>
+                </div>
+                <span class="text-success">-$5</span>
+              </li> */}
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Total</span>
+                <strong>{total}€</strong>
+              </li>
+              </ul>
+    
+              {/* <form class="card p-2" style={{height:'10%'}}>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Promo code"></input>
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-secondary">Redeem</button>
+                  </div>
+                </div>
+              </form> */}
+            </div>
+            <div class="p-5 col-md-8 order-md-1">
+              <h4 class="mb-3">Billing address</h4>
+              <form class="needs-validation" onSubmit={props.handleNextStep}>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="firstName">First name</label>
+                    <div class="input-field bg-dark"> 
+                      <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="firstName" placeholder={props.state.fName} required></input>
+                    </div>
+                    <div class="invalid-feedback">
+                      Valid first name is required.
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="lastName">Last name</label>
+                    <div class="input-field bg-dark"> 
+                      <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="lastName" placeholder={props.state.lName} required></input>
+                    </div>
+                    <div class="invalid-feedback">
+                      Valid last name is required.
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="mb-3">
+                  <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                    <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" placeholder={props.state.email}></input>
+                  <div class="invalid-feedback">
+                    Please enter a valid email address for shipping updates.
+                  </div>
+                </div>
+    
+                <div class="mb-3">
+                  <label for="address">Address</label>
+                  <div class="input-field bg-dark"> 
+                    <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="address" placeholder={props.state.morada} required></input>
+                  </div>
+                  <div class="invalid-feedback">
+                    Please enter your shipping address.
+                  </div>
+                </div>
+    
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="firstName">NIF</label>
+                      <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="NIF" placeholder={props.state.nif} required></input>
+                    <div class="invalid-feedback">
+                      Valid NIF is required.
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="lastName">Phone Number</label>
+                      <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="phone" placeholder={props.state.phone} required></input>
+                    <div class="invalid-feedback">
+                      Valid Phone Number is required.
+                    </div>
+                  </div>
+                </div>
+    
+                {/* <div class="row">
+                  <div class="col-md-5 mb-3">
+                    <label for="country">Country</label>
+                    <select class="custom-select d-block w-100 rounded" id="country" required>
+                      <option value="">Choose...</option>
+                      <option>Portugal</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a valid country.
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="state">State</label>
+                    <select class="custom-select d-block w-100 rounded" id="state" required>
+                      <option value="">Choose...</option>
+                      <option>California</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please provide a valid state.
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <label for="zip">Zip</label>
+                    <input type="text" class="form-control" id="zip" placeholder="" required></input>
+                    <div class="invalid-feedback">
+                      Zip code required.
+                    </div>
+                  </div>
+                </div> */}
+                <hr class="mb-4"></hr>
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+              </form>
+            </div>
           </div>
         </div>
-      
-      ))}
-            
-            
-        {/*
-        <li class="list-group-item d-flex justify-content-between bg-light">
-          <div class="text-success">
-            <h6 class="my-0">Promo code</h6>
-            <small>EXAMPLECODE</small>
-          </div>
-          <span class="text-success">-$5</span>
-        </li> */}
-        <li class="list-group-item d-flex justify-content-between">
-          <span>Total</span>
-          <strong>{total}€</strong>
-        </li>
-        </ul>
+        );
+    }
+  };
 
-        {/* <form class="card p-2" style={{height:'10%'}}>
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Promo code"></input>
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-secondary">Redeem</button>
-            </div>
-          </div>
-        </form> */}
-      </div>
-      <div class="p-5 col-md-8 order-md-1">
-        <h4 class="mb-3">Billing address</h4>
-        <form class="needs-validation" onSubmit={props.handleNextStep}>
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="firstName">First name</label>
-              <div class="input-field bg-dark"> 
-                <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="firstName" placeholder={props.state.fName} required></input>
-              </div>
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="lastName">Last name</label>
-              <div class="input-field bg-dark"> 
-                <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="lastName" placeholder={props.state.lName} required></input>
-              </div>
-              <div class="invalid-feedback">
-                Valid last name is required.
-              </div>
-            </div>
-          </div>
+  // Function to check if the cart is empty
+  const isCartEmpty = () => {
+    return props.state.carrinho.length === 0;
+  };
 
-          <div class="mb-3">
-            <label for="email">Email <span class="text-muted">(Optional)</span></label>
-              <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" placeholder={props.state.email}></input>
-            <div class="invalid-feedback">
-              Please enter a valid email address for shipping updates.
-            </div>
-          </div>
+  useEffect(() => {
+    // Call the CheckCartEmpty function when the component mounts
+    CheckCartEmpty();
+  }, []);
 
-          <div class="mb-3">
-            <label for="address">Address</label>
-            <div class="input-field bg-dark"> 
-              <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="address" placeholder={props.state.morada} required></input>
-            </div>
-            <div class="invalid-feedback">
-              Please enter your shipping address.
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="firstName">NIF</label>
-                <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="NIF" placeholder={props.state.nif} required></input>
-              <div class="invalid-feedback">
-                Valid NIF is required.
-              </div>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="lastName">Phone Number</label>
-                <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="phone" placeholder={props.state.phone} required></input>
-              <div class="invalid-feedback">
-                Valid Phone Number is required.
-              </div>
-            </div>
-          </div>
-
-          {/* <div class="row">
-            <div class="col-md-5 mb-3">
-              <label for="country">Country</label>
-              <select class="custom-select d-block w-100 rounded" id="country" required>
-                <option value="">Choose...</option>
-                <option>Portugal</option>
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid country.
-              </div>
-            </div>
-            <div class="col-md-4 mb-3">
-              <label for="state">State</label>
-              <select class="custom-select d-block w-100 rounded" id="state" required>
-                <option value="">Choose...</option>
-                <option>California</option>
-              </select>
-              <div class="invalid-feedback">
-                Please provide a valid state.
-              </div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <label for="zip">Zip</label>
-              <input type="text" class="form-control" id="zip" placeholder="" required></input>
-              <div class="invalid-feedback">
-                Zip code required.
-              </div>
-            </div>
-          </div> */}
-          <hr class="mb-4"></hr>
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  );
+  return <CheckCartEmpty />;
 }
 
 function Payment(props) {
@@ -161,6 +190,8 @@ function Payment(props) {
 // };
 
   const total = props.calcularTotal(props.state.carrinho);
+
+  let valorFinal = total.toFixed(2);
 
   return (
     <div class="encomenda">
@@ -198,12 +229,14 @@ function Payment(props) {
 
           <PayPalScriptProvider  options={{ "client-id": "AS3rmVBGmMwOidTWn8ZkC-lab9AocIuWvzOtbtItPQCZRlf9jCAcW5FePQgOiR1_UY5O5UEfU14Mh8Ek" }} >
             <PayPalButtons
+            style={{ layout: "vertical" }}
+            shippingPreference="NO_SHIPPING"
             createOrder={(data, actions) => {
               return actions.order.create({
                 purchase_units: [
                   {
                     amount: {
-                      value: "13.99",
+                      value: valorFinal,
                     },
                   },
                 ],
@@ -213,7 +246,7 @@ function Payment(props) {
               const details = await actions.order.capture();
               const name = details.payer.name.given_name;
               props.state.paymentSuccess = true;
-              alert("Transaction completed by " + name);
+              props.handleNextStep();
           }}
         />
           </PayPalScriptProvider>
@@ -266,8 +299,7 @@ function Payment(props) {
             </div>
           </div>
           <hr class="mb-4"></hr> */}
-          <button class="btn btn-primary btn-lg btn-block" type="button" onClick={props.handlePreviousStep}>Go back</button>
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+          <button class="btn btn-primary btn-lg btn-block m-3" type="button" onClick={props.handlePreviousStep}>Go back</button>
         </form>
       </div>
     </div>
@@ -276,23 +308,85 @@ function Payment(props) {
 }
 
 function Confirmation(props) {
+  const total = props.calcularTotal(props.state.carrinho);
+
+  useEffect(() => {
+    if (props.state.paymentSuccess) {
+      createOrder();
+    }
+  }, [props.state.paymentSuccess]);
+
+  const createOrder = () => {
+    const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, idProdutos} = getOrderData();
+
+    console.log(getOrderData())
+
+    fetch("http://localhost:5000/user/encomenda", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idConsumidor,
+        preco,
+        dataEncomenda,
+        dataEnvio,
+        prazoCancelamento,
+        estadoEncomenda,
+        idProdutos,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "ok") {
+          // Order creation successful
+          console.log("Encomenda criada com sucesso!");
+          // Perform any additional actions here
+        } else {
+          // Order creation failed
+          console.log("Erro ao criar encomenda", data.error);
+          // Handle the error or display an error message
+        }
+      })
+      .catch((error) => {
+        console.log("Erro ao criar encomenda:", error);
+        // Handle the error or display an error message
+      });
+  };
+
+  const getOrderData = () => {
+    // Replace with the actual order data from your app's state
+    const {
+      userData,
+      carrinho,
+    } = props.state;
+  
+    const currentDate = new Date();
+    const dataEncomenda = currentDate.toISOString(); // Get the current time as the dataEncomenda
+  
+    const prazoCancelamento = (new Date(currentDate.getTime() + (30 * 24 * 60 * 60 * 1000))).toISOString(); // Set prazoCancelamento 30 days after dataEncomenda
+  
+    const idProdutos = carrinho.map(item => item.id_produto); // Extracting the id_produto from each item in carrinho
+  
+    return {
+      idConsumidor: userData._id,
+      preco: total,
+      dataEncomenda,
+      dataEnvio: null,
+      prazoCancelamento,
+      estadoEncomenda: "Pendente",
+      idProdutos,
+    };
+  };
+
   return (
-  <div class="encomenda">
-  {/* <div>
-    <h2>Confirmaçao a dizer que foi sucesso ou nao!</h2>
-    <h2>Ou seja, se o email for diferente ao da conta logada dá erro</h2>
-    <h2>(maybe) se a morada nao existe, dá erro</h2>
-    <h2>se a API de pagamento (nos tinhamos pensado em paypal) der erro, entao a "transaçao" foi mal, dá erro</h2>
-    <h2>etc</h2>
-  </div> */}
-  <div className="encomenda">
-    {props.state.paymentSuccess ? (
-      <h2>Payment was successful!</h2>
-    ) : (
-      <h2>Payment failed. Please try again.</h2>
-    )}
-  </div>
-  </div>
+    <div className="encomenda">
+      {props.state.paymentSuccess ? (
+        <h2>Payment was successful by {props.state.nickname}!</h2>
+      ) : (
+        <h2>Payment failed. Please try again.</h2>
+      )}
+    </div>
   );
 }
 
@@ -428,7 +522,7 @@ getSectionComponent(s) {
   switch(s) {
     case 0: return <Details state={state} handleNextStep={this.handleNextStep} calcularTotal={this.calcularTotal} />;
     case 1: return <Payment  state={state} handleNextStep={this.handleNextStep} handlePreviousStep={this.handlePreviousStep} calcularTotal={this.calcularTotal} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} />;
-    case 2: return <Confirmation state={state} handlePreviousStep={this.handlePreviousStep} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} />;
+    case 2: return <Confirmation state={state} handlePreviousStep={this.handlePreviousStep} handlePaymentSuccess={this.handlePaymentSuccess} handlePaymentFailure={this.handlePaymentFailure} calcularTotal={this.calcularTotal}/>;
     default: return <Details state={state} handleNextStep={this.handleNextStep} handlePreviousStep={this.handlePreviousStep} calcularTotal={this.calcularTotal} />;
   }
 }
