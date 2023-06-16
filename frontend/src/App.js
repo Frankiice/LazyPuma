@@ -21,8 +21,8 @@ import Up from "./componentes/up.component";
 import Fup from "./componentes/fUp.component";
 import Fveiculo from "./componentes/fVeiculo.component";
 import Fproduto from "./componentes/fProduto.component";
-import Frecords from "./componentes/frecord.component";
-import Crecords from "./componentes/crecord.component";
+import Frecords from "./componentes/frecord1.component";
+import Crecords from "./componentes/crecord1.component";
 import Arecords from "./componentes/arecord.component";
 import Admin from "./componentes/admin.component";
 
