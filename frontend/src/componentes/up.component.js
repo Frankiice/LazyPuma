@@ -312,9 +312,9 @@ render() {
 //   console.log("dentro do render: ", unidades)
   return (
     
-    <div class="container">
-    <div class="row">
-        <div class="cardP  border shadow-0 custom-cardUP">
+    <div class="container" >
+    <div class="row" >
+        <div class="cardP border shadow-0 custom-cardUP" >
             <div class="m-4">
             <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Production Units</h2>
             <br></br>
@@ -395,7 +395,6 @@ render() {
                         </div>
 
                           {this.state.showProducts && (
-                          <div className="col">
                             <div className="d-flex">
                             <div className="col" style={{ overflowY: 'auto', overflowX: 'hidden' }}>
                                 
@@ -467,17 +466,8 @@ render() {
                                 ))}                 
                               </div>
                             </div>
-                          </div>
-                        )}
-                          {/* <div className="col-lg-12">
-                          <div className="row">
-                            <div className="col-md-9"></div>
-                            <div className="col-md-3 text-right">
-                              <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleNovoProduto}>Create New Product</button>
-                            </div>
-                          </div>
-                          </div> */}
-                     
+                        
+                        )}    
                      
                           <div className="col-lg-12">
                             <div className="d-flex align-items-center">

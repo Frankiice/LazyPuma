@@ -27,6 +27,7 @@ import Arecords from "./componentes/arecord.component";
 import Admin from "./componentes/admin.component";
 import FaAllUp from "./componentes/fAllUp.component";
 import EncomendasC from "./componentes/cEncomenda.component";
+import EncomendasF from "./componentes/fEncomenda.component";
 
 
 function App() {
@@ -59,6 +60,8 @@ function App() {
         <Route path ="/user/admin" element={<Admin/>}/>
         <Route path ="/user/f/allup" element={<FaAllUp/>}/>
         <Route path ="/user/c/orders" element={<EncomendasC/>}/>
+        <Route path ="/user/f/orderHistory" element={<EncomendasF/>}/>
+
 
 
 

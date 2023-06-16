@@ -218,12 +218,14 @@ export default class Navbar extends Component{
 
   redirect_up = () => {
     window.location.href = "/user/f/allup";
-    
   }
 
   redirect_ordersC = () => {
     window.location.href = "/user/c/orders";
-    
+  }
+
+  redirect_sales = () => {
+    window.location.href = "/user/f/orderHistory"; 
   }
   
   componentDidMount() {

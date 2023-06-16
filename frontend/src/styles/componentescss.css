@@ -781,11 +781,16 @@ a[target='_blank'] {
     height: 550px;;
 }
 
-.custom-cardUP{
-    height: 700px;;
-}
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding-bottom: 150px; /* Adjust this value based on your footer height */
+  }
   
-  
+  .cardP {
+    flex: 1;
+  }
 .barra-container {
     display: flex;
     align-items: center;
