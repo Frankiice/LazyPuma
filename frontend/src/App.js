@@ -25,6 +25,7 @@ import Frecords from "./componentes/frecord.component";
 import Crecords from "./componentes/crecord.component";
 import Arecords from "./componentes/arecord.component";
 import Admin from "./componentes/admin.component";
+import FaAllUp from "./componentes/fAllUp.component";
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
         <Route path ="/user/f/records" element={<Frecords/>}/>
         <Route path ="/user/admin/records" element={<Arecords/>}/>
         <Route path ="/user/admin" element={<Admin/>}/>
+        <Route path ="/user/f/allup" element={<FaAllUp/>}/>
 
 
 
