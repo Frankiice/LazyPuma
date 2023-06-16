@@ -6,8 +6,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Autosuggest from "react-autosuggest";
 // import { Bar } from 'react-chartjs-2';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-
+// import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar,ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Cell, Legend} from 'recharts';
 
 
 export default class Login extends Component {
@@ -18,13 +18,16 @@ export default class Login extends Component {
       distancia: 1010,
       arrastando: false,
       encomendas: [],
-      startDate: null,
-      endDate: null,
       categories: ["Baby","Sports","Animals","Cosmetics","DIY","Smartphones","Tech","Decoration","Gardening","Gaming","TVs","Toys","Appliances","Photography","Books"], 
-      searchValue: "", 
       selectedCategories: [], 
       filteredEncomendas: [],
       chartData: [],
+      produtos2: [],
+      startDate: null,
+      endDate: null,
+      searchValue: "",
+     
+      
 
 
       
@@ -32,49 +35,69 @@ export default class Login extends Component {
 
     };
   }
+  handleStartDateChange = (date) => {
+    this.setState({ startDate: date });
+  };
+  
+  handleEndDateChange = (date) => {
+    this.setState({ endDate: date });
+  };
+  
   //Aplicação do filtro
   filtrarEncomendas = () => {
-    const { encomendas, startDate, endDate, selectedCategories } = this.state;
-    const distancia = this.state.distancia;
+    const { startDate, endDate, selectedCategories } = this.state;
   
-    // Filtrar por intervalo de datas
-    const filteredByDate = encomendas.filter((encomenda) => {
-      const dataEncomenda = new Date(encomenda.encomenda.data_encomenda);
-      return (
-        (!startDate || dataEncomenda >= startDate) &&
-        (!endDate || dataEncomenda <= endDate)
-      );
-    });
+    // Filtrar os dados baseado nas datas
+    let filteredData = this.state.encomendas;
+    if (startDate && endDate) {
+      filteredData = filteredData.filter((item) => {
+        const itemDate = new Date(item.encomenda.data_encomenda); // Substitua "data_encomenda" pelo nome correto da propriedade de data em "encomendas"
+        return itemDate >= startDate && itemDate <= endDate;
+      });
+    }
   
-    // Filtrar por categorias
-    const filteredByCategory = filteredByDate.filter((encomenda) => {
-      if (selectedCategories.length === 0) {
-        return true; // Inclui todas as encomendas quando não há categorias selecionadas
-      }
-  
-      const produtos = encomenda.produtos;
-      return produtos.some((produto) =>
+    // Filtrar os dados baseado nas categorias selecionadas
+   // Filtrar os dados baseado nas categorias selecionadas
+// Filtrar os dados baseado nas categorias selecionadas
+if (selectedCategories.length > 0) {
+    filteredData = filteredData.map((item) => {
+      const produtosCategoria = item.produtos.filter((produto) =>
         selectedCategories.includes(produto.categoria)
       );
+  
+      return produtosCategoria.length > 0 ? { ...item, produtos: produtosCategoria } : null;
+    }).filter(Boolean); // Remover itens nulos da matriz
+  }
+  
+  
+    // Processar os dados filtrados para os gráficos
+    let produtos = [];
+    let produtos2 = [];
+  
+    filteredData.forEach((item) => {
+      item.produtos.forEach((produto) => {
+        const price = produto.preco;
+        const distance = this.calculateDistance(
+          this.state.lat_user,
+          this.state.lon_user,
+          produto.lat_UP,
+          produto.lon_UP
+        );
+  
+        produtos.push({ price: price, distance: distance });
+  
+        const existingProduct = produtos2.find((item) => item.distance === distance);
+        if (existingProduct) {
+            existingProduct.total += produto.quantidade;
+        } else {
+          produtos2.push({ distance: distance, total: produto.quantidade });
+        }
+      });
     });
   
-    const filteredByDistance = filteredByCategory.filter((encomenda) => {
-      const produtos = encomenda.produtos;
-      const filteredProdutos = produtos.filter((produto) => {
-        const proximity = this.calculateDistance(
-          parseFloat(this.state.lat_user),
-          parseFloat(this.state.lon_user),
-          parseFloat(produto.lat_UP),
-          parseFloat(produto.lon_UP)
-        );
-        produto.proximity = proximity; // Adicionando a propriedade "proximity" ao objeto produto
-        return proximity <= distancia;
-      });
-      return filteredProdutos.length > 0;
-    });
-
-  this.setState({ filteredEncomendas: filteredByDistance });
+    this.setState({ chartData: produtos, produtos2: produtos2 });
   };
+  
   
   
 
@@ -138,60 +161,33 @@ export default class Login extends Component {
     });
   };
 
-//funcoes do filtro da distancia
 
-moverBola = (event) => {
-  if (this.state.arrastando) {
-    const barra = document.getElementById("barra");
-    const barraEsquerda = barra.getBoundingClientRect().left;
-    const mouseX = event.clientX - barraEsquerda;
-    const larguraBarra = barra.offsetWidth;
-    const incremento = 10;
-    const maxDistancia = 1000; // reduzido em 10 para ajustar a barra começando em 10
-
-    const novaDistancia = Math.floor((mouseX / larguraBarra) * maxDistancia);
-    const distanciaAjustada = Math.min(Math.max(novaDistancia, 10), maxDistancia + 10); // ajustado o valor mínimo e máximo
-    const distanciaIncrementada = Math.ceil(distanciaAjustada / incremento) * incremento;
-
-    this.setState({ distancia: distanciaIncrementada });
-  }
-};
-
-
-  iniciarArrasto = () => {
-    this.setState({ arrastando: true });
-  };
-
-  pararArrasto = () => {
-    this.setState({ arrastando: false });
-  };
 
 //--------------------------------------------------------------
 
 calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Radius of the Earth in kilometers
-
-  // Convert degrees to radians
-  const lat1Rad = this.degToRad(lat1);
-  const lon1Rad = this.degToRad(lon1);
-  const lat2Rad = this.degToRad(lat2);
-  const lon2Rad = this.degToRad(lon2);
-
-  // Calculate the differences between the coordinates
-  const dLat = lat2Rad - lat1Rad;
-  const dLon = lon2Rad - lon1Rad;
-
-  // Haversine formula
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var distance = R * c;
-
-  distance = distance.toFixed(2);
-
-  return distance; // Distance in kilometers
-}
+    const R = 6371; // Radius of the Earth in kilometers
+  
+    // Convert degrees to radians
+    const lat1Rad = this.degToRad(lat1);
+    const lon1Rad = this.degToRad(lon1);
+    const lat2Rad = this.degToRad(lat2);
+    const lon2Rad = this.degToRad(lon2);
+  
+    // Calculate the differences between the coordinates
+    const dLat = lat2Rad - lat1Rad;
+    const dLon = lon2Rad - lon1Rad;
+  
+    // Haversine formula
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+  
+    return Math.floor(distance); // Distance in kilometers without decimal places
+  }
+  
 
 degToRad(degrees) {
   return degrees * (Math.PI / 180);
@@ -226,94 +222,83 @@ componentDidMount() {
         });
 
         fetch(`http://localhost:5000/relatorios/consumidor/${data.data._id}`)
-          .then((response) => response.json())
-          .then((data1) => {
-            console.log(data1, 'EncomendaData');
-            this.setState({ encomendas: data1, filteredEncomendas: data1 });
-
-            // Processar os dados para o gráfico
-            const chartData = data1.map((item, index) => {
-                const distances = item.produtos.map((produto) => ({
-                  price: parseFloat(produto.preco),
-                  distance: this.calculateDistance(
-                    this.state.lat_user,
-                    this.state.lon_user,
-                    produto.lat_UP,
-                    produto.lon_UP
-                  ),
-                }));
+        .then((response) => response.json())
+        .then((data1) => {
+        //   console.log(data1, 'EncomendaData');
+          this.setState({ encomendas: data1, filteredEncomendas: data1 });
+          let produtos = [];
+          let produtos2 = [];
+      
+          // Processar os dados para o gráfico
+          data1.forEach((item) => {
+            item.produtos.forEach((produto) => {
+             const quantity = produto.quantidade;
+              const price = produto.preco;
+              let total_price = price * quantity;
+              const distance = this.calculateDistance(
+                this.state.lat_user,
+                this.state.lon_user,
+                produto.lat_UP,
+                produto.lon_UP
+              );
+      
+              produtos.push({ price: total_price, distance: distance});
               
-                // Retorne apenas o primeiro item do array de distâncias
-                return distances[0];
-              });
-              
-              console.log("chartData", chartData);
-              this.setState({ chartData });
-              
-          })
-          .catch((error) => {
-            console.error(error);
+              // Procurar se já existe um objeto com a mesma distância
+              const existingProduct = produtos2.find((item) => item.distance === distance);
+              if (existingProduct) {
+                existingProduct.total++;
+              } else {
+                produtos2.push({ distance: distance, total: 1 });
+              }
+            });
           });
+      
+        //   console.log("produtos", produtos);
+        //   console.log("produtos2", produtos2);
+          this.setState({ chartData: produtos, produtos2: produtos2 });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      
+      
+
       });
   }
 
-//   createChart(jsonData) {
-//     const chartData = {
-//       labels: [],
-//       datasets: [
-//         {
-//           label: 'Total de Preço por Encomenda',
-//           data: [],
-//           backgroundColor: 'rgba(75, 192, 192, 0.6)',
-//           borderColor: 'rgba(75, 192, 192, 1)',
-//           borderWidth: 1,
-//         },
-//       ],
-//     };
 
-//     jsonData.forEach((item) => {
-//       const { preco_encomenda, lat_UP, lon_UP } = item.encomenda;
-//       const distancia = this.calculateDistance(
-//         38.9015518,
-//         -9.1616508,
-//         parseFloat(lat_UP),
-//         parseFloat(lon_UP)
-//       );
 
-//       chartData.labels.push(distancia);
-//       chartData.datasets[0].data.push(parseFloat(preco_encomenda));
-//     });
-
-//     const options = {
-//       scales: {
-//         x: {
-//           title: {
-//             display: true,
-//             text: 'Distância (em km)',
-//           },
-//         },
-//         y: {
-//           title: {
-//             display: true,
-//             text: 'Total de Preço',
-//           },
-//         },
-//       },
-//     };
-
-//     return (
-//       <div>
-//         <Bar data={chartData} options={options} />
-//       </div>
-//     );
-//   }
-
+renderTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload; // Dados do ponto de dados clicado
+      const { price, distance } = data;
   
+      // Filtrar os produtos com o mesmo preço e distância
+      const produtosIguais = this.state.chartData.filter(
+        (produto) => produto.price === price && produto.distance === distance
+      );
+  
+      return (
+        <div className="custom-tooltip">
+          <p>Price: {price}€</p>
+          <p>Distance: {distance} km</p>
+          {produtosIguais.length > 1 && (
+            <p>There are {produtosIguais.length} orders for this product with the same characteristics </p>
+          )}
+        </div>
+      );
+    }
+  
+    return null;
+  }
+   
 
 render() {
   
 const {chartData} = this.state;
-console.log("chartData2",chartData);
+const {produtos2} = this.state;
+// console.log("chartData2",chartData);
 
   const { distancia } = this.state;
   const maxDistancia = 1010;
@@ -322,6 +307,7 @@ console.log("chartData2",chartData);
   const { searchValue, selectedCategories } = this.state;
   const { encomendas } = this.state;
   const { filteredEncomendas } = this.state;
+  
 
   
   
@@ -330,12 +316,12 @@ console.log("chartData2",chartData);
 <div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <div class="card d-flex border shadow-0 custom-card" style={{ height: '621px'}}>
+      <div class="card d-flex border shadow-0 custom-card" style={{ height: '1521px'}}>
         <div class="m-4">
           <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
    
           <br></br>
-          <div class="card-body" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+          <div class="card-body" style={{ maxHeight: '1521px', overflowY: 'auto' }}>
             {filteredEncomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>
@@ -349,20 +335,58 @@ console.log("chartData2",chartData);
             ) : (
                 
                 <>
-                <h5 class="text-secondary justify-content-md-center">Existem encomendas (mostrar gráficos)</h5>
-                <div>
-                  <h1>Relatórios</h1>
-                  <LineChart width={600} height={400} data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="distance" label={{ value: 'Distance (km) between You and Suppliers', position: 'insideBottom', offset: -10 }} />
-                    <YAxis label={{ value: 'Price', angle: -90, position: 'insideLeft' }} />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="price"  />
-                  </LineChart>
+                    {/* <h5 class="text-secondary justify-content-md-center">Existem encomendas (mostrar gráficos)</h5> */}
+                    {chartData.length === 0 ? (
+    <h5>No matches for the selected criteria in Graphic 1</h5>
+  ) : (
+                            <div>
+                            <h4>First Graphic: </h4>
+                            <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on your distance to the respective Supplier.</h6>
+                                <br></br><br></br>
+                        <ScatterChart width={700} height={400} data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            type="number"
+                            dataKey="distance"
+                            label={{
+                            value:'Proximity',
+                            position: 'insideBottom',
+                           offset:-4,
+                            }}
+                        />
+                        <YAxis
+                            type="number"
+                            dataKey="price"
+                            label={{ value: 'Price', angle: -90, position: 'insideLeft',offset: 10}}
+                        />
+                        <Tooltip cursor={{ strokeDasharray: '3 3' }} content={this.renderTooltip} />
+                        
+                        <Scatter data={chartData} fill="#8884d8" />
+                        </ScatterChart>
+                    </div>
+  )}
+                    <br></br><br></br>
+                    {produtos2.length === 0 ? (
+    <h5>No matches for the selected criteria in Graphic 2</h5>
+  ) : (
+    <div>
+    <h4>Second Graphic: </h4>
+    <h6 class="text-muted">Number of each product ordered according to the distance to the supplier.</h6>
 
-                </div>
-              </>
+    <br></br><br></br>
+    <BarChart width={600} height={400} data={produtos2}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="distance" label={{ value: 'Proximity', position: 'insideBottom'}} />
+        <YAxis label={{ value: 'Number of Products', angle: -90, position: 'inside' }} />
+        <Tooltip />
+        
+        <Bar dataKey="total" fill="#8884d8" />
+        <br></br>
+        
+        </BarChart>
+        </div>
+)}
+                    </>
             )}
 
             </div>
@@ -380,27 +404,10 @@ console.log("chartData2",chartData);
 
             <h3 class="d-flex justify-content-center">Search Filters</h3>
             <br></br>
-            <div class="d-flex justify-content-between">
-              <h7 class="mb-2 text-dark">Maximum distance between {this.state.nickname} and Suppliers:</h7>
-            </div>
-            <div>
+            
+          
         
-                <div className="barra-container">
-                <div
-          id="barra"
-          className="barra"
-          onMouseMove={this.moverBola}
-          onMouseDown={this.iniciarArrasto}
-          onMouseUp={this.pararArrasto}
-        >
-          <div
-            className="bola"
-            style={{ left: `${(distancia / maxDistancia) * 100}%` }}
-          />
-        </div>
-        <p> {distanciaFormatada}</p>
-      </div>
-      </div>
+                
       <div class="d-flex justify-content-start">
               <h7 class="mb-2 text-dark">Date Range:</h7>
       </div>
