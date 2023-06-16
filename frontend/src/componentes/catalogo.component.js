@@ -156,29 +156,53 @@ export default class Catalogo extends Component{
     };
     
     filterProducts = () => {
-    const { obj, brandFilter, subCategoryFilter } = this.state;
-    let filteredProducts = obj;
-    
-    if (brandFilter && subCategoryFilter) {
-        filteredProducts = obj.filter(
-        (product) =>
-            product._doc.brand === brandFilter &&
-            product._doc.categorieA === subCategoryFilter
-        );
-    } else {
-        if (brandFilter) {
-        filteredProducts = obj.filter(
-            (product) => product._doc.brand === brandFilter
-        );
+    const { obj, objSearch, brandFilter, subCategoryFilter } = this.state;
+    let filteredProducts 
+    if(objSearch){
+        filteredProducts = objSearch;
+        if (brandFilter && subCategoryFilter) {
+            filteredProducts = objSearch.filter(
+            (product) =>
+                product._doc.brand === brandFilter &&
+                product._doc.categorieA === subCategoryFilter
+            );
+        } else {
+            if (brandFilter) {
+            filteredProducts = objSearch.filter(
+                (product) => product._doc.brand === brandFilter
+            );
+            }
+        
+            if (subCategoryFilter) {
+                console.log("entra aqui bem")
+            filteredProducts = objSearch.filter(
+                (product) => product._doc.categorieA === subCategoryFilter
+            );
+            }
         }
-    
-        if (subCategoryFilter) {
-        filteredProducts = obj.filter(
-            (product) => product._doc.categorieA === subCategoryFilter
-        );
+    }else{
+        filteredProducts = obj;
+        if (brandFilter && subCategoryFilter) {
+            filteredProducts = obj.filter(
+            (product) =>
+                product._doc.brand === brandFilter &&
+                product._doc.categorieA === subCategoryFilter
+            );
+        } else {
+            if (brandFilter) {
+            filteredProducts = obj.filter(
+                (product) => product._doc.brand === brandFilter
+            );
+            }
+        
+            if (subCategoryFilter) {
+            filteredProducts = obj.filter(
+                (product) => product._doc.categorieA === subCategoryFilter
+            );
+            }
         }
-    }
-    
+
+    }    
     this.setState({ filteredProducts });
     };
 
@@ -291,7 +315,7 @@ export default class Catalogo extends Component{
             </div>
             <div className="col-lg-9">
             <div className="row row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                {this.state.objSearch ? (
+            {this.state.objSearch && this.state.filteredProducts.length === 0 ? (
                 this.state.objSearch.length === 0 ? (
                     <h2>No Products Found</h2>
                 ) : (
@@ -319,7 +343,7 @@ export default class Catalogo extends Component{
                                 parseFloat(this.state.user_lon), // Convert to float
                                 parseFloat(produto.lat), // Convert to float
                                 parseFloat(produto.lon) // Convert to float
-                            )}
+                            )}km
                             <br />
                             {produto.price}€
                             </div>
