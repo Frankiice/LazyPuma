@@ -176,11 +176,11 @@ render() {
     <div class="row">
         {this.state.msg === "" ? 
 
-            <div class="cardP d-flex border shadow-0 custom-card">
+            <div class="cardP border shadow-0 custom-cardUP">
                 <div class="m-4">
                 <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Production Unit</h2>
                 <br></br>
-                <div class="cardP-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                <div class="cardP-body" style={{ overflowY: 'auto' }}>
                 
                 <form onSubmit={this.handleUnidadeProducao}>
                 <div class="row">
@@ -278,15 +278,15 @@ render() {
                 </div>
             </form>
 
-                </div>
-                </div>
-                <div>
-                <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/up">Back </a>
-                </div>
+          </div>
+        </div>
+      <div>
+      <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/up">Back </a>
+      </div>
 
-            </div>
+    </div>
     :
-        <div class="card d-flex border shadow-0 custom-card">
+        <div class="cardP d-flex border shadow-0 custom-card">
             <div class="m-4">
             <div class="carrinho-vazio">
             <br></br>

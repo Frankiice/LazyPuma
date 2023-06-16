@@ -780,6 +780,11 @@ a[target='_blank'] {
 .custom-card{
     height: 550px;;
 }
+
+.custom-cardUP{
+    height: 700px;;
+}
+  
   
 .barra-container {
     display: flex;

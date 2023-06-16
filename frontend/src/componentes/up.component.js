@@ -36,7 +36,9 @@ export default class Up extends Component {
       showConfirmationDialog: false,
       msgRemoved: "",
       remove: "",
-      confirmationDialogId: ""
+      confirmationDialogId: "",
+      showProducts: false,
+      showVehicles: false
     };
     this.getCoordenadas = this.getCoordenadas.bind(this);
     this.handleUnidadeProducao = this.handleUnidadeProducao.bind(this);
@@ -291,6 +293,18 @@ handleRemoveUP(){
       // Handle any network or fetch-related errors
     });
   };
+
+  toggleProducts = () => {
+    this.setState((prevState) => ({
+      showProducts: !prevState.showProducts,
+    }));
+  };
+
+  toggleVehicles = () => {
+    this.setState((prevState) => ({
+      showVehicles: !prevState.showVehicles,
+    }));
+  };
  
 
 render() {
@@ -300,11 +314,11 @@ render() {
     
     <div class="container">
     <div class="row">
-        <div class="cardP d-flex border shadow-0 custom-card">
+        <div class="cardP  border shadow-0 custom-cardUP">
             <div class="m-4">
             <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Production Units</h2>
             <br></br>
-            <div class="cardP-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <div class="cardP-body" style={{ overflowY: 'auto' }}>
  
 
              {this.state.msgRemoved === "" ?
@@ -362,13 +376,28 @@ render() {
                             </div>
                           </div>
                         </div>                    
-                          <div className="col-lg-12">
-                          <h5>Products:</h5>
-                            <hr />
+                        <div className="col-lg-12">
+                          <div className="d-flex align-items-center">
+                            <h5 className="me-3">Products:</h5>
+                            <div className="ms-3">
+                              <button
+                                className="btn btn-secondary me-2"
+                                onClick={this.toggleProducts}
+                              >
+                                {this.state.showProducts ? 'Hide Products' : 'View All Products'}
+                              </button>
+                              <button className="btn btn-light border icon-hover-danger" onClick={this.handleNovoProduto}>
+                                Create New Product
+                              </button>
+                            </div>
                           </div>
+                          <hr />
+                        </div>
+
+                          {this.state.showProducts && (
                           <div className="col">
                             <div className="d-flex">
-                              <div className="col" style={{ maxHeight: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
+                            <div className="col" style={{ overflowY: 'auto', overflowX: 'hidden' }}>
                                 
                                 {unidade.listaProdutos.map((item, index) => (
                                 <div className="row gy-3 mb-4 produto_carrinho" key={item.nome}>
@@ -439,89 +468,107 @@ render() {
                               </div>
                             </div>
                           </div>
-                          <div className="col-lg-12">
+                        )}
+                          {/* <div className="col-lg-12">
                           <div className="row">
                             <div className="col-md-9"></div>
                             <div className="col-md-3 text-right">
                               <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleNovoProduto}>Create New Product</button>
                             </div>
                           </div>
-                          </div>
-                          <hr />
+                          </div> */}
+                     
+                     
                           <div className="col-lg-12">
-                            <h5>Vehicles:</h5>
-                            <hr />
-                            <div className="col">
-                            <div className="d-flex">
-                            <div className="col" style={{ maxHeight: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
-                            {unidade.listaVeiculos.map((veiculo, index) => (
-                            <div className="row gy-3 mb-4 produto_carrinho" key={veiculo._id}>
-                                <div className="col-lg-6">
-                                <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                                <div className="">
-                                    <h6>Licence Plate</h6>
-                                    <h6>{veiculo.matricula}</h6>
-                                </div>
-                                </div>
-                                </div>
-
-                                <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                                <div className="">
-                                    <h6>Brand</h6>
-                                    <h6>{veiculo.marca}</h6>
-                                </div>
-                                </div>
-                                <div className="col-lg-2 col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                                <div className="form-outline">
-                                    <h6>Capacity (m³)</h6>
-                                    <h6>{veiculo.capacidade}</h6>
-                                    </div>
-                                </div>
-                                <div className="col-lg-2 d-flex justify-content-end">
-                                    <div className="row">
-                                    {this.state.showConfirmationDialog && this.state.remove === "veiculo" && this.state.confirmationDialogId === veiculo._id ? (
-                                    <div className="confirmation-dialog">
-                                      <h6>Are you sure you want to remove this Vehicle?</h6>
-                                      <div>
-                                        <button className="btn btn-danger" onClick={() => this.handleRemoveVeiculo(veiculo._id)}>
-                                          Confirm
-                                        </button>&nbsp;
-                                        <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
-                                          Cancel
-                                        </button>
-                                      </div>
-                                    </div>
-                                  )
-                                :
-                                (<div className="col-md-auto">
-                                <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ remove: "veiculo", confirmationDialogId: veiculo._id }); this.showConfirmationDialog();}}>
-                                  Remove
-                                </a>
-                                </div>
-                                )
-                                }
-                                      <div class="float-md-end mt-2">
-                                        <a href="#" class="btn btn-light border icon-hover-danger" onClick={() => this.handleVeiculo(veiculo._id)}> Edit</a>
-                                      </div>
-                                    </div>
-                                  </div>
-                                <hr />
+                            <div className="d-flex align-items-center">
+                              <h5 className="me-3">Vehicles:</h5>
+                              <div className="ms-3">
+                                <button
+                                  className="btn btn-secondary me-2"
+                                  onClick={this.toggleVehicles}
+                                >
+                                  {this.state.showVehicles ? 'Hide Vehicles' : 'View All Vehicles'}
+                                </button>
+                                <button className="btn btn-light border icon-hover-danger" onClick={this.handleNovoVeiculo}>
+                                  Create New Vehicle
+                                </button>
+                              </div>
                             </div>
-                            ))}
+                            <hr />
+                          </div>
+                            {this.state.showVehicles && (
+                                <div className="col">
+                                <div className="d-flex">
+                                <div className="col" style={{ maxHeight: '300px', overflowY: 'auto', overflowX: 'hidden' }}>
+                                {unidade.listaVeiculos.map((veiculo, index) => (
+                                <div className="row gy-3 mb-4 produto_carrinho" key={veiculo._id}>
+                                    <div className="col-lg-6">
+                                    <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                                    <div className="">
+                                        <h6>Licence Plate</h6>
+                                        <h6>{veiculo.matricula}</h6>
+                                    </div>
+                                    </div>
+                                    </div>
+
+                                    <div className="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
+                                    <div className="">
+                                        <h6>Brand</h6>
+                                        <h6>{veiculo.marca}</h6>
+                                    </div>
+                                    </div>
+                                    <div className="col-lg-2 col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
+                                    <div className="form-outline">
+                                        <h6>Capacity (m³)</h6>
+                                        <h6>{veiculo.capacidade}</h6>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-2 d-flex justify-content-end">
+                                        <div className="row">
+                                        {this.state.showConfirmationDialog && this.state.remove === "veiculo" && this.state.confirmationDialogId === veiculo._id ? (
+                                        <div className="confirmation-dialog">
+                                          <h6>Are you sure you want to remove this Vehicle?</h6>
+                                          <div>
+                                            <button className="btn btn-danger" onClick={() => this.handleRemoveVeiculo(veiculo._id)}>
+                                              Confirm
+                                            </button>&nbsp;
+                                            <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
+                                              Cancel
+                                            </button>
+                                          </div>
+                                        </div>
+                                      )
+                                    :
+                                    (<div className="col-md-auto">
+                                    <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ remove: "veiculo", confirmationDialogId: veiculo._id }); this.showConfirmationDialog();}}>
+                                      Remove
+                                    </a>
+                                    </div>
+                                    )
+                                    }
+                                          <div class="float-md-end mt-2">
+                                            <a href="#" class="btn btn-light border icon-hover-danger" onClick={() => this.handleVeiculo(veiculo._id)}> Edit</a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    <hr />
+                                </div>
+                                ))}
                               
                                 
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="col-lg-12">
+                      )}
+                     
+                      {/* <div className="col-lg-12">
                       <div className="row">
                         <div className="col-md-9"></div>
                         <div className="col-md-3 text-right">
                           <button type="submit" class="btn btn-outline-light btn-dark botaoPerfil" onClick={this.handleNovoVeiculo}>Create New Vehicle</button>
                         </div>
                       </div>
-                      </div>
+                      </div> */}
                         
                     </div>
                       
@@ -626,13 +673,10 @@ render() {
                     </div>
                 </div>
             </form>
-            <div>
-            <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f">Back </a>
-            </div>
             </div>
                 ):(
                   <div class="card d-flex border shadow-0 custom-card">
-                      <div class="m-4">
+                     
                       <div class="carrinho-vazio">
                       <br></br>
                           <h4 class="text-secondary justify-content-md-center">{this.state.msg}!</h4>
@@ -640,12 +684,12 @@ render() {
                       <div>
                       <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f">Back </a>
                       </div>
-                      </div>
+                      
                   </div>
                 )
              ) : (
               <div class="card d-flex border shadow-0 custom-card">
-                      <div class="m-4">
+                  
                       <div class="carrinho-vazio">
                       <br></br>
                           <h4 class="text-secondary justify-content-md-center">{this.state.msgRemoved}!</h4>
@@ -653,7 +697,7 @@ render() {
                       <div>
                       <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f">Back </a>
                       </div>
-                      </div>
+                    
                   </div>
              )
               }
