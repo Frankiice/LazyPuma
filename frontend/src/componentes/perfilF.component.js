@@ -317,7 +317,7 @@ render() {
                                 <div class="form-group">
                                     <label>Email</label>
                                     <div class="input-field bg-dark"> 
-                                        <input type="text" class="bg-dark text-white" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder={this.state.userData.email}/>
+                                        <input type="text" class="bg-dark text-white" id="email" value={this.state.userData.email}/>
                                     </div>
                                 </div>
                             </div>
