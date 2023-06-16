@@ -214,7 +214,6 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   const Produto = mongoose.model("products", ProductDetailsSchema);
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   
-
   try {
 
     const idConsumidor = req.params.idConsumidor;
@@ -277,10 +276,10 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
         preco_encomenda: encomenda.preco,
         id_encomenda: encomenda._id,
         preco:encomenda.preco,
+        estado:encomenda.estadoEncomenda,
+        prazoCancelamento: encomenda.prazoCancelamento
         
         }
-        
-        
         
       });
     }
@@ -291,6 +290,32 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
+//PARA CANCELAR A ENCOMENDA
+app.post('/encomenda/consumidor/:id', (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+
+  const { idOrder } = req.query;
+  const { id } = req.params;
+
+  Encomenda.findOneAndUpdate(
+    { idConsumidor: id, _id: idOrder },
+    { estadoEncomenda: "Canceled" },
+    { new: true }
+  )
+    .then((updatedOrder) => {
+      if (updatedOrder) {
+        res.json({ status: "ok", data: updatedOrder });
+      } else {
+        res.status(404).json({ status: "error", data: "Order not found" });
+      }
+    })
+    .catch((error) => {
+      console.log('Error:', error);
+      res.status(500).json({ status: "error", data: "Internal server error" });
+    });
+});
+
 
 //REPORTS CONSUMIDOR
 app.get("/relatorios/consumidor/:idConsumidor", async (req, res) => {

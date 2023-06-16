@@ -220,6 +220,11 @@ export default class Navbar extends Component{
     window.location.href = "/user/f/allup";
     
   }
+
+  redirect_ordersC = () => {
+    window.location.href = "/user/c/orders";
+    
+  }
   
   componentDidMount() {
     const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
@@ -347,7 +352,7 @@ export default class Navbar extends Component{
                :
                this.state.type === "consumidor" ?
                 <>
-                <li><a class="dropdown-item" onClick={this.redirect_ordersF} href="#">Order History</a></li>
+                <li><a class="dropdown-item" onClick={this.redirect_ordersC} href="#">Order History</a></li>
                 <li><hr class="dropdown-divider"></hr></li>
                 </>
                 :

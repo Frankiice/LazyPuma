@@ -374,7 +374,7 @@ function Confirmation(props) {
       dataEncomenda,
       dataEnvio: null,
       prazoCancelamento,
-      estadoEncomenda: "Pendente",
+      estadoEncomenda: "Pending",
       idProdutos,
     };
   };
