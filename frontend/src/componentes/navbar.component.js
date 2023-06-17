@@ -109,7 +109,7 @@ export default class Navbar extends Component{
 
 
   handleButtonClick() {
-    window.location.href = './cart';
+    window.location.href = '/cart';
   }
 
   handleCartHover() {
@@ -214,6 +214,26 @@ export default class Navbar extends Component{
       window.location.href = "/user/admin/records";
     }
     
+  }
+
+  redirect_up = () => {
+    window.location.href = "/user/f/allup";
+  }
+
+  redirect_ordersC = () => {
+    window.location.href = "/user/c/orders";
+  }
+
+  redirect_sales = () => {
+    window.location.href = "/user/f/orderHistory"; 
+  }
+
+  redirect_ordersA = () => {
+    window.location.href = "/user/admin/orderHistory"; 
+  }
+
+  redirect_ordersF = () => {
+    window.location.href = "/user/f/orders"; 
   }
   
   componentDidMount() {
@@ -330,6 +350,31 @@ export default class Navbar extends Component{
               <li><hr class="dropdown-divider"></hr></li>
               <li><a class="dropdown-item" onClick={this.redirect_records} href="#">Records</a></li>
               <li><hr class="dropdown-divider"></hr></li>
+              {this.state.type === "fornecedor" ? 
+                <>
+                <li><a class="dropdown-item" onClick={this.redirect_up} href="#">Production Units</a></li>
+                <li><hr class="dropdown-divider"></hr></li>
+                <li><a class="dropdown-item" onClick={this.redirect_ordersF} href="#">Orders</a></li>
+                <li><hr class="dropdown-divider"></hr></li>
+                <li><a class="dropdown-item" onClick={this.redirect_sales} href="#">Order History</a></li>
+                <li><hr class="dropdown-divider"></hr></li>
+                </>
+               :
+               this.state.type === "consumidor" ?
+                <>
+                <li><a class="dropdown-item" onClick={this.redirect_ordersC} href="#">Order History</a></li>
+                <li><hr class="dropdown-divider"></hr></li>
+                </>
+                :
+                this.state.type === "admin" ?
+                <>
+                <li><a class="dropdown-item" onClick={this.redirect_ordersA} href="#">Order History</a></li>
+                <li><hr class="dropdown-divider"></hr></li>
+                </>
+                :
+                <>
+                </>
+              }
               <li><a class="dropdown-item" onClick={this.logOut} href="/user/login">Log out</a></li>
           </ul>
         </li>:

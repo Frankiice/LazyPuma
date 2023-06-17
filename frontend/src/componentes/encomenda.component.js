@@ -390,7 +390,11 @@ function Confirmation(props) {
       dataEnvio: null,
       prazoCancelamento,
       estadoEncomenda: "Pending",
+<<<<<<< HEAD
       infoProdutos,
+=======
+      idProdutos,
+>>>>>>> 9f727417bf790c4332f734801b013d1ba6dcbc7c
     };
   };
 

@@ -21,10 +21,15 @@ import Up from "./componentes/up.component";
 import Fup from "./componentes/fUp.component";
 import Fveiculo from "./componentes/fVeiculo.component";
 import Fproduto from "./componentes/fProduto.component";
-import Frecords from "./componentes/frecord.component";
-import Crecords from "./componentes/crecord.component";
+import Frecords from "./componentes/frecord1.component";
+import Crecords from "./componentes/crecord1.component";
 import Arecords from "./componentes/arecord.component";
 import Admin from "./componentes/admin.component";
+import FaAllUp from "./componentes/fAllUp.component";
+import EncomendasC from "./componentes/cEncomenda.component";
+import EncomendasF from "./componentes/fEncomenda.component";
+import EncomendasA from "./componentes/aEncomenda.component";
+import OrdersF from "./componentes/fOrders.component";
 
 
 function App() {
@@ -55,11 +60,11 @@ function App() {
         <Route path ="/user/f/records" element={<Frecords/>}/>
         <Route path ="/user/admin/records" element={<Arecords/>}/>
         <Route path ="/user/admin" element={<Admin/>}/>
-
-
-
-
-
+        <Route path ="/user/f/allup" element={<FaAllUp/>}/>
+        <Route path ="/user/c/orders" element={<EncomendasC/>}/>
+        <Route path ="/user/f/orderHistory" element={<EncomendasF/>}/>
+        <Route path ="/user/admin/orderHistory" element={<EncomendasA/>}/>
+        <Route path ="/user/f/orders" element={<OrdersF/>}/>
 
 
 

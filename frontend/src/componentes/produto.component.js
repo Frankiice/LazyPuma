@@ -16,6 +16,7 @@ export default class Produto extends Component{
             categoriaB: window.localStorage.getItem("categoriaB") || "",
             user_lat: window.localStorage.getItem("user_lat") || "",
             user_lon: window.localStorage.getItem("user_lon") || "",
+            tipoUser: window.localStorage.getItem("tipoUser") || "",
             produto: {},
             carrinho: JSON.parse(localStorage.getItem('carrinho')) || [],
             quantidade: "1",
@@ -196,7 +197,6 @@ degToRad(degrees) {
                         </div>
                       ) : (
                         <div>
-                          <p className="lead text-dark">Caracteristicas do produto</p>
                           <br />
                         </div>
                       )}
@@ -205,12 +205,15 @@ degToRad(degrees) {
 
                         <h4 style={{ color: "#212529"}}>Supplier Caracteristics:</h4>
                             <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Name: {this.state.produto.nome}</p>
+                            {this.state.tipoUser !== "" ?
                             <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Distance: {this.calculateDistance(
                                                                                                     parseFloat(this.state.user_lat), // Convert to float
                                                                                                     parseFloat(this.state.user_lon), // Convert to float
                                                                                                     parseFloat(this.state.produto.lat), // Convert to float
                                                                                                     parseFloat(this.state.produto.lon) // Convert to float
                                                                                                 )}Km</p>
+                            :
+                            null}
                             <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Address: {this.state.produto.morada}</p>
                         <br></br>
 

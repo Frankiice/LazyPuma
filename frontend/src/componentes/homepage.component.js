@@ -21,8 +21,8 @@ export default class Homepage extends Component {
       nickname: "",
       unidades: [], // Initialize unidades as an empty array
       produtos: [],
-      user_lat: window.localStorage.getItem("user_lat") || "",
-      user_lon: window.localStorage.getItem("user_lon") || "",
+      user_lat:  "",
+      user_lon:  "",
     };
     this.handleClick = this.handleClick.bind(this);
     this.handleProduto = this.handleProduto.bind(this);
@@ -56,6 +56,9 @@ export default class Homepage extends Component {
             nickname: data.data.nickname,
             tipoUser: data.data.type,
             idUser: data.data._id,
+            user_lat: data.data.lat,
+            user_lon: data.data.lon,
+
           },
           () => {
             const { tipoUser, idUser } = this.state;
@@ -664,7 +667,9 @@ degToRad(degrees) {
     {/* //<!-- Section --> */}
     <section class="py-5">
     {this.state.tipoUser === "fornecedor" ?
-        <h1> &nbsp;{this.state.nickname}'s Production Units</h1>
+        <div className='breadcrumb'>
+        <h1> &nbsp;<a href="/user/f/allup" >{this.state.nickname}'s Production Units</a></h1>
+        </div>
     :   
         <>
         <h1> &nbsp;Products for You</h1>

@@ -32,44 +32,50 @@ export default class Login extends Component {
     const { encomendas, startDate, endDate, selectedCategories } = this.state;
     const distancia = this.state.distancia;
   
-    // Filtrar por intervalo de datas
-    const filteredByDate = encomendas.filter((encomenda) => {
-      const dataEncomenda = new Date(encomenda.encomenda.data_encomenda);
+  // Filtrar por intervalo de datas
+  const filteredByDate = encomendas.map((encomenda) => {
+    const produtosVendidos = encomenda.UP.produtos_vendidos;
+    const filteredProdutos = produtosVendidos.filter((venda) => {
+      const dataEncomenda = new Date(venda.produto.data);
       return (
         (!startDate || dataEncomenda >= startDate) &&
         (!endDate || dataEncomenda <= endDate)
       );
     });
-  
+
+    // Criar uma nova encomenda apenas com os produtos filtrados
+    return { ...encomenda, UP: { ...encomenda.UP, produtos_vendidos: filteredProdutos } };
+  });
     // Filtrar por categorias
     const filteredByCategory = filteredByDate.filter((encomenda) => {
       if (selectedCategories.length === 0) {
         return true; // Inclui todas as encomendas quando não há categorias selecionadas
       }
   
-      const produtos = encomenda.produtos;
-      return produtos.some((produto) =>
-        selectedCategories.includes(produto.categoria)
+      const produtosVendidos = encomenda.UP.produtos_vendidos;
+      return produtosVendidos.some((venda) =>
+        selectedCategories.includes(venda.produto.produto.categorieB)
       );
     });
   
     const filteredByDistance = filteredByCategory.filter((encomenda) => {
-      const produtos = encomenda.produtos;
-      const filteredProdutos = produtos.filter((produto) => {
+      const produtosVendidos = encomenda.UP.produtos_vendidos;
+      const filteredProdutos = produtosVendidos.filter((venda) => {
         const proximity = this.calculateDistance(
-          parseFloat(this.state.lat_user),
-          parseFloat(this.state.lon_user),
-          parseFloat(produto.lat_UP),
-          parseFloat(produto.lon_UP)
+          parseFloat(this.state.lat_user), // Convert to float
+          parseFloat(this.state.lon_user), // Convert to float
+          parseFloat(venda.consumidor_lat), // Convert to float
+          parseFloat(venda.consumidor_lon) // Convert to float
         );
-        produto.proximity = proximity; // Adicionando a propriedade "proximity" ao objeto produto
+        venda.produto.proximity = proximity; // Adicionando a propriedade "proximity" ao objeto produto
         return proximity <= distancia;
       });
       return filteredProdutos.length > 0;
     });
-
-  this.setState({ filteredEncomendas: filteredByDistance });
+  
+    this.setState({ filteredEncomendas: filteredByDistance });
   };
+  
   
   
 
@@ -211,8 +217,8 @@ degToRad(degrees) {
       .then((data) => {
         
         this.setState({ nickname: data.data.nickname, id_consumidor: data.data._id, lat_user:data.data.lat, lon_user: data.data.lon});
-        
-        fetch(`http://localhost:5000/encomenda/consumidor/${data.data._id}`)
+        // fetch(`http://localhost:5000/administrador/relatorios`)
+        fetch(`http://localhost:5000/fornecedor/relatorios/${data.data._id}`)
           .then((response) => response.json())
           .then((data1) => {
             console.log(data1, "EncomendaData");
@@ -248,11 +254,11 @@ render() {
         <div class="m-4">
           <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
           <br></br>
-          <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          <div class="card-body" style={{ maxHeight: '500px', overflowY: 'auto' }}>
             {filteredEncomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>
-                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't placed any orders yet 
+                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't sold any products yet 
                </h5>
                 
       
@@ -262,49 +268,54 @@ render() {
             ) : (
               filteredEncomendas.map((encomenda) => (
                 
-                <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.encomenda.id_encomenda}>
+                <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.UP}>
                   <div class="">
                     <div class="me-lg-5">
-                    <h4 class="d-flex justify-content-sm-left "><i class="bi bi-bag-check-fill"></i>&nbsp; Order ID: {encomenda.encomenda.id_encomenda} </h4>
-                    <h5 class="d-flex justify-content-sm-left text-muted">Date: {encomenda.encomenda.data_encomenda}</h5>
-                    <h5 class="d-flex justify-content-sm-left text-muted">Total: {encomenda.encomenda.preco}€</h5>
+                    <h4 class="d-flex justify-content-sm-left "><i class="bi bi-building"></i>&nbsp; UP NAME: {encomenda.UP.nome} </h4>
+                    {/* <h5 class="d-flex justify-content-sm-left text-muted">Date: {encomenda.encomenda.data_encomenda}</h5>
+                    <h5 class="d-flex justify-content-sm-left text-muted">Total: {encomenda.encomenda.preco}€</h5> */}
                   
                     
                      <br></br>
-                    <h5 class="">Purchased products:</h5>
+                    <h5 class="">Products sold from this Production Unit:</h5>
                     <br></br>
-                    {encomenda.produtos.map((produto) => (
+                    <div class="produtos-vendidos-scrollbar">
+                    {encomenda.UP.produtos_vendidos.map((venda) => (
 
 
 
-          <div class="d-flex" key={produto.idProduto}>
+          <div class="d-flex" key={venda}>
             
             <img
               class="border rounded me-3"
-              src={produto.foto}
+              src={venda.produto.produto.img}
               style={{ width: '96px', height: '96px' }}
             />
             <div>
-              <a href="#" class="nav-link">{produto.nome}</a>
-              {/* <p class="text-muted">{produto.marca}</p> */}
+              <a href="#" class="nav-link">{venda.produto.produto.name}</a>
+              
               <p class="text-muted">
-                Brand: {produto.marca}<br></br>
-                Categorie: {produto.categoria} <br></br>
-                Quantity: {produto.quantidade}<br></br> <br></br>
-                Suplier: {produto.name_UP}<br></br>
-                Proximity: &nbsp;
+                Brand: {venda.produto.produto.brand}<br></br>
+                Categorie: {venda.produto.produto.categorieB} <br></br>
+                Quantity: {venda.produto.quantidade}<br></br> <br></br>
+                Buyer: {venda.consumidor_name}<br></br>
+                Date: {venda.produto.data}<br></br>
+                UP Proximity to the buyer: &nbsp;
                 
                 {this.calculateDistance(
                                                         parseFloat(this.state.lat_user), // Convert to float
                                                         parseFloat(this.state.lon_user), // Convert to float
-                                                        parseFloat(produto.lat_UP), // Convert to float
-                                                        parseFloat(produto.lon_UP) // Convert to float
+                                                        parseFloat(venda.consumidor_lat), // Convert to float
+                                                        parseFloat(venda.consumidor_lon) // Convert to float
                                                     )} Km 
+                  <br></br><br></br>
               
                </p>
             </div>
           </div>
+          
         ))}
+        </div>
                     </div>
                   </div>
                   <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
@@ -312,22 +323,14 @@ render() {
 
                     </div>
                     <div class="">
-                      {/* <text class="h6">{item.preco}€</text> <br />
-                      <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small> */}
+                     
                       
                     </div>
                     
                     
                   </div>
                   <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                  {/* <div class="form-outline">
-                  <text class="h6">Quantity</text>  &nbsp;
-                      <input type="number" id="typeNumber" class="form-control form-control-sm " style={{ width: '48px', backgroundColor: '#f8f9fa', border: '1px solid #e4e8eb',display: 'inline-block'  }} defaultValue={item.quantidade} min="1" onChange={(e) => this.handleQuantityChange(item.nome, parseInt(e.target.value))} /> 
-                  </div> */}
-                  {/* &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-                    <div class="float-md-end">
-                      <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
-                    </div> */}
+                 
                   </div>
                   <hr />
                 </div>
