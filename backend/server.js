@@ -172,9 +172,9 @@ const UnidadeProducaoSchema = new mongoose.Schema(
 const EncomendaUPSchema = new mongoose.Schema(
   {
     _id: false,
-  idUP: String,
-  idProduct: String,
-  quantidade: Number,
+    idUP: String,
+    idProduct: String,
+    quantidade: Number,
     estado: String,
   },
   {
@@ -1166,9 +1166,9 @@ app.post("/user/encomenda", async (req, res) => {
       const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   
       const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, infoProdutos } = req.body;
-  
+
       console.log(req.body);
-  
+
       const listaUP = [];
 
       for (const infoProduto of infoProdutos) {
@@ -1194,7 +1194,7 @@ app.post("/user/encomenda", async (req, res) => {
           }
         }
       }
-  
+
       console.log("listaUP")
       console.log(listaUP)
   
