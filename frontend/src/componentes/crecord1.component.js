@@ -292,6 +292,26 @@ renderTooltip = ({ active, payload }) => {
   
     return null;
   }
+
+  renderTooltip2 = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload; // Dados do ponto de dados clicado
+      const { total, distance } = data;
+  
+      
+      
+  
+      return (
+        <div className="custom-tooltip">
+          <p>Total of products: {total}</p>
+          <p>Distance: {distance} km</p>
+          
+        </div>
+      );
+    }
+  
+    return null;
+  }
    
 
 render() {
@@ -316,7 +336,7 @@ const {produtos2} = this.state;
 <div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <div class="card d-flex border shadow-0 custom-card" style={{ height: '1521px'}}>
+      <div class="card_record_c d-flex border shadow-0 custom-card" style={{ height: '1221px'}}>
         <div class="m-4">
           <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
    
@@ -337,13 +357,19 @@ const {produtos2} = this.state;
                 <>
                     {/* <h5 class="text-secondary justify-content-md-center">Existem encomendas (mostrar gráficos)</h5> */}
                     {chartData.length === 0 ? (
-    <h5>No matches for the selected criteria in Graphic 1</h5>
+                      <div> 
+                      <h4>First Graphic: </h4>
+                      <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on your distance to the respective Supplier.</h6>
+                      <br></br>
+                      <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
+                      </div>
+    
   ) : (
                             <div>
                             <h4>First Graphic: </h4>
                             <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on your distance to the respective Supplier.</h6>
                                 <br></br><br></br>
-                        <ScatterChart width={700} height={400} data={chartData}>
+                        <ScatterChart width={700} height={400} data={chartData} margin={{ bottom: 50 , left:50}} >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis
                             type="number"
@@ -351,13 +377,13 @@ const {produtos2} = this.state;
                             label={{
                             value:'Proximity',
                             position: 'insideBottom',
-                           offset:-4,
+                           offset:-10,
                             }}
                         />
                         <YAxis
                             type="number"
                             dataKey="price"
-                            label={{ value: 'Price', angle: -90, position: 'insideLeft',offset: 10}}
+                            label={{ value: 'Price', angle: -90, position: 'insideLeft',offset: 5}}
                         />
                         <Tooltip cursor={{ strokeDasharray: '3 3' }} content={this.renderTooltip} />
                         
@@ -367,32 +393,44 @@ const {produtos2} = this.state;
   )}
                     <br></br><br></br>
                     {produtos2.length === 0 ? (
-    <h5>No matches for the selected criteria in Graphic 2</h5>
-  ) : (
-    <div>
-    <h4>Second Graphic: </h4>
-    <h6 class="text-muted">Number of each product ordered according to the distance to the supplier.</h6>
+                      <div>
+                        <h4>Second Graphic: </h4>
+                        <h6 class="text-muted">Number of each product ordered according to the distance to the supplier.</h6>
+                        <br></br>
+                        <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
+                      
+                      </div>
+                    
+                      ) : (
+                        <div>
+                        <h4>Second Graphic: </h4>
+                        <h6 class="text-muted">Number of each product ordered according to the distance to the supplier.</h6>
 
-    <br></br><br></br>
-    <BarChart width={600} height={400} data={produtos2}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="distance" label={{ value: 'Proximity', position: 'insideBottom'}} />
-        <YAxis label={{ value: 'Number of Products', angle: -90, position: 'inside' }} />
-        <Tooltip />
-        
-        <Bar dataKey="total" fill="#8884d8" />
-        <br></br>
-        
-        </BarChart>
-        </div>
-)}
-                    </>
-            )}
+                        <br></br><br></br>
+                        <BarChart width={600} height={400} data={produtos2} margin={{ bottom: 50 , left:50}}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis
+                            dataKey="distance"
+                            label={{
+                              value: 'Proximity',
+                              position: 'insideBottom',
+                              offset: -10,
+                            }}
+                          />
+                          <YAxis label={{ value: 'Number of Products', angle: -90, position: 'inside', offset: 10, }} />
+                          <Tooltip cursor={{ strokeDasharray: '3 3' }} content={this.renderTooltip2} />
+                          <Bar dataKey="total" fill="#8884d8" />
+                        </BarChart>
 
-            </div>
+                            </div>
+                    )}
+                                        </>
+                                )}
 
-          </div>
-          
+                                </div>
+
+                              </div>
+                              
 
         </div>
       </div>

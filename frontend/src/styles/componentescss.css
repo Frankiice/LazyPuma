@@ -940,6 +940,16 @@ border-radius: 10px;
     overflow-y: auto; 
   }
   
+  .card_record_c{
+    background-color: white;
+  }
+
+  .custom-tooltip {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid black;
+  }
+  
   
   
   
