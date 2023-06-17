@@ -109,7 +109,7 @@ export default class Navbar extends Component{
 
 
   handleButtonClick() {
-    window.location.href = './cart';
+    window.location.href = '/cart';
   }
 
   handleCartHover() {
@@ -230,6 +230,10 @@ export default class Navbar extends Component{
 
   redirect_ordersA = () => {
     window.location.href = "/user/admin/orderHistory"; 
+  }
+
+  redirect_ordersF = () => {
+    window.location.href = "/user/f/orders"; 
   }
   
   componentDidMount() {

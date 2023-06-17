@@ -174,6 +174,7 @@ const EncomendaUPSchema = new mongoose.Schema(
   idUP: String,
   idProduct: String,
   quantidade: Number,
+  estado: String,
   },
 );
 
@@ -300,7 +301,7 @@ app.post('/encomenda/consumidor/:id', (req, res) => {
 
   Encomenda.findOneAndUpdate(
     { idConsumidor: id, _id: idOrder },
-    { estadoEncomenda: "Canceled" },
+    { estadoEncomenda: "Canceled", "listaUP.$[].estado": "Canceled" }, // Update both estadoEncomenda and every UP's estado
     { new: true }
   )
     .then((updatedOrder) => {
@@ -315,6 +316,7 @@ app.post('/encomenda/consumidor/:id', (req, res) => {
       res.status(500).json({ status: "error", data: "Internal server error" });
     });
 });
+
 
 
 //REPORTS CONSUMIDOR
@@ -484,7 +486,7 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
   }
 });
 
-
+//Historico de Fornecedor
 app.get("/fornecedor/orderHistory/:idFornecedor", async (req, res) => {
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
@@ -511,6 +513,77 @@ app.get("/fornecedor/orderHistory/:idFornecedor", async (req, res) => {
         const data_encomenda = encomenda.dataEncomenda;
         const partes = data_encomenda.split(" ");
       const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+
+        for (const item of encomenda.listaUP) {
+          if (item.idUP === unidadeProducao._id.toString()) {
+            const produto = await Produto.findById(item.idProduct);
+            const quantidade = item.quantidade;
+
+            if (produto) {
+              produtosVendidos.push({
+                consumidor_id: consumidorId,
+                consumidor_name:consumidor.fullname,
+                consumidor_lat:consumidor.lat,
+                consumidor_lon:consumidor.lon,
+                produto: {
+                  produto,
+                  quantidade,
+                  data,
+                }
+              });
+            }
+          }
+        }
+      }
+
+      if (produtosVendidos.length > 0) {
+        result.push({
+          UP: {
+            nome: unidadeProducao.nome,
+            lat: unidadeProducao.lat,
+            lon: unidadeProducao.lon,
+            produtos_vendidos: produtosVendidos,
+          },
+        });
+      }
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
+//Orders
+app.get("/fornecedor/orders/:idFornecedor", async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
+  const User = mongoose.model("users", UserDetailsSchema);
+
+  try {
+    const idFornecedor = req.params.idFornecedor;
+    console.log("idFornecedor", idFornecedor);
+
+    const unidadesProducao = await UnidadeProducao.find({ idFornecedor });
+    const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());
+
+    const result = [];
+
+    const encomendas = await Encomenda.find({ estadoEncomenda: { $ne: "Complete" } });
+    console.log(encomendas)
+
+    for (const unidadeProducao of unidadesProducao) {
+      const produtosVendidos = [];
+
+      for (const encomenda of encomendas) {
+        const consumidorId = encomenda.idConsumidor;
+        const consumidor = await User.findById(consumidorId);
+        const data_encomenda = encomenda.dataEncomenda;
+        const partes = data_encomenda.split(" ");
+        const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
 
         for (const item of encomenda.listaUP) {
           if (item.idUP === unidadeProducao._id.toString()) {

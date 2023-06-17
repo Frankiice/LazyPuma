@@ -29,6 +29,7 @@ import FaAllUp from "./componentes/fAllUp.component";
 import EncomendasC from "./componentes/cEncomenda.component";
 import EncomendasF from "./componentes/fEncomenda.component";
 import EncomendasA from "./componentes/aEncomenda.component";
+import OrdersF from "./componentes/fOrders.component";
 
 
 function App() {
@@ -63,13 +64,7 @@ function App() {
         <Route path ="/user/c/orders" element={<EncomendasC/>}/>
         <Route path ="/user/f/orderHistory" element={<EncomendasF/>}/>
         <Route path ="/user/admin/orderHistory" element={<EncomendasA/>}/>
-
-
-
-
-
-
-
+        <Route path ="/user/f/orders" element={<OrdersF/>}/>
 
 
 
