@@ -618,6 +618,72 @@ app.get("/administrador/relatorios", async (req, res) => {
   }
 });
 
+//historico de vendas total
+app.get("/administrador/historico", async (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const User = mongoose.model("users", UserDetailsSchema);
+
+  try {
+    const encomendas = await Encomenda.find().lean();
+    let produtosVendidos = [];
+
+    for (const encomenda of encomendas) {
+      const consumidorId = encomenda.idConsumidor;
+      const consumidor = await User.findById(consumidorId);
+
+      const data_encomenda = new Date(encomenda.dataEncomenda);
+      const options = { month: 'short', day: '2-digit', year: 'numeric' };
+      const formattedDate = data_encomenda.toLocaleString('en-US', options).replace(',', '');;
+
+      for (let item of encomenda.listaUP) {
+        console.log("item", item)
+        let produto = await Produto.findById(item.idProduct);
+        // console.log("produto", produto)
+        const quantidade = item.quantidade;
+        const id_UP = item.idUP;
+        const UP = await UnidadeProducao.findById(id_UP);
+        // console.log("UP", UP)
+        const fornecedorId = UP.idFornecedor;
+        const fornecedor = await User.findById(fornecedorId);
+
+        
+
+        if (produto) {
+          produtosVendidos.push({
+            encomeda:{
+            
+            produto: {
+              produto,
+              quantidade: quantidade,
+              data: formattedDate,
+              consumidor_nome: consumidor.fullname,
+              consumidor_lat: consumidor.lat,
+              consumidor_lon: consumidor.lon,
+              consumidor_email: consumidor.email,
+              UP_name: UP.nome,
+              UP_lat:UP.lat,
+              UP_lon:UP.lon,
+              fornecedor_nome: fornecedor.fullname,
+              fornecedor_email: fornecedor.email,
+            }
+          }
+          });
+        }
+      }
+
+      
+    }
+
+    res.status(200).json(produtosVendidos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
 
 
 

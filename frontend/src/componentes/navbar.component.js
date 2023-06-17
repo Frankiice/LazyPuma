@@ -227,6 +227,10 @@ export default class Navbar extends Component{
   redirect_sales = () => {
     window.location.href = "/user/f/orderHistory"; 
   }
+
+  redirect_ordersA = () => {
+    window.location.href = "/user/admin/orderHistory"; 
+  }
   
   componentDidMount() {
     const isGoogleLogged = window.localStorage.getItem("isGoogleLogged") === "true";
@@ -360,6 +364,8 @@ export default class Navbar extends Component{
                 :
                 this.state.type === "admin" ?
                 <>
+                <li><a class="dropdown-item" onClick={this.redirect_ordersA} href="#">Order History</a></li>
+                <li><hr class="dropdown-divider"></hr></li>
                 </>
                 :
                 <>
