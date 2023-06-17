@@ -499,18 +499,28 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
 
     for (const unidadeProducao of unidadesProducao) {
       const produtosVendidos = [];
-
+      let preco;
+      
+      let total;
       for (const encomenda of encomendas) {
         const consumidorId = encomenda.idConsumidor;
-        const consumidor = await User.findById(consumidorId);
+        const consumidor = await User.findById(consumidorId); //preciso dele para saber a lat e lon
         const data_encomenda = encomenda.dataEncomenda;
         const partes = data_encomenda.split(" ");
-      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+        const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
 
         for (const item of encomenda.listaUP) {
           if (item.idUP === unidadeProducao._id.toString()) {
             const produto = await Produto.findById(item.idProduct);
             const quantidade = item.quantidade;
+            for (const x of unidadeProducao.listaProdutos){
+              if (x.idProduto === item.idProduct) {
+                
+                preco = x.preco ;
+                total = preco * quantidade;
+              }
+            }
+            
 
             if (produto) {
               produtosVendidos.push({
@@ -522,6 +532,9 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
                   produto,
                   quantidade,
                   data,
+                  preco,
+                  total,
+
                 }
               });
             }
@@ -703,11 +716,12 @@ app.get("/administrador/relatorios", async (req, res) => {
   try {
     const encomendas = await Encomenda.find().lean();
     let produtosVendidos = [];
-
+    let preco;
+    let total;
     for (const encomenda of encomendas) {
       const consumidorId = encomenda.idConsumidor;
       const consumidor = await User.findById(consumidorId);
-      console.log(encomenda);
+      
 
       const data_encomenda = new Date(encomenda.dataEncomenda);
       const options = { month: 'short', day: '2-digit', year: 'numeric' };
@@ -716,31 +730,33 @@ app.get("/administrador/relatorios", async (req, res) => {
       for (let item of encomenda.listaUP) {
         let produto = await Produto.findById(item.idProduct);
         const quantidade = item.quantidade;
+       
         const id_UP = item.idUP;
         const UP = await UnidadeProducao.findById(id_UP);
-        const fornecedorId =UP.idFornecedor;
-        const fornecedor = await User.findById(fornecedorId);
+        for (let item2 of UP.listaProdutos) {
+          if(item2.idProduto === item.idProduct){
+            preco = item2.preco;
+            total = preco * quantidade;
+          }
+        }
 
         
 
         if (produto) {
           produtosVendidos.push({
-            encomeda:{
-            
-            produto: {
-              produto,
+            produto:{
+              categoria:produto.categorieB,
+              preco:preco,
               quantidade: quantidade,
+              total:total,
               data: formattedDate,
-              consumidor_nome: consumidor.fullname,
               consumidor_lat: consumidor.lat,
               consumidor_lon: consumidor.lon,
-              consumidor_email: consumidor.email,
-              UP_name: UP.nome,
               UP_lat:UP.lat,
               UP_lon:UP.lon,
-              fornecedor_nome: fornecedor.fullname,
-              fornecedor_email: fornecedor.email,
-            }
+              UP_name: UP.nome,
+              
+            
           }
           });
         }

@@ -56,8 +56,7 @@ export default class Login extends Component {
       });
     }
   
-    // Filtrar os dados baseado nas categorias selecionadas
-   // Filtrar os dados baseado nas categorias selecionadas
+   
 // Filtrar os dados baseado nas categorias selecionadas
 if (selectedCategories.length > 0) {
     filteredData = filteredData.map((item) => {
