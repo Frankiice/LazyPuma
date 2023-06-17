@@ -171,10 +171,15 @@ const UnidadeProducaoSchema = new mongoose.Schema(
 
 const EncomendaUPSchema = new mongoose.Schema(
   {
+    _id: false,
   idUP: String,
   idProduct: String,
   quantidade: Number,
+    estado: String,
   },
+  {
+    suppressSubdocsId: true, // Exclude _id field in subdocuments
+  }
 );
 
 
@@ -182,7 +187,7 @@ const EncomendaUPSchema = new mongoose.Schema(
 const EncomendaSchema = new mongoose.Schema(
     {
         idConsumidor: String,
-        preco: String,
+        preco: Number,
         dataEncomenda: String,
         dataEnvio: String,
         prazoCancelamento: String,
@@ -1160,14 +1165,38 @@ app.post("/user/encomenda", async (req, res) => {
       const Encomenda = mongoose.model("encomenda", EncomendaSchema);
       const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   
-      const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, idProdutos } = req.body;
+      const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, infoProdutos } = req.body;
   
       console.log(req.body);
   
-      const listaUP = await UnidadeProducao.find({ "listaProdutos.idProduto": { $in: idProdutos } });
+      const listaUP = [];
+
+      for (const infoProduto of infoProdutos) {
+        const { idProduto, quantidadeCompra } = infoProduto;
+        const unidadeProducao = await UnidadeProducao.findOne({
+          "listaProdutos.idProduto": idProduto,
+        }).lean();
+      
+        if (unidadeProducao) {
+          const { _id, listaProdutos } = unidadeProducao;
+          const produto = listaProdutos.find(
+            (item) => item.idProduto === idProduto
+          );
+      
+          if (produto) {
+            const { idProduto, quantidade } = produto;
+            listaUP.push({
+              idUP: _id,
+              idProduct: idProduto,
+              quantidade: quantidadeCompra,
+              estado: "Pending",
+            });
+          }
+        }
+      }
   
-      console.log("ENCOMENDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      console.log(listaUP);
+      console.log("listaUP")
+      console.log(listaUP)
   
       await Encomenda.create({
         idConsumidor,
