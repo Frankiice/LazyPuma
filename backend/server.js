@@ -214,7 +214,6 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   const Produto = mongoose.model("products", ProductDetailsSchema);
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   
-
   try {
 
     const idConsumidor = req.params.idConsumidor;
@@ -277,10 +276,10 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
         preco_encomenda: encomenda.preco,
         id_encomenda: encomenda._id,
         preco:encomenda.preco,
+        estado:encomenda.estadoEncomenda,
+        prazoCancelamento: encomenda.prazoCancelamento
         
         }
-        
-        
         
       });
     }
@@ -291,6 +290,32 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
+//PARA CANCELAR A ENCOMENDA
+app.post('/encomenda/consumidor/:id', (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+
+  const { idOrder } = req.query;
+  const { id } = req.params;
+
+  Encomenda.findOneAndUpdate(
+    { idConsumidor: id, _id: idOrder },
+    { estadoEncomenda: "Canceled" },
+    { new: true }
+  )
+    .then((updatedOrder) => {
+      if (updatedOrder) {
+        res.json({ status: "ok", data: updatedOrder });
+      } else {
+        res.status(404).json({ status: "error", data: "Order not found" });
+      }
+    })
+    .catch((error) => {
+      console.log('Error:', error);
+      res.status(500).json({ status: "error", data: "Internal server error" });
+    });
+});
+
 
 //REPORTS CONSUMIDOR
 app.get("/relatorios/consumidor/:idConsumidor", async (req, res) => {
@@ -458,6 +483,76 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
+
+app.get("/fornecedor/orderHistory/:idFornecedor", async (req, res) => {
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
+  const User = mongoose.model("users", UserDetailsSchema);
+
+  try {
+    const idFornecedor = req.params.idFornecedor;
+    console.log("idFornecedor", idFornecedor);
+
+    const unidadesProducao = await UnidadeProducao.find({ idFornecedor });
+    const unidadesProducaoIds = unidadesProducao.map((up) => up._id.toString());
+
+    const result = [];
+
+    const encomendas = await Encomenda.find({ estadoEncomenda: "Complete" });
+
+    for (const unidadeProducao of unidadesProducao) {
+      const produtosVendidos = [];
+
+      for (const encomenda of encomendas) {
+        const consumidorId = encomenda.idConsumidor;
+        const consumidor = await User.findById(consumidorId);
+        const data_encomenda = encomenda.dataEncomenda;
+        const partes = data_encomenda.split(" ");
+      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+
+        for (const item of encomenda.listaUP) {
+          if (item.idUP === unidadeProducao._id.toString()) {
+            const produto = await Produto.findById(item.idProduct);
+            const quantidade = item.quantidade;
+
+            if (produto) {
+              produtosVendidos.push({
+                consumidor_id: consumidorId,
+                consumidor_name:consumidor.fullname,
+                consumidor_lat:consumidor.lat,
+                consumidor_lon:consumidor.lon,
+                produto: {
+                  produto,
+                  quantidade,
+                  data,
+                }
+              });
+            }
+          }
+        }
+      }
+
+      if (produtosVendidos.length > 0) {
+        result.push({
+          UP: {
+            nome: unidadeProducao.nome,
+            lat: unidadeProducao.lat,
+            lon: unidadeProducao.lon,
+            produtos_vendidos: produtosVendidos,
+          },
+        });
+      }
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
 
 
 //Relatorios do administrador
@@ -1253,26 +1348,35 @@ app.delete("/produto", async (req, res) => {
   
 
 
-app.post("/user/encomenda", async(req, res) => {
-    try{
-        const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-        const {idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, listaUP, estadoEncomenda} = req.body;
-
-        await Encomenda.create({
-            idConsumidor,
-            preco,
-            dataEncomenda,
-            dataEnvio,
-            prazoCancelamento,
-            listaUP,
-            estadoEncomenda,
-        });
-        res.send({ status: "ok" });
-        
-    }catch (error) {
-        res.send({ status: "error", error: error })
+app.post("/user/encomenda", async (req, res) => {
+    try {
+      const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+      const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  
+      const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, idProdutos } = req.body;
+  
+      console.log(req.body);
+  
+      const listaUP = await UnidadeProducao.find({ "listaProdutos.idProduto": { $in: idProdutos } });
+  
+      console.log("ENCOMENDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+      console.log(listaUP);
+  
+      await Encomenda.create({
+        idConsumidor,
+        preco,
+        dataEncomenda,
+        dataEnvio,
+        prazoCancelamento,
+        listaUP,
+        estadoEncomenda,
+      });
+  
+      res.send({ status: "ok" });
+    } catch (error) {
+      res.send({ status: "error", error: error });
     }
-})
+  });
 
 app.post("/user/unidadeProducao", async (req, res) => {
   try {
@@ -1399,8 +1503,26 @@ app.get("/user/homepage", async (req, res) => {
 
       if (encomendas.length > 0) {
         // User has placed orders
-        const categories = encomendas.flatMap(unit => unit.listaProdutos.map(productEntry => productEntry.categorieB));
-        productList = await Product.find({ categorieB: { $in: categories } });
+        const productIds = encomendas.flatMap(encomenda => encomenda.listaUP.map(productEntry => productEntry.idProduct));
+
+        const productListForCategories = await Product.find({ _id: { $in: productIds } });
+
+        // Get unique categories from the productListForCategories
+        const categories = [...new Set(productListForCategories.map(product => product.categorieB))];
+
+        productList = await Promise.all(categories.map(async (category) => {
+          // Retrieve products with the same category, excluding the ones in productListForCategories
+          const productsWithCategory = await Product.find({
+            categorieB: category,
+            _id: { $nin: productIds }
+          });
+
+          return productsWithCategory.map(product => product.toObject());
+        }));
+
+        // Flatten the array of arrays into a single array
+        productList = productList.flat();  
+
       } else {
         // User has no orders
         const categories = await Product.distinct("categorieB");

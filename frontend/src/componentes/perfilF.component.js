@@ -270,14 +270,6 @@ render() {
                         <i class="bi bi-person-fill"></i>
                         Account
                     </a>
-                    <a class="nav-link" id="encomendas-tab" data-toggle="pill" href="#encomendas" role="tab" aria-controls="encomendas" aria-selected="false">
-                        <i class="bi bi-archive-fill"></i> 
-                        Orders
-                    </a>
-                    <a class="nav-link" id="relatorios-tab" data-toggle="pill" href="#relatorios" role="tab" aria-controls="relatorios" aria-selected="false">
-                        <i class="bi bi-file-earmark-bar-graph"></i>
-                        Reports
-                    </a>
                     <a class="nav-link" id="logout-tab" data-toggle="pill" href="#logout" role="tab" aria-controls="logout" aria-selected="false">
                         <i class="bi bi-box-arrow-right"></i>
                         Logout
@@ -285,10 +277,6 @@ render() {
                     <a class="nav-link" id="remocao-tab" data-toggle="pill" href="#remocao" role="tab" aria-controls="remocao" aria-selected="false">
                         <i class="bi bi-door-open-fill"></i>
                         Remove Account
-                    </a>
-                    <a class="nav-link" id="up-tab" data-toggle="pill" href="#up" role="tab" aria-controls="up" aria-selected="false" onClick={() => this.getUnidades()}>
-                        <i class="fa fa-home text-center mr-1"></i> 
-                        Production Units
                     </a>
                 </div>
             </div>
@@ -317,7 +305,7 @@ render() {
                                 <div class="form-group">
                                     <label>Email</label>
                                     <div class="input-field bg-dark"> 
-                                        <input type="text" class="bg-dark text-white" id="email" onChange={(e => this.setState({ email: e.target.value }))} placeholder={this.state.userData.email}/>
+                                        <input type="text" class="bg-dark text-white" id="email" value={this.state.userData.email}/>
                                     </div>
                                 </div>
                             </div>
@@ -431,97 +419,7 @@ render() {
                     </form>
                     
                 </div>
-                <div class="tab-pane fade" id="encomendas" role="tabpanel" aria-labelledby="encomendas-tab">
-                    <h3 class="mb-4">Order History </h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                    </div>
-                    
-
-                    <div>
-                        
-                        
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">View all orders</button> 
-                        {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button> */}
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="relatorios" role="tabpanel" aria-labelledby="relatorios-tab">
-                    <h3 class="mb-4">Your Reports</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Reports</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Reports </label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Confirme a Nova Reports</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
-                    </div>
-                </div>
+                
                 <div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
                     <h3 class="mb-4">Logout</h3>
                     <div class="row">
@@ -562,94 +460,7 @@ render() {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="up" role="tabpanel" aria-labelledby="up-tab">
-                <h3 class="mb-4">Production Units Settings</h3>
-                <div className="row" style={{ maxHeight: '600px', overflowY: 'auto', overflowX: 'hidden' }}>
-                  
-                    {this.state.unidades !== [] ? (
-                        <div className="col">
-                        {this.state.unidades.map((unidade, index) => (
-                        <div class="border-top border-bottom pt-2">
-                            <div className="row gy-3 mb-4" key={unidade._id}>
-                            <div className="col-lg-12">
-                                <div className="me-lg-5">
-                                <div className="d-flex">
-                                    <div className="">
-                                    <h5>{unidade.nome}</h5>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-12">
-                                <div className="row">
-                                <div className="col-lg-6 col-sm-6 col-6">
-                                    <div className="">
-                                    <h6>Address:</h6>
-                                    <h6>{unidade.morada}</h6>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-sm-6">
-                                    <div className="form-outline">
-                                    <h6>Nº of Products:</h6>
-                                    <h6>{unidade.listaProdutos.length}</h6>
-                                    </div>
-                                </div>
-                                <div className="col-lg-3 col-sm-6">
-                                    <div className="form-outline">
-                                    <h6>Nº of Vehicles:</h6>
-                                    <h6>{unidade.listaVeiculos.length}</h6>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-12">
-                                <div className="row">
-                                <div className="col-lg-6 col-sm-6 col-6">
-                                    <div className="form-outline">
-                                    <button class="btn btn-outline-light col-md-3 botaoPerfil" value={unidade._id} onClick={(e) => {this.setState({ unidadeID: e.target.value }, this.handleUnidade)}}>View Details</button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                            <hr />
-                            </div>
-                        </div>
-                        ))}
-                        </div>
-                        
-                    ) : (
-                        <div class="border-top border-bottom pt-2">
-                        <div className="col-md-6">
-                        <div className="form-group box">
-                            <label>Most recent order</label>
-                            <p>Order No.:</p>
-                            <p>Purchase Date:</p>
-                            <p>Value:</p>
-                            <button className="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-                        </div>
-                        </div>
-                    </div>
-                    )}
-
-                    
-
-                    <br></br>
-                    <div className="col-lg-12">
-                    <div className="row">
-                        <div className="col-lg-6 col-sm-6 col-6">
-                        <div className="form-outline">
-                            <button class="btn btn-outline-light col-md-3 botaoPerfil mt-3" onClick={this.handleNovaUnidade}>Add Production Unit</button>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-            </div>
-            
-
-                </div>
-
-               
+                </div>               
             </div>
         </div>
         <Helmet>

@@ -222,14 +222,6 @@ render() {
                         <i class="bi bi-person-fill"></i>
                         Account
                     </a>
-                    <a class="nav-link" id="encomendas-tab" data-toggle="pill" href="#encomendas" role="tab" aria-controls="encomendas" aria-selected="false">
-                        <i class="bi bi-archive-fill"></i> 
-                        Orders
-                    </a>
-                    <a class="nav-link" id="relatorios-tab" data-toggle="pill" href="#relatorios" role="tab" aria-controls="relatorios" aria-selected="false">
-                        <i class="bi bi-file-earmark-bar-graph"></i>
-                        Reports
-                    </a>
                     <a class="nav-link" id="logout-tab" data-toggle="pill" href="#logout" role="tab" aria-controls="logout" aria-selected="false">
                         <i class="bi bi-box-arrow-right"></i>
                         Logout
@@ -237,10 +229,6 @@ render() {
                     <a class="nav-link" id="remocao-tab" data-toggle="pill" href="#remocao" role="tab" aria-controls="remocao" aria-selected="false">
                         <i class="bi bi-door-open-fill"></i> 
                         Remove Account
-                    </a>
-                    <a class="nav-link" id="notification-tab" data-toggle="pill" href="#notification" role="tab" aria-controls="notification" aria-selected="false">
-                        <i class="fa fa-bell text-center mr-1"></i> 
-                        Notification
                     </a>
                 </div>
             </div>
@@ -382,97 +370,7 @@ render() {
                     </form>
                     
                 </div>
-                <div class="tab-pane fade" id="encomendas" role="tabpanel" aria-labelledby="encomendas-tab">
-                    <h3 class="mb-4">Order History</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group box">
-                                <label>Most recent order</label>
-                                <p> Order No.:</p>
-                                <p> Purchase Date:</p>
-                                <p> Value:</p>
-                                <button class="btn btn-outline-light col-md-3 botaoPerfil">View Details</button>
-
-                            </div>
-                        </div>
-                    </div>
-                    
-
-                    <div>
-                        
-                        
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">View all orders</button>
-                        {/* <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button> */}
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="relatorios" role="tabpanel" aria-labelledby="relatorios-tab">
-                    <h3 class="mb-4">Your Reports</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Reports</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Reports </label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Confirme a Nova relatorios</label>
-                                <div class="input-field bg-dark"> 
-                                    <input type="password" class="bg-dark text-white"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
-                    </div>
-                </div>
+                  
                 <div class="tab-pane fade" id="logout" role="tabpanel" aria-labelledby="logout-tab">
                     <h3 class="mb-4">Logout</h3>
                     <div class="row">
@@ -514,38 +412,7 @@ render() {
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
-                    <h3 class="mb-4">Notification Settings</h3>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="notification1"/>
-                            <label class="form-check-label" for="notification1">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum accusantium accusamus, neque cupiditate quis
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="notification2"/>
-                            <label class="form-check-label" for="notification2">
-                                hic nesciunt repellat perferendis voluptatum totam porro eligendi.
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="notification3"/>
-                            <label class="form-check-label" for="notification3">
-                                commodi fugiat molestiae tempora corporis. Sed dignissimos suscipit
-                            </label>
-                        </div>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Save</button>
-                        <button class="btn btn-outline-light col-md-3 botaoPerfil">Cancel</button>
-                    </div>
-                </div>
-            </div>
+             </div>
         </div>
         <Helmet>
             <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

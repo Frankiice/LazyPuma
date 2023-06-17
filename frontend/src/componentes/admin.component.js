@@ -153,8 +153,8 @@ export default class Admin extends Component {
     return (
         <div class="container">
         <div class="row">
-          <div class="card d-flex border shadow-0 custom-card">
-            <div class="m-4">
+          <div class="cardP border shadow-0 custom-card">
+            <div >
             {this.state.msgRemoved === "" ?
               <>
               <div className="tab-buttons">
@@ -178,7 +178,7 @@ export default class Admin extends Component {
                 <br />
                 <h2>Active Users Content</h2>
                 <div
-                  class="card-body"
+                  class="cardP-body"
                   style={{ maxHeight: "400px", overflowY: "auto" }}
                 >
                   {currentPageUsers.length === 0 ? (
