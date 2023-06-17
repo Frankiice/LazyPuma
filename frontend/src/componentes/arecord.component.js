@@ -5,6 +5,10 @@ import { MDBCheckbox } from 'mdb-react-ui-kit';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Autosuggest from "react-autosuggest";
+// import { Bar } from 'react-chartjs-2';
+// import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { BarChart, Bar,ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Cell, Legend} from 'recharts';
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -14,12 +18,16 @@ export default class Login extends Component {
       distancia: 1010,
       arrastando: false,
       encomendas: [],
-      startDate: null,
-      endDate: null,
       categories: ["Baby","Sports","Animals","Cosmetics","DIY","Smartphones","Tech","Decoration","Gardening","Gaming","TVs","Toys","Appliances","Photography","Books"], 
-      searchValue: "", 
       selectedCategories: [], 
       filteredEncomendas: [],
+      chartData: [],
+      produtos2: [],
+      startDate: null,
+      endDate: null,
+      searchValue: "",
+     
+      
 
 
       
@@ -27,50 +35,72 @@ export default class Login extends Component {
 
     };
   }
+  handleStartDateChange = (date) => {
+    this.setState({ startDate: date });
+  };
+  
+  handleEndDateChange = (date) => {
+    this.setState({ endDate: date });
+  };
+  
   //Aplicação do filtro
   filtrarEncomendas = () => {
-    const { encomendas, startDate, endDate, selectedCategories } = this.state;
-    const distancia = this.state.distancia;
+    const { startDate, endDate, selectedCategories } = this.state;
   
-    // Filtrar por intervalo de datas
-    const filteredByDate = [];
-    for (const encomenda of encomendas) {
-      const dataEncomenda = new Date(encomenda.encomeda.produto.data);
-      if (
-        (!startDate || dataEncomenda >= startDate) &&
-        (!endDate || dataEncomenda <= endDate)
-      ) {
-        filteredByDate.push(encomenda);
-      }
+    // Filtrar os dados baseado nas datas
+    let filteredData = this.state.encomendas;
+    if (startDate && endDate) {
+      filteredData = filteredData.filter((item) => {
+        const produto = item.produto;
+        console.log("itemDate",produto.data);
+        const itemDate = new Date(produto.data); 
+        return itemDate >= startDate && itemDate <= endDate;
+      });
     }
   
-    // Filtrar por categorias
-    const filteredByCategory = [];
-    for (const encomenda of filteredByDate) {
-      const produto = encomenda.encomeda.produto;
-      if (selectedCategories.length === 0 || selectedCategories.includes(produto.produto.categorieB)) {
-        filteredByCategory.push(encomenda);
-      }
-    }
+   
+// Filtrar os dados baseado nas categorias selecionadas
+// Filtrar os dados baseado nas categorias selecionadas
+if (selectedCategories.length > 0) {
+  filteredData = filteredData.filter((item) =>
+    selectedCategories.includes(item.produto.categoria)
+  );
+}
+
   
-    // Filtrar por distância
-    const filteredByDistance = [];
-    for (const encomenda of filteredByCategory) {
-      const produto = encomenda.encomeda.produto;
-      const proximity = this.calculateDistance(
-        parseFloat(produto.consumidor_lat),
-        parseFloat(produto.consumidor_lon),
-        parseFloat(produto.UP_lat),
-        parseFloat(produto.UP_lon)
+  
+    // Processar os dados filtrados para os gráficos
+    let produtos = [];
+    let produtos2 = [];
+    console.log("filteredData",filteredData);
+    filteredData.forEach((item) => {
+      const produto = item.produto;
+      let total_price = produto.total;
+      const distance = this.calculateDistance(
+        produto.consumidor_lat,
+        produto.consumidor_lon,
+        produto.UP_lat,
+        produto.UP_lon
       );
-      produto.proximity = proximity; // Adicionando a propriedade "proximity" ao objeto produto
-      if (proximity <= distancia) {
-        filteredByDistance.push(encomenda);
+
+      produtos.push({ price: total_price, distance: distance});
+      
+      // Procurar se já existe um objeto com a mesma distância
+      
+      const quantidade = parseInt(produto.quantidade); // Converter para número
+
+      const existingProduct = produtos2.find((item) => item.distance === distance);
+      if (existingProduct) {
+        existingProduct.total += quantidade;
+      } else {
+        produtos2.push({ distance: distance, total: quantidade });
       }
-    }
+      
+    });
   
-    this.setState({ filteredEncomendas: filteredByDistance });
+    this.setState({ chartData: produtos, produtos2: produtos2 });
   };
+  
   
   
 
@@ -134,60 +164,33 @@ export default class Login extends Component {
     });
   };
 
-//funcoes do filtro da distancia
 
-moverBola = (event) => {
-  if (this.state.arrastando) {
-    const barra = document.getElementById("barra");
-    const barraEsquerda = barra.getBoundingClientRect().left;
-    const mouseX = event.clientX - barraEsquerda;
-    const larguraBarra = barra.offsetWidth;
-    const incremento = 10;
-    const maxDistancia = 1000; // reduzido em 10 para ajustar a barra começando em 10
-
-    const novaDistancia = Math.floor((mouseX / larguraBarra) * maxDistancia);
-    const distanciaAjustada = Math.min(Math.max(novaDistancia, 10), maxDistancia + 10); // ajustado o valor mínimo e máximo
-    const distanciaIncrementada = Math.ceil(distanciaAjustada / incremento) * incremento;
-
-    this.setState({ distancia: distanciaIncrementada });
-  }
-};
-
-
-  iniciarArrasto = () => {
-    this.setState({ arrastando: true });
-  };
-
-  pararArrasto = () => {
-    this.setState({ arrastando: false });
-  };
 
 //--------------------------------------------------------------
 
 calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Radius of the Earth in kilometers
-
-  // Convert degrees to radians
-  const lat1Rad = this.degToRad(lat1);
-  const lon1Rad = this.degToRad(lon1);
-  const lat2Rad = this.degToRad(lat2);
-  const lon2Rad = this.degToRad(lon2);
-
-  // Calculate the differences between the coordinates
-  const dLat = lat2Rad - lat1Rad;
-  const dLon = lon2Rad - lon1Rad;
-
-  // Haversine formula
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var distance = R * c;
-
-  distance = distance.toFixed(2);
-
-  return distance; // Distance in kilometers
-}
+    const R = 6371; // Radius of the Earth in kilometers
+  
+    // Convert degrees to radians
+    const lat1Rad = this.degToRad(lat1);
+    const lon1Rad = this.degToRad(lon1);
+    const lat2Rad = this.degToRad(lat2);
+    const lon2Rad = this.degToRad(lon2);
+  
+    // Calculate the differences between the coordinates
+    const dLat = lat2Rad - lat1Rad;
+    const dLon = lon2Rad - lon1Rad;
+  
+    // Haversine formula
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+  
+    return Math.floor(distance); // Distance in kilometers without decimal places
+  }
+  
 
 degToRad(degrees) {
   return degrees * (Math.PI / 180);
@@ -195,41 +198,132 @@ degToRad(degrees) {
 
 
 //----------------------------------------------------------------
-  componentDidMount() {
-    fetch("http://localhost:5000/user/userData", {
-      method: "POST",
+
+
+
+componentDidMount() {
+    this._isMounted = true; // Adicione esta linha ao iniciar o componente
+    fetch('http://localhost:5000/user/userData', {
+      method: 'POST',
       crossDomain: true,
       headers: {
-        "Content-type": "application/json",
-        Accept: "application/json",
-        "Access-Control-Allow-Origin": "*",
+        'Content-type': 'application/json',
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify({
-        token: window.localStorage.getItem("token"),
+        token: window.localStorage.getItem('token'),
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        
-        this.setState({ nickname: data.data.nickname, id_consumidor: data.data._id, lat_user:data.data.lat, lon_user: data.data.lon});
-        
+        this.setState({
+          nickname: data.data.nickname,
+          id_consumidor: data.data._id,
+          lat_user: data.data.lat,
+          lon_user: data.data.lon,
+        });
+
         fetch(`http://localhost:5000/administrador/relatorios`)
-          .then((response) => response.json())
-          .then((data1) => {
-            console.log(data1, "EncomendaData");
-            this.setState({ encomendas: data1, filteredEncomendas: data1});
-          })
-          .catch((error) => {
-            console.error(error);
+        .then((response) => response.json())
+        .then((data1) => {
+        //   console.log(data1, 'EncomendaData');
+          this.setState({ encomendas: data1, filteredEncomendas: data1 });
+          let produtos = [];
+          let produtos2 = [];
+          console.log(data1);
+          // Processar os dados para o gráfico
+          data1.forEach((item) => {
+            const produto = item.produto;
+              let total_price = produto.total;
+              const distance = this.calculateDistance(
+                produto.consumidor_lat,
+                produto.consumidor_lon,
+                produto.UP_lat,
+                produto.UP_lon
+              );
+      
+              produtos.push({ price: total_price, distance: distance});
+              
+              // Procurar se já existe um objeto com a mesma distância
+              
+              const quantidade = parseInt(produto.quantidade); // Converter para número
+
+              const existingProduct = produtos2.find((item) => item.distance === distance);
+              if (existingProduct) {
+                existingProduct.total += quantidade;
+              } else {
+                produtos2.push({ distance: distance, total: quantidade });
+              }
+          
+           
           });
+      
+          console.log("produtos", produtos);
+          console.log("produtos2", produtos2);
+          this.setState({ chartData: produtos, produtos2: produtos2 });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      
+      
+
       });
   }
+
+
+
+renderTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload; // Dados do ponto de dados clicado
+      const { price, distance } = data;
   
+      // Filtrar os produtos com o mesmo preço e distância
+      const produtosIguais = this.state.chartData.filter(
+        (produto) => produto.price === price && produto.distance === distance
+      );
   
+      return (
+        <div className="custom-tooltip">
+          <p>Price: {price}€</p>
+          <p>Distance: {distance} km</p>
+          {produtosIguais.length > 1 && (
+            <p>There are {produtosIguais.length} orders for this product with the same characteristics </p>
+          )}
+        </div>
+      );
+    }
+  
+    return null;
+  }
+
+  renderTooltip2 = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload; // Dados do ponto de dados clicado
+      const { total, distance } = data;
+  
+      
+      
+  
+      return (
+        <div className="custom-tooltip">
+          <p>Total of products: {total}</p>
+          <p>Distance: {distance} km</p>
+          
+        </div>
+      );
+    }
+  
+    return null;
+  }
+   
 
 render() {
   
-
+const {chartData} = this.state;
+const {produtos2} = this.state;
+// console.log("chartData2",chartData);
 
   const { distancia } = this.state;
   const maxDistancia = 1010;
@@ -239,23 +333,25 @@ render() {
   const { encomendas } = this.state;
   const { filteredEncomendas } = this.state;
   
+
+  
   
   return (
     
 <div class="container">
   <div class="row">
     <div class="col-lg-8">
-      <div class="card d-flex border shadow-0 custom-card" style={{ height: '621px'}}>
+      <div class="card_record_c d-flex border shadow-0 custom-card" style={{ height: '1221px'}}>
         <div class="m-4">
-          <h2 class="card-title mb-4 text-dark">Administrator Local Impact Report  </h2>
-          <h4 class="card-title mb-4 text-dark">All transactions between consumers and suppliers </h4>
+          <h2 class="card-title mb-4 text-dark">Administrator Local Impact Report </h2>
+   
           <br></br>
-          <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+          <div class="card-body" style={{ maxHeight: '1521px', overflowY: 'auto' }}>
             {filteredEncomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>
-                <h5 class="text-secondary justify-content-md-center">Transactions between consumers and suppliers with the defined search filter have not yet been carried out.
-               </h5>
+                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't placed any orders yet </h5>
+           
                 
       
               </div>
@@ -263,88 +359,83 @@ render() {
               
             ) : (
                 
-              filteredEncomendas.map((encomenda) => (
-                
-                <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.encomeda.produto.produto._id}>
-                  <div class="">
-                    <div class="me-lg-5">
-                    {/* <h4 class="d-flex justify-content-sm-left "><i class="bi bi-bag-check-fill"></i>&nbsp;Product Details </h4> */}
-                    {/* <h7 class="d-flex justify-content-sm-left text-muted">Consumer email: {encomenda.encomeda.consumidor_email}€</h7> */}
-                    {/* <h5 class="d-flex justify-content-sm-left ">Consumer name: {encomenda.encomeda.consumidor_nome}</h5>
-                    <h7 class="d-flex justify-content-sm-left text-muted">Consumer email: {encomenda.encomeda.consumidor_email}€</h7>
-
-                    <br></br>
-                    <h5 class="d-flex justify-content-sm-left ">Production unit: {encomenda.encomeda.UP_name}</h5>
-                    <h7 class="d-flex justify-content-sm-left text-muted">Supplier name: {encomenda.encomeda.fornecedor_nome}</h7>
-                    <h7 class="d-flex justify-content-sm-left text-muted">Supplier email: {encomenda.encomeda.fornecedor_email}€</h7> */}
-                    <div class="d-flex" >
-                    <img
-                        class="border rounded me-3"
-                        src={encomenda.encomeda.produto.produto.img}
-                        style={{ width: '96px', height: '96px' }}
+                <>
+                    {/* <h5 class="text-secondary justify-content-md-center">Existem encomendas (mostrar gráficos)</h5> */}
+                    {chartData.length === 0 ? (
+                      <div> 
+                      <h4>First Graphic: </h4>
+                      <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on the distance between Consumer and Supplier.</h6>
+                      <br></br>
+                      <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
+                      </div>
+    
+  ) : (
+                            <div>
+                            <h4>First Graphic: </h4>
+                            <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on the distance between Consumer and Supplier.</h6>
+                                <br></br><br></br>
+                        <ScatterChart width={700} height={400} data={chartData} margin={{ bottom: 50 , left:50}} >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            type="number"
+                            dataKey="distance"
+                            label={{
+                            value:'Distance between Consumer and Supplier',
+                            position: 'insideBottom',
+                           offset:-15,
+                            }}
                         />
-                        <div>
-                        <a href="#" class="nav-link">{encomenda.encomeda.produto.produto.name}</a>
-                        {/* <p class="text-muted">{produto.marca}</p> */}
-                        <p class="text-muted">
-                            Brand: {encomenda.encomeda.produto.produto.brand}<br></br>
-                            Categorie: {encomenda.encomeda.produto.produto.categorieB} <br></br>
-                            Quantity: {encomenda.encomeda.produto.quantidade}<br></br> 
-                            Purchase Date: {encomenda.encomeda.produto.data}<br></br> <br></br>
-                            Consumer name:{encomenda.encomeda.produto.consumidor_nome}<br></br>
-                            Consumer email:{encomenda.encomeda.produto.consumidor_email}<br></br>
-                            Production unit: {encomenda.encomeda.produto.UP_name}<br></br>
-                            Suplier name: {encomenda.encomeda.produto.fornecedor_nome}<br></br>
-                            Suplier email: {encomenda.encomeda.produto.fornecedor_email}<br></br>
-                            Proximity: &nbsp;
-                            
-                            {this.calculateDistance(
-                                                                    parseFloat(encomenda.encomeda.produto.consumidor_lat), // Convert to float
-                                                                    parseFloat(encomenda.encomeda.produto.consumidor_lon), // Convert to float
-                                                                    parseFloat(encomenda.encomeda.produto.UP_lat), // Convert to float
-                                                                    parseFloat(encomenda.encomeda.produto.UP_lon) // Convert to float
-                                                                )} Km 
+                        <YAxis
+                            type="number"
+                            dataKey="price"
+                            label={{ value: 'Price', angle: -90, position: 'insideLeft',offset: 5}}
+                        />
+                        <Tooltip cursor={{ strokeDasharray: '3 3' }} content={this.renderTooltip} />
                         
-                        </p>
-            </div>
-                    
-                     <br></br>
-                    
-                    <br></br>
+                        <Scatter data={chartData} fill="#8884d8" />
+                        </ScatterChart>
                     </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                    <div class="">
-
-                    </div>
-                    <div class="">
-                      {/* <text class="h6">{item.preco}€</text> <br />
-                      <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small> */}
+  )}
+                    <br></br><br></br>
+                    {produtos2.length === 0 ? (
+                      <div>
+                        <h4>Second Graphic: </h4>
+                        <h6 class="text-muted">Quantity of all products ordered according to the distance between Consumer and Supplier.</h6>
+                        <br></br>
+                        <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
                       
-                    </div>
+                      </div>
                     
-                    
-                  </div>
-                  <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                  {/* <div class="form-outline">
-                  <text class="h6">Quantity</text>  &nbsp;
-                      <input type="number" id="typeNumber" class="form-control form-control-sm " style={{ width: '48px', backgroundColor: '#f8f9fa', border: '1px solid #e4e8eb',display: 'inline-block'  }} defaultValue={item.quantidade} min="1" onChange={(e) => this.handleQuantityChange(item.nome, parseInt(e.target.value))} /> 
-                  </div> */}
-                  {/* &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-                    <div class="float-md-end">
-                      <a href="#" class="btn btn-light border text-danger icon-hover-danger" onClick={() => this.removerProduto(index)}> Remove</a>
-                    </div> */}
-                  </div>
-                  <hr />
-                </div>
-              ))
-            )}
+                      ) : (
+                        <div>
+                        <h4>Second Graphic: </h4>
+                        <h6 class="text-muted">Quantity of all products ordered according to the distance between Consumer and Supplier.</h6>
 
-            </div>
+                        <br></br><br></br>
+                        <BarChart width={600} height={400} data={produtos2} margin={{ bottom: 50 , left:90}}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis
+                            dataKey="distance"
+                            label={{
+                              value: 'Distance between consumer and suplier',
+                              position: 'insideBottom',
+                              offset: -15,
+                            }}
+                          />
+                          <YAxis label={{ value: 'Total Quantity of Products', angle: -90, position: 'inside', offset: -70, }} />
+                          <Tooltip cursor={{ strokeDasharray: '3 3' }} content={this.renderTooltip2} />
+                          <Bar dataKey="total" fill="#8884d8" />
+                        </BarChart>
 
-          </div>
-          
+                            </div>
+                    )}
+                                        </>
+                                )}
+
+                                </div>
+
+                              </div>
+                              
 
         </div>
       </div>
@@ -356,27 +447,10 @@ render() {
 
             <h3 class="d-flex justify-content-center">Search Filters</h3>
             <br></br>
-            <div class="d-flex justify-content-between">
-              <h7 class="mb-2 text-dark">Maximum distance between {this.state.nickname} and Suppliers:</h7>
-            </div>
-            <div>
+            
+          
         
-                <div className="barra-container">
-                <div
-          id="barra"
-          className="barra"
-          onMouseMove={this.moverBola}
-          onMouseDown={this.iniciarArrasto}
-          onMouseUp={this.pararArrasto}
-        >
-          <div
-            className="bola"
-            style={{ left: `${(distancia / maxDistancia) * 100}%` }}
-          />
-        </div>
-        <p> {distanciaFormatada}</p>
-      </div>
-      </div>
+                
       <div class="d-flex justify-content-start">
               <h7 class="mb-2 text-dark">Date Range:</h7>
       </div>
