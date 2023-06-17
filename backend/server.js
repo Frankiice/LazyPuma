@@ -292,30 +292,92 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   }
 });
 
-//PARA CANCELAR A ENCOMENDA
+//PARA CANCELAR/ CONFIRMAR A ENCOMENDA
 app.post('/encomenda/consumidor/:id', (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
 
-  const { idOrder } = req.query;
+  const { idOrder, op } = req.query;
   const { id } = req.params;
 
-  Encomenda.findOneAndUpdate(
-    { idConsumidor: id, _id: idOrder },
-    { estadoEncomenda: "Canceled", "listaUP.$[].estado": "Canceled" }, // Update both estadoEncomenda and every UP's estado
-    { new: true }
-  )
-    .then((updatedOrder) => {
-      if (updatedOrder) {
-        res.json({ status: "ok", data: updatedOrder });
-      } else {
-        res.status(404).json({ status: "error", data: "Order not found" });
-      }
-    })
-    .catch((error) => {
-      console.log('Error:', error);
-      res.status(500).json({ status: "error", data: "Internal server error" });
-    });
+  console.log("op", op)
+
+  if (op === "Cancel"){
+    Encomenda.findOneAndUpdate(
+      { idConsumidor: id, _id: idOrder },
+      { estadoEncomenda: "Canceled", "listaUP.$[].estado": "Canceled" }, // Update both estadoEncomenda and every UP's estado
+      { new: true }
+    )
+      .then((updatedOrder) => {
+        if (updatedOrder) {
+          res.json({ status: "ok", data: updatedOrder });
+        } else {
+          res.status(404).json({ status: "error", data: "Order not found" });
+        }
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+        res.status(500).json({ status: "error", data: "Internal server error" });
+      });
+  } else{
+    Encomenda.findOneAndUpdate(
+      { idConsumidor: id, _id: idOrder },
+      { estadoEncomenda: "Complete", "listaUP.$[].estado": "Complete" }, // Update both estadoEncomenda and every UP's estado
+      { new: true }
+    )
+      .then((updatedOrder) => {
+        if (updatedOrder) {
+          res.json({ status: "ok", data: updatedOrder });
+        } else {
+          res.status(404).json({ status: "error", data: "Order not found" });
+        }
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+        res.status(500).json({ status: "error", data: "Internal server error" });
+      });
+  }
+  
 });
+
+app.post('/fornecedor/veiculo', (req, res) => {
+  const Encomenda = mongoose.model('encomenda', EncomendaSchema);
+
+  const { consumidorID, produtoID } = req.body;
+
+  Encomenda.findOne(
+    {
+      idConsumidor: consumidorID,
+      'listaUP.idProduct': produtoID,
+      'listaUP.estado': 'Pending'
+    },
+    (err, encomenda) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ error: 'An error occurred' });
+      } else if (!encomenda) {
+        res.status(404).json({ message: 'Encomenda not found' });
+      } else {
+        // Update the estado of the matching EncomendaUP
+        const encomendaUP = encomenda.listaUP.find(item => item.idProduct === produtoID);
+        if (encomendaUP) {
+          encomendaUP.estado = 'Shipping';
+        }
+
+        // Save the updated encomenda
+        encomenda.save((err, updatedEncomenda) => {
+          if (err) {
+            console.log(err);
+            res.status(500).json({ error: 'An error occurred' });
+          } else {
+            // Return the updated encomenda
+            res.json(updatedEncomenda);
+          }
+        });
+      }
+    }
+  );
+});
+
 
 
 
@@ -576,7 +638,7 @@ app.get("/fornecedor/orders/:idFornecedor", async (req, res) => {
     console.log(encomendas)
 
     for (const unidadeProducao of unidadesProducao) {
-      const produtosVendidos = [];
+      const produtosEncomenda = [];
 
       for (const encomenda of encomendas) {
         const consumidorId = encomenda.idConsumidor;
@@ -591,11 +653,12 @@ app.get("/fornecedor/orders/:idFornecedor", async (req, res) => {
             const quantidade = item.quantidade;
 
             if (produto) {
-              produtosVendidos.push({
+              produtosEncomenda.push({
                 consumidor_id: consumidorId,
                 consumidor_name:consumidor.fullname,
                 consumidor_lat:consumidor.lat,
                 consumidor_lon:consumidor.lon,
+                estado: item.estado,
                 produto: {
                   produto,
                   quantidade,
@@ -607,13 +670,14 @@ app.get("/fornecedor/orders/:idFornecedor", async (req, res) => {
         }
       }
 
-      if (produtosVendidos.length > 0) {
+      if (produtosEncomenda.length > 0) {
         result.push({
           UP: {
             nome: unidadeProducao.nome,
             lat: unidadeProducao.lat,
             lon: unidadeProducao.lon,
-            produtos_vendidos: produtosVendidos,
+            veiculos: unidadeProducao.listaVeiculos,
+            produtos_encomenda: produtosEncomenda,
           },
         });
       }

@@ -30,8 +30,8 @@ export default class OrdersF extends Component {
   
   // Filtrar por intervalo de datas
   const filteredByDate = encomendas.map((encomenda) => {
-    const produtosVendidos = encomenda.UP.produtos_vendidos;
-    const filteredProdutos = produtosVendidos.filter((venda) => {
+    const produtosEncomenda = encomenda.UP.produtos_encomenda;
+    const filteredProdutos = produtosEncomenda.filter((venda) => {
       const dataEncomenda = new Date(venda.produto.data);
       return (
         (!startDate || dataEncomenda >= startDate) &&
@@ -40,7 +40,7 @@ export default class OrdersF extends Component {
     });
 
     // Criar uma nova encomenda apenas com os produtos filtrados
-    return { ...encomenda, UP: { ...encomenda.UP, produtos_vendidos: filteredProdutos } };
+    return { ...encomenda, UP: { ...encomenda.UP, produtos_encomenda: filteredProdutos } };
   });
     // Filtrar por categorias
     const filteredByCategory = filteredByDate.filter((encomenda) => {
@@ -48,15 +48,15 @@ export default class OrdersF extends Component {
         return true; // Inclui todas as encomendas quando não há categorias selecionadas
       }
   
-      const produtosVendidos = encomenda.UP.produtos_vendidos;
-      return produtosVendidos.some((venda) =>
+      const produtosEncomenda = encomenda.UP.produtos_encomenda;
+      return produtosEncomenda.some((venda) =>
         selectedCategories.includes(venda.produto.produto.categorieB)
       );
     });
   
     const filteredByDistance = filteredByCategory.filter((encomenda) => {
-      const produtosVendidos = encomenda.UP.produtos_vendidos;
-      const filteredProdutos = produtosVendidos.filter((venda) => {
+      const produtosEncomenda = encomenda.UP.produtos_encomenda;
+      const filteredProdutos = produtosEncomenda.filter((venda) => {
         const proximity = this.calculateDistance(
           parseFloat(this.state.lat_user), // Convert to float
           parseFloat(this.state.lon_user), // Convert to float
@@ -233,6 +233,31 @@ degToRad(degrees) {
       },
     }));
   };
+
+  handleVehicleSelection(e, consumidorID, produtoID) {  
+    // Fetch request to the route with the selected vehicle ID
+    fetch(`http://localhost:5000/fornecedor/veiculo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        consumidorID: consumidorID,
+        produtoID: produtoID
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response data
+        console.log(data, "Veiculo Associado");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log('Error:', error);
+        // Handle any errors
+      });
+  }
+  
   
   
 
@@ -253,55 +278,57 @@ render() {
     <div class="container">
     <div class="row">
         <div class="col-lg-8">
-        <div class="cardP border shadow-0 custom-cardUP">
-            <div class="m-4">
-            <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Orders</h2>
-            <br></br>
-            <div class="cardP-body" style={{ overflowY: 'auto' }}>
+  
+            <div className="cardP border shadow-0 custom-cardUP">
+              <div className="m-4">
+                <h2 className="card-title mb-4 text-dark">{this.state.nickname}'s Orders</h2>
+                <br></br>
+                <div className="cardP-body" style={{ overflowY: 'auto' }}>
                 {filteredEncomendas.length === 0 ? (
-                <div class="relatorio-vazio">
+                  <div className="relatorio-vazio">
                     <br></br>
-                    <h5 class="text-secondary justify-content-md-center">
-                    {this.state.nickname} hasn't sold any products yet
+                    <h5 className="text-secondary justify-content-md-center">
+                      {this.state.nickname} hasn't sold any products yet
                     </h5>
-                </div>
+                  </div>
                 ) : (
-                filteredEncomendas.map((encomenda) => (
-                    <div class="row gy-3 mb-4 produto_carrinho" key={encomenda.UP}>
-                    <div class="">
-                        <div class="me-lg-5">
-                        <h4 class="d-flex justify-content-sm-left">
+                  filteredEncomendas.map((encomenda) => (
+                    <div className="row gy-3 mb-4 produto_carrinho" key={encomenda.UP}>
+                    
+                        <div className="me-lg-5">
+                          <h4 className="justify-content-sm-left">
                             <button
-                            className="btn btn-link"
-                            onClick={() => this.toggleProducts(encomenda.UP.nome)}
+                              className="btn btn-link"
+                              onClick={() => this.toggleProducts(encomenda.UP.nome)}
                             >
-                            {this.state.showProducts[encomenda.UP.nome] ? (
-                                <i class="bi bi-chevron-down"></i>
-                            ) : (
-                                <i class="bi bi-chevron-right"></i>
-                            )}
+                              {this.state.showProducts[encomenda.UP.nome] ? (
+                                <i className="bi bi-chevron-down"></i>
+                              ) : (
+                                <i className="bi bi-chevron-right"></i>
+                              )}
                             </button>
-                            <i class="bi bi-building"></i>&nbsp; UP NAME: {encomenda.UP.nome}
-                        </h4>
-                        {this.state.showProducts[encomenda.UP.nome] && (
+                            <i className="bi bi-building"></i>&nbsp; UP NAME: {encomenda.UP.nome}
+                          </h4>
+                          {this.state.showProducts[encomenda.UP.nome] && (
                             <div>
-                            <br></br>
-                            <h5 class="">Products sold from this Production Unit:</h5>
-                            <br></br>
-                            <div class="produtos-vendidos-scrollbar">
-                                {encomenda.UP.produtos_vendidos.map((venda) => (
-                                <div class="d-flex" key={venda}>
-                                    <img
-                                    class="border rounded me-3"
-                                    src={venda.produto.produto.img}
-                                    style={{ width: '96px', height: '96px' }}
-                                    />
-                                    <div>
-                                    <a href="#" class="nav-link">
+                              <br></br>
+                              <h5 className="">Ordered Products from this Production Unit:</h5>
+                              <br></br>
+                              <div className="produtos-vendidos-scrollbar">
+                                {encomenda.UP.produtos_encomenda.map((venda) => (
+                                  <div className="row" key={venda}>
+                                    <div className="col-2">
+                                      <img
+                                        className="border rounded me-3"
+                                        src={venda.produto.produto.img}
+                                        style={{ width: '96px', height: '96px' }}
+                                      />
+                                    </div>
+                                    <div className="col-4">
+                                      <a href="#" className="nav-link">
                                         {venda.produto.produto.name}
-                                    </a>
-
-                                    <p class="text-muted">
+                                      </a>
+                                      <p className="text-muted">
                                         Brand: {venda.produto.produto.brand}
                                         <br></br>
                                         Categorie: {venda.produto.produto.categorieB} <br></br>
@@ -313,36 +340,52 @@ render() {
                                         <br></br>
                                         UP Proximity to the buyer: &nbsp;
                                         {this.calculateDistance(
-                                        parseFloat(this.state.lat_user),
-                                        parseFloat(this.state.lon_user),
-                                        parseFloat(venda.consumidor_lat),
-                                        parseFloat(venda.consumidor_lon)
+                                          parseFloat(this.state.lat_user),
+                                          parseFloat(this.state.lon_user),
+                                          parseFloat(venda.consumidor_lat),
+                                          parseFloat(venda.consumidor_lon)
                                         )}{' '}
                                         Km
                                         <br></br>
                                         <br></br>
-                                    </p>
+                                      </p>
                                     </div>
-                                </div>
+                                    <div className="col-4">
+                                      <p className="text-muted">Order Status: {venda.estado}</p>
+                                      {venda.estado === 'Pending' && (
+                                        <div className="d-flex align-items-center">
+                                          <select className="form-select" >
+                                            <option value="">Select a Vehicle</option>
+                                            {encomenda.UP.veiculos.map((veiculo) => (
+                                              <option value={veiculo._id} key={veiculo._id}>
+                                                {veiculo.matricula}
+                                              </option>
+                                            ))}
+                                          </select>
+                                          &nbsp;
+                                          <button className="btn btn-light border icon-hover-danger" onClick={(e) => this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id)}>Associate</button>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
                                 ))}
+                              </div>
                             </div>
-                            </div>
-                        )}
+                          )}
                         </div>
+                  
+                      <hr />
                     </div>
-                    <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                        <div class=""></div>
-                        <div class=""></div>
-                    </div>
-                    <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2"></div>
-                    <hr />
-                    </div>
-                ))
+                  ))
                 )}
+              </div>
+
+              </div>
             </div>
             </div>
-        </div>
-        </div>
+
+
+
 
 
       <div class="col-lg-4">

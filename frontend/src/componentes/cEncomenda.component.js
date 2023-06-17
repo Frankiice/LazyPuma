@@ -22,7 +22,8 @@ export default class EncomendasC extends Component {
       filteredEncomendas: [],
       orderID: "",
       confirmationDialogId: false,
-      showProducts: {},  
+      showProducts: {},
+      op: ""  
     };
   }
   //Aplicação do filtro
@@ -229,11 +230,12 @@ degToRad(degrees) {
       });
   }
 
-  handleRemoveOrder() {
-    const { confirmationDialogId, id_consumidor} = this.state
-    console.log("confirmationDialogId", confirmationDialogId)
+  handleOpOrder(idEncomenda, operacao) {
+    const { id_consumidor} = this.state
+    console.log("idEncomenda", idEncomenda)
+    console.log("operacao", operacao)
     const base_url = `http://localhost:5000/encomenda/consumidor/${id_consumidor}`
-    const url = `${base_url}?idOrder=${confirmationDialogId}`;
+    const url = `${base_url}?idOrder=${idEncomenda}&op=${operacao}`;
     fetch(url, {
       method: 'POST',
       headers: {
@@ -243,9 +245,13 @@ degToRad(degrees) {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 'ok') {
-          console.log('Document deleted:', data.data);
-          this.setState({ msgRemoved: "Order was canceled" });
-  
+          if(operacao === "Cancel"){
+            console.log('Order Canceled:', data.data);
+            this.setState({ msgRemoved: "Order was canceled" });
+          }else{
+            console.log('Order Confirmed:', data.data);
+            this.setState({ msgRemoved: "Order was Confirmed" });
+          }
         } else {
           console.log('Error:', data.data);
           // Handle the error case appropriately
@@ -330,7 +336,7 @@ render() {
                                 <div className="confirmation-dialog">
                                   <h6>Are you sure you want to Cancel this Order?</h6>
                                   <div>
-                                    <button className="btn btn-danger" onClick={() => this.handleRemoveOrder(encomenda.encomenda.id_encomenda)}>
+                                    <button className="btn btn-danger" onClick={() => { this.setState({ op: "Cancel" }); this.handleOpOrder(encomenda.encomenda.id_encomenda, "Cancel");}}>
                                       Confirm
                                     </button>&nbsp;
                                     <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
@@ -340,7 +346,7 @@ render() {
                                 </div>
                               ) : (
                                 <div className="d-flex justify-content-end">
-                                  <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda }); this.showConfirmationDialog();}}>
+                                  <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda, op: "Cancel" }); this.showConfirmationDialog();}}>
                                     Cancel Order
                                   </a>
                                 </div>
@@ -350,7 +356,7 @@ render() {
                             <div className="d-flex justify-content-end">
                               {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" && (
                                 <div style={{ marginTop: '10px' }}>
-                                  <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda }); this.showConfirmationDialog();}}>
+                                  <a href="#" className="btn btn-light border icon-hover-danger" onClick={() => { this.setState({ op: "Complete" }); this.handleOpOrder(encomenda.encomenda.id_encomenda, "Complete");}}>
                                     Confirm Delivery
                                   </a>
                                 </div>
