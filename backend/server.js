@@ -379,6 +379,7 @@ app.get("/relatorios/consumidor/:idConsumidor", async (req, res) => {
             lon_UP: lon,
             name_UP: nome_UP,
             preco: preco,
+          
           };
           produtosEncomenda.push(productInfo);
           console.log(`produtosEncomenda: ${produtosEncomenda}`);
