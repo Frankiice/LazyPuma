@@ -354,17 +354,23 @@ render() {
                                       <p className="text-muted">Order Status: {venda.estado}</p>
                                       {venda.estado === 'Pending' && (
                                         <div className="d-flex align-items-center">
-                                          <select className="form-select" >
-                                            <option value="">Select a Vehicle</option>
-                                            {encomenda.UP.veiculos.map((veiculo) => (
-                                              <option value={veiculo._id} key={veiculo._id}>
-                                                {veiculo.matricula}
-                                              </option>
-                                            ))}
-                                          </select>
-                                          &nbsp;
+                                          {encomenda.UP.veiculos.length !== 0 ? 
+                                          <>
+                                            <select className="form-select" >
+                                              <option value="">Select a Vehicle</option>
+                                              {encomenda.UP.veiculos.map((veiculo) => (
+                                                <option value={veiculo._id} key={veiculo._id}>
+                                                  {veiculo.matricula}
+                                                </option>
+                                              ))}
+                                            </select>
+                                            &nbsp;
                                           <button className="btn btn-light border icon-hover-danger" onClick={(e) => this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id)}>Associate</button>
-                                        </div>
+                                        </>
+                                        :
+                                          <p>You don't have Vehicles <a href="/user/f/veiculo" >Create</a></p>
+                                          }
+                                          </div>
                                       )}
                                     </div>
                                   </div>

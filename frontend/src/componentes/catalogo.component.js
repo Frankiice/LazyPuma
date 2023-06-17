@@ -289,7 +289,7 @@ export default class Catalogo extends Component{
         </div>
     </div>
 
-    {this.state.tipoUser === "consumidor" ?
+    {this.state.tipoUser !== "" ?
         <div className="container_catalogo">
         <div className="row gx-4 gx-lg-5">
             <div className="col-lg-3 order-lg-first">

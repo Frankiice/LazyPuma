@@ -360,7 +360,7 @@ app.post('/fornecedor/veiculo', (req, res) => {
         // Update the estado of the matching EncomendaUP
         const encomendaUP = encomenda.listaUP.find(item => item.idProduct === produtoID);
         if (encomendaUP) {
-          encomendaUP.estado = 'Shipping';
+          encomendaUP.estado = 'Shipped';
         }
 
         // Save the updated encomenda

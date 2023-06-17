@@ -19,6 +19,7 @@ export default class FaAllUp extends Component {
   }
 
   componentDidMount(){
+    window.localStorage.removeItem("unidadeID")
     fetch("http://localhost:5000/user/userData", { //provavelmente teremos de mudar as cenas
         method:"POST",
         crossDomain:true,
