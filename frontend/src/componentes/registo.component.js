@@ -30,6 +30,7 @@ export default class Registo extends Component {
             morada: "",
             msgMorada: "",
             msgErroBackend: "",
+            errorMsg: "",
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -77,7 +78,13 @@ export default class Registo extends Component {
         e.preventDefault();
         // this.getCoordenadas();
         // console.log("moradaInvalida dentro do handleSubmit", this.state.moradaInvalida);
-        const {type, fullname, nickname,morada,lat,lon, nif, email, phone, password} = this.state;
+        const {type, fullname, nickname,morada,lat,lon, nif, email, phone, password, confirmPassword} = this.state;
+
+        if (password !== confirmPassword) {
+            // Passwords don't match, display error message
+            this.setState({ errorMsg: "Passwords do not match" });
+            return;
+          }
         console.log(type, fullname, nickname,morada,lat,lon, nif, email, phone, password);
         fetch("http://localhost:5000/user/registar",{
             method:"POST",
@@ -109,6 +116,7 @@ export default class Registo extends Component {
             }else{
                 this.setState({ flag: false })
                 this.setState({ msgErroBackend: data.error })
+                this.setState({ errorMsg: "" });
             }
 
         })
@@ -293,13 +301,17 @@ render() {
                             <button type="submit"  class="btn btn-outline-light col-md-3">
                                 Register
                             </button>
-                            {this.state.msgErroBackend != "" ? 
-                               
-                               <label><br></br>{this.state.msgErroBackend}</label>
-                               :
-                               <label></label>
-                               }
+                                {this.state.msgErroBackend !== "" || this.state.errorMsg !== "" ? (
+                                    <label>
+                                        <br />
+                                        {this.state.msgErroBackend}
+                                        {this.state.errorMsg}
+                                    </label>
+                                    ) : (
+                                    <label></label>
+                                    )}
                             </div>
+                            
                             <div class="text-center pt-4 text-muted">Already have an account? <a href="user/login">Log in</a> </div>
                         </form>
                     </div>
