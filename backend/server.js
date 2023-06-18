@@ -296,6 +296,93 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
   }
 });
 
+//Export dados das encomendas do consumidor
+app.get("/export/encomenda/consumidor/:idConsumidor", async (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  
+  try {
+
+    const idConsumidor = req.params.idConsumidor;
+
+    // Busca todas as encomendas do consumidor
+    const encomendas = await Encomenda.find({ idConsumidor });
+
+    // Array para armazenar todas as informações das encomendas e produtos relacionados
+    const result = [];
+
+    let count = 0;
+    let lat;
+    let lon;
+    let nome_UP;
+    for (const encomenda of encomendas) {
+      console.log(`Encomenda: ${encomenda._id}`);
+      const produtosEncomenda = [];
+      count++;
+
+      for (const item of encomenda.listaUP) {
+        // console.log(`objecto da listaUp da encomenda atual: ${item}`);
+        // console.log(`id do produto: ${item.idProduct}`);
+        // const produto = await Produto.findById(item.idProduct);
+        console.log(`id da UP:${item.idUP}`);
+        const idProduto = mongoose.Types.ObjectId(item.idProduct);
+        const produto = await Produto.findById(idProduto);
+        const idUP = mongoose.Types.ObjectId(item.idUP);
+        const UP = await UnidadeProducao.findById(idUP);
+        console.log(`UP: ${UP}`);
+        // console.log(`Produto: ${produto}`);
+        lat = UP.lat;
+        lon = UP.lon;
+        nome_UP =UP.nome;
+        if (produto) {
+          const productInfo = {
+            Name: produto.name,
+            Brand: produto.brand,
+            first_categorie: produto.categorieB,
+            second_categorie: produto.categorieA,
+            properties: produto.properties,
+            quantity: item.quantidade,
+            supplier_detais:{
+              latitude_UP:lat,
+              latitude_UP:lon,
+              name_UP:nome_UP,
+            },
+            
+            
+          };
+          produtosEncomenda.push(productInfo);
+          console.log(`produtosEncomenda: ${produtosEncomenda}`);
+        }
+      }
+      const dataEncomenda = encomenda.dataEncomenda;
+      const partes = dataEncomenda.split(" ");
+      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+        
+
+      result.push({
+        Order: {
+          
+          order_date: data,
+          order_total_price: encomenda.preco,
+          order_state:encomenda.estadoEncomenda,
+          cancellation_deadline: encomenda.prazoCancelamento,
+          ordered_products: produtosEncomenda,
+          }
+        
+        
+        
+      });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
+
 //PARA CANCELAR/ CONFIRMAR A ENCOMENDA
 app.post('/encomenda/consumidor/:id', (req, res) => {
   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
@@ -503,18 +590,28 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
 
     for (const unidadeProducao of unidadesProducao) {
       const produtosVendidos = [];
-
+      let preco;
+      
+      let total;
       for (const encomenda of encomendas) {
         const consumidorId = encomenda.idConsumidor;
-        const consumidor = await User.findById(consumidorId);
+        const consumidor = await User.findById(consumidorId); //preciso dele para saber a lat e lon
         const data_encomenda = encomenda.dataEncomenda;
         const partes = data_encomenda.split(" ");
-      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+        const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
 
         for (const item of encomenda.listaUP) {
           if (item.idUP === unidadeProducao._id.toString()) {
             const produto = await Produto.findById(item.idProduct);
             const quantidade = item.quantidade;
+            for (const x of unidadeProducao.listaProdutos){
+              if (x.idProduto === item.idProduct) {
+                
+                preco = x.preco ;
+                total = preco * quantidade;
+              }
+            }
+            
 
             if (produto) {
               produtosVendidos.push({
@@ -526,6 +623,9 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
                   produto,
                   quantidade,
                   data,
+                  preco,
+                  total,
+
                 }
               });
             }
@@ -707,11 +807,12 @@ app.get("/administrador/relatorios", async (req, res) => {
   try {
     const encomendas = await Encomenda.find().lean();
     let produtosVendidos = [];
-
+    let preco;
+    let total;
     for (const encomenda of encomendas) {
       const consumidorId = encomenda.idConsumidor;
       const consumidor = await User.findById(consumidorId);
-      console.log(encomenda);
+      
 
       const data_encomenda = new Date(encomenda.dataEncomenda);
       const options = { month: 'short', day: '2-digit', year: 'numeric' };
@@ -720,31 +821,33 @@ app.get("/administrador/relatorios", async (req, res) => {
       for (let item of encomenda.listaUP) {
         let produto = await Produto.findById(item.idProduct);
         const quantidade = item.quantidade;
+       
         const id_UP = item.idUP;
         const UP = await UnidadeProducao.findById(id_UP);
-        const fornecedorId =UP.idFornecedor;
-        const fornecedor = await User.findById(fornecedorId);
+        for (let item2 of UP.listaProdutos) {
+          if(item2.idProduto === item.idProduct){
+            preco = item2.preco;
+            total = preco * quantidade;
+          }
+        }
 
         
 
         if (produto) {
           produtosVendidos.push({
-            encomeda:{
-            
-            produto: {
-              produto,
+            produto:{
+              categoria:produto.categorieB,
+              preco:preco,
               quantidade: quantidade,
+              total:total,
               data: formattedDate,
-              consumidor_nome: consumidor.fullname,
               consumidor_lat: consumidor.lat,
               consumidor_lon: consumidor.lon,
-              consumidor_email: consumidor.email,
-              UP_name: UP.nome,
               UP_lat:UP.lat,
               UP_lon:UP.lon,
-              fornecedor_nome: fornecedor.fullname,
-              fornecedor_email: fornecedor.email,
-            }
+              UP_name: UP.nome,
+              
+            
           }
           });
         }
