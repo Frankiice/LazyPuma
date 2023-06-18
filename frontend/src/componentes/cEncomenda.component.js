@@ -10,6 +10,7 @@ export default class EncomendasC extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id_consumidor:"",
       nickname: "",
       distancia: 1010,
       arrastando: false,
@@ -23,6 +24,7 @@ export default class EncomendasC extends Component {
       orderID: "",
       confirmationDialogId: false,
       showProducts: {},  
+      json_data: {},
     };
   }
   //Aplicação do filtro
@@ -226,7 +228,19 @@ degToRad(degrees) {
           .catch((error) => {
             console.error(error);
           });
+      
+      
+      fetch(`http://localhost:5000/export/encomenda/consumidor/${this.state.id_consumidor}`)
+      .then((response) => response.json())
+      .then((data1) => {
+        console.log(data1, "JSON");
+        this.setState({ json_data: data1});
+      })
+      .catch((error) => {
+        console.error(error);
       });
+  });
+
   }
 
   handleRemoveOrder() {
@@ -267,10 +281,32 @@ degToRad(degrees) {
     }));
   };  
 
-render() {
+
+  handleDownload = () => {
+    const { json_data } = this.state;
+    const jsonContent = JSON.stringify(json_data);
+  
+    // Cria um objeto Blob com o conteúdo JSON
+    const blob = new Blob([jsonContent], { type: 'application/json' });
+  
+    // Cria um URL temporário para o objeto Blob
+    const url = URL.createObjectURL(blob);
+  
+    // Cria um elemento <a> invisível
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'data.json'; // Nome do arquivo a ser baixado
+  
+    // Simula um clique no elemento <a> para iniciar o download
+    link.click();
+  
+    // Libera o URL temporário
+    URL.revokeObjectURL(url);
+  };
   
 
 
+render() {
   const { distancia } = this.state;
   const maxDistancia = 1010;
   const distanciaFormatada = distancia <= 1000 ? `${distancia} km` : "More than 1000 km";
@@ -287,7 +323,14 @@ render() {
     <div class="col-lg-8">
       <div class="cardP border shadow-0 custom-cardUP">
         <div class="m-4">
-          <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report</h2>
+          <div className="row">
+  <div className="col-md-6">
+    <h2 className="card-title mb-4 text-dark">{this.state.nickname}'s Order History</h2>
+  </div>
+  <div className="col-md-6 d-flex justify-content-end">
+    <button onClick={this.handleDownload} className="btn btn-light border icon-hover-danger">Download JSON</button>
+  </div>
+</div>
           <br></br>
           <div class="cardP-body" style={{ overflowY: 'auto' }}>
             {filteredEncomendas.length === 0 ? (
