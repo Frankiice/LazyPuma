@@ -170,6 +170,7 @@ render() {
                             id="vCapacity"
                             onChange={(e) => this.setState({ vCapacity: e.target.value })}
                             value={this.state.vCapacity}
+                            min="1"
                             required
                         />
                         </div>
@@ -218,6 +219,7 @@ render() {
                             type="number"
                             id="vCapacity"
                             onChange={(e) => this.setState({ vCapacity: e.target.value })}
+                            min="1"
                             required
                         />
                         </div>
@@ -233,9 +235,7 @@ render() {
 
             </div>
             </div>
-            <div>
-            <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/allup">Back </a>
-            </div>
+        
 
         </div>
     :
@@ -246,7 +246,7 @@ render() {
                 <h4 class="text-secondary justify-content-md-center">{this.state.msg}!</h4>
             </div>
             <div>
-            <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/allup">Back </a>
+            <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/up">Back </a>
             </div>
             </div>
         </div>

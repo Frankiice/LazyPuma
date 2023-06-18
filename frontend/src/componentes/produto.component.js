@@ -216,7 +216,7 @@ degToRad(degrees) {
                             null}
                             <p class="lead text-dark" style={{ paddingLeft: "1em"}}>Address: {this.state.produto.morada}</p>
                         <br></br>
-
+                      {this.state.tipoUser !== "fornecedor" ? 
                         <div class="d-flex">
                             <label class="lead text-dark">Quantity: &nbsp; </label>
                         
@@ -234,6 +234,9 @@ degToRad(degrees) {
                                 Add to cart
                             </button>
                         </div>
+                      :
+                      null
+                      }
                     </div>
                 </div>
             :

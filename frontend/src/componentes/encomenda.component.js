@@ -76,7 +76,7 @@ function Details(props) {
                   <div class="col-md-6 mb-3">
                     <label for="firstName">First name</label>
                     <div class="input-field bg-dark"> 
-                      <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="firstName" placeholder={props.state.fName} required></input>
+                      <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="firstName" value={props.state.fName} readOnly></input>
                     </div>
                     <div class="invalid-feedback">
                       Valid first name is required.
@@ -85,7 +85,7 @@ function Details(props) {
                   <div class="col-md-6 mb-3">
                     <label for="lastName">Last name</label>
                     <div class="input-field bg-dark"> 
-                      <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="lastName" placeholder={props.state.lName} required></input>
+                      <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="lastName" value={props.state.lName} readOnly></input>
                     </div>
                     <div class="invalid-feedback">
                       Valid last name is required.
@@ -95,7 +95,7 @@ function Details(props) {
     
                 <div class="mb-3">
                   <label for="email">Email <span class="text-muted">(Optional)</span></label>
-                    <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" placeholder={props.state.email}></input>
+                    <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" value={props.state.email} readOnly></input>
                   <div class="invalid-feedback">
                     Please enter a valid email address for shipping updates.
                   </div>
@@ -104,7 +104,7 @@ function Details(props) {
                 <div class="mb-3">
                   <label for="address">Address</label>
                   <div class="input-field bg-dark"> 
-                    <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="address" placeholder={props.state.morada} required></input>
+                    <input type="text" class="form-control bg-dark text-white detailsEncomenda" id="address" value={props.state.morada} readOnly></input>
                   </div>
                   <div class="invalid-feedback">
                     Please enter your shipping address.
@@ -114,14 +114,14 @@ function Details(props) {
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="firstName">NIF</label>
-                      <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="NIF" placeholder={props.state.nif} required></input>
+                      <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="NIF" value={props.state.nif} readOnly></input>
                     <div class="invalid-feedback">
                       Valid NIF is required.
                     </div>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label for="lastName">Phone Number</label>
-                      <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="phone" placeholder={props.state.phone} required></input>
+                      <input type="num" class="form-control bg-dark text-white detailsEncomenda" id="phone" value={props.state.phone} readOnly></input>
                     <div class="invalid-feedback">
                       Valid Phone Number is required.
                     </div>
@@ -347,6 +347,7 @@ function Confirmation(props) {
           if (data.status === "ok") {
             // Order creation successful
             console.log("Encomenda criada com sucesso!");
+            window.localStorage.removeItem("carrinho")
             // Perform any additional actions here
           } else {
             // Order creation failed

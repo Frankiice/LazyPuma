@@ -342,7 +342,7 @@ export default class Navbar extends Component{
         //   </div>
         // </li> 
         <li class="nav-item dropdown active px-2">
-          <button class="btn btn-outline-light col-md-12" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-outline-light col-md-12 dropdown-toggle" id="perfilDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="bi bi-person-circle"></i> Hello {this.state.nickname}
           </button>
           <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
@@ -441,7 +441,7 @@ export default class Navbar extends Component{
                       <h5 class="text-dark">{item.nome}</h5>
                       <p class="text-dark">
                         <span class="pt-4 text-dark">{item.preco}€</span><br></br>
-                        <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
+                        <small class="text-muted text-nowrap"> {item.preco_original}€ per item </small>
                         
            
                     <div className="quantidade">

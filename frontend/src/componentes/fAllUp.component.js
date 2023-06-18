@@ -13,7 +13,7 @@ export default class FaAllUp extends Component {
       unidades: [],
       unidadeID: "",
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
+
 
 
   }
@@ -63,43 +63,7 @@ export default class FaAllUp extends Component {
 }
 
 
-handleSubmit(e) {
-    e.preventDefault();
-    const { unidadeID, matricula, vBrand, vCapacity, veiculoID } = this.state;
-    var flag = false;
-    // se for true é para dar update
-    if(veiculoID){
-        flag = true;
-    }
-  
-    const formData = new FormData();
-    formData.append('veiculoID', veiculoID);
-    formData.append('unidadeID', unidadeID);
-    formData.append('matricula', matricula);
-    formData.append('vBrand', vBrand);
-    formData.append('vCapacity', vCapacity);
-    formData.append('flag', flag);
 
-  
-  
-    fetch("http://localhost:5000/user/veiculos", {
-      method: "POST",
-      crossDomain: true,
-      body: formData
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data, "veiculo");
-        if (data.status === "error") {
-          throw new Error(data.error);
-        }
-        this.setState({ msg: "Vehicle added Successfully" });
-      })
-      .catch((error) => {
-        console.log(error);
-        this.setState({ msg: "Error adding Vehicle" });
-      });
-  }
 
 handleUnidade(e){
     const {unidadeID} = this.state;
@@ -128,7 +92,7 @@ render() {
                 <br></br>
                 <div class="cardP-body" style={{ overflowY: 'auto' }}>
 
-                    {this.state.unidades !== [] ? (
+                    {this.state.unidades.length !== 0 ? (
                         <div className="col">
                         {this.state.unidades.map((unidade, index) => (
                         <div class="border-top border-bottom pt-2">
@@ -179,17 +143,10 @@ render() {
                         </div>
                         
                     ) : (
-                        <div class="border-top border-bottom pt-2">
-                        <div className="col-md-6">
-                        <div className="form-group box">
-                            <label>Most recent order</label>
-                            <p>Order No.:</p>
-                            <p>Purchase Date:</p>
-                            <p>Value:</p>
-                            <button className="btn btn-outline-light btn-dark col-md-3 botaoPerfil">View Details</button>
-                        </div>
-                        </div>
-                    </div>
+                       
+                            <h4 class="text-secondary justify-content-md-center">You don't have Production Units</h4>
+                        
+                   
                     )}
                        <br></br>
                         <div className="col-lg-12">
@@ -201,7 +158,6 @@ render() {
                             </div>
                         </div>
                         </div>
-
 
                     </div>
                     </div>
