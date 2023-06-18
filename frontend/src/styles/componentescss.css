@@ -790,6 +790,7 @@ a[target='_blank'] {
   
   .cardP {
     flex: 1;
+    background-color: white;
   }
 .barra-container {
     display: flex;

@@ -171,11 +171,15 @@ const UnidadeProducaoSchema = new mongoose.Schema(
 
 const EncomendaUPSchema = new mongoose.Schema(
   {
-  idUP: String,
-  idProduct: String,
-  quantidade: Number,
-  estado: String,
+    _id: false,
+    idUP: String,
+    idProduct: String,
+    quantidade: Number,
+    estado: String,
   },
+  {
+    suppressSubdocsId: true, // Exclude _id field in subdocuments
+  }
 );
 
 
@@ -183,7 +187,7 @@ const EncomendaUPSchema = new mongoose.Schema(
 const EncomendaSchema = new mongoose.Schema(
     {
         idConsumidor: String,
-        preco: String,
+        preco: Number,
         dataEncomenda: String,
         dataEnvio: String,
         prazoCancelamento: String,
@@ -291,6 +295,93 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
+
+//Export dados das encomendas do consumidor
+app.get("/export/encomenda/consumidor/:idConsumidor", async (req, res) => {
+  const Encomenda = mongoose.model("encomenda", EncomendaSchema);
+  const Produto = mongoose.model("products", ProductDetailsSchema);
+  const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+  
+  try {
+
+    const idConsumidor = req.params.idConsumidor;
+
+    // Busca todas as encomendas do consumidor
+    const encomendas = await Encomenda.find({ idConsumidor });
+
+    // Array para armazenar todas as informações das encomendas e produtos relacionados
+    const result = [];
+
+    let count = 0;
+    let lat;
+    let lon;
+    let nome_UP;
+    for (const encomenda of encomendas) {
+      console.log(`Encomenda: ${encomenda._id}`);
+      const produtosEncomenda = [];
+      count++;
+
+      for (const item of encomenda.listaUP) {
+        // console.log(`objecto da listaUp da encomenda atual: ${item}`);
+        // console.log(`id do produto: ${item.idProduct}`);
+        // const produto = await Produto.findById(item.idProduct);
+        console.log(`id da UP:${item.idUP}`);
+        const idProduto = mongoose.Types.ObjectId(item.idProduct);
+        const produto = await Produto.findById(idProduto);
+        const idUP = mongoose.Types.ObjectId(item.idUP);
+        const UP = await UnidadeProducao.findById(idUP);
+        console.log(`UP: ${UP}`);
+        // console.log(`Produto: ${produto}`);
+        lat = UP.lat;
+        lon = UP.lon;
+        nome_UP =UP.nome;
+        if (produto) {
+          const productInfo = {
+            Name: produto.name,
+            Brand: produto.brand,
+            first_categorie: produto.categorieB,
+            second_categorie: produto.categorieA,
+            properties: produto.properties,
+            quantity: item.quantidade,
+            supplier_detais:{
+              latitude_UP:lat,
+              latitude_UP:lon,
+              name_UP:nome_UP,
+            },
+            
+            
+          };
+          produtosEncomenda.push(productInfo);
+          console.log(`produtosEncomenda: ${produtosEncomenda}`);
+        }
+      }
+      const dataEncomenda = encomenda.dataEncomenda;
+      const partes = dataEncomenda.split(" ");
+      const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
+        
+
+      result.push({
+        Order: {
+          
+          order_date: data,
+          order_total_price: encomenda.preco,
+          order_state:encomenda.estadoEncomenda,
+          cancellation_deadline: encomenda.prazoCancelamento,
+          ordered_products: produtosEncomenda,
+          }
+        
+        
+        
+      });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+
 
 //PARA CANCELAR/ CONFIRMAR A ENCOMENDA
 app.post('/encomenda/consumidor/:id', (req, res) => {
@@ -1572,14 +1663,38 @@ app.post("/user/encomenda", async (req, res) => {
       const Encomenda = mongoose.model("encomenda", EncomendaSchema);
       const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   
-      const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, idProdutos } = req.body;
-  
+      const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, infoProdutos } = req.body;
+
       console.log(req.body);
-  
-      const listaUP = await UnidadeProducao.find({ "listaProdutos.idProduto": { $in: idProdutos } });
-  
-      console.log("ENCOMENDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-      console.log(listaUP);
+
+      const listaUP = [];
+
+      for (const infoProduto of infoProdutos) {
+        const { idProduto, quantidadeCompra } = infoProduto;
+        const unidadeProducao = await UnidadeProducao.findOne({
+          "listaProdutos.idProduto": idProduto,
+        }).lean();
+      
+        if (unidadeProducao) {
+          const { _id, listaProdutos } = unidadeProducao;
+          const produto = listaProdutos.find(
+            (item) => item.idProduto === idProduto
+          );
+      
+          if (produto) {
+            const { idProduto, quantidade } = produto;
+            listaUP.push({
+              idUP: _id,
+              idProduct: idProduto,
+              quantidade: quantidadeCompra,
+              estado: "Pending",
+            });
+          }
+        }
+      }
+
+      console.log("listaUP")
+      console.log(listaUP)
   
       await Encomenda.create({
         idConsumidor,

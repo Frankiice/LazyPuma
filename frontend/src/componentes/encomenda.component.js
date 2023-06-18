@@ -310,48 +310,57 @@ function Payment(props) {
 function Confirmation(props) {
   const total = props.calcularTotal(props.state.carrinho);
 
-  useEffect(() => {
-    if (props.state.paymentSuccess) {
-      createOrder();
-    }
-  }, [props.state.paymentSuccess]);
+  // const [orderCreated, setOrderCreated] = useState(false);
 
+  let orderCreated = false;
+
+  // useEffect(() => {
+  //   if (props.state.paymentSuccess && !orderCreated) {
+  //     setOrderCreated(true);
+  //     createOrder();
+  //   }
+  // }, [props.state.paymentSuccess, orderCreated]);
   const createOrder = () => {
-    const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, idProdutos} = getOrderData();
+    console.log(orderCreated)
+    if (!orderCreated) {
+      const { idConsumidor, preco, dataEncomenda, dataEnvio, prazoCancelamento, estadoEncomenda, infoProdutos} = getOrderData();
 
-    console.log(getOrderData())
+      console.log(getOrderData());
 
-    fetch("http://localhost:5000/user/encomenda", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idConsumidor,
-        preco,
-        dataEncomenda,
-        dataEnvio,
-        prazoCancelamento,
-        estadoEncomenda,
-        idProdutos,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === "ok") {
-          // Order creation successful
-          console.log("Encomenda criada com sucesso!");
-          // Perform any additional actions here
-        } else {
-          // Order creation failed
-          console.log("Erro ao criar encomenda", data.error);
-          // Handle the error or display an error message
-        }
+      fetch("http://localhost:5000/user/encomenda", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idConsumidor,
+          preco,
+          dataEncomenda,
+          dataEnvio,
+          prazoCancelamento,
+          estadoEncomenda,
+          infoProdutos,
+        }),
       })
-      .catch((error) => {
-        console.log("Erro ao criar encomenda:", error);
-        // Handle the error or display an error message
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            // Order creation successful
+            console.log("Encomenda criada com sucesso!");
+            // Perform any additional actions here
+          } else {
+            // Order creation failed
+            console.log("Erro ao criar encomenda", data.error);
+            // Handle the error or display an error message
+          }
+        })
+        .catch((error) => {
+          console.log("Erro ao criar encomenda:", error);
+          // Handle the error or display an error message
+        });
+    } else {
+      console.log("swag")
+    }
   };
 
   const getOrderData = () => {
@@ -366,7 +375,13 @@ function Confirmation(props) {
   
     const prazoCancelamento = (new Date(currentDate.getTime() + (30 * 24 * 60 * 60 * 1000))).toISOString(); // Set prazoCancelamento 30 days after dataEncomenda
   
-    const idProdutos = carrinho.map(item => item.id_produto); // Extracting the id_produto from each item in carrinho
+    // const idProdutos = carrinho.map(item => item.id_produto); // Extracting the id_produto from each item in carrinho
+    const infoProdutos = carrinho.map((item) => ({
+      idProduto: item.id_produto,
+      quantidadeCompra: item.quantidade, // Replace with the actual quantity property from your carrinho item
+    }));
+
+    orderCreated = true
   
     return {
       idConsumidor: userData._id,
@@ -375,9 +390,14 @@ function Confirmation(props) {
       dataEnvio: null,
       prazoCancelamento,
       estadoEncomenda: "Pending",
-      idProdutos,
+      infoProdutos,
     };
   };
+
+  // Call createOrder when the component mounts
+  useEffect(() => {
+    createOrder();
+  }, []);
 
   return (
     <div className="encomenda">
