@@ -430,10 +430,13 @@ app.post('/encomenda/consumidor/:id', (req, res) => {
   
 });
 
+
+//ASSOCIAR UM VEICULO
 app.post('/fornecedor/veiculo', (req, res) => {
   const Encomenda = mongoose.model('encomenda', EncomendaSchema);
+  const UnidadeProducao = mongoose.model('unidadeProducao', UnidadeProducaoSchema);
 
-  const { consumidorID, produtoID } = req.body;
+  const { consumidorID, produtoID, quantidade } = req.body;
 
   Encomenda.findOne(
     {
@@ -448,22 +451,58 @@ app.post('/fornecedor/veiculo', (req, res) => {
       } else if (!encomenda) {
         res.status(404).json({ message: 'Encomenda not found' });
       } else {
-        // Update the estado of the matching EncomendaUP
         const encomendaUP = encomenda.listaUP.find(item => item.idProduct === produtoID);
-        if (encomendaUP) {
-          encomendaUP.estado = 'Shipped';
-        }
+        if (!encomendaUP) {
+          res.status(404).json({ message: 'Product not found in Encomenda' });
+        } else {
+          UnidadeProducao.findOne({ 'listaProdutos.idProduto': produtoID }, (err, unidadeProducao) => {
+            if (err) {
+              console.log(err);
+              res.status(500).json({ error: 'An error occurred' });
+            } else if (!unidadeProducao) {
+              res.status(404).json({ message: 'Unidade Producao not found' });
+            } else {
+              const produto = unidadeProducao.listaProdutos.find(item => item.idProduto === produtoID);
+              if (!produto) {
+                res.status(404).json({ message: 'Product not found in Unidade Producao' });
+              } else if (produto.quantidade < quantidade) {
+                console.log("entra onde deve entrar")
+                res.status(400).json({ message: 'Insufficient quantity in Unidade Producao' });
+              } else {
+                // Update the estado of the matching EncomendaUP
+                encomendaUP.estado = 'Shipped';
 
-        // Save the updated encomenda
-        encomenda.save((err, updatedEncomenda) => {
-          if (err) {
-            console.log(err);
-            res.status(500).json({ error: 'An error occurred' });
-          } else {
-            // Return the updated encomenda
-            res.json(updatedEncomenda);
-          }
-        });
+                // Decrease the stock quantity in Unidade Producao
+                produto.quantidade -= quantidade;
+
+                const allShipped = encomenda.listaUP.every(item => item.estado === 'Shipped');
+                if (allShipped) {
+                  encomenda.estadoEncomenda = 'Shipped';
+                  encomenda.dataEnvio = new Date().toISOString();
+                }
+
+                // Save the updated encomenda and Unidade Producao
+                encomenda.save((err, updatedEncomenda) => {
+                  if (err) {
+                    console.log(err);
+                    res.status(500).json({ error: 'An error occurred' });
+                  } else {
+                    unidadeProducao.save((err, updatedUnidadeProducao) => {
+                      if (err) {
+                        console.log(err);
+                        res.status(500).json({ error: 'An error occurred' });
+                      } else {
+                        // Return the updated encomenda
+                        res.json({status: "ok" , data: updatedEncomenda})
+
+                      }
+                    });
+                  }
+                });
+              }
+            }
+          });
+        }
       }
     }
   );
@@ -777,6 +816,7 @@ app.get("/fornecedor/orders/:idFornecedor", async (req, res) => {
       if (produtosEncomenda.length > 0) {
         result.push({
           UP: {
+            idUP: unidadeProducao._id,
             nome: unidadeProducao.nome,
             lat: unidadeProducao.lat,
             lon: unidadeProducao.lon,

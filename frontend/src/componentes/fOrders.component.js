@@ -21,6 +21,7 @@ export default class OrdersF extends Component {
       selectedCategories: [], 
       filteredEncomendas: [],  
       showProducts: {},  
+      msgErro: "",
     };
   }
   //Aplicação do filtro
@@ -234,7 +235,7 @@ degToRad(degrees) {
     }));
   };
 
-  handleVehicleSelection(e, consumidorID, produtoID) {  
+  handleVehicleSelection(e, consumidorID, produtoID, quantidade) {  
     // Fetch request to the route with the selected vehicle ID
     fetch(`http://localhost:5000/fornecedor/veiculo`, {
       method: 'POST',
@@ -243,19 +244,39 @@ degToRad(degrees) {
       },
       body: JSON.stringify({
         consumidorID: consumidorID,
-        produtoID: produtoID
+        produtoID: produtoID,
+        quantidade: quantidade
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         // Handle the response data
-        console.log(data, "Veiculo Associado");
-        window.location.reload();
+        if(data.status === "ok"){
+          console.log(data.data, "Veiculo Associado");
+          window.location.reload();
+        }else{
+          console.log(data.message)
+          this.setState({ msgErro: data.message})
+        }
       })
       .catch((error) => {
         console.log('Error:', error);
         // Handle any errors
       });
+  }
+
+  handleCreateVehicle(unidadeID){
+    console.log("unidadeID", unidadeID)
+    window.localStorage.setItem("unidadeID",unidadeID )
+    window.location ="/user/f/veiculo"
+  }
+
+  handleAddQuantity(unidadeID, produtoID){
+    console.log("unidadeID", unidadeID)
+    console.log("produtoID", produtoID)
+    window.localStorage.setItem("unidadeID",unidadeID )
+    window.localStorage.setItem("produtoID",produtoID )
+    window.location ="/user/f/produto"
   }
   
   
@@ -354,25 +375,31 @@ render() {
                                       <p className="text-muted">Order Status: {venda.estado}</p>
                                       {venda.estado === 'Pending' && (
                                         <div className="d-flex align-items-center">
-                                          {encomenda.UP.veiculos.length !== 0 ? 
-                                          <>
-                                            <select className="form-select" >
-                                              <option value="">Select a Vehicle</option>
-                                              {encomenda.UP.veiculos.map((veiculo) => (
-                                                <option value={veiculo._id} key={veiculo._id}>
-                                                  {veiculo.matricula}
-                                                </option>
-                                              ))}
-                                            </select>
-                                            &nbsp;
-                                          <button className="btn btn-light border icon-hover-danger" onClick={(e) => this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id)}>Associate</button>
-                                        </>
-                                        :
-                                          <p>You don't have Vehicles <a href="/user/f/veiculo" >Create</a></p>
-                                          }
-                                          </div>
+                                          {encomenda.UP.veiculos.length !== 0 ? (
+                                            <>
+                                              {this.state.msgErro !== "" ? (
+                                                <p>{this.state.msgErro} <a  href="#" onClick={() => this.handleAddQuantity(encomenda.UP.idUP, venda.produto.produto._id)}>Add more</a></p>
+                                              ) : (
+                                                <>
+                                                  <select className="form-select">
+                                                    <option value="">Select a Vehicle</option>
+                                                    {encomenda.UP.veiculos.map((veiculo) => (
+                                                      <option value={veiculo._id} key={veiculo._id}>
+                                                        {veiculo.matricula}
+                                                      </option>
+                                                    ))}
+                                                  </select>
+                                                  &nbsp;
+                                                  <button className="btn btn-light border icon-hover-danger" onClick={(e) => this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id, venda.produto.quantidade)}>Associate</button>
+                                                </>
+                                              )}
+                                            </>
+                                          ) : (
+                                            <p>You don't have Vehicles <a href="#" onClick={() => this.handleCreateVehicle(encomenda.UP.idUP)}>Create</a></p>
+                                          )}
+                                        </div>
                                       )}
-                                    </div>
+                                  </div>
                                   </div>
                                 ))}
                               </div>
