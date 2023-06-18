@@ -340,19 +340,21 @@ body{
    
 } */
 
-
+.cardP-body{
+    overflow-x: hidden;
+}
   
   .card {
     flex: 0 0 300px;
     margin: 10px;
-    /* height: 460px !important; */
+    height: 520px !important;
   }
   
 
 
   
   .img-fluid {
-    height: 200px;
+    height: 280px;
     object-fit: contain;
     width: auto;
   }
@@ -778,7 +780,18 @@ a[target='_blank'] {
 .custom-card{
     height: 550px;;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding-bottom: 150px; /* Adjust this value based on your footer height */
+  }
   
+  .cardP {
+    flex: 1;
+    background-color: white;
+  }
 .barra-container {
     display: flex;
     align-items: center;
@@ -926,11 +939,19 @@ border-radius: 10px;
     
     max-height: 300px; 
     overflow-y: auto; 
+    overflow-x: hidden;
+  }
+  
+  .card_record_c{
+    background-color: white;
+  }
+
+  .custom-tooltip {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid black;
   }
   
   
-.container_catalogo{
-    margin: 50px auto;
-    max-width: 1800px;
-}
+  
   

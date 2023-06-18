@@ -34,6 +34,7 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "4.0.3",
     "react-use-draggable-scroll": "^0.4.7",
+    "recharts": "^2.7.1",
     "scrollbooster": "^3.0.2"
   }
 }

@@ -254,7 +254,7 @@ render() {
         <div class="m-4">
           <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
           <br></br>
-          <div class="card-body" style={{ maxHeight: '500px', overflowY: 'auto' }}>
+          <div class="card-body" style={{ maxHeight: '400px', overflowY: 'auto' }}>
             {filteredEncomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>

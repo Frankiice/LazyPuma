@@ -51,51 +51,47 @@ export default class Login extends Component {
     let filteredData = this.state.encomendas;
     if (startDate && endDate) {
       filteredData = filteredData.filter((item) => {
-        const produto = item.produto;
-        console.log("itemDate",produto.data);
-        const itemDate = new Date(produto.data); 
+        const itemDate = new Date(item.encomenda.data_encomenda); // Substitua "data_encomenda" pelo nome correto da propriedade de data em "encomendas"
         return itemDate >= startDate && itemDate <= endDate;
       });
     }
   
    
 // Filtrar os dados baseado nas categorias selecionadas
-// Filtrar os dados baseado nas categorias selecionadas
 if (selectedCategories.length > 0) {
-  filteredData = filteredData.filter((item) =>
-    selectedCategories.includes(item.produto.categoria)
-  );
-}
-
+    filteredData = filteredData.map((item) => {
+      const produtosCategoria = item.produtos.filter((produto) =>
+        selectedCategories.includes(produto.categoria)
+      );
+  
+      return produtosCategoria.length > 0 ? { ...item, produtos: produtosCategoria } : null;
+    }).filter(Boolean); // Remover itens nulos da matriz
+  }
   
   
     // Processar os dados filtrados para os gráficos
     let produtos = [];
     let produtos2 = [];
-    console.log("filteredData",filteredData);
+  
     filteredData.forEach((item) => {
-      const produto = item.produto;
-      let total_price = produto.total;
-      const distance = this.calculateDistance(
-        produto.consumidor_lat,
-        produto.consumidor_lon,
-        produto.UP_lat,
-        produto.UP_lon
-      );
-
-      produtos.push({ price: total_price, distance: distance});
-      
-      // Procurar se já existe um objeto com a mesma distância
-      
-      const quantidade = parseInt(produto.quantidade); // Converter para número
-
-      const existingProduct = produtos2.find((item) => item.distance === distance);
-      if (existingProduct) {
-        existingProduct.total += quantidade;
-      } else {
-        produtos2.push({ distance: distance, total: quantidade });
-      }
-      
+      item.produtos.forEach((produto) => {
+        const price = produto.preco;
+        const distance = this.calculateDistance(
+          this.state.lat_user,
+          this.state.lon_user,
+          produto.lat_UP,
+          produto.lon_UP
+        );
+  
+        produtos.push({ price: price, distance: distance });
+  
+        const existingProduct = produtos2.find((item) => item.distance === distance);
+        if (existingProduct) {
+            existingProduct.total += produto.quantidade;
+        } else {
+          produtos2.push({ distance: distance, total: produto.quantidade });
+        }
+      });
     });
   
     this.setState({ chartData: produtos, produtos2: produtos2 });
@@ -224,43 +220,41 @@ componentDidMount() {
           lon_user: data.data.lon,
         });
 
-        fetch(`http://localhost:5000/administrador/relatorios`)
+        fetch(`http://localhost:5000/relatorios/consumidor/${data.data._id}`)
         .then((response) => response.json())
         .then((data1) => {
         //   console.log(data1, 'EncomendaData');
           this.setState({ encomendas: data1, filteredEncomendas: data1 });
           let produtos = [];
           let produtos2 = [];
-          console.log(data1);
+      
           // Processar os dados para o gráfico
           data1.forEach((item) => {
-            const produto = item.produto;
-              let total_price = produto.total;
+            item.produtos.forEach((produto) => {
+             const quantity = produto.quantidade;
+              const price = produto.preco;
+              let total_price = price * quantity;
               const distance = this.calculateDistance(
-                produto.consumidor_lat,
-                produto.consumidor_lon,
-                produto.UP_lat,
-                produto.UP_lon
+                this.state.lat_user,
+                this.state.lon_user,
+                produto.lat_UP,
+                produto.lon_UP
               );
       
               produtos.push({ price: total_price, distance: distance});
               
               // Procurar se já existe um objeto com a mesma distância
-              
-              const quantidade = parseInt(produto.quantidade); // Converter para número
-
               const existingProduct = produtos2.find((item) => item.distance === distance);
               if (existingProduct) {
-                existingProduct.total += quantidade;
+                existingProduct.total++;
               } else {
-                produtos2.push({ distance: distance, total: quantidade });
+                produtos2.push({ distance: distance, total: 1 });
               }
-          
-           
+            });
           });
       
-          console.log("produtos", produtos);
-          console.log("produtos2", produtos2);
+        //   console.log("produtos", produtos);
+        //   console.log("produtos2", produtos2);
           this.setState({ chartData: produtos, produtos2: produtos2 });
         })
         .catch((error) => {
@@ -343,7 +337,7 @@ const {produtos2} = this.state;
     <div class="col-lg-8">
       <div class="card_record_c d-flex border shadow-0 custom-card" style={{ height: '1221px'}}>
         <div class="m-4">
-          <h2 class="card-title mb-4 text-dark">Administrator Local Impact Report </h2>
+          <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
    
           <br></br>
           <div class="card-body" style={{ maxHeight: '1521px', overflowY: 'auto' }}>
@@ -364,7 +358,7 @@ const {produtos2} = this.state;
                     {chartData.length === 0 ? (
                       <div> 
                       <h4>First Graphic: </h4>
-                      <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on the distance between Consumer and Supplier.</h6>
+                      <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on your distance to the respective Supplier.</h6>
                       <br></br>
                       <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
                       </div>
@@ -372,7 +366,7 @@ const {produtos2} = this.state;
   ) : (
                             <div>
                             <h4>First Graphic: </h4>
-                            <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on the distance between Consumer and Supplier.</h6>
+                            <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on your distance to the respective Supplier.</h6>
                                 <br></br><br></br>
                         <ScatterChart width={700} height={400} data={chartData} margin={{ bottom: 50 , left:50}} >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -380,9 +374,9 @@ const {produtos2} = this.state;
                             type="number"
                             dataKey="distance"
                             label={{
-                            value:'Distance between Consumer and Supplier',
+                            value:'Proximity',
                             position: 'insideBottom',
-                           offset:-15,
+                           offset:-10,
                             }}
                         />
                         <YAxis
@@ -400,7 +394,7 @@ const {produtos2} = this.state;
                     {produtos2.length === 0 ? (
                       <div>
                         <h4>Second Graphic: </h4>
-                        <h6 class="text-muted">Quantity of all products ordered according to the distance between Consumer and Supplier.</h6>
+                        <h6 class="text-muted">Number of each product ordered according to the distance to the supplier.</h6>
                         <br></br>
                         <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
                       
@@ -409,20 +403,20 @@ const {produtos2} = this.state;
                       ) : (
                         <div>
                         <h4>Second Graphic: </h4>
-                        <h6 class="text-muted">Quantity of all products ordered according to the distance between Consumer and Supplier.</h6>
+                        <h6 class="text-muted">Number of each product ordered according to the distance to the supplier.</h6>
 
                         <br></br><br></br>
-                        <BarChart width={600} height={400} data={produtos2} margin={{ bottom: 50 , left:90}}>
+                        <BarChart width={600} height={400} data={produtos2} margin={{ bottom: 50 , left:50}}>
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis
                             dataKey="distance"
                             label={{
-                              value: 'Distance between consumer and suplier',
+                              value: 'Proximity',
                               position: 'insideBottom',
-                              offset: -15,
+                              offset: -10,
                             }}
                           />
-                          <YAxis label={{ value: 'Total Quantity of Products', angle: -90, position: 'inside', offset: -70, }} />
+                          <YAxis label={{ value: 'Number of Products', angle: -90, position: 'inside', offset: 10, }} />
                           <Tooltip cursor={{ strokeDasharray: '3 3' }} content={this.renderTooltip2} />
                           <Bar dataKey="total" fill="#8884d8" />
                         </BarChart>

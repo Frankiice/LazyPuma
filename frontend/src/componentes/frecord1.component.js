@@ -23,17 +23,15 @@ export default class Login extends Component {
       filteredEncomendas: [],
       chartData: [],
       produtos2: [],
+      UP:[],
+      selectedUP: "All",
       startDate: null,
       endDate: null,
       searchValue: "",
-     
-      
-
-
       
       
-
     };
+    this.handleUPChange = this.handleUPChange.bind(this);
   }
   handleStartDateChange = (date) => {
     this.setState({ startDate: date });
@@ -45,61 +43,68 @@ export default class Login extends Component {
   
   //Aplicação do filtro
   filtrarEncomendas = () => {
-    const { startDate, endDate, selectedCategories } = this.state;
+    const { startDate, endDate, selectedCategories, selectedUP } = this.state;
+  
+    // Filtrar os dados baseado nas categorias selecionadas
+    let filteredData = this.state.encomendas;
+    if (selectedCategories.length > 0) {
+      filteredData = filteredData.map((item) => {
+        const produtosCategoria = item.UP.produtos_vendidos.filter((produtoVendido) =>
+          selectedCategories.includes(produtoVendido.produto.produto.categorieB)
+        );
+  
+        return produtosCategoria.length > 0 ? { ...item, UP: { ...item.UP, produtos_vendidos: produtosCategoria } } : null;
+      }).filter(Boolean); // Remover itens nulos da matriz
+    }
+  
+    // Filtrar os dados baseado na UP selecionada
+    if (selectedUP !== "" && selectedUP !== "All") {
+      filteredData = filteredData.filter((item) => item.UP.nome === selectedUP);
+    }
   
     // Filtrar os dados baseado nas datas
-    let filteredData = this.state.encomendas;
     if (startDate && endDate) {
-      filteredData = filteredData.filter((item) => {
-        const produto = item.produto;
-        console.log("itemDate",produto.data);
-        const itemDate = new Date(produto.data); 
-        return itemDate >= startDate && itemDate <= endDate;
+      filteredData = filteredData.map((item) => {
+        const produtosVendidos = item.UP.produtos_vendidos.filter((produtoVendido) => {
+          const itemDate = new Date(produtoVendido.produto.data);
+          return itemDate >= startDate && itemDate <= endDate;
+        });
+  
+        return { ...item, UP: { ...item.UP, produtos_vendidos: produtosVendidos } };
       });
     }
   
-   
-// Filtrar os dados baseado nas categorias selecionadas
-// Filtrar os dados baseado nas categorias selecionadas
-if (selectedCategories.length > 0) {
-  filteredData = filteredData.filter((item) =>
-    selectedCategories.includes(item.produto.categoria)
-  );
-}
-
-  
-  
     // Processar os dados filtrados para os gráficos
-    let produtos = [];
-    let produtos2 = [];
-    console.log("filteredData",filteredData);
+    const chartData = [];
+    const produtos2 = [];
+  
     filteredData.forEach((item) => {
-      const produto = item.produto;
-      let total_price = produto.total;
-      const distance = this.calculateDistance(
-        produto.consumidor_lat,
-        produto.consumidor_lon,
-        produto.UP_lat,
-        produto.UP_lon
-      );
-
-      produtos.push({ price: total_price, distance: distance});
-      
-      // Procurar se já existe um objeto com a mesma distância
-      
-      const quantidade = parseInt(produto.quantidade); // Converter para número
-
-      const existingProduct = produtos2.find((item) => item.distance === distance);
-      if (existingProduct) {
-        existingProduct.total += quantidade;
-      } else {
-        produtos2.push({ distance: distance, total: quantidade });
-      }
-      
+      item.UP.produtos_vendidos.forEach((produtoVendido) => {
+        const produto = produtoVendido.produto;
+        const price = produto.total;
+        const distance = this.calculateDistance(
+          this.state.lat_user,
+          this.state.lon_user,
+          produtoVendido.consumidor_lat,
+          produtoVendido.consumidor_lon
+        );
+  
+        chartData.push({ price: price, distance: distance });
+  
+        const existingProduct = produtos2.find((item) => item.distance === distance);
+        if (existingProduct) {
+          existingProduct.total += produto.quantidade;
+        } else {
+          produtos2.push({ distance: distance, total: produto.quantidade });
+        }
+      });
     });
   
-    this.setState({ chartData: produtos, produtos2: produtos2 });
+    console.log("filtro aplicado-chartData", chartData);
+    console.log("filtro aplicado-produtos2", produtos2);
+    this.setState({ chartData: chartData, produtos2: produtos2 });
   };
+  
   
   
   
@@ -224,48 +229,47 @@ componentDidMount() {
           lon_user: data.data.lon,
         });
 
-        fetch(`http://localhost:5000/administrador/relatorios`)
+        fetch(`http://localhost:5000/fornecedor/relatorios/${data.data._id}`)
         .then((response) => response.json())
         .then((data1) => {
-        //   console.log(data1, 'EncomendaData');
           this.setState({ encomendas: data1, filteredEncomendas: data1 });
-          let produtos = [];
+          let chartData = [];
           let produtos2 = [];
-          console.log(data1);
-          // Processar os dados para o gráfico
+          let data_UPs = ["All"];
+          
           data1.forEach((item) => {
-            const produto = item.produto;
-              let total_price = produto.total;
+            const { nome, lat, lon, produtos_vendidos } = item.UP;
+            let nomeUP = item.UP.nome;
+            data_UPs.push(nomeUP);
+            produtos_vendidos.forEach((produto) => {
+              const { quantidade, preco } = produto.produto;
+              const total_price = preco * quantidade;
               const distance = this.calculateDistance(
+                this.state.lat_user,
+                this.state.lon_user,
                 produto.consumidor_lat,
-                produto.consumidor_lon,
-                produto.UP_lat,
-                produto.UP_lon
+                produto.consumidor_lon
               );
       
-              produtos.push({ price: total_price, distance: distance});
-              
-              // Procurar se já existe um objeto com a mesma distância
-              
-              const quantidade = parseInt(produto.quantidade); // Converter para número
-
+              chartData.push({ price: total_price, distance: distance  });
+      
               const existingProduct = produtos2.find((item) => item.distance === distance);
               if (existingProduct) {
                 existingProduct.total += quantidade;
               } else {
                 produtos2.push({ distance: distance, total: quantidade });
               }
-          
-           
+            });
           });
-      
-          console.log("produtos", produtos);
-          console.log("produtos2", produtos2);
-          this.setState({ chartData: produtos, produtos2: produtos2 });
+            console.log("chartData", chartData);
+            console.log("produtos2", chartData);
+            console.log("UPS", data_UPs);
+          this.setState({ chartData: chartData, produtos2: produtos2, UP:data_UPs});
         })
         .catch((error) => {
           console.error(error);
         });
+      
       
       
 
@@ -318,6 +322,14 @@ renderTooltip = ({ active, payload }) => {
     return null;
   }
    
+  handleUPChange(event) {
+    const selectedUP = event.target.value;
+    this.setState({ selectedUP }); 
+    console.log("selectedUP",selectedUP);
+  }
+  
+
+
 
 render() {
   
@@ -330,8 +342,10 @@ const {produtos2} = this.state;
   const distanciaFormatada = distancia <= 1000 ? `${distancia} km` : "More than 1000 km";
   const { startDate, endDate } = this.state;
   const { searchValue, selectedCategories } = this.state;
+
   const { encomendas } = this.state;
   const { filteredEncomendas } = this.state;
+  const { UP, selectedUP } = this.state;
   
 
   
@@ -343,7 +357,7 @@ const {produtos2} = this.state;
     <div class="col-lg-8">
       <div class="card_record_c d-flex border shadow-0 custom-card" style={{ height: '1221px'}}>
         <div class="m-4">
-          <h2 class="card-title mb-4 text-dark">Administrator Local Impact Report </h2>
+          <h2 class="card-title mb-4 text-dark">{this.state.nickname}'s Local Impact Report </h2>
    
           <br></br>
           <div class="card-body" style={{ maxHeight: '1521px', overflowY: 'auto' }}>
@@ -364,7 +378,7 @@ const {produtos2} = this.state;
                     {chartData.length === 0 ? (
                       <div> 
                       <h4>First Graphic: </h4>
-                      <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on the distance between Consumer and Supplier.</h6>
+                      <h6 class="text-muted">Price of each product, taking into account the quantity selected per order by the consumer, depending on the distance between your Production Unit and the consumer.</h6>
                       <br></br>
                       <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
                       </div>
@@ -372,7 +386,7 @@ const {produtos2} = this.state;
   ) : (
                             <div>
                             <h4>First Graphic: </h4>
-                            <h6 class="text-muted">Price of each product, taking into account the quantity selected per order, depending on the distance between Consumer and Supplier.</h6>
+                            <h6 class="text-muted">Price of each product, taking into account the quantity selected per order by the consumer, depending on the distance between your Production Unit and the consumer.</h6>
                                 <br></br><br></br>
                         <ScatterChart width={700} height={400} data={chartData} margin={{ bottom: 50 , left:50}} >
                         <CartesianGrid strokeDasharray="3 3" />
@@ -380,9 +394,9 @@ const {produtos2} = this.state;
                             type="number"
                             dataKey="distance"
                             label={{
-                            value:'Distance between Consumer and Supplier',
+                            value:'Proximity',
                             position: 'insideBottom',
-                           offset:-15,
+                           offset:-10,
                             }}
                         />
                         <YAxis
@@ -400,7 +414,7 @@ const {produtos2} = this.state;
                     {produtos2.length === 0 ? (
                       <div>
                         <h4>Second Graphic: </h4>
-                        <h6 class="text-muted">Quantity of all products ordered according to the distance between Consumer and Supplier.</h6>
+                        <h6 class="text-muted">Number of products ordered from your Production Unit taking in consideration the distance from the Consumer.</h6>
                         <br></br>
                         <h5 class="text-muted text-allign-center">No matches for the selected criteria </h5>
                       
@@ -409,20 +423,20 @@ const {produtos2} = this.state;
                       ) : (
                         <div>
                         <h4>Second Graphic: </h4>
-                        <h6 class="text-muted">Quantity of all products ordered according to the distance between Consumer and Supplier.</h6>
+                        <h6 class="text-muted">Number of products ordered from your Production Unit taking in consideration the distance from the Consumer.</h6>
 
                         <br></br><br></br>
-                        <BarChart width={600} height={400} data={produtos2} margin={{ bottom: 50 , left:90}}>
+                        <BarChart width={600} height={400} data={produtos2} margin={{ bottom: 50 , left:50}}>
                           <CartesianGrid strokeDasharray="3 3" />
                           <XAxis
                             dataKey="distance"
                             label={{
-                              value: 'Distance between consumer and suplier',
+                              value: 'Proximity',
                               position: 'insideBottom',
-                              offset: -15,
+                              offset: -10,
                             }}
                           />
-                          <YAxis label={{ value: 'Total Quantity of Products', angle: -90, position: 'inside', offset: -70, }} />
+                          <YAxis label={{ value: 'Number of Products', angle: -90, position: 'inside', offset: 10, }} />
                           <Tooltip cursor={{ strokeDasharray: '3 3' }} content={this.renderTooltip2} />
                           <Bar dataKey="total" fill="#8884d8" />
                         </BarChart>
@@ -515,11 +529,24 @@ const {produtos2} = this.state;
       </span>
     ))}
   </div>
+
+  
 </div>
 
     </div>
-            
-            
+            <br></br>
+    <div className="dropdown">
+    <label for="ups">Choose an UP:</label>
+  <select name="ups"  onChange={this.handleUPChange}>
+    {UP.map((up, index) => (
+      <option key={index} value={up}>
+        {up}
+      </option>
+    ))}
+  </select>
+ 
+</div>
+
             <hr />
             
             <div class="mt-3">
