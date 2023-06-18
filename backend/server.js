@@ -188,9 +188,9 @@ const EncomendaSchema = new mongoose.Schema(
     {
         idConsumidor: String,
         preco: Number,
-        dataEncomenda: String,
-        dataEnvio: String,
-        prazoCancelamento: String,
+        dataEncomenda: Date,
+        dataEnvio: Date,
+        prazoCancelamento: Date,
         listaUP: [EncomendaUPSchema],
         estadoEncomenda: String,
     },
@@ -270,7 +270,7 @@ app.get("/encomenda/consumidor/:idConsumidor", async (req, res) => {
           console.log(`produtosEncomenda: ${produtosEncomenda}`);
         }
       }
-      const dataEncomenda = encomenda.dataEncomenda;
+      const dataEncomenda = encomenda.dataEncomenda.toString();
       const partes = dataEncomenda.split(" ");
       const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
         
@@ -579,7 +579,7 @@ app.get("/relatorios/consumidor/:idConsumidor", async (req, res) => {
           console.log(`produtosEncomenda: ${produtosEncomenda}`);
         }
       }
-      const dataEncomenda = encomenda.dataEncomenda;
+      const dataEncomenda = encomenda.dataEncomenda.toString();
       const partes = dataEncomenda.split(" ");
       const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
         
@@ -635,7 +635,7 @@ app.get("/fornecedor/relatorios/:idFornecedor", async (req, res) => {
       for (const encomenda of encomendas) {
         const consumidorId = encomenda.idConsumidor;
         const consumidor = await User.findById(consumidorId); //preciso dele para saber a lat e lon
-        const data_encomenda = encomenda.dataEncomenda;
+        const data_encomenda = encomenda.dataEncomenda.toString();
         const partes = data_encomenda.split(" ");
         const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
 
@@ -715,7 +715,7 @@ app.get("/fornecedor/orderHistory/:idFornecedor", async (req, res) => {
       for (const encomenda of encomendas) {
         const consumidorId = encomenda.idConsumidor;
         const consumidor = await User.findById(consumidorId);
-        const data_encomenda = encomenda.dataEncomenda;
+        const data_encomenda = encomenda.dataEncomenda.toString();
         const partes = data_encomenda.split(" ");
       const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
 
@@ -786,7 +786,7 @@ app.get("/fornecedor/orders/:idFornecedor", async (req, res) => {
       for (const encomenda of encomendas) {
         const consumidorId = encomenda.idConsumidor;
         const consumidor = await User.findById(consumidorId);
-        const data_encomenda = encomenda.dataEncomenda;
+        const data_encomenda = encomenda.dataEncomenda.toString();
         const partes = data_encomenda.split(" ");
         const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
 
