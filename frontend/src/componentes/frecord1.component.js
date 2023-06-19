@@ -364,7 +364,7 @@ const {produtos2} = this.state;
             {filteredEncomendas.length === 0 ? (
               <div class="relatorio-vazio">
                 <br></br>
-                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't placed any orders yet </h5>
+                <h5 class="text-secondary justify-content-md-center">{this.state.nickname} hasn't sold any products yet </h5>
            
                 
       
