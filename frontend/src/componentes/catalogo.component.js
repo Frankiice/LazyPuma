@@ -340,14 +340,18 @@ export default class Catalogo extends Component{
                         <div className="card-body p-4">
                             <div className="text-center">
                             <h5 className="fw-bolder">{produto._doc.name}</h5>
-                            {console.log('lat1', parseFloat(this.state.lat))}
-                            {this.calculateDistance(
-                                parseFloat(this.state.user_lat), // Convert to float
-                                parseFloat(this.state.user_lon), // Convert to float
-                                parseFloat(produto.lat), // Convert to float
-                                parseFloat(produto.lon) // Convert to float
-                            )}km
-                            <br />
+                            {this.state.tipoUser === 'consumidor' ? (
+                              <>
+                                {this.calculateDistance(
+                                  parseFloat(this.state.user_lat), // Convert to float
+                                  parseFloat(this.state.user_lon), // Convert to float
+                                  parseFloat(produto.lat), // Convert to float
+                                  parseFloat(produto.lon) // Convert to float
+                                )}
+                                km
+                                <br />
+                              </>
+                            ) : null}
                             {produto.price}€
                             </div>
                         </div>
@@ -391,14 +395,18 @@ export default class Catalogo extends Component{
                         <div className="card-body p-4">
                         <div className="text-center">
                             <h5 className="fw-bolder">{produto._doc.name}</h5>
-                            {this.calculateDistance(
-                            parseFloat(this.state.user_lat), // Convert to float
-                            parseFloat(this.state.user_lon), // Convert to float
-                            parseFloat(produto.lat), // Convert to float
-                            parseFloat(produto.lon) // Convert to float
-                            )}
-                            Km
-                            <br />
+                            {this.state.tipoUser === 'consumidor' ? (
+                              <>
+                                {this.calculateDistance(
+                                  parseFloat(this.state.user_lat), // Convert to float
+                                  parseFloat(this.state.user_lon), // Convert to float
+                                  parseFloat(produto.lat), // Convert to float
+                                  parseFloat(produto.lon) // Convert to float
+                                )}
+                                km
+                                <br />
+                              </>
+                            ) : null}
                             {produto.price}€
                         </div>
                         </div>
@@ -435,31 +443,46 @@ export default class Catalogo extends Component{
                             this.state.objSearch.map((produto) => (
                                 <div key={produto._doc._id}>
                                     <div class="col mb-5">
-                                        <div class="card h-100 crop">
-                                        {produto._doc.img.startsWith('http') ? (
-                                            <img class="card-img  img-fluid" src={produto._doc.img} alt="..." />
-                                        ) : (
-                                            <img class="card-img img-fluid" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
-
-                                        )}
+                                        <div class="card h-100 crop"
+                                            onClick={(e) => {
+                                                this.setState({ produtoID: produto._doc._id }, this.handleProduto);
+                                            }}
+                                            style={{ cursor: 'pointer' }}
+                                            >
+                                            {produto._doc.img.startsWith('http') ? (
+                                                <img class="card-img img-fluid" src={produto._doc.img} alt="..." />
+                                            ) : (
+                                                <img
+                                                class="card-img img-fluid"
+                                                src={`http://localhost:5000/images/${produto._doc.img.replace(
+                                                    'public/images/',
+                                                    ''
+                                                )}`}
+                                                alt="..."
+                                                />
+                                            )}
                                             <div class="card-body p-4">
                                                 <div class="text-center">
-                                                    <h5 class="fw-bolder">{produto._doc.name}</h5>
-                                                    {console.log("lat1", parseFloat(this.state.lat))}
+                                                <h5 class="fw-bolder">{produto._doc.name}</h5>
+                                                {this.state.tipoUser === 'consumidor' ? (
+                                                <>
                                                     {this.calculateDistance(
-                                                        parseFloat(this.state.user_lat), // Convert to float
-                                                        parseFloat(this.state.user_lon), // Convert to float
-                                                        parseFloat(produto.lat), // Convert to float
-                                                        parseFloat(produto.lon) // Convert to float
+                                                    parseFloat(this.state.user_lat), // Convert to float
+                                                    parseFloat(this.state.user_lon), // Convert to float
+                                                    parseFloat(produto.lat), // Convert to float
+                                                    parseFloat(produto.lon) // Convert to float
                                                     )}
-                                                    <br></br>
-                                                    {produto.price}€
+                                                    km
+                                                    <br />
+                                                </>
+                                                ) : null}
+                                                {produto.price}€
                                                 </div>
                                             </div>
-                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._doc._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
-                                            </div>
+
                                         </div>
+
+
                                     </div>
                                 </div> 
                                 ))
@@ -468,35 +491,48 @@ export default class Catalogo extends Component{
                                 
                                 <div key={produto._doc._id}>
                                     <div class="col mb-5">
-                                        <div class="card h-100 crop">
-                                            {
-                                            produto._doc.img ? 
+                                        <div class="card h-100 crop"
+                                            onClick={() => {
+                                                this.setState({ produtoID: produto._doc._id }, this.handleProduto);
+                                            }}
+                                            style={{ cursor: 'pointer' }}
+                                            >
+                                            {produto._doc.img ? (
                                                 produto._doc.img.startsWith('http') ? (
-                                                    <img class="card-img img-fluid"  src={produto._doc.img} alt="..." />
+                                                <img class="card-img img-fluid" src={produto._doc.img} alt="..." />
                                                 ) : (
-                                                    <img class="card-img img-fluid" src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`} alt="..." />
-
+                                                <img
+                                                    class="card-img img-fluid"
+                                                    src={`http://localhost:5000/images/${produto._doc.img.replace(
+                                                    'public/images/',
+                                                    ''
+                                                    )}`}
+                                                    alt="..."
+                                                />
                                                 )
-                                            :
-                                            <img class="card-img img-fluid" alt="..." />
-                                            }
+                                            ) : (
+                                                <img class="card-img img-fluid" alt="..." />
+                                            )}
                                             <div class="card-body p-4">
                                                 <div class="text-center">
-                                                    <h5 class="fw-bolder">{produto._doc.name}</h5>
+                                                <h5 class="fw-bolder">{produto._doc.name}</h5>
+                                                {this.state.tipoUser === 'consumidor' ? (
+                                                <>
                                                     {this.calculateDistance(
-                                                        parseFloat(this.state.user_lat), // Convert to float
-                                                        parseFloat(this.state.user_lon), // Convert to float
-                                                        parseFloat(produto.lat), // Convert to float
-                                                        parseFloat(produto.lon) // Convert to float
-                                                    )}Km
-                                                    <br></br>
-                                                    {produto.price}€
+                                                    parseFloat(this.state.user_lat), // Convert to float
+                                                    parseFloat(this.state.user_lon), // Convert to float
+                                                    parseFloat(produto.lat), // Convert to float
+                                                    parseFloat(produto.lon) // Convert to float
+                                                    )}
+                                                    km
+                                                    <br />
+                                                </>
+                                                ) : null}
+                                                {produto.price}€
                                                 </div>
                                             </div>
-                                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._doc._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
-                                            </div>
                                         </div>
+
                                     </div>
                                 </div> ))                   
                        }

@@ -31,6 +31,7 @@ export default class Registo extends Component {
             msgMorada: "",
             msgErroBackend: "",
             errorMsg: "",
+            addressVerif: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -61,6 +62,7 @@ export default class Registo extends Component {
             if (data && data.length > 0) {
               const { lat, lon } = data[0];
               this.setState({ lat, lon, msgMorada: "Valid address, you can proceed with your registration" });
+              this.setState({ addressVerif: true })
               console.log("entra no if")
             } else {
               this.setState({ msgMorada: "Error: Invalid address, please correct your address" });
@@ -121,74 +123,7 @@ export default class Registo extends Component {
 
         })
     };
-// const initialUserState = {
-//     type: "",
-//     fullname: "",
-//     nickname: "",
-//     morada: "",
-//     nif: "",
-//     email: "",
-//     phone: "",
-//     password: "",
-//   };
 
-//   const [type, settype] = useState(null);
-//   const [fullname, setName] = useState(null);
-//   const [nickname, setUsername] = useState(null);
-//   const [morada, setMorada] = useState(null);
-//   const [nif, setIdFiscal] = useState(null);
-//   const [email, setEmail] = useState(null);
-//   const [phone, setTelemovel] = useState(null);
-//   const [password,setPassword] = useState(null);
-//   const [confirmPassword,setConfirmPassword] = useState(null);
-
-//   const options = [
-//     { value: 'consumidor', label: 'Consumidor' },
-//     { value: 'produtor', label: 'Produtor' }
-//   ]
-
-
-//   const handleInputChange = (e) => {
-//     const {id , value} = e.target;
-//     if(id === "type"){
-//         settype(value);
-//     }
-//     if(id === "fullname"){
-//         setName(value);
-//     }
-//     if(id === "nickname"){
-//         setUsername(value);
-//     }
-//     if(id === "morada"){
-//         setMorada(value);
-//     }
-//     if(id === "nif"){
-//         setIdFiscal(value);
-//     }
-//     if(id === "email"){
-//         setEmail(value);
-//     }
-//     if(id === "phone"){
-//         setTelemovel(value);
-//     }
-//     if(id === "password"){
-//         setPassword(value);
-//     }
-//     if(id === "confirmPassword"){
-//         setConfirmPassword(value);
-//     }
-
-
-
-// const handleSubmit  = () => {
-//   console.log(type,fullname,nickname,morada,email,password,confirmPassword);
-// }
-
-// const register = () => { //da registo no user e depois vai para a home page ???? copiado do login
-//     props.register(email)
-//     console.log(type,fullname,nickname,morada,nif,email,password,confirmPassword);
-//     props.history.push('/');
-//   }
 
 render() {
     if(this.state.flag){
@@ -283,51 +218,43 @@ render() {
                                 <label></label>
                                 }
                             </div>
-                            <div class="form-group py-2">
-                            <label>NIF</label>
-                                <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="nif" onChange={(e => this.setState({ nif: e.target.value }))}  required /> </div>
-                            </div>
-                            <div class="form-group py-1 pb-2">
-                            <label>Password</label>
-                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))}  required /> </div>
-                            </div>
-                            <div class="form-group py-1 pb-2">
-                            <label>Confirm Password</label>
-                                <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }))} required /> </div>
-                            </div>
-                            <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
-                            <div class="botao">
-                                <br></br>
-                            <button type="submit"  class="btn btn-outline-light col-md-3">
-                                Register
-                            </button>
-                                {this.state.msgErroBackend !== "" || this.state.errorMsg !== "" ? (
-                                    <label>
-                                        <br />
-                                        {this.state.msgErroBackend}
-                                        {this.state.errorMsg}
-                                    </label>
-                                    ) : (
-                                    <label></label>
-                                    )}
-                            </div>
-                            
+                                {this.state.addressVerif ? 
+                                <>
+                                <div class="form-group py-2">
+                                <label>NIF</label>
+                                    <div class="input-field bg-dark"> <span class="fa fa-id-card-o px-1"></span> <input class="bg-dark text-white" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}"  id="nif" onChange={(e => this.setState({ nif: e.target.value }))}  required /> </div>
+                                </div>
+                                <div class="form-group py-1 pb-2">
+                                <label>Password</label>
+                                    <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="password" onChange={(e => this.setState({ password: e.target.value }))}  required /> </div>
+                                </div>
+                                <div class="form-group py-1 pb-2">
+                                <label>Confirm Password</label>
+                                    <div class="input-field"> <span class="fa fa-lock px-2"></span> <input class="bg-dark text-white" type="password" id="confirmPassword" onChange={(e => this.setState({ confirmPassword: e.target.value }))} required /> </div>
+                                </div>
+                                <div class="form-inline"> <input type="checkbox" name="remember" id="remember" /> <label for="remember" class="text-muted">Remember me</label> <a href="#" id="forgot" class="font-weight-bold">Forgot password?</a> </div>
+                                <div class="botao">
+                                    <br></br>
+                                    <button type="submit"  class="btn btn-outline-light col-md-3">
+                                        Register
+                                    </button>
+                                    {this.state.msgErroBackend !== "" || this.state.errorMsg !== "" ? (
+                                        <label>
+                                            <br />
+                                            {this.state.msgErroBackend}
+                                            {this.state.errorMsg}
+                                        </label>
+                                        ) : (
+                                        <label></label>
+                                        )}
+                                </div>
+                                </>
+                            :
+                            null}
                             <div class="text-center pt-4 text-muted">Already have an account? <a href="user/login">Log in</a> </div>
                         </form>
                     </div>
-                    <div class="mx-3 my-2 py-2 bordert">
-                        <div class="text-center py-3">
-                        <a href="https://wwww.facebook.com" class="px-3"> 
-                            <img id="loginimg" src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="icon do facebook"/> 
-                        </a> 
-                        <a href="https://www.google.com" class="px-2"> 
-                            <img id="loginimg" src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" alt="icon do google"/> 
-                        </a> 
-                        <a href="https://www.github.com" class="px-3"> 
-                            <img id="loginimg" src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" alt="icon do github"/> 
-                        </a>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>

@@ -64,7 +64,7 @@ a:hover{
     margin-left: 90px;
     margin-top: 21px;
 
-    width: 64%;
+    width: 67%;
     height: 40px;
 
     border: 1.5px solid #FFFFFF;
@@ -90,10 +90,14 @@ a:hover{
     margin-bottom: 5em;
 }
 
-#form1Botao{
-    width: 100%;
+#form1Botao {
+    position: absolute; /* Position the icon absolutely */
+    right: 10px; /* Adjust the right position as needed */
+    top: 50%; /* Center the icon vertically */
+    transform: translateY(-50%); /* Center the icon vertically */
+    width: 30px;
     height: 30px;
-}
+  }
 
 #iconbotao {
     bottom:20px;
@@ -347,7 +351,7 @@ body{
   .card {
     flex: 0 0 300px;
     margin: 10px;
-    height: 520px !important;
+    height: 450px !important;
   }
   
 
@@ -737,25 +741,50 @@ a[target='_blank'] {
     right: 0.5rem;
 }
 
-@media(max-width: 360px) {
+@media (max-width: 360px) {
     #forgot {
-        margin-left: 0;
-        padding-top: 10px
+      margin-left: 0;
+      padding-top: 10px;
     }
-
+  
     body {
-        height: 100%
+      height: 100%;
     }
-
+  
     .container {
-        margin: 30px 0
+      margin: 30px 0;
     }
-
+  
     .bordert:after {
-        left: 25%
+      left: 25%;
     }
-    
-}
+  
+    #form1Search {
+      box-sizing: border-box;
+      position: relative; /* Change position to relative */
+      margin-left: 12px;
+      margin-top: 4px;
+      width: calc(100% - 72px); /* Adjust the width to fit the container */
+      height: 40px;
+      border: 1.5px solid #ffffff;
+      border-radius: 33px;
+      padding-right: 40px; /* Add padding to accommodate the icon */
+    }
+  
+    #form1Botao {
+      position: absolute; /* Position the icon absolutely */
+      right: 10px; /* Adjust the right position as needed */
+      top: 50%; /* Center the icon vertically */
+      transform: translateY(-50%); /* Center the icon vertically */
+      width: 30px;
+      height: 30px;
+    }
+  
+    #iconbotao {
+      /* No changes needed */
+    }
+  }
+  
 
 .quantidade_cart{
     height:25px;
@@ -786,6 +815,13 @@ a[target='_blank'] {
     flex-direction: column;
     min-height: 100%;
     padding-bottom: 150px; /* Adjust this value based on your footer height */
+  }
+
+  .containerProduto{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding-bottom: 0px; /* Adjust this value based on your footer height */
   }
   
   .cardP {
