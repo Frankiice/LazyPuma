@@ -37,7 +37,9 @@ export default class Catalogo extends Component{
         
     }  
     componentDidMount(){
-        const {categoriaA, categoriaB, brand} = this.state;
+        const {categoriaA, categoriaB, brand, objSearch} = this.state;
+        if (!objSearch){
+            console.log("entra no obj serach nao existente")
         const base_url = "http://localhost:5000/catalogo" 
         const url = `${base_url}?&categoriaB=${categoriaB}&categoriaA=${categoriaA}&brand=${brand}`;
         console.log(url);
@@ -64,6 +66,7 @@ export default class Catalogo extends Component{
                         });
             
         })
+        }
     }
     
 
@@ -132,7 +135,7 @@ export default class Catalogo extends Component{
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var distance = R * c;
 
-        distance = distance.toFixed(2);
+        distance = distance.toFixed(0);
       
         return distance; // Distance in kilometers
       }

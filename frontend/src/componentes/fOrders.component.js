@@ -22,6 +22,7 @@ export default class OrdersF extends Component {
       filteredEncomendas: [],  
       showProducts: {},  
       msgErro: "",
+      selectedVehicleId: ""
     };
   }
   //Aplicação do filtro
@@ -278,6 +279,23 @@ degToRad(degrees) {
     window.localStorage.setItem("produtoID",produtoID )
     window.location ="/user/f/produto"
   }
+
+  countPendingProducts(up) {
+    let pendingCount = 0;
+  
+    up.produtos_encomenda.forEach((produto) => {
+      if (produto.estado === "Pending") {
+        pendingCount += 1;
+      }
+    });
+  
+    return pendingCount;
+  }
+
+  handleVehicleChange = (event) => {
+    const selectedVehicleId = event.target.value;
+    this.setState({ selectedVehicle: selectedVehicleId });
+  };
   
   
   
@@ -328,7 +346,12 @@ render() {
                                 <i className="bi bi-chevron-right"></i>
                               )}
                             </button>
-                            <i className="bi bi-building"></i>&nbsp; UP NAME: {encomenda.UP.nome}
+                            <i className="bi bi-building"></i>&nbsp; UP NAME: {encomenda.UP.nome} 
+                            {this.countPendingProducts(encomenda.UP) > 0 && (
+                              <span className="badge bg-light text-danger ms-1 rounded-pill">
+                                {this.countPendingProducts(encomenda.UP)}
+                              </span>
+                            )}
                           </h4>
                           {this.state.showProducts[encomenda.UP.nome] && (
                             <div>
@@ -378,10 +401,10 @@ render() {
                                           {encomenda.UP.veiculos.length !== 0 ? (
                                             <>
                                               {this.state.msgErro !== "" ? (
-                                                <p>{this.state.msgErro} <a  href="#" onClick={() => this.handleAddQuantity(encomenda.UP.idUP, venda.produto.produto._id)}>Add more</a></p>
+                                                <p>{this.state.msgErro} <a href="#" onClick={() => this.handleAddQuantity(encomenda.UP.idUP, venda.produto.produto._id)}>Add more</a></p>
                                               ) : (
                                                 <>
-                                                  <select className="form-select">
+                                                  <select className="form-select" onChange={this.handleVehicleChange}>
                                                     <option value="">Select a Vehicle</option>
                                                     {encomenda.UP.veiculos.map((veiculo) => (
                                                       <option value={veiculo._id} key={veiculo._id}>
@@ -390,7 +413,9 @@ render() {
                                                     ))}
                                                   </select>
                                                   &nbsp;
-                                                  <button className="btn btn-light border icon-hover-danger" onClick={(e) => this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id, venda.produto.quantidade)}>Associate</button>
+                                                  <button className="btn btn-light border icon-hover-danger" onClick={(e) => this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id, venda.produto.quantidade)} disabled={!this.state.selectedVehicle}>
+                                                    Associate
+                                                  </button>
                                                 </>
                                               )}
                                             </>

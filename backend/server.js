@@ -1009,17 +1009,17 @@ app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({email})
     if(!user){
-        return res.json({status: "error", error: "O utilizador não foi encontrado"})
+        return res.json({status: "error", error: "The user doesn't exist"})
     }
     if(await bcrypt.compare(password,user.password)){
         const token = jwt.sign({email:user.email}, JWT_SECRET)
         if(res.status(201)){
             return res.json({status:"ok", data: token, type: user.type})
         }else{
-            return res.json({status:"error", error: "Ocorreu um erro na ligação à base de dados"})
+            return res.json({status:"error", error: "An error ocurred connecting to the database"})
         }
     }
-    return res.json({status:"error", error: "Password inválida"})
+    return res.json({status:"error", error: "Wrong Password or Email"})
 });
 
 app.post("/user/userData", async (req, res) => { //este seria para aceder as infos do user

@@ -52,6 +52,7 @@ export default class Navbar extends Component{
         isCartHovered: false,
         carrinho: [],
         type: "",
+        encomendas: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCartHover = this.handleCartHover.bind(this);
@@ -135,7 +136,7 @@ export default class Navbar extends Component{
 
 
   handleSearch(){
-    const {page, categoriaA, categoriaB, search,brand, objSearch} = this.state;
+    const {page, categoriaA, categoriaB, search,brand} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este Ã© a base nao sei se aceita do outro lado mais parametros aqui
       const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&brand=${brand}&search=${search}`;
@@ -149,12 +150,6 @@ export default class Navbar extends Component{
             Accept:"application/json",
             "Access-Control-Allow-Origin":"*",
         },
-        // body:JSON.stringify({
-        //     token: window.localStorage.getItem("token"), //se daquela forma nao funcionar manda-se aqui os campos
-        //     // filterCategoria,
-        //     // page,
-        //     // search,
-        // }),
     })
     .then((res) => res.json())
     .then((data) => {
@@ -269,9 +264,41 @@ export default class Navbar extends Component{
           
           window.localStorage.setItem("user_lat", data.data.lat);
           window.localStorage.setItem("user_lon", data.data.lon);
+
+          if(data.data.type === "fornecedor"){
+            fetch(`http://localhost:5000/fornecedor/orders/${data.data._id}`)
+            .then((response) => response.json())
+            .then((data1) => {
+              console.log(data1, "EncomendaData");
+              this.setState({ encomendas: data1});
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+          }
         });
+       
     }
   }
+
+  countTotalOrders(){
+    const {encomendas} = this.state;
+  
+    let pendingCount = 0;
+  
+    encomendas.forEach((item) => {
+      const produtos_encomenda = item.UP.produtos_encomenda;
+      produtos_encomenda.forEach((produto) => {
+        if (produto.estado === "Pending") {
+          pendingCount += 1;
+        }
+      });
+    });
+  
+    return pendingCount;
+  }
+
+
   handlePre(){
     window.localStorage.removeItem("categoriaB");
     window.localStorage.removeItem("categoriaA");
@@ -334,7 +361,7 @@ export default class Navbar extends Component{
                 </li> */}
                 <li class="nav-item">
                   <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
-                    Produtos
+                    Products
                   </button>
                 </li>
               </ul>
@@ -370,8 +397,6 @@ export default class Navbar extends Component{
                     {this.state.type === "fornecedor" ? 
                       <>
                       <li><a class="dropdown-item" onClick={this.redirect_up} href="#">Production Units</a></li>
-                      <li><hr class="dropdown-divider"></hr></li>
-                      <li><a class="dropdown-item" onClick={this.redirect_ordersF} href="#">Orders</a></li>
                       <li><hr class="dropdown-divider"></hr></li>
                       <li><a class="dropdown-item" onClick={this.redirect_sales} href="#">Order History</a></li>
                       <li><hr class="dropdown-divider"></hr></li>
@@ -418,23 +443,15 @@ export default class Navbar extends Component{
                       aria-haspopup="true"
                       aria-expanded="false"
                       onMouseEnter={this.handleCartHover}
-                      onClick ={this.handleButtonClick}
-                      
-                      
-                      
-                    >
+                      onClick ={this.handleButtonClick}>
                   <i className="bi-cart-fill me-1"></i>
                   Cart
                   <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
               </button>
               <div
-                      className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
-                      aria-labelledby="cartDropdown"
-                      onMouseLeave={this.handleCartLeave}
-                      
-                      
-                      
-                    >
+                className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
+                aria-labelledby="cartDropdown"
+                onMouseLeave={this.handleCartLeave}>
                     
                   <h3 class="text-dark font-weight-bold ">Shopping Cart</h3>
                   
@@ -457,75 +474,52 @@ export default class Navbar extends Component{
                           <div class="detalhes text-dark">
                             <h5 class="text-dark">{item.nome}</h5>
                             <p class="text-dark">
-                              <span class="pt-4 text-dark">{item.preco}â‚¬</span><br></br>
-                              <small class="text-muted text-nowrap"> {item.preco_original}â‚¬ / per item </small>
+                              <span class="pt-4 text-dark">{item.preco}€</span><br></br>
+                              <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
                               
-                
-                          <div className="quantidade">
-                
-                
-                          <div className="row">
-                            <div className="col d-flex align-items-center">
-                              <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
-                              <p className="text-secondary mb-0  "> </p>
-                              <br></br>
-                              <div className="d-flex flex-column">
-                                <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
-                                <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+                              <div className="quantidade">
+                                <div className="row">
+                                  <div className="col d-flex align-items-center">
+                                    <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
+                                    <p className="text-secondary mb-0  "> </p>
+                                    <br></br>
+                                    <div className="d-flex flex-column">
+                                      <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
+                                      <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+                                    </div>
+                  
+                                  </div>
+                                </div>
                               </div>
-            
-            </div>
-          </div>
-
-
-
-
-
-
-
-
-
-
-                
-                      
-                  
-                  
-                  </div>
-                </p>
-              </div>
-              <div class="cancel">
-                <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)}></i>
-              </div>
-            </div>
-          ))
-        )}
-        </div>
-
-                    
-                      
+                            </p>
+                          </div>
+                          <div class="cancel">
+                            <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)}></i>
+                          </div>
+                        </div>
+                        ))
+                      )}
                       </div>
-                    
-
-                    
+                      </div>       
                   </div>
                   <p class="d-none">espaco</p>
-                  <p class="text-end text-dark" id="total">Total: {total}â‚¬</p>
+                  <p class="text-end text-dark" id="total">Total: {total}€</p>
                   {carrinho.length > 0 && (
               <a class="btn btn-success w-100 shadow-0 mb-2" id="checkout" href='/user/encomenda'>Checkout</a>
             )}
                     {/* <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a> */}
                     <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="carrinho" href='/cart'>View Cart</a>
-                    
-
-
-                    
-                </div>
+                   </div>
                 <div class="overlay"></div>
             </form>
           : 
-          <>
-          <form class="d-flex px-3 nav-item " >
-            <div></div></form></>} 
+              <form class="d-flex px-3 nav-item " >
+                <a className="btn btn-outline-light col-md-12" href="/user/f/orders">
+                  Orders
+                  <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalOrders()}</span>
+                </a>
+              </form>
+          } 
             
 
 

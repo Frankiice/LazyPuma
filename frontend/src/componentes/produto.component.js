@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/componentescss.css";
 import "../scripts/scripts.js";
-import { FaSearch } from "react-icons/fa"
+import { FaSearch, FaWindowRestore } from "react-icons/fa"
 import 'bootstrap';
 
 
@@ -50,6 +50,7 @@ adicionarCarrinho() {
 
     localStorage.setItem('carrinho', JSON.stringify(novoCarrinho));
     this.setState({ carrinho: novoCarrinho });
+    window.location.reload();
 
     // this.setState({ carrinho: novoCarrinho });
 
