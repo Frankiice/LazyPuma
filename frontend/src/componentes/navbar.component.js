@@ -10,30 +10,6 @@ import {useState, useEffect} from 'react';
 import axios from 'axios';
 import 'bootstrap';
 
-// const navigate = useNavigate();
-// const handleOnClickResults = useCallback(() => navigate('/results', {replace: true}), [navigate]);
-
-// import ExercisesList from "./componentes/exercises-list.component";
-// import EditExercise from "./componentes/edit-exercise.component";
-// import CreateExercise from "./componentes/create-exercise.component";
-// import CreateUser from "./componentes/create-user.component";
-//import searchResults from './componentes/searchresults.component';
-
-// const ProdutosResposta = [{primeiroNome: "Bananas", quantidade:"30", tipo: "Madeira"}]
-
-// state = {
-//   pesquisa: ""
-// };
-
-// pesquisaInput = event => {
-//   this.setState({ pesquisa: event.target.value });
-// };
-
-// Click = () => {
-//   console.log(this.state.pesquisa);
-// };
-
-// const [searchTerm, setSearchTerm] = useState('')
 
 export default class Navbar extends Component{
 
@@ -53,6 +29,7 @@ export default class Navbar extends Component{
         isCartHovered: false,
         carrinho: [],
         type: "",
+        encomendas: [],
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleCartHover = this.handleCartHover.bind(this);
@@ -136,7 +113,7 @@ export default class Navbar extends Component{
 
 
   handleSearch(){
-    const {page, categoriaA, categoriaB, search,brand, objSearch} = this.state;
+    const {page, categoriaA, categoriaB, search,brand} = this.state;
     try {
       const base_url = "http://localhost:5000/produto/search" //este Ã© a base nao sei se aceita do outro lado mais parametros aqui
       const url = `${base_url}?page=${page}&categoriaA=${categoriaA}&categoriaB=${categoriaB}&brand=${brand}&search=${search}`;
@@ -150,12 +127,6 @@ export default class Navbar extends Component{
             Accept:"application/json",
             "Access-Control-Allow-Origin":"*",
         },
-        // body:JSON.stringify({
-        //     token: window.localStorage.getItem("token"), //se daquela forma nao funcionar manda-se aqui os campos
-        //     // filterCategoria,
-        //     // page,
-        //     // search,
-        // }),
     })
     .then((res) => res.json())
     .then((data) => {
@@ -169,29 +140,6 @@ export default class Navbar extends Component{
     }
 }
 
-
-    // const [query, setQuery] = useState('')
-    // const [data, setData] = useState([])
-    // const [user, setUser] = useState(null);
-
-    // funcoes dummy --------------
-    // async function login(user = null){
-    //   setUser(user);
-    // }
-
-    // async function logout(){
-    //   setUser(null);
-    // }
-    // -----------------------------
-
-
-  //  sendSearchData = (query) => {
-  //   const fetchUsers = () => {
-  //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
-  //     this.setState({data: res.data});
-  //   };
-  //   fetchUsers();
-  // };
 
   logOut = () => {
     window.localStorage.clear();
@@ -270,9 +218,41 @@ export default class Navbar extends Component{
           
           window.localStorage.setItem("user_lat", data.data.lat);
           window.localStorage.setItem("user_lon", data.data.lon);
+
+          if(data.data.type === "fornecedor"){
+            fetch(`http://localhost:5000/fornecedor/orders/${data.data._id}`)
+            .then((response) => response.json())
+            .then((data1) => {
+              console.log(data1, "EncomendaData");
+              this.setState({ encomendas: data1});
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+          }
         });
+       
     }
   }
+
+  countTotalOrders(){
+    const {encomendas} = this.state;
+  
+    let pendingCount = 0;
+  
+    encomendas.forEach((item) => {
+      const produtos_encomenda = item.UP.produtos_encomenda;
+      produtos_encomenda.forEach((produto) => {
+        if (produto.estado === "Pending") {
+          pendingCount += 1;
+        }
+      });
+    });
+  
+    return pendingCount;
+  }
+
+
   handlePre(){
     window.localStorage.removeItem("categoriaB");
     window.localStorage.removeItem("categoriaA");
@@ -285,13 +265,7 @@ export default class Navbar extends Component{
     window.localStorage.removeItem("user_lon");
 
 }
-    // const sendSearchData = (query) => {
-    //   const fetchUsers = () => {
-    //     const res = axios.get(`http://localhost:5000/getProdutos?q=${query}`);
-    //     setData(res.data);
-    //   };
-    //   fetchUsers();
-    // };
+
 
     handleClick(e){
       const {categoriaB, categoriaA} = this.state;
@@ -327,22 +301,33 @@ export default class Navbar extends Component{
             </div>
             <div class="collapse navbar-collapse px-3" id="navbarSupportedContent">
               <ul class="navbar-nav px-3">
-                {/* <li class="nav-item active">
-                  <a class="nav-link" href="/exercise-list">Test1 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/">Test2<span class="sr-only">(current)</span></a>
-                </li> */}
                 <li class="nav-item">
                   <button id="produtosbtn" class="btn btn-outline-light p-2 px-3 col-md-12" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasScrolling">
-                    Produtos
+                    Products
                   </button>
                 </li>
               </ul>
-              <div className="input-group px-3" id="searchbar">/                                                                   {/* onChange={e => {setQuery(e.target.value)}} placeholder='Search'/> <a href="/results" onClick={() => sendSearchData(query)}*/}
-                  <div className="form-group has-search">                                                                           
-                  <div class="input-field border-0"> <input id="form1Search" className="text-white form-control inputSearch bg-dark" onChange={e => {this.setState({search: e.target.value} )}} placeholder={this.state.search === "" ? 'Search' : this.state.search}/> <a onClick={() => this.handleSearch()} id="form1Botao iconbotao"><span class="fa fa-search text-white form-control-feedback"></span></a> </div>
+              <div className="input-group px-3" id="searchbar">
+                <div className="form-group has-search">
+                  <div className="input-field border-0">
+                    <input
+                      id="form1Search"
+                      className="text-white form-control inputSearch bg-dark"
+                      onChange={e => {
+                        this.setState({ search: e.target.value });
+                      }}
+                      onKeyPress={e => {
+                        if (e.key === "Enter") {
+                          this.handleSearch();
+                        }
+                      }}
+                      placeholder={this.state.search === "" ? "Search" : this.state.search}
+                    />
+                    <a onClick={() => this.handleSearch()} id="form1Botao iconbotao">
+                      <span className="fa fa-search text-white form-control-feedback"></span>
+                    </a>
                   </div>
+                </div>
               </div>
             </div>
           
@@ -370,13 +355,11 @@ export default class Navbar extends Component{
                 <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
                     <li><a class="dropdown-item" onClick={this.redirect} href="#">Profile</a></li>
                     <li><hr class="dropdown-divider"></hr></li>
-                    <li><a class="dropdown-item" onClick={this.redirect_records} href="#">Records</a></li>
+                    <li><a class="dropdown-item" onClick={this.redirect_records} href="#">Reports</a></li>
                     <li><hr class="dropdown-divider"></hr></li>
                     {this.state.type === "fornecedor" ? 
                       <>
                       <li><a class="dropdown-item" onClick={this.redirect_up} href="#">Production Units</a></li>
-                      <li><hr class="dropdown-divider"></hr></li>
-                      <li><a class="dropdown-item" onClick={this.redirect_ordersF} href="#">Orders</a></li>
                       <li><hr class="dropdown-divider"></hr></li>
                       <li><a class="dropdown-item" onClick={this.redirect_sales} href="#">Order History</a></li>
                       <li><hr class="dropdown-divider"></hr></li>
@@ -433,13 +416,9 @@ export default class Navbar extends Component{
                   <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
               </button>
               <div
-                      className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
-                      aria-labelledby="cartDropdown"
-                      onMouseLeave={this.handleCartLeave}
-                      
-                      
-                      
-                    >
+                className={`dropdown-menu p-4 text-dark botaoCart ${isCartHovered ? 'show' : ''}`}
+                aria-labelledby="cartDropdown"
+                onMouseLeave={this.handleCartLeave}>
                     
                   <h3 class="text-dark font-weight-bold ">Shopping Cart</h3>
                   
@@ -465,53 +444,30 @@ export default class Navbar extends Component{
                               <span class="pt-4 text-dark">{item.preco}€</span><br></br>
                               <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
                               
-                
-                          <div className="quantidade">
-                
-                
-                          <div className="row">
-                            <div className="col d-flex align-items-center">
-                              <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
-                              <p className="text-secondary mb-0  "> </p>
-                              <br></br>
-                              <div className="d-flex flex-column">
-                                <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
-                                <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+                              <div className="quantidade">
+                                <div className="row">
+                                  <div className="col d-flex align-items-center">
+                                    <p className="text-secondary mb-0 ">Quantity: {item.quantidade}</p>
+                                    <p className="text-secondary mb-0  "> </p>
+                                    <br></br>
+                                    <div className="d-flex flex-column">
+                                      <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
+                                      <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+                                    </div>
+                  
+                                  </div>
+                                </div>
                               </div>
-            
-            </div>
-          </div>
-
-
-
-
-
-
-
-
-
-
-                
-                      
-                  
-                  
-                  </div>
-                </p>
-              </div>
-              <div class="cancel">
-                <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)}></i>
-              </div>
-            </div>
-          ))
-        )}
-        </div>
-
-                    
-                      
+                            </p>
+                          </div>
+                          <div class="cancel">
+                            <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)}></i>
+                          </div>
+                        </div>
+                        ))
+                      )}
                       </div>
-                    
-
-                    
+                      </div>       
                   </div>
                   <p class="d-none">espaco</p>
                   <p class="text-end text-dark" id="total">Total: {total}€</p>
@@ -520,32 +476,19 @@ export default class Navbar extends Component{
             )}
                     {/* <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="checkout" href='/user/encomenda'>Checkout</a> */}
                     <a class="btn-checkout btn btn-outline-light btn-dark col-md-12 mb-1" id="carrinho" href='/cart'>View Cart</a>
-                    
-
-
-                    
-                </div>
+                   </div>
                 <div class="overlay"></div>
             </form>
           : 
-          <>
-          <form class="d-flex px-3 nav-item " >
-            <div></div></form></>} 
+              <form class="d-flex px-3 nav-item " >
+                <a className="btn btn-outline-light col-md-12" href="/user/f/orders">
+                  Orders
+                  <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalOrders()}</span>
+                </a>
+              </form>
+          } 
             
 
-
-            {/* Login e signup buttons + informaÃ§ao sobre user logado */}
-
-            {/* Codigo para ver se user esta ou nao logado   */}
-            {/* {user ? ( // if there is a user (se for true) a primeira coisa acontece se for false acontece a segunda (depois de :)
-                    <a onClick={logout} className="nav-link" style={{cursor:'pointer'}}>
-                      Logout {user.name}
-                    </a>
-                  ) : (
-                    <Link to={"/login"} className="nav-link">
-                      Login/Registo
-                    </Link>
-                  )} */}
           </nav>
           <div class="offcanvas offcanvas-left" data-bs-scroll="true" tabindex="-1" id="sidebar">
             <div class="offcanvas-header navbar-dark bg-dark">

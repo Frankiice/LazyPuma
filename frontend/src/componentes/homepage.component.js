@@ -323,46 +323,35 @@ degToRad(degrees) {
                     unidade.listaProdutos.map((produto) => (
                     <div key={produto._id}>
                         <div class="col mb-5">
-                        <div class="card h-100 crop">
+                          <div class="card h-100 crop"
+                            onClick={() => {
+                              this.setState({ produtoID: produto._id }, this.handleProduto);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
                             {produto.img ? (
-                            produto.img.startsWith("http") ? (
+                              produto.img.startsWith('http') ? (
                                 <img class="card-img" src={produto.img} alt="..." />
-                            ) : (
+                              ) : (
                                 <img
-                                class="card-img"
-                                src={`http://localhost:5000/images/${produto.img.replace(
-                                    "public/images/",
-                                    ""
-                                )}`}
-                                alt="..."
+                                  class="card-img"
+                                  src={`http://localhost:5000/images/${produto.img.replace(
+                                    'public/images/',
+                                    ''
+                                  )}`}
+                                  alt="..."
                                 />
-                            )
+                              )
                             ) : (
-                            <img class="card-img" alt="..." />
+                              <img class="card-img" alt="..." />
                             )}
                             <div class="card-body p-4">
-                            <div class="text-center">
+                              <div class="text-center">
                                 <h5 class="fw-bolder">{produto.name}</h5>
                                 {produto.preco}€
+                              </div>
                             </div>
-                            </div>
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center">
-                                <button
-                                class="btn btn-outline-dark mt-auto"
-                                value={produto._id}
-                                onClick={(e) => {
-                                    this.setState(
-                                    { produtoID: e.target.value },
-                                    this.handleProduto
-                                    );
-                                }}
-                                >
-                                View options
-                                </button>
-                            </div>
-                            </div>
-                        </div>
+                          </div>
                         </div>
                     </div>
                     ))
@@ -381,44 +370,54 @@ degToRad(degrees) {
                 this.state.produtos.map((produto, index) => (
                      <div key={produto._id}>
                      <div class="col mb-5">
-                        <div class="card h-100 crop">
+                      <div class="card h-100 crop"
+                        onClick={() => {
+                          this.setState({ produtoID: produto._id }, this.handleProduto);
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
                         {produto.img ? (
-                            produto.img.startsWith("http") ? (
-                                <img class="card-img" src={produto.img} style={{ height: '200px' }} alt="..." />
-                            ) : (
-                                <img
-                                class="card-img"
-                                src={`http://localhost:5000/images/${produto.img.replace(
-                                    "public/images/",
-                                    ""
-                                )}`}
-                                style={{ height: '200px' }}
-                                alt="..."
-                                />
-                            )
-                            ) : (
-                            <img class="card-img" alt="..." style={{ height: '200px' }} />
+                          produto.img.startsWith('http') ? (
+                            <img
+                              class="card-img"
+                              src={produto.img}
+                              style={{ height: '200px' }}
+                              alt="..."
+                            />
+                          ) : (
+                            <img
+                              class="card-img"
+                              src={`http://localhost:5000/images/${produto.img.replace(
+                                'public/images/',
+                                ''
+                              )}`}
+                              style={{ height: '200px' }}
+                              alt="..."
+                            />
+                          )
+                        ) : (
+                          <img class="card-img" alt="..." style={{ height: '200px' }} />
                         )}
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <h5 class="fw-bolder">{produto.name}</h5>
-                                    {this.state.tipoUser === "consumidor" ?
-                                        this.calculateDistance(
-                                            parseFloat(this.state.user_lat), // Convert to float
-                                            parseFloat(this.state.user_lon), // Convert to float
-                                            parseFloat(produto.lat), // Convert to float
-                                            parseFloat(produto.lon) // Convert to float
-                                        )
-                                    :
-                                        <></>}km
-                                    <br></br>
-                                    {produto.preco}€
-                                </div>
-                            </div>
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><button class="btn btn-outline-dark mt-auto" value={produto._id} onClick={(e) => {this.setState({ produtoID: e.target.value }, this.handleProduto)}}>View options</button></div>
-                            </div>
+                        <div class="card-body p-4">
+                          <div class="text-center">
+                            <h5 class="fw-bolder">{produto.name}</h5>
+                            {this.state.tipoUser === 'consumidor' ? (
+                              <>
+                                {this.calculateDistance(
+                                  parseFloat(this.state.user_lat), // Convert to float
+                                  parseFloat(this.state.user_lon), // Convert to float
+                                  parseFloat(produto.lat), // Convert to float
+                                  parseFloat(produto.lon) // Convert to float
+                                )}
+                                km
+                                <br />
+                              </>
+                            ) : null}
+                            {produto.preco}€
+                          </div>
                         </div>
+                      </div>
+
                     </div>
                  </div>
                 ))

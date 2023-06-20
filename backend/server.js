@@ -37,7 +37,7 @@ app.use(express.json());
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { NavbarBrand } = require('react-bootstrap');
-const JWT_SECRET = "aisfnoiqnfnqnfqfinqfw+qofmwkginanpgangspaiag"
+const JWT_SECRET = process.env.JWT_SECRET;
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri);
 const connection = mongoose.connection;
@@ -126,19 +126,6 @@ const ProdutoSchema = new mongoose.Schema(
     { _id: false }
   );
 
-  const ProdutoSchema2 = new mongoose.Schema(
-    {
-      name: String, // correspondente a "name" em ProductDetailsSchema
-      brand: String, // correspondente a "brand" em ProductDetailsSchema
-      categorieA: String, // correspondente a "categorieA" em ProductDetailsSchema
-      categorieB: String, // correspondente a "categorieB" em ProductDetailsSchema
-      img: String, // correspondente a "img" em ProductDetailsSchema
-      properties: [ProductPropertiesSchema], // correspondente a "properties" em ProductDetailsSchema
-      quantidade: Number,
-      preco: Number,
-    },
-    { _id: false }
-  );
   
 
 const VeiculoSchema = new mongoose.Schema(
@@ -211,18 +198,6 @@ const NotificationsSchema = new mongoose.Schema(
       collection: "notifications"
   }
 )
-
-
-// app.get("/encomenda", async (req, res) => {
-//   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-//   try {
-//     const encomendas = await Encomenda.find();
-//     res.status(200).json(encomendas);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: true, message: "Internal Server Error" });
-//   }
-// });
 
 
 
@@ -330,7 +305,7 @@ app.get("/export/encomenda/consumidor/:idConsumidor", async (req, res) => {
     let lon;
     let nome_UP;
     for (const encomenda of encomendas) {
-      console.log(`Encomenda: ${encomenda._id}`);
+      // console.log(`Encomenda: ${encomenda._id}`);
       const produtosEncomenda = [];
       count++;
 
@@ -338,12 +313,12 @@ app.get("/export/encomenda/consumidor/:idConsumidor", async (req, res) => {
         // console.log(`objecto da listaUp da encomenda atual: ${item}`);
         // console.log(`id do produto: ${item.idProduct}`);
         // const produto = await Produto.findById(item.idProduct);
-        console.log(`id da UP:${item.idUP}`);
+        // console.log(`id da UP:${item.idUP}`);
         const idProduto = mongoose.Types.ObjectId(item.idProduct);
         const produto = await Produto.findById(idProduto);
         const idUP = mongoose.Types.ObjectId(item.idUP);
         const UP = await UnidadeProducao.findById(idUP);
-        console.log(`UP: ${UP}`);
+        // console.log(`UP: ${UP}`);
         // console.log(`Produto: ${produto}`);
         lat = UP.lat;
         lon = UP.lon;
@@ -368,7 +343,8 @@ app.get("/export/encomenda/consumidor/:idConsumidor", async (req, res) => {
           console.log(`produtosEncomenda: ${produtosEncomenda}`);
         }
       }
-      const dataEncomenda = encomenda.dataEncomenda;
+      const dataEncomenda = encomenda.dataEncomenda.toString();
+      console.log("dataEncomenda", dataEncomenda)
       const partes = dataEncomenda.split(" ");
       const data = `${partes[1]} ${partes[2]} ${partes[3]}`;
         
@@ -1022,17 +998,17 @@ app.post("/user/login", async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({email})
     if(!user){
-        return res.json({status: "error", error: "O utilizador não foi encontrado"})
+        return res.json({status: "error", error: "The user doesn't exist"})
     }
     if(await bcrypt.compare(password,user.password)){
         const token = jwt.sign({email:user.email}, JWT_SECRET)
         if(res.status(201)){
             return res.json({status:"ok", data: token, type: user.type})
         }else{
-            return res.json({status:"error", error: "Ocorreu um erro na ligação à base de dados"})
+            return res.json({status:"error", error: "An error ocurred connecting to the database"})
         }
     }
-    return res.json({status:"error", error: "Password inválida"})
+    return res.json({status:"error", error: "Wrong Password or Email"})
 });
 
 app.post("/user/userData", async (req, res) => { //este seria para aceder as infos do user
@@ -1490,6 +1466,7 @@ app.get("/produto", async (req, res) => {
     }
 });
 
+//usado no produto para obter 4 produtos da mesma unidade de producao
 app.get('/unidadeProducao/:id', async (req, res) => {
   const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
   const Product = mongoose.model("products", ProductDetailsSchema);

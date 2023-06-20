@@ -159,12 +159,12 @@ fetch("http://localhost:5000/user/unidadeProducao",{
     if (data.status === "error") {
         throw new Error(data.error); // Throw an error if the response has the status "error"
       }else{
-        this.setState({ msg: "Produtcion Unit updated successfully" });
+        this.setState({ msg: "Production Unit updated successfully" });
       }
 })
 .catch((error) => {
     console.log(error);
-    this.setState({ msg: "Error updating Produtcion Unit" }); // Set the error message in the state
+    this.setState({ msg: "Error updating Production Unit" }); // Set the error message in the state
 });
 };
   
@@ -258,7 +258,7 @@ render() {
                         <div class="form-group">
                             <label>Capacity (m&sup3;)  </label>
                             <div class="input-field "> 
-                                <input type="number" id="upCapacity" onChange={(e => this.setState({ upCapacity: e.target.value }))} value={this.state.upCapacity} required/>
+                                <input type="number" id="upCapacity" onChange={(e => this.setState({ upCapacity: e.target.value }))} value={this.state.upCapacity} min="1" required/>
                             </div>
                         </div>
                     </div>

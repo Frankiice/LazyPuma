@@ -362,6 +362,7 @@ render() {
                             id="quantity"
                             value={this.state.quantity}
                             onChange={(e) => this.setState({ quantity: e.target.value })}
+                            min="1"
                             required
                             />
                         </div>
@@ -540,6 +541,7 @@ render() {
                             type="number"
                             id="quantity"
                             onChange={(e) => this.setState({ quantity: e.target.value })}
+                            min="1"
                             required
                             />
                         </div>
@@ -612,9 +614,7 @@ render() {
 
                 </div>
                 </div>
-                <div>
-                <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/allup">Back </a>
-                </div>
+        
 
             </div>
     :

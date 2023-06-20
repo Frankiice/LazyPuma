@@ -283,7 +283,7 @@ render() {
                                         <div class="form-group">
                                             <label>Street</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ rua: e.target.value }))} placeholder={this.state.rua}/>
+                                            <input type="text" class="bg-dark text-white" id="rua" onChange={(e => this.setState({ rua: e.target.value }))} placeholder={this.state.rua}/>
                                             </div>
                                         </div>
                                     </div>
@@ -291,7 +291,7 @@ render() {
                                         <div class="form-group">
                                             <label>Location</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ localidade: e.target.value }))} placeholder={this.state.localidade}/>
+                                            <input type="text" class="bg-dark text-white" id="localidade" onChange={(e => this.setState({ localidade: e.target.value }))} placeholder={this.state.localidade}/>
                                             </div>
                                         </div>
                                     </div>
@@ -299,7 +299,7 @@ render() {
                                         <div class="form-group">
                                             <label>Parish</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ freguesia: e.target.value }))} placeholder={this.state.freguesia}/>
+                                            <input type="text" class="bg-dark text-white" id="freguesia" onChange={(e => this.setState({ freguesia: e.target.value }))} placeholder={this.state.freguesia}/>
                                             </div>
                                         </div>
                                     </div>
@@ -307,7 +307,7 @@ render() {
                                         <div class="form-group">
                                             <label>County</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ concelho: e.target.value }))} placeholder={this.state.concelho}/>
+                                            <input type="text" class="bg-dark text-white" id="concelho" onChange={(e => this.setState({ concelho: e.target.value }))} placeholder={this.state.concelho}/>
                                             </div>
                                         </div>
                                     </div>
@@ -315,7 +315,7 @@ render() {
                                         <div class="form-group">
                                             <label>Postal Code</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" pattern="\d{4}-\d{3}" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cod_postal: e.target.value }))} placeholder={this.state.cod_postal}/>
+                                            <input type="text" pattern="\d{4}-\d{3}" class="bg-dark text-white" id="cod_postal" onChange={(e => this.setState({ cod_postal: e.target.value }))} placeholder={this.state.cod_postal}/>
                                             </div>
                                         </div>
                                     </div>
@@ -323,7 +323,7 @@ render() {
                                         <div class="form-group">
                                             <label>City</label>
                                             <div class="input-field bg-dark"> 
-                                            <input type="text" class="bg-dark text-white" id="morada" onChange={(e => this.setState({ cidade: e.target.value }))} placeholder={this.state.cidade}/>
+                                            <input type="text" class="bg-dark text-white" id="cidade" onChange={(e => this.setState({ cidade: e.target.value }))} placeholder={this.state.cidade}/>
                                             </div>
                                         </div>
                                     </div>
