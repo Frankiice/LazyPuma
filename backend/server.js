@@ -37,7 +37,7 @@ app.use(express.json());
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { NavbarBrand } = require('react-bootstrap');
-const JWT_SECRET = "aisfnoiqnfnqnfqfinqfw+qofmwkginanpgangspaiag"
+const JWT_SECRET = process.env.JWT_SECRET;
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri);
 const connection = mongoose.connection;
@@ -126,19 +126,6 @@ const ProdutoSchema = new mongoose.Schema(
     { _id: false }
   );
 
-  const ProdutoSchema2 = new mongoose.Schema(
-    {
-      name: String, // correspondente a "name" em ProductDetailsSchema
-      brand: String, // correspondente a "brand" em ProductDetailsSchema
-      categorieA: String, // correspondente a "categorieA" em ProductDetailsSchema
-      categorieB: String, // correspondente a "categorieB" em ProductDetailsSchema
-      img: String, // correspondente a "img" em ProductDetailsSchema
-      properties: [ProductPropertiesSchema], // correspondente a "properties" em ProductDetailsSchema
-      quantidade: Number,
-      preco: Number,
-    },
-    { _id: false }
-  );
   
 
 const VeiculoSchema = new mongoose.Schema(
@@ -198,18 +185,6 @@ const EncomendaSchema = new mongoose.Schema(
         collection: "encomenda"
     }
 )
-
-
-// app.get("/encomenda", async (req, res) => {
-//   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
-//   try {
-//     const encomendas = await Encomenda.find();
-//     res.status(200).json(encomendas);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: true, message: "Internal Server Error" });
-//   }
-// });
 
 
 
