@@ -349,7 +349,7 @@ export default class Navbar extends Component{
                 <ul class="dropdown-menu botaoPerfilDropdown" aria-labelledby="perfilDropdown">
                     <li><a class="dropdown-item" onClick={this.redirect} href="#">Profile</a></li>
                     <li><hr class="dropdown-divider"></hr></li>
-                    <li><a class="dropdown-item" onClick={this.redirect_records} href="#">Records</a></li>
+                    <li><a class="dropdown-item" onClick={this.redirect_records} href="#">Reports</a></li>
                     <li><hr class="dropdown-divider"></hr></li>
                     {this.state.type === "fornecedor" ? 
                       <>

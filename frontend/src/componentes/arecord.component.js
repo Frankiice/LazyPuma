@@ -227,7 +227,7 @@ componentDidMount() {
         fetch(`http://localhost:5000/administrador/relatorios`)
         .then((response) => response.json())
         .then((data1) => {
-        //   console.log(data1, 'EncomendaData');
+          console.log(data1, 'EncomendaData');
           this.setState({ encomendas: data1, filteredEncomendas: data1 });
           let produtos = [];
           let produtos2 = [];

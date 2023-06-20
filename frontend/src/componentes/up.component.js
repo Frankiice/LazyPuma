@@ -681,9 +681,9 @@ render() {
                       <br></br>
                           <h4 class="text-secondary justify-content-md-center">{this.state.msgRemoved}!</h4>
                       </div>
-                      <div>
+                      {/* <div>
                       <a type="submit" className="btn btn-outline-light btn-dark col-md-3 botaoPerfil" href="/user/f/allup">Back </a>
-                      </div>
+                      </div> */}
                     
                   </div>
              )

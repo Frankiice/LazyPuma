@@ -41,6 +41,8 @@ export default class EncomendasC extends Component {
         (!endDate || dataEncomenda <= endDate)
       );
     });
+
+    console.log("filteredByDate", filteredByDate)
   
     // Filtrar por categorias
     const filteredByCategory = filteredByDate.filter((encomenda) => {
@@ -130,6 +132,7 @@ export default class EncomendasC extends Component {
 //funcoes o filtro da data
 
   handleStartDateChange = (date) => {
+    console.log("date", date)
     this.setState({
       startDate: date
     });
@@ -231,7 +234,7 @@ degToRad(degrees) {
           });
       
       
-      fetch(`http://localhost:5000/export/encomenda/consumidor/${this.state.id_consumidor}`)
+      fetch(`http://localhost:5000/export/encomenda/consumidor/${data.data._id}`)
       .then((response) => response.json())
       .then((data1) => {
         console.log(data1, "JSON");

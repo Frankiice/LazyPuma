@@ -35,17 +35,11 @@ export default class Login extends Component {
 
     };
   }
-  handleStartDateChange = (date) => {
-    this.setState({ startDate: date });
-  };
-  
-  handleEndDateChange = (date) => {
-    this.setState({ endDate: date });
-  };
-  
+
   //Aplicação do filtro
   filtrarEncomendas = () => {
     const { startDate, endDate, selectedCategories } = this.state;
+    console.log( "startDate", startDate)
   
     // Filtrar os dados baseado nas datas
     let filteredData = this.state.encomendas;
@@ -149,6 +143,7 @@ if (selectedCategories.length > 0) {
 //funcoes o filtro da data
 
   handleStartDateChange = (date) => {
+    console.log("handleStartDateChange", date)
     this.setState({
       startDate: date
     });
@@ -223,7 +218,7 @@ componentDidMount() {
         fetch(`http://localhost:5000/relatorios/consumidor/${data.data._id}`)
         .then((response) => response.json())
         .then((data1) => {
-        //   console.log(data1, 'EncomendaData');
+          console.log(data1, 'EncomendaData');
           this.setState({ encomendas: data1, filteredEncomendas: data1 });
           let produtos = [];
           let produtos2 = [];
