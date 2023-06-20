@@ -199,6 +199,19 @@ const EncomendaSchema = new mongoose.Schema(
     }
 )
 
+const NotificationsSchema = new mongoose.Schema(
+  {
+      idFrom: String,
+      idTo: String,
+      title: String,
+      mensagem: String,
+      dateMsg: Date,
+  },
+  {
+      collection: "notifications"
+  }
+)
+
 
 // app.get("/encomenda", async (req, res) => {
 //   const Encomenda = mongoose.model("encomenda", EncomendaSchema);
@@ -1751,6 +1764,22 @@ app.post("/user/encomenda", async (req, res) => {
       res.send({ status: "error", error: error });
     }
   });
+
+app.get("/notifications/:idUserLogged", async (req, res) => {
+  const Notifications = mongoose.model("notifications", NotificationsSchema);
+
+  try {
+    const idUserLogged = req.params.idUserLogged;
+    console.log("idUserLogged", idUserLogged);
+
+    const notifications = await Notifications.find({ idTo: idUserLogged });
+
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
 
 app.post("/user/unidadeProducao", async (req, res) => {
   try {

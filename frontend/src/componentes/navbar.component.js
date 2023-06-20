@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Notification from './Notification.component';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/componentescss.css";
 import "../scripts/scripts.js";
@@ -316,7 +317,7 @@ export default class Navbar extends Component{
       
       return (
         <React.Fragment>
-          <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-3 ">
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0 py-2 ">
             
             {/* Logo e imagem do navbar */}
             
@@ -347,6 +348,10 @@ export default class Navbar extends Component{
           
             <ul class="navbar-nav mr-auto">
               {/* <a class="nav-link" href="/login"><i class="bi bi-person-circle"></i> Login/Registo <span class="sr-only">(current)</span></a> */}
+              {/* Notificao */}
+              <div>
+                <Notification />
+              </div>
               {this.state.loggedIn ? 
               // <li class="nav-item active px-2">
               //   <div class="dropdown">
@@ -410,7 +415,7 @@ export default class Navbar extends Component{
               <div></div></form>
               </>
               :
-            <form class="d-flex px-3 nav-item " >
+            <form class="d-flex px-2 nav-item mx-2" >
             <button
                       className="btn btn-outline-light col-md-12 dropdown-hover"
                       id="cartDropdown"
@@ -423,7 +428,7 @@ export default class Navbar extends Component{
                       
                       
                     >
-                  <i className="bi-cart-fill me-1"></i>
+                  <i className="bi-cart-fill me-2" style={{ fontSize: '1rem', marginRight: '0.5rem' }}></i>
                   Cart
                   <span className="badge bg-dark text-white ms-1 rounded-pill">{this.countTotalProducts()}</span>
               </button>
@@ -457,8 +462,8 @@ export default class Navbar extends Component{
                           <div class="detalhes text-dark">
                             <h5 class="text-dark">{item.nome}</h5>
                             <p class="text-dark">
-                              <span class="pt-4 text-dark">{item.preco}â‚¬</span><br></br>
-                              <small class="text-muted text-nowrap"> {item.preco_original}â‚¬ / per item </small>
+                              <span class="pt-4 text-dark">{item.preco}€</span><br></br>
+                              <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
                               
                 
                           <div className="quantidade">
@@ -509,7 +514,7 @@ export default class Navbar extends Component{
                     
                   </div>
                   <p class="d-none">espaco</p>
-                  <p class="text-end text-dark" id="total">Total: {total}â‚¬</p>
+                  <p class="text-end text-dark" id="total">Total: {total}€</p>
                   {carrinho.length > 0 && (
               <a class="btn btn-success w-100 shadow-0 mb-2" id="checkout" href='/user/encomenda'>Checkout</a>
             )}

@@ -32,26 +32,38 @@ use('lazypuma');
 //       }
 //    }
 // })
-const produtos = [
-    {
-        "name": "Art of War",
-        "author": "Sun Tzu",
-        "categorieA": "Historical",
-        "categorieB": "Books"
-    },
-    {
-        "name": "Sherlock Holmes Series",
-        "author": "Arthur Conan Doyle",
-        "categorieA": "Romance",
-        "categorieB": "Books"
-    }
-];
+// const produtos = [
+//     {
+//         "name": "Art of War",
+//         "author": "Sun Tzu",
+//         "categorieA": "Historical",
+//         "categorieB": "Books"
+//     },
+//     {
+//         "name": "Sherlock Holmes Series",
+//         "author": "Arthur Conan Doyle",
+//         "categorieA": "Romance",
+//         "categorieB": "Books"
+//     }
+// ];
 
   
 
 
 
-db.products.insertMany(produtos)
+// db.products.insertMany(produtos)
+
+const notificacao = [
+    {
+        idFrom: "123",
+        idTo: "456",
+        title: "Encomenda Shipped!",
+        mensagem: "Your order has been shipped!",
+        dateMsg: new Date()
+    }
+];
+
+db.notifications.insertOne(notificacao)
 
 // db.products.find({"categorieB": "Gardening"})
 
