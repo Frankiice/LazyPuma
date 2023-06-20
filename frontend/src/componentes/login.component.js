@@ -50,7 +50,11 @@ export default class Login extends Component {
               window.localStorage.setItem("token", data.data);
               window.localStorage.setItem("loggedIn", true);
               window.localStorage.setItem("tipoUser", data.type);
-              window.location.href = "/";
+              if(data.type==="admin"){
+                window.location.href = "./admin";
+              }else{
+                window.location.href = "/";
+              }
               // if(data.type=="consumidor"){  //se for consumidor
               //   window.location.href = "./c";
               // }else{ //se for fornecedor
