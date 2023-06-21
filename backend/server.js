@@ -1742,6 +1742,84 @@ app.post("/user/encomenda", async (req, res) => {
     }
   });
 
+app.post("/user/notificationsOrders", async (req, res) => {
+
+  try {
+    const Notifications = mongoose.model("notifications", NotificationsSchema);
+    const ProductDetails = mongoose.model("productdetails", ProductDetailsSchema)
+
+    const { idFrom, idTo, produtoID, title, dateMsg } = req.body;
+
+    console.log(req.body);
+
+    const product = await ProductDetails.findById(produtoID);
+
+    if (!product) {
+      return res.status(404).json({ status: "error", error: "Product not found" });
+    }
+
+    let mensagem = `The product ${product.name} was shipped!`
+
+    await Notifications.create({
+      idFrom,
+      idTo,
+      title,
+      mensagem,
+      dateMsg,
+    });
+
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error", error: error });
+  }
+});
+
+app.post("/user/notificationsEncomendas", async (req, res) => {
+  try {
+    const Notifications = mongoose.model("notifications", NotificationsSchema);
+    const ProductDetails = mongoose.model("productdetails", ProductDetailsSchema);
+    const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
+    const User = mongoose.model("users", UserDetailsSchema);
+
+    const { idFrom, title, dateMsg, infoProdutos } = req.body;
+
+    console.log(req.body);
+
+    const notifications = [];
+
+    const user = await User.findOne(idFrom);
+
+    for (const infoProduto of infoProdutos) {
+      const { idProduto, quantidadeCompra } = infoProduto;
+      const unidadeProducao = await UnidadeProducao.findOne({
+        "listaProdutos.idProduto": idProduto,
+      }).lean();
+
+      if (unidadeProducao) {
+        const { _id, idFornecedor } = unidadeProducao;
+
+        const mensagem = `An order was just placed by Name: ${user.name} or Nickname: ${user.swag}`;
+
+        const notification = {
+          idFrom,
+          idTo: idFornecedor,
+          title,
+          mensagem,
+          dateMsg,
+        };
+
+        notifications.push(notification);
+      }
+    }
+
+    await Notifications.create(notifications);
+
+    res.send({ status: "ok" });
+  } catch (error) {
+    res.send({ status: "error", error: error });
+  }
+});
+
 app.get("/notifications/:idUserLogged", async (req, res) => {
   const Notifications = mongoose.model("notifications", NotificationsSchema);
 

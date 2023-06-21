@@ -5,6 +5,7 @@ import { MDBCheckbox } from 'mdb-react-ui-kit';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Autosuggest from "react-autosuggest";
+import { now } from "mongoose";
 
 export default class OrdersF extends Component {
   constructor(props) {
@@ -254,7 +255,7 @@ degToRad(degrees) {
         // Handle the response data
         if(data.status === "ok"){
           console.log(data.data, "Veiculo Associado");
-          window.location.reload();
+          //window.location.reload();
         }else{
           console.log(data.message)
           this.setState({ msgErro: data.message})
@@ -263,6 +264,56 @@ degToRad(degrees) {
       .catch((error) => {
         console.log('Error:', error);
         // Handle any errors
+      });
+  }
+
+  handleNotificationSend(consumidorID, produtoID, quantidade) {
+    fetch("http://localhost:5000/user/userData", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const idFrom = data.data._id; // Set idFrom as the idLogado value
+
+        this.setState({ nickname: data.data.nickname, idLogado: idFrom, lat_user:data.data.lat, lon_user: data.data.lon});
+        fetch("http://localhost:5000/user/notificationsOrders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idFrom,
+          idTo: consumidorID,
+          produtoID: produtoID,
+          title: "Produto Shipped",
+          dateMsg: new Date(),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            // Notification creation successful
+            console.log("Notification created successfully!");
+            // Perform any additional actions here
+          } else {
+            // Notification creation failed
+            console.log("Error creating notification:", data.error);
+            // Handle the error or display an error message
+          }
+        })
+        .catch((error) => {
+          console.log("Error creating notification:", error);
+          // Handle the error or display an error message
+        });
       });
   }
 
@@ -413,7 +464,14 @@ render() {
                                                     ))}
                                                   </select>
                                                   &nbsp;
-                                                  <button className="btn btn-light border icon-hover-danger" onClick={(e) => this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id, venda.produto.quantidade)} disabled={!this.state.selectedVehicle}>
+                                                  <button
+                                                    className="btn btn-light border icon-hover-danger"
+                                                    onClick={(e) => {
+                                                      this.handleVehicleSelection(e, venda.consumidor_id, venda.produto.produto._id, venda.produto.quantidade);
+                                                      this.handleNotificationSend(venda.consumidor_id, venda.produto.produto._id, venda.produto.quantidade);
+                                                    }}
+                                                    disabled={!this.state.selectedVehicle}
+                                                  >
                                                     Associate
                                                   </button>
                                                 </>

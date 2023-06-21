@@ -359,6 +359,35 @@ function Confirmation(props) {
           console.log("Erro ao criar encomenda:", error);
           // Handle the error or display an error message
         });
+
+      fetch("http://localhost:5000/user/notificationsEncomendas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idFrom: idConsumidor,
+          title: "Encomenda criada!",
+          dateMsg: new Date(),
+          infoProdutos
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "ok") {
+            // Notification creation successful
+            console.log("Notification created successfully!");
+            // Perform any additional actions here
+          } else {
+            // Notification creation failed
+            console.log("Error creating notification:", data.error);
+            // Handle the error or display an error message
+          }
+        })
+        .catch((error) => {
+          console.log("Error creating notification:", error);
+          // Handle the error or display an error message
+        });
     } else {
       console.log("swag")
     }
@@ -567,12 +596,6 @@ getSectionComponent(s) {
         </div>
         <div class="stepsEncomenda" style={{padding: '25px'}}>
           { this.getSectionComponent(this.state.activeStep) }
-          { 
-          (this.state.activeStep !== 0 && this.state.activeStep !== this.steps.length) && <button onClick={ () => this.setState({ activeStep: this.state.activeStep - 1 }) }>Previous</button>
-          }
-          { 
-          this.state.activeStep !== this.steps.length - 1 && <button onClick={ () => this.setState({ activeStep: this.state.activeStep + 1 }) }>Next</button>
-          }
         </div>
         </React.Fragment>
       :
