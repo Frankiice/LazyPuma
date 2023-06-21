@@ -31,8 +31,5 @@ jobs:
     - name: Send greeting
       run: echo "Hello world"
       
-    - name: Check code
-      run: actions/checkout@v2
-      
     - name: Run Super-Linter
       run: github/super-linter@v3
