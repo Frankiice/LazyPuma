@@ -32,5 +32,6 @@ jobs:
       run: echo "Hello world"
       
     - name: conta
-      run: 1+1 
+      if: 1+1 == 2
+      run: echo "Conta certa"
   
