@@ -7,18 +7,18 @@ html, body {
     height: 80px;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: white;
-    opacity: 1; /* Firefox */
+/* ::placeholder { 
+    color: white !important;; 
+    opacity: 1;
+  }
+
+   :-ms-input-placeholder { 
+    color: white !important;
   }
   
-  :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: white;
-  }
-  
-  ::-ms-input-placeholder { /* Microsoft Edge */
-    color: white;
-  }
+  ::-ms-input-placeholder { 
+    color: white !important;
+  } */
 
 a {
     color: #84b3ff;
@@ -33,6 +33,11 @@ a:hover{
     width: 40%;
     padding: 10px;
 }
+
+.breadcrumb a{
+    color:#28242c
+}
+
 
 .scrollcontainer {
 	cursor: grab;
@@ -59,11 +64,16 @@ a:hover{
     margin-left: 90px;
     margin-top: 21px;
 
-    width: 64%;
+    width: 75%;
     height: 40px;
 
     border: 1.5px solid #FFFFFF;
     border-radius: 33px;
+}
+
+.detailsEncomenda::placeholder {
+    color: rgba(255, 255, 255, 0.658) !important;; 
+    opacity: 0.5;/* Firefox */
 }
 
 .has-search .form-control {
@@ -80,10 +90,15 @@ a:hover{
     margin-bottom: 5em;
 }
 
-#form1Botao{
-    width: 100%;
+#form1Botao {
+    position: relative; /* Position the icon absolutely */
+    right: 30px; /* Adjust the right position as needed */
+    top: 50%; /* Center the icon vertically */
+    transform: translateY(-50%); /* Center the icon vertically */
+    width: 30px;
     height: 30px;
-}
+    top:25px;
+  }
 
 #iconbotao {
     bottom:20px;
@@ -142,7 +157,7 @@ body{
 
 .footer {
     position: relative;
-    margin-top: 166px; /* negative value of footer height */
+    /* margin-top: 166px; negative value of footer height */
     height: 150px;
     clear:both;
     padding-top:20px;
@@ -253,6 +268,8 @@ body{
     width: -1%;
 }
 
+
+
 .botaoCart{
     /* display: none;
     position: absolute; */
@@ -266,12 +283,13 @@ body{
     right: auto;
      */
     position: absolute;
-    left: 800px;
-    transform: translateX(-75%) translateY(6%);
+    left: 1800px;
+    transform: translateX(-74%) translateY(8%);
 
     overflow-y:auto;
-    min-height: 00px;
-    min-width:600px;
+    max-height: 810px;
+    min-width:400px;
+    
     /* max-height: 400px;
     max-width:300px; */
 }
@@ -280,28 +298,128 @@ body{
     overflow-y:auto;
     overflow-x:auto;
     
+    
+}
+.items-carrinho{
+    overflow: auto;
+    max-height: 580px;
+    
 }
 .carrinho-item{
     display:grid;
     grid-template-columns: 3fr 6fr 1fr;
     padding:5% 2%;
     background-color: #ffffff;
-    border-style: solid;
+    /* border-style: solid; */
     border-width: 1px;
     border-radius: 5px;
+    max-height: 300px;
+    margin-bottom: 5px;
 }
-
+.carrinho-vazio{
+    
+    /* background-color: #ffffff; */
+    /* border-style: solid; */
+    border-width: 1px;
+    border-radius: 5px;
+    padding-top: 50px;
+    padding-left: 29%;
+    height: 100px;
+    margin-bottom: 5px;
+}
 .carrinho-item img{
     width: 100%;
     padding-right: 30px;
 }
 
 .cancel{
-    padding-left: 40px;
+    padding-left: 0px;
+    
     
 }
 
+/* .card-img-top{
+    float: center;
+    max-height: 250px;
+    object-fit: center;
+   
+} */
 
+.cardP-body{
+    overflow-x: hidden;
+}
+  
+  .card {
+    flex: 0 0 300px;
+    margin: 10px;
+    height: 450px !important;
+  }
+  
+  .notification-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 16px;
+    /* Add any other styles you want */
+  }
+  
+  .dropdown-menu {
+    top: 100%;
+  }
+
+  
+  .img-fluid {
+    height: 280px;
+    object-fit: contain;
+    width: auto;
+  }
+  
+
+.btn-checkout:hover{
+    border-color: #000000;
+}
+
+.stepsEncomenda {
+    margin-left: auto;
+    margin-right: auto;
+}
+/* .containerProduto{
+    min-height: 300px;
+    max-height: 300px;
+    width: auto;
+} */
+
+/* .crop {
+    height: 250px;
+    width: auto;
+    overflow: hidden;
+}
+.crop img {
+    height: auto;
+    width: 250px;
+} */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 1;
+    display: none;
+  }
+  
+  .dropdown-wrapper:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-wrapper:hover .overlay {
+    display: block;
+  }
 
 
 
@@ -314,6 +432,9 @@ body{
 .container {
     margin: 50px auto;
 }
+.filters {
+    text-align: left;
+  }
 
 .panel-heading {
     text-align: center;
@@ -382,65 +503,83 @@ input[type='password'] {
 
 a[target='_blank'] {
     position: relative;
-    transition: all 0.1s ease-in-out
-}
-
-.bordert {
+    transition: all 0.1s ease-in-out;
+  }
+  
+  .bordert {
     border-top: 1px solid #aaa;
-    position: relative
-}
-
-.bordert:after {
+    position: relative;
+  }
+  
+  .bordert:after {
     content: "or connect with";
     position: absolute;
     top: -13px;
     left: 33%;
     background-color: #fff;
-    padding: 0px 8px
-}
-
-.btn-xl {
-    padding: 50px;
-    width:10%;
-    display:block;
+    padding: 0px 8px;
+  }
+  
+  .btn-xl {
+    padding: 0;
     height: 140px;
     width: 140px;
     border-radius: 50%;
-    margin:20px 20px 20px 20px; 
+    margin: 20px;
     border: none;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease 0s;
     cursor: pointer;
     outline: none;
     font-size: 0;
-}
+  }
 
-.btn-xl:hover {
+  
+  .btn-xl:hover {
     box-shadow: 0px 15px 20px rgba(53, 52, 52, 0.4);
-    color: #ffffff;
+    /* color: #ffffff; */
     transform: translateY(-7px);
-    font-size: 16px;
-    
-}
+    /* font-size: 16px; */
+  }
+  
 
-.scrollmenu {
-    overflow: auto;
+  .scrollmenu {
     white-space: nowrap;
     background-color: #F2F4F5;
-    overflow-y:hidden;
+    overflow-y: hidden;
     cursor: grab;
-}
+    flex-wrap: nowrap;
+    transition: transform 0.3s ease; /* Add a transition for smooth sliding */
+  }
+  
+  .scrollmenu:hover {
+    cursor: grabbing; /* Change cursor to a grabbing hand when dragging */
+  }
+  
+  .scrollmenu.dragging {
+    cursor: grabbing; /* Change cursor to a grabbing hand when actively dragging */
+  }
+  
+  .scrollmenu .row {
+    flex-wrap: nowrap;
+  }
+  .btn-toolbar{
+    display: block;
+  }
 
-.scrollmenu:active {
-    cursor: grabbing;
-}
-
-.scrollmenu .btn-xl {
+/* .scrollmenu .btn-xl{
     display: inline-block;
-}
+} */
 
-#buttons_header{
+/* #buttons_header{
     display: inline-block;
+} */
+
+.butaoBLA{
+    /* background-image: url("https://ae01.alicdn.com/kf/H9bcc7fb7e08e4842a77427fabfe599e9j/100cm-djungelskog-urso-marrom-brinquedo-de-pel-cia-macio-animal-de-pel-cia-gigante-mr-boss.jpg_Q90.jpg_.webp");; */
+    background-size: contain;
+    background-position: 40px 20px 65px;   
+    text-align: center;
 }
 
 #butao1{
@@ -454,7 +593,7 @@ a[target='_blank'] {
     background-image: url('../images/bebe.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:3.1em;
     
 }
@@ -463,7 +602,7 @@ a[target='_blank'] {
     background-image: url('../images/desporto.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.1em;
 }
 
@@ -471,7 +610,7 @@ a[target='_blank'] {
     background-image: url('../images/animais.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:2.4em;
 }
 
@@ -479,15 +618,15 @@ a[target='_blank'] {
     background-image: url('../images/beleza.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
-    padding:2.7em;
+    text-align: center;
+    padding:1.8em;
 }
 
 #butao6{
     background-image: url('../images/bricolagem.jpg');
     background-size: contain;
     background-position: 40px 20px 65px;
-    text-align: justify;
+    text-align: center;
     padding:1.5em;
 }
 
@@ -576,17 +715,36 @@ a[target='_blank'] {
     padding:1.7em;
 }
 
-#butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
+/* #butao1:hover, #butao2:hover, #butao3:hover, #butao4:hover, #butao5:hover, #butao6:hover, #butao7:hover, #butao8:hover, #butao9:hover, #butao10:hover, #butao11:hover,#butao12:hover, #butao13:hover, #butao14:hover, #butao15:hover{
     background-image:none;
-}
+} */
 
 .cor_header{
     background-color: #F2F4F5;
 }
+
 .height_header{
-    height: 183px;
+    height: 200px;
     
 }
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+  }
+  
+  .button-container .btn {
+    margin-bottom: 10px;
+  }
+  
+  .button-name {
+    font-size: 14px;
+  }
+  
 
 #inputQuantity{
     max-width: 3rem;
@@ -597,22 +755,250 @@ a[target='_blank'] {
     right: 0.5rem;
 }
 
-@media(max-width: 360px) {
+@media (max-width: 360px) {
     #forgot {
-        margin-left: 0;
-        padding-top: 10px
+      margin-left: 0;
+      padding-top: 10px;
     }
-
+  
     body {
-        height: 100%
+      height: 100%;
     }
-
+  
     .container {
-        margin: 30px 0
+      margin: 30px 0;
     }
-
+  
     .bordert:after {
-        left: 25%
+      left: 25%;
     }
+  
+    #form1Search {
+      box-sizing: border-box;
+      position: relative; /* Change position to relative */
+      margin-left: 12px;
+      margin-top: 4px;
+      width: calc(100% - 72px); /* Adjust the width to fit the container */
+      height: 40px;
+      border: 1.5px solid #ffffff;
+      border-radius: 33px;
+      padding-right: 40px; /* Add padding to accommodate the icon */
+    }
+  
+    #form1Botao {
+      position: absolute; /* Position the icon absolutely */
+      right: 10px; /* Adjust the right position as needed */
+      top: 50%; /* Center the icon vertically */
+      transform: translateY(-50%); /* Center the icon vertically */
+      width: 30px;
+      height: 30px;
+    }
+  
+  }
+  
+
+.quantidade_cart{
+    height:25px;
+    width:25px;
+   
 }
 
+.quantidade_atualizar{
+    padding-left: 5px;
+}
+.container_cart{
+    width: 100%;
+    padding-right: 50px;
+    padding-left: 30px;
+    /* margin-right: 15px; */
+    margin-left: 15px;
+    margin-top:80px;
+    
+}
+
+
+.custom-card{
+    height: 550px;;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding-bottom: 150px; /* Adjust this value based on your footer height */
+  }
+
+  .containerProduto{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding-bottom: 0px; /* Adjust this value based on your footer height */
+  }
+  
+  .cardP {
+    flex: 1;
+    background-color: white;
+  }
+.barra-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .barra {
+    width: 400px;
+    height: 20px;
+    background-color: #e0e0e0;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .bola {
+    width: 20px;
+    height: 20px;
+    background-color: #ff4081;
+    border-radius: 50%;
+    position: absolute;
+    top: -10px;
+    transform: translateX(-50%);
+  }
+.barra-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.barra {
+border-radius: 10px;
+  width: 280px;
+  height: 20px;
+  background-color: #e0e0e0;
+  position: relative;
+  cursor: pointer;
+}
+
+.bola {
+  width: 20px;
+  height: 20px;
+  background-color: rgb(53, 52, 52);
+  border-radius: 50%;
+  position: absolute;
+  top: -1px;
+  transform: translateX(-50%);
+}
+  
+
+/* Css do Date Range do relatorio de encomendas */
+.react-datepicker {
+    /* font-family: Arial, sans-serif; */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+  }
+  
+  .react-datepicker__header {
+    background-color: #f0f0f0;
+    border-bottom: none;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .react-datepicker__month {
+    margin: 0;
+  }
+  
+  .react-datepicker__day-names {
+    margin-top: 10px;
+  }
+  
+  .react-datepicker__day-name {
+    color: #999;
+  }
+  
+  .react-datepicker__day {
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .react-datepicker__day:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .react-datepicker__day--selected {
+    background-color: #0099ff;
+    color: #fff;
+  }
+  
+  .react-datepicker__day--disabled {
+    cursor: default;
+    color: #999;
+  }
+  
+  .react-datepicker__input-container {
+    display: inline-block;
+  }
+  
+  .react-datepicker__input-container input {
+    width: 110px;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .label_date{
+    transform: translateY(20%);
+  }
+  
+  
+
+  .card-height{
+    height: 620px;
+}
+
+.autosuggest-wrapper {
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-radius: 4px;
+    width: 200px;
+  }
+
+  .output_categories{
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 4px;
+  }
+
+  .delete_category_button {
+    display: none;
+    
+  }
+  
+  .category_span:hover .delete_category_button {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+
+    font-size:10px;
+  }
+  
+  .produtos-vendidos-scrollbar {
+    
+    max-height: 300px; 
+    overflow-y: auto; 
+    overflow-x: hidden;
+  }
+  
+  .card_record_c{
+    background-color: white;
+  }
+
+  .custom-tooltip {
+    background-color: white;
+    padding: 10px;
+    border: 1px solid black;
+  }
+  
+  
+  
+  
