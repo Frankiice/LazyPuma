@@ -99,7 +99,7 @@ render() {
                     <div class="me-lg-5">
                       <div class="d-flex">
                         {/* <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp" class="border rounded me-3" style="width: 96px; height: 96px;" /> */}
-                        <img class="border rounded me-3" src={item.img} style={{ width: '96px', height: '96px' }}/>
+                        <img class="border rounded me-3" src={item.img} style={{ width: '96px', height: '96px' }} alt={item.nome}/>
                         <div class="">
                           <a href="#" class="nav-link">{item.nome}</a>
 

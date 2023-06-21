@@ -160,9 +160,9 @@ degToRad(degrees) {
                 <div class="row gx-4 gx-lg-5 align-items-center">
                    <div class="col-md-6">
                     {this.state.produto._doc.img.startsWith('http') ? (
-                        <img class="card-img" src={this.state.produto._doc.img} alt="..." />
+                        <img class="card-img" src={this.state.produto._doc.img} alt={this.state.produto._doc.name} />
                     ) : (
-                        <img class="card-img" src={`http://localhost:5000/images/${this.state.produto._doc.img.replace('public/images/', '')}`} alt="..." />
+                        <img class="card-img" src={`http://localhost:5000/images/${this.state.produto._doc.img.replace('public/images/', '')}`} alt={this.state.produto._doc.name} />
 
                     )}
                     </div>
@@ -261,7 +261,7 @@ degToRad(degrees) {
                         >
                           <div class="card h-100 crop">
                             {produto.img.startsWith('http') ? (
-                              <img class="card-img" src={produto.img} alt="..." />
+                              <img class="card-img" src={produto.img} alt={produto.name}/>
                             ) : (
                               <img
                                 class="card-img"
@@ -269,7 +269,7 @@ degToRad(degrees) {
                                   'public/images/',
                                   ''
                                 )}`}
-                                alt="..."
+                                alt={produto.name}
                               />
                             )}
                             <div class="card-body p-4">

@@ -36,7 +36,7 @@ function Details(props) {
               { props.state.carrinho && props.state.carrinho.map(item => (
               <div class="container-cart">
                 <div class="carrinho-item" key={item.nome}>
-                      <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
+                      <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} alt={item.nome}/>    
                       <h6>{item.nome}</h6>
                       {/* <small class="text-muted">Brief description</small> */}
                       <span class="text-muted">{item.preco}€</span>
@@ -205,7 +205,7 @@ function Payment(props) {
         { props.state.carrinho && props.state.carrinho.map(item => (
       <div class="container-cart">
         <div class="carrinho-item" key={item.nome}>
-              <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} />    
+              <img class="" style={{minHeight: "50px", minWidth: "30px"}} src={item.img} alt={item.nome}/>    
               <h6>{item.nome}</h6>
               {/* <small class="text-muted">Brief description</small> */}
               <span class="text-muted">{item.preco}€</span>

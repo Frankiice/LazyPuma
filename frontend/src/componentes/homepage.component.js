@@ -331,7 +331,7 @@ degToRad(degrees) {
                           >
                             {produto.img ? (
                               produto.img.startsWith('http') ? (
-                                <img class="card-img" src={produto.img} alt="..." />
+                                <img class="card-img" src={produto.img} alt={produto.name} />
                               ) : (
                                 <img
                                   class="card-img"
@@ -339,11 +339,11 @@ degToRad(degrees) {
                                     'public/images/',
                                     ''
                                   )}`}
-                                  alt="..."
+                                  alt={produto.name}
                                 />
                               )
                             ) : (
-                              <img class="card-img" alt="..." />
+                              <img class="card-img" alt={produto.name}/>
                             )}
                             <div class="card-body p-4">
                               <div class="text-center">
@@ -382,7 +382,7 @@ degToRad(degrees) {
                               class="card-img"
                               src={produto.img}
                               style={{ height: '200px' }}
-                              alt="..."
+                              alt={produto.name}
                             />
                           ) : (
                             <img
@@ -392,11 +392,11 @@ degToRad(degrees) {
                                 ''
                               )}`}
                               style={{ height: '200px' }}
-                              alt="..."
+                              alt={produto.name}
                             />
                           )
                         ) : (
-                          <img class="card-img" alt="..." style={{ height: '200px' }} />
+                          <img class="card-img" alt={produto.name} style={{ height: '200px' }} />
                         )}
                         <div class="card-body p-4">
                           <div class="text-center">

@@ -333,7 +333,7 @@ export default class Catalogo extends Component{
                       >
                         <div className="card h-100 crop">
                           {produto._doc.img.startsWith('http') ? (
-                            <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
+                            <img className="card-img img-fluid" src={produto._doc.img} alt={produto._doc.name}/>
                           ) : (
                             <img
                               className="card-img img-fluid"
@@ -341,7 +341,7 @@ export default class Catalogo extends Component{
                                 'public/images/',
                                 ''
                               )}`}
-                              alt="..."
+                              alt={produto._doc.name}
                             />
                           )}
                           <div className="card-body p-4">
@@ -380,7 +380,7 @@ export default class Catalogo extends Component{
                         <div className="card h-100 crop">
                             {produto._doc.img ? (
                             produto._doc.img.startsWith('http') ? (
-                                <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
+                                <img className="card-img img-fluid" src={produto._doc.img} alt={produto._doc.name}/>
                             ) : (
                                 <img
                                 className="card-img img-fluid"
@@ -388,11 +388,11 @@ export default class Catalogo extends Component{
                                     'public/images/',
                                     ''
                                 )}`}
-                                alt="..."
+                                alt={produto._doc.name}
                                 />
                             )
                             ) : (
-                            <img className="card-img img-fluid" alt="..." />
+                            <img className="card-img img-fluid" alt={produto._doc.name} />
                             )}
                             <div className="card-body p-4">
                             <div className="text-center">
@@ -440,7 +440,7 @@ export default class Catalogo extends Component{
                                             style={{ cursor: 'pointer' }}
                                             >
                                             {produto._doc.img.startsWith('http') ? (
-                                                <img class="card-img img-fluid" src={produto._doc.img} alt="..." />
+                                                <img class="card-img img-fluid" src={produto._doc.img} alt={produto._doc.name} />
                                             ) : (
                                                 <img
                                                 class="card-img img-fluid"
@@ -448,7 +448,7 @@ export default class Catalogo extends Component{
                                                     'public/images/',
                                                     ''
                                                 )}`}
-                                                alt="..."
+                                                alt={produto._doc.name}
                                                 />
                                             )}
                                             <div class="card-body p-4">
@@ -489,7 +489,7 @@ export default class Catalogo extends Component{
                                             >
                                             {produto._doc.img ? (
                                                 produto._doc.img.startsWith('http') ? (
-                                                <img class="card-img img-fluid" src={produto._doc.img} alt="..." />
+                                                <img class="card-img img-fluid" src={produto._doc.img} alt={produto._doc.name} />
                                                 ) : (
                                                 <img
                                                     class="card-img img-fluid"
@@ -497,11 +497,11 @@ export default class Catalogo extends Component{
                                                     'public/images/',
                                                     ''
                                                     )}`}
-                                                    alt="..."
+                                                    alt={produto._doc.name}
                                                 />
                                                 )
                                             ) : (
-                                                <img class="card-img img-fluid" alt="..." />
+                                                <img class="card-img img-fluid" alt={produto._doc.name} />
                                             )}
                                             <div class="card-body p-4">
                                                 <div class="text-center">

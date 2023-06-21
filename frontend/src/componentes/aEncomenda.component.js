@@ -279,6 +279,7 @@ render() {
                         class="border rounded me-3"
                         src={encomenda.encomeda.produto.produto.img}
                         style={{ width: '96px', height: '96px' }}
+                        alt={encomenda.encomeda.produto.produto.name}
                         />
                         <div>
                         <a href="#" class="nav-link">{encomenda.encomeda.produto.produto.name}</a>

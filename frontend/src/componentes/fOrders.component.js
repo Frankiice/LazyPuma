@@ -255,7 +255,7 @@ degToRad(degrees) {
         // Handle the response data
         if(data.status === "ok"){
           console.log(data.data, "Veiculo Associado");
-          //window.location.reload();
+          window.location.reload();
         }else{
           console.log(data.message)
           this.setState({ msgErro: data.message})
@@ -417,6 +417,7 @@ render() {
                                         className="border rounded me-3"
                                         src={venda.produto.produto.img}
                                         style={{ width: '96px', height: '96px' }}
+                                        alt={venda.produto.produto.name}
                                       />
                                     </div>
                                     <div className="col-4">

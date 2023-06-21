@@ -298,8 +298,8 @@ export default class Navbar extends Component{
             {/* Logo e imagem do navbar */}
             
             <div class="logo px-4">
-              <a onClick={this.handlePre} href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png"></img>
-              <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png"></img></a>
+              <a onClick={this.handlePre} href="/"><img id="imglogo" src="https://cdn.discordapp.com/attachments/821485480898068498/1079086052435828777/lazypumatr.png" alt='Imagem Logo'></img>
+              <img id="imgNome" src="https://cdn.discordapp.com/attachments/811930446765097000/1079804170586030100/Untitled.png" alt='Imagem Nome LazyPuma'></img></a>
             </div>
             <div class="collapse navbar-collapse px-3" id="navbarSupportedContent">
               <ul class="navbar-nav px-3">
@@ -439,7 +439,7 @@ export default class Navbar extends Component{
                       ) : (
                         carrinho.map((item, index) => (
                         <div class="carrinho-item" key={item.nome}>
-                          <img class="" src={item.img} />
+                          <img class="" src={item.img} alt={item.nome} />
                           <div class="detalhes text-dark">
                             <h5 class="text-dark">{item.nome}</h5>
                             <p class="text-dark">

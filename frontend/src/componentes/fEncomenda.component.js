@@ -296,6 +296,7 @@ render() {
                                     class="border rounded me-3"
                                     src={venda.produto.produto.img}
                                     style={{ width: '96px', height: '96px' }}
+                                    alt={venda.produto.proq.name}
                                     />
                                     <div>
                                     <a href="#" class="nav-link">

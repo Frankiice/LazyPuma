@@ -402,9 +402,9 @@ render() {
                                 <div className="row gy-3 mb-4 produto_carrinho" key={item.nome}>
                                     <div className="col-lg-2">
                                      {item.img.startsWith('http') ? (
-                                            <img className="border rounded me-3" style={{ width: '96px', height: '96px' }} src={item.img} alt="..." />
+                                            <img className="border rounded me-3" style={{ width: '96px', height: '96px' }} src={item.img} alt={item.nome} />
                                         ) : (
-                                            <img className="border rounded me-3" style={{ width: '96px', height: '96px' }} src={`http://localhost:5000/images/${item.img.replace('public/images/', '')}`} alt="..." />
+                                            <img className="border rounded me-3" style={{ width: '96px', height: '96px' }} src={`http://localhost:5000/images/${item.img.replace('public/images/', '')}`} alt={item.nome} />
 
                                         )}
                                     </div>
