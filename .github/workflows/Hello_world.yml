@@ -30,3 +30,9 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello world"
+  conta:
+    runs-on: ubuntu-latest
+    steps:
+    - name: conta
+    if: 1+1 == 2 
+  
