@@ -348,6 +348,35 @@ function Confirmation(props) {
             // Order creation successful
             console.log("Encomenda criada com sucesso!");
             window.localStorage.removeItem("carrinho")
+
+            fetch("http://localhost:5000/user/notificationsEncomendas", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                idFrom: idConsumidor,
+                title: "Encomenda criada!",
+                dateMsg: new Date(),
+                infoProdutos
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.status === "ok") {
+                  // Notification creation successful
+                  console.log("Notification created successfully!");
+                  // Perform any additional actions here
+                } else {
+                  // Notification creation failed
+                  console.log("Error creating notification:", data.error);
+                  // Handle the error or display an error message
+                }
+              })
+              .catch((error) => {
+                console.log("Error creating notification:", error);
+                // Handle the error or display an error message
+              });
             // Perform any additional actions here
           } else {
             // Order creation failed
@@ -357,35 +386,6 @@ function Confirmation(props) {
         })
         .catch((error) => {
           console.log("Erro ao criar encomenda:", error);
-          // Handle the error or display an error message
-        });
-
-      fetch("http://localhost:5000/user/notificationsEncomendas", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          idFrom: idConsumidor,
-          title: "Encomenda criada!",
-          dateMsg: new Date(),
-          infoProdutos
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === "ok") {
-            // Notification creation successful
-            console.log("Notification created successfully!");
-            // Perform any additional actions here
-          } else {
-            // Notification creation failed
-            console.log("Error creating notification:", data.error);
-            // Handle the error or display an error message
-          }
-        })
-        .catch((error) => {
-          console.log("Error creating notification:", error);
           // Handle the error or display an error message
         });
     } else {

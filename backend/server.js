@@ -1777,7 +1777,6 @@ app.post("/user/notificationsOrders", async (req, res) => {
 app.post("/user/notificationsEncomendas", async (req, res) => {
   try {
     const Notifications = mongoose.model("notifications", NotificationsSchema);
-    const ProductDetails = mongoose.model("productdetails", ProductDetailsSchema);
     const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
     const User = mongoose.model("users", UserDetailsSchema);
 
@@ -1787,7 +1786,7 @@ app.post("/user/notificationsEncomendas", async (req, res) => {
 
     const notifications = [];
 
-    const user = await User.findOne(idFrom);
+    const user = await User.findOne({ _id: idFrom });
 
     for (const infoProduto of infoProdutos) {
       const { idProduto, quantidadeCompra } = infoProduto;
@@ -1798,7 +1797,7 @@ app.post("/user/notificationsEncomendas", async (req, res) => {
       if (unidadeProducao) {
         const { _id, idFornecedor } = unidadeProducao;
 
-        const mensagem = `An order was just placed by Name: ${user.name} or Nickname: ${user.swag}`;
+        const mensagem = `An order was just placed by Name: ${user.fullname} and Nickname: ${user.nickname}`;
 
         const notification = {
           idFrom,
