@@ -273,6 +273,8 @@ export default class Navbar extends Component{
       console.log(categoriaA);
       window.localStorage.setItem("categoriaB", categoriaB);
       window.localStorage.setItem("categoriaA", categoriaA);
+      window.localStorage.removeItem("objSearch")
+      window.localStorage.removeItem("search")
       window.location.href = "/catalogo";
     };
 
@@ -323,7 +325,7 @@ export default class Navbar extends Component{
                       }}
                       placeholder={this.state.search === "" ? "Search" : this.state.search}
                     />
-                    <a onClick={() => this.handleSearch()} id="form1Botao iconbotao">
+                    <a onClick={() => this.handleSearch()} id="form1Botao">
                       <span className="fa fa-search text-white form-control-feedback"></span>
                     </a>
                   </div>
@@ -566,7 +568,7 @@ export default class Navbar extends Component{
                             <li><hr class="dropdown-divider"></hr></li>
                             <li><button class="dropdown-item" value="Accessories" onClick={(e) => {this.setState({ categoriaB: "Sports", categoriaA: e.target.value}, this.handleClick)}}>Accessories</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
-                            <li><a class="dropdown-item" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                            <li><button class="dropdown-item" value="Sports" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
                         </ul>
                       </li>
@@ -586,7 +588,7 @@ export default class Navbar extends Component{
                             <li><hr class="dropdown-divider"></hr></li>
                             <li><button class="dropdown-item" value="Toys" onClick={(e) => {this.setState({ categoriaB: "Animals", categoriaA: e.target.value}, this.handleClick)}}>Toys</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
-                            <li><a class="dropdown-item" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                            <li><button class="dropdown-item" value="Animals" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
                         </ul>
                       </li>
@@ -636,7 +638,7 @@ export default class Navbar extends Component{
                             <li><hr class="dropdown-divider"></hr></li>
                             <li><button class="dropdown-item" value="Drill Bits" onClick={(e) => {this.setState({ categoriaB: "DIY", categoriaA: e.target.value}, this.handleClick)}}>Drill Bits</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
-                            <li><a class="dropdown-item" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                            <li><button class="dropdown-item" value="DIY" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
                         </ul>
                       </li>
@@ -676,7 +678,7 @@ export default class Navbar extends Component{
                             <li><hr class="dropdown-divider"></hr></li>
                             <li><button class="dropdown-item" value="Wall Decor" onClick={(e) => {this.setState({ categoriaB: "Decoration", categoriaA: e.target.value}, this.handleClick)}}>Wall Decor</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
-                            <li><a class="dropdown-item" value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                            <li><button class="dropdown-item" value="Decoration" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
                         </ul>
                       </li>
@@ -704,7 +706,7 @@ export default class Navbar extends Component{
                             <li><hr class="dropdown-divider"></hr></li>
                             <li><button class="dropdown-item" value="Soil" onClick={(e) => {this.setState({ categoriaB: "Gardening", categoriaA: e.target.value}, this.handleClick)}}>Soil</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
-                            <li><a class="dropdown-item" value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                            <li><button class="dropdown-item" value="Gardening" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
                         </ul>
                       </li>
@@ -778,7 +780,7 @@ export default class Navbar extends Component{
                             <li><hr class="dropdown-divider"></hr></li>
                             <li><button class="dropdown-item" value="Kids Electronics" onClick={(e) => {this.setState({ categoriaB: "Toys", categoriaA: e.target.value}, this.handleClick)}}>Kids Electronics</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
-                            <li><a class="dropdown-item" value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                            <li><button class="dropdown-item" value="Toys" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
                         </ul>
                       </li>
@@ -798,7 +800,7 @@ export default class Navbar extends Component{
                             <li><hr class="dropdown-divider"></hr></li>
                             <li><button class="dropdown-item" value="Dryers" onClick={(e) => {this.setState({ categoriaB: "Appliances", categoriaA: e.target.value}, this.handleClick)}}>Dryers</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
-                            <li><a class="dropdown-item" value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</a></li>
+                            <li><button class="dropdown-item" value="Appliances" onClick={(e) => {this.setState({ categoriaB: e.target.value}, this.handleClick)}}>See All</button></li>
                             <li><hr class="dropdown-divider"></hr></li>
                         </ul>
                       </li>

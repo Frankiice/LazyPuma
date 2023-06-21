@@ -51,28 +51,33 @@ export default class Registo extends Component {
     getCoordenadas(e) {
         e.preventDefault();
         const { rua, localidade, freguesia, concelho, cod_postal, cidade, pais } = this.state;
-        const morada = `${rua}, ${localidade}, ${freguesia}, ${concelho}, ${cod_postal}, ${cidade}, ${pais}`;
-        console.log(morada);
-        this.setState({morada: morada})
-        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${encodeURIComponent(morada)}`;
       
-        fetch(url)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data && data.length > 0) {
-              const { lat, lon } = data[0];
-              this.setState({ lat, lon, msgMorada: "Valid address, you can proceed with your registration" });
-              this.setState({ addressVerif: true })
-              console.log("entra no if")
-            } else {
-              this.setState({ msgMorada: "Error: Invalid address, please correct your address" });
-              console.log("entra no else")
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            this.setState({ msgMorada: "Error validating address, please try again later" });
-          });
+        if (rua !== "" && localidade !== "" && freguesia !== "" && concelho !== "" && cod_postal !== "" && cidade !== "" && pais !== "") {
+          const morada = `${rua}, ${localidade}, ${freguesia}, ${concelho}, ${cod_postal}, ${cidade}, ${pais}`;
+          console.log(morada);
+          this.setState({ morada: morada })
+          const url = `https://nominatim.openstreetmap.org/search?format=json&limit=3&q=${encodeURIComponent(morada)}`;
+      
+          fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data && data.length > 0) {
+                const { lat, lon } = data[0];
+                this.setState({ lat, lon, msgMorada: "Valid address, you can proceed with your registration" });
+                this.setState({ addressVerif: true })
+                console.log("entra no if")
+              } else {
+                this.setState({ msgMorada: "Error: Invalid address, please correct your address" });
+                console.log("entra no else")
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              this.setState({ msgMorada: "Error validating address, please try again later" });
+            });
+        } else {
+            this.setState({ msgMorada: "Error: Invalid address, please correct your address" });
+        }
       }
       
 

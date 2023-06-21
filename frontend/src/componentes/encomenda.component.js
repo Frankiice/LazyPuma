@@ -94,7 +94,7 @@ function Details(props) {
                 </div>
     
                 <div class="mb-3">
-                  <label for="email">Email <span class="text-muted">(Optional)</span></label>
+                  <label for="email">Email </label>
                     <input type="email" class="form-control bg-dark text-white detailsEncomenda" id="email" value={props.state.email} readOnly></input>
                   <div class="invalid-feedback">
                     Please enter a valid email address for shipping updates.

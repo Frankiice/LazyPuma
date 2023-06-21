@@ -323,108 +323,98 @@ export default class Catalogo extends Component{
                     <h2>No Products Found</h2>
                 ) : (
                     this.state.objSearch.map((produto) => (
-                    <div key={produto._doc._id} className="col mb-5">
+                        <div
+                        key={produto._doc._id}
+                        className="col mb-5 clickable-card"
+                        onClick={() => {
+                          this.setState({ produtoID: produto._doc._id }, this.handleProduto);
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <div className="card h-100 crop">
-                        {produto._doc.img.startsWith('http') ? (
+                          {produto._doc.img.startsWith('http') ? (
                             <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
-                        ) : (
+                          ) : (
                             <img
-                            className="card-img img-fluid"
-                            src={`http://localhost:5000/images/${produto._doc.img.replace(
+                              className="card-img img-fluid"
+                              src={`http://localhost:5000/images/${produto._doc.img.replace(
                                 'public/images/',
                                 ''
-                            )}`}
-                            alt="..."
+                              )}`}
+                              alt="..."
                             />
-                        )}
-                        <div className="card-body p-4">
+                          )}
+                          <div className="card-body p-4">
                             <div className="text-center">
-                            <h5 className="fw-bolder">{produto._doc.name}</h5>
-                            {this.state.tipoUser === 'consumidor' ? (
-                              <>
-                                {this.calculateDistance(
-                                  parseFloat(this.state.user_lat), // Convert to float
-                                  parseFloat(this.state.user_lon), // Convert to float
-                                  parseFloat(produto.lat), // Convert to float
-                                  parseFloat(produto.lon) // Convert to float
-                                )}
-                                km
-                                <br />
-                              </>
-                            ) : null}
-                            {produto.price}€
+                              <h5 className="fw-bolder">{produto._doc.name}</h5>
+                              {this.state.tipoUser === 'consumidor' ? (
+                                <>
+                                  {this.calculateDistance(
+                                    parseFloat(this.state.user_lat), // Convert to float
+                                    parseFloat(this.state.user_lon), // Convert to float
+                                    parseFloat(produto.lat), // Convert to float
+                                    parseFloat(produto.lon) // Convert to float
+                                  )}
+                                  km
+                                  <br />
+                                </>
+                              ) : null}
+                              {produto.price}€
                             </div>
+                          </div>
                         </div>
-                        <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div className="text-center">
-                            <button
-                                className="btn btn-outline-dark mt-auto"
-                                value={produto._doc._id}
-                                onClick={(e) => {
-                                this.setState({ produtoID: e.target.value }, this.handleProduto);
-                                }}
-                            >
-                                View options
-                            </button>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+                      </div>
+                      
                     ))
                 )
                 ) : (
                 this.state.filteredProducts.map((produto) => (
-                    <div key={produto._doc._id} className="col mb-5">
-                    <div className="card h-100 crop">
-                        {produto._doc.img ? (
-                        produto._doc.img.startsWith('http') ? (
-                            <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
-                        ) : (
-                            <img
-                            className="card-img img-fluid"
-                            src={`http://localhost:5000/images/${produto._doc.img.replace(
-                                'public/images/',
-                                ''
-                            )}`}
-                            alt="..."
-                            />
-                        )
-                        ) : (
-                        <img className="card-img img-fluid" alt="..." />
-                        )}
-                        <div className="card-body p-4">
-                        <div className="text-center">
-                            <h5 className="fw-bolder">{produto._doc.name}</h5>
-                            {this.state.tipoUser === 'consumidor' ? (
-                              <>
-                                {this.calculateDistance(
-                                  parseFloat(this.state.user_lat), // Convert to float
-                                  parseFloat(this.state.user_lon), // Convert to float
-                                  parseFloat(produto.lat), // Convert to float
-                                  parseFloat(produto.lon) // Convert to float
-                                )}
-                                km
-                                <br />
-                              </>
-                            ) : null}
-                            {produto.price}€
+                    <div
+                        key={produto._doc._id}
+                        className="col mb-5"
+                        onClick={() => {
+                            this.setState({ produtoID: produto._doc._id }, this.handleProduto);
+                        }}
+                        style={{ cursor: 'pointer' }}
+                        >
+                        <div className="card h-100 crop">
+                            {produto._doc.img ? (
+                            produto._doc.img.startsWith('http') ? (
+                                <img className="card-img img-fluid" src={produto._doc.img} alt="..." />
+                            ) : (
+                                <img
+                                className="card-img img-fluid"
+                                src={`http://localhost:5000/images/${produto._doc.img.replace(
+                                    'public/images/',
+                                    ''
+                                )}`}
+                                alt="..."
+                                />
+                            )
+                            ) : (
+                            <img className="card-img img-fluid" alt="..." />
+                            )}
+                            <div className="card-body p-4">
+                            <div className="text-center">
+                                <h5 className="fw-bolder">{produto._doc.name}</h5>
+                                {this.state.tipoUser === 'consumidor' ? (
+                                <>
+                                    {this.calculateDistance(
+                                    parseFloat(this.state.user_lat), // Convert to float
+                                    parseFloat(this.state.user_lon), // Convert to float
+                                    parseFloat(produto.lat), // Convert to float
+                                    parseFloat(produto.lon) // Convert to float
+                                    )}
+                                    km
+                                    <br />
+                                </>
+                                ) : null}
+                                {produto.price}€
+                            </div>
+                            </div>
                         </div>
                         </div>
-                        <div className="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div className="text-center">
-                            <button
-                            className="btn btn-outline-dark mt-auto"
-                            value={produto._doc._id}
-                            onClick={(e) => {
-                                this.setState({ produtoID: e.target.value }, this.handleProduto);
-                            }}
-                            >
-                            View options
-                            </button>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
+
                 ))
                 )}
             </div>
