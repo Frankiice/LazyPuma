@@ -369,9 +369,9 @@ render() {
                                       />
                                     </div>
                                     <div className="col-4">
-                                      <a href="#" className="nav-link">
+                                      <p href="#" className="nav-link">
                                         {venda.produto.produto.name}
-                                      </a>
+                                      </p>
                                       <p className="text-muted">
                                         Brand: {venda.produto.produto.brand}
                                         <br></br>
