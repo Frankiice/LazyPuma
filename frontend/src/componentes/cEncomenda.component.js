@@ -76,6 +76,7 @@ export default class EncomendasC extends Component {
   
   showConfirmationDialog() {
     this.setState({ showConfirmationDialog: true });
+    console.log("entro bem")
   }
   
   // Method to hide the confirmation dialog
@@ -377,7 +378,7 @@ render() {
                           <div className="col-md-4">
                             {/* Cancel Order */}
                             {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" ? (
-                              new Date(encomenda.encomenda.prazoCancelamento) < new Date() && 
+                              new Date(encomenda.encomenda.prazoCancelamento) > new Date() && 
                               this.state.showConfirmationDialog && this.state.confirmationDialogId === encomenda.encomenda.id_encomenda ? (
                                 <div className="confirmation-dialog">
                                   <h6>Are you sure you want to Cancel this Order?</h6>
@@ -392,7 +393,7 @@ render() {
                                 </div>
                               ) : (
                                 <div className="d-flex justify-content-end">
-                                  <a href="#" className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda, op: "Cancel" }); this.showConfirmationDialog();}}>
+                                  <a className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda, op: "Cancel" }); this.showConfirmationDialog();}}>
                                     Cancel Order
                                   </a>
                                 </div>
