@@ -14,6 +14,11 @@ export default class Login extends Component {
     };
   }
 
+  handleProduto(produtoID){
+    window.localStorage.setItem("produtoID", produtoID)
+    window.location = "/produto"
+  }
+
   handleQuantityChange(itemnome, newQuantity) {
     const { cart } = this.state;
   
@@ -97,33 +102,24 @@ render() {
                 <div class="row gy-3 mb-4 produto_carrinho" key={item.nome}>
                   <div class="col-lg-5">
                     <div class="me-lg-5">
-                      <div class="d-flex">
-                        {/* <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp" class="border rounded me-3" style="width: 96px; height: 96px;" /> */}
-                        <img class="border rounded me-3" src={item.img} style={{ width: '96px', height: '96px' }} alt={item.nome}/>
-                        <div class="">
-                          <a href="#" class="nav-link">{item.nome}</a>
-
-                          {item.propriedades.map((propriedade, propIndex) => (
-                <p key={propIndex} className="text-muted">{propriedade.name}: {propriedade.value}</p>
-              ))}
-       
-                          
-                        </div>
+                    <div className="d-flex" onClick={() => { this.handleProduto(item.id_produto) }} style={{ cursor: 'pointer' }}>
+                      {/* <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp" className="border rounded me-3" style={{ width: '96px', height: '96px' }} /> */}
+                      <img className="border rounded me-3" src={item.img} style={{ width: '96px', height: '96px' }} alt={item.nome} />
+                      <div>
+                        <a className="nav-link">{item.nome}</a>
+                        {item.propriedades.map((propriedade, propIndex) => (
+                          <p key={propIndex} className="text-muted">{propriedade.name}: {propriedade.value}</p>
+                        ))}
                       </div>
+                    </div>
                     </div>
                   </div>
                   <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
                     <div class="">
-                      {/* <select style="width: 100px;" class="form-select me-4">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                      </select> */}
                     </div>
                     <div class="">
                       <text class="h6">{item.preco}€</text> <br />
-                      <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
+                      <small class="text-muted text-nowrap"> {item.preco_original}€ per item </small>
                       
                     </div>
                     

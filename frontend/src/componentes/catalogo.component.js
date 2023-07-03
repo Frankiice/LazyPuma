@@ -26,12 +26,18 @@ export default class Catalogo extends Component{
             filteredProducts: [], // Add this property
             brands: [],
             subCategories: [],
+            propertiesFilter: [],
+            priceFilter: null,
+            distanceFilter: null, 
             brandFilter: null,
             subCategoryFilter: null,
             colorFilter: null,
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleProduto = this.handleProduto.bind(this);
+        this.handlePriceFilterChange = this.handlePriceFilterChange.bind(this);
+        this.handleDistanceFilterChange = this.handleDistanceFilterChange.bind(this);
+
         window.localStorage.removeItem("userUpdated");
 
         
@@ -57,15 +63,38 @@ export default class Catalogo extends Component{
             console.log(data, "Catalogo");
             const brands = [...new Set(data.productsWPrice.map((product) => product._doc.brand))];
             const subCategories = [...new Set(data.productsWPrice.map((product) => product._doc.categorieA))];
-            this.setState({obj: data.productsWPrice,
-                            novoHeader: data.novoHeader,
-                            novoHeaderTip: data.novoHeaderTip,
-                            filteredProducts: data.productsWPrice,
-                            brands,
-                            subCategories
-                        });
-            
-        })
+        
+            const properties = new Map(); // Use a map to store property values
+            data.productsWPrice.forEach((product) => {
+                product._doc.properties.forEach((property) => {
+                    const propertyName = property.name;
+                    const propertyValue = property.value;
+        
+                    if (properties.has(propertyName)) {
+                        // Add the property value to the existing property
+                        properties.get(propertyName).add(propertyValue);
+                    } else {
+                        // Create a new property with the value
+                        properties.set(propertyName, new Set([propertyValue]));
+                    }
+                });
+            });
+        
+            const propertiesFilter = Array.from(properties).map(([propertyName, propertyValues]) => ({
+                name: propertyName,
+                values: Array.from(propertyValues)
+            }));
+        
+            this.setState({
+                obj: data.productsWPrice,
+                novoHeader: data.novoHeader,
+                novoHeaderTip: data.novoHeaderTip,
+                filteredProducts: data.productsWPrice,
+                brands,
+                subCategories,
+                propertiesFilter, // Set the properties filter state
+            });
+        })        
         }
     }
     
@@ -133,12 +162,11 @@ export default class Catalogo extends Component{
           Math.cos(lat1Rad) * Math.cos(lat2Rad) *
           Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        var distance = R * c;
-
-        distance = distance.toFixed(0);
+        const distance = R * c;
       
-        return distance; // Distance in kilometers
+        return Math.round(distance);; // Distance in kilometers
       }
+      
       
     degToRad(degrees) {
         return degrees * (Math.PI / 180);
@@ -157,57 +185,175 @@ export default class Catalogo extends Component{
         this.filterProducts();
     });
     };
-    
-    filterProducts = () => {
-    const { obj, objSearch, brandFilter, subCategoryFilter } = this.state;
-    let filteredProducts 
-    if(objSearch){
-        filteredProducts = objSearch;
-        if (brandFilter && subCategoryFilter) {
-            filteredProducts = objSearch.filter(
-            (product) =>
-                product._doc.brand === brandFilter &&
-                product._doc.categorieA === subCategoryFilter
-            );
-        } else {
-            if (brandFilter) {
-            filteredProducts = objSearch.filter(
-                (product) => product._doc.brand === brandFilter
-            );
-            }
-        
-            if (subCategoryFilter) {
-                console.log("entra aqui bem")
-            filteredProducts = objSearch.filter(
-                (product) => product._doc.categorieA === subCategoryFilter
-            );
-            }
-        }
-    }else{
-        filteredProducts = obj;
-        if (brandFilter && subCategoryFilter) {
-            filteredProducts = obj.filter(
-            (product) =>
-                product._doc.brand === brandFilter &&
-                product._doc.categorieA === subCategoryFilter
-            );
-        } else {
-            if (brandFilter) {
-            filteredProducts = obj.filter(
-                (product) => product._doc.brand === brandFilter
-            );
-            }
-        
-            if (subCategoryFilter) {
-            filteredProducts = obj.filter(
-                (product) => product._doc.categorieA === subCategoryFilter
-            );
-            }
-        }
 
-    }    
-    this.setState({ filteredProducts });
+    handlePropertyFilterChange = (event) => {
+        const propertyValue = event.target.value;
+        this.setState({ propertyValueFilter: propertyValue }, () => {
+            this.filterProducts();
+        });
     };
+
+    getPriceRangeOptions() {
+        const { obj } = this.state;
+        let minPrice = Infinity;
+        let maxPrice = -Infinity;
+      
+        // Find the minimum and maximum prices
+        obj.forEach((product) => {
+          const price = product.price;
+          if (price < minPrice) {
+            minPrice = price;
+          }
+          if (price > maxPrice) {
+            maxPrice = price;
+          }
+        });
+      
+        const rangeOptions = [];
+        const increment = 20;
+      
+        // Generate range options
+        for (let i = minPrice; i <= maxPrice; i += increment) {
+          const rangeStart = i;
+          const rangeEnd = Math.min(i + increment - 1, maxPrice);
+          const optionValue = `${rangeStart}-${rangeEnd}`;
+          const optionLabel = `$${rangeStart} - $${rangeEnd}`;
+          rangeOptions.push(<option key={optionValue} value={optionValue}>{optionLabel}</option>);
+        }
+      
+        return rangeOptions;
+      }
+      
+      getDistanceRangeOptions() {
+        const { obj, user_lat, user_lon } = this.state;
+        let minDistance = 1000;
+        let maxDistance = -1000;
+      
+        // Find the minimum and maximum distances
+        obj.forEach((product) => {
+          const distance = this.calculateDistance(user_lat, user_lon, product.lat, product.lon);
+          if (distance < minDistance) {
+            minDistance = distance;
+          }
+          if (distance > maxDistance) {
+            maxDistance = distance;
+          }
+        });
+      
+        const rangeOptions = [];
+        const increment = 50;
+      
+        // Generate range options
+        for (let i = minDistance; i <= maxDistance; i += increment) {
+          const rangeStart = i;
+          const rangeEnd = Math.min(i + increment - 1, maxDistance);
+          const optionValue = `${rangeStart}-${rangeEnd}`;
+          const optionLabel = `${rangeStart} - ${rangeEnd} km`;
+          rangeOptions.push(<option key={optionValue} value={optionValue}>{optionLabel}</option>);
+        }
+      
+        return rangeOptions;
+      }
+
+      handleDistanceFilterChange(event) {
+        const selectedRange = event.target.value;
+      
+        if (selectedRange === "") {
+          // Reset the distance filter
+          this.setState({ distanceFilter: "", filteredProducts: this.state.obj }, () => {
+            this.filterProducts();
+          });
+        } else {
+          const [rangeStart, rangeEnd] = selectedRange.split("-");
+          this.setState({ distanceFilter: selectedRange }, () => {
+            this.filterProducts();
+          });
+        }
+      }
+      
+      
+      handlePriceFilterChange(event) {
+        const selectedRange = event.target.value;
+      
+        if (selectedRange === "") {
+          // Reset the price filter
+          this.setState({ priceFilter: "", filteredProducts: this.state.obj }, () => {
+            this.filterProducts();
+          });
+        } else {
+          const [rangeStart, rangeEnd] = selectedRange.split("-");
+          this.setState({ priceFilter: selectedRange }, () => {
+            this.filterProducts();
+          });
+        }
+      }
+      
+      
+      filterProducts = () => {
+        const {
+          obj,
+          objSearch,
+          brandFilter,
+          subCategoryFilter,
+          propertyValueFilter,
+          priceFilter,
+          distanceFilter,
+          user_lat,
+          user_lon
+        } = this.state;
+      
+        let filteredProducts;
+      
+        if (objSearch) {
+          filteredProducts = objSearch.slice();
+        } else {
+          filteredProducts = obj.slice();
+        }
+      
+        if (brandFilter) {
+          filteredProducts = filteredProducts.filter(
+            (product) => product._doc.brand === brandFilter
+          );
+        }
+      
+        if (subCategoryFilter) {
+          filteredProducts = filteredProducts.filter(
+            (product) => product._doc.categorieA === subCategoryFilter
+          );
+        }
+      
+        if (propertyValueFilter) {
+          filteredProducts = filteredProducts.filter((product) =>
+            product._doc.properties.some(
+              (property) => property.value === propertyValueFilter
+            )
+          );
+        }
+      
+        if (priceFilter) {
+          const [rangeStart, rangeEnd] = priceFilter.split("-");
+          filteredProducts = filteredProducts.filter((product) => {
+            const price = product.price;
+            return price >= Number(rangeStart) && price <= Number(rangeEnd);
+          });
+        }
+      
+        if (distanceFilter) {
+          const [rangeStart, rangeEnd] = distanceFilter.split("-");
+          filteredProducts = filteredProducts.filter((product) => {
+            const distance = this.calculateDistance(
+              user_lat,
+              user_lon,
+              product.lat,
+              product.lon
+            );
+            return distance >= Number(rangeStart) && distance <= Number(rangeEnd);
+          });
+        }
+      
+        this.setState({ filteredProducts });
+      };
+  
 
     render(){
     return (
@@ -261,36 +407,19 @@ export default class Catalogo extends Component{
         ?
             this.state.brand === ""
             ?
-                <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a></h2>
+                <h1>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a></h1>
             :
-                <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb2} href='/catalogo'>{this.state.brand}</a> </h2>
+                <h1>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb2} href='/catalogo'>{this.state.brand}</a> </h1>
         :
             this.state.brand === ""
             ?
-            <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb3} href='/catalogo'>{this.state.categoriaA}</a> </h2>
+            <h1>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb3} href='/catalogo'>{this.state.categoriaA}</a> </h1>
             :
-            <h2>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb3} href='/catalogo'>{this.state.categoriaA}</a> {'>'} <a onClick={this.preBreadCrumb4} href='/catalogo'>{this.state.brand}</a> </h2>
+            <h1>&nbsp;<a onClick={this.preBreadCrumb} href='/catalogo'>{this.state.categoriaB}</a> {'>'} <a onClick={this.preBreadCrumb3} href='/catalogo'>{this.state.categoriaA}</a> {'>'} <a onClick={this.preBreadCrumb4} href='/catalogo'>{this.state.brand}</a> </h1>
 
         }
     </div>
 
-    <div class="offcanvas offcanvas-left" data-bs-scroll="true" tabindex="-1" id="sidebar">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Produtos</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <nav class="navbar navbar-light bg-light" id="offcanvasItems">
-                <div class="container-fluid">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Clickable Item</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </div>
 
     {this.state.tipoUser !== "" ?
         <div className="container_catalogo">
@@ -314,6 +443,36 @@ export default class Catalogo extends Component{
                 ))}
                 </select>
                 {/* Add other filter options */}
+                
+               <div>
+                <label htmlFor="priceFilter">Price:</label>
+                <select id="priceFilter" value={this.state.priceFilter} onChange={this.handlePriceFilterChange}>
+                    <option value="">All</option>
+                    {this.getPriceRangeOptions()}
+                </select>
+                </div>
+
+                <div>
+                <label htmlFor="distanceFilter">Distance:</label>
+                <select id="distanceFilter" value={this.state.distanceFilter} onChange={this.handleDistanceFilterChange}>
+                    <option value="">All</option>
+                    {this.getDistanceRangeOptions()}
+                </select>
+                </div>
+
+                {this.state.propertiesFilter.map((property) => (
+                <div key={property.name}>
+                    <label htmlFor={property.name}>{property.name}:</label>
+                    <select id={property.name} onChange={(event) => this.handlePropertyFilterChange(event, property.name)}>
+                    <option value="">All</option>
+                    {property.values.map((value) => (
+                        <option key={value} value={value}>{value}</option>
+                    ))}
+                    </select>
+                </div>
+                ))}
+
+
             </div>
             </div>
             <div className="col-lg-9">
@@ -368,54 +527,54 @@ export default class Catalogo extends Component{
                     ))
                 )
                 ) : (
-                this.state.filteredProducts.map((produto) => (
-                    <div
-                        key={produto._doc._id}
-                        className="col mb-5"
-                        onClick={() => {
-                            this.setState({ produtoID: produto._doc._id }, this.handleProduto);
-                        }}
-                        style={{ cursor: 'pointer' }}
-                        >
-                        <div className="card h-100 crop">
-                            {produto._doc.img ? (
-                            produto._doc.img.startsWith('http') ? (
-                                <img className="card-img img-fluid" src={produto._doc.img} alt={produto._doc.name}/>
-                            ) : (
-                                <img
-                                className="card-img img-fluid"
-                                src={`http://localhost:5000/images/${produto._doc.img.replace(
-                                    'public/images/',
-                                    ''
-                                )}`}
-                                alt={produto._doc.name}
-                                />
-                            )
-                            ) : (
-                            <img className="card-img img-fluid" alt={produto._doc.name} />
-                            )}
-                            <div className="card-body p-4">
-                            <div className="text-center">
-                                <h5 className="fw-bolder">{produto._doc.name}</h5>
-                                {this.state.tipoUser === 'consumidor' ? (
-                                <>
-                                    {this.calculateDistance(
-                                    parseFloat(this.state.user_lat), // Convert to float
-                                    parseFloat(this.state.user_lon), // Convert to float
-                                    parseFloat(produto.lat), // Convert to float
-                                    parseFloat(produto.lon) // Convert to float
-                                    )}
-                                    km
-                                    <br />
-                                </>
-                                ) : null}
-                                {produto.price}€
+                    this.state.filteredProducts.length > 0 ? (
+                        this.state.filteredProducts.map((produto) => (
+                          <div
+                            key={produto._doc._id}
+                            className="col mb-5"
+                            onClick={() => {
+                              this.setState({ produtoID: produto._doc._id }, this.handleProduto);
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <div className="card h-100 crop">
+                              {produto._doc.img ? (
+                                produto._doc.img.startsWith('http') ? (
+                                  <img className="card-img img-fluid" src={produto._doc.img} alt={produto._doc.name} />
+                                ) : (
+                                  <img
+                                    className="card-img img-fluid"
+                                    src={`http://localhost:5000/images/${produto._doc.img.replace('public/images/', '')}`}
+                                    alt={produto._doc.name}
+                                  />
+                                )
+                              ) : (
+                                <img className="card-img img-fluid" alt={produto._doc.name} />
+                              )}
+                              <div className="card-body p-4">
+                                <div className="text-center">
+                                  <h5 className="fw-bolder">{produto._doc.name}</h5>
+                                  {this.state.tipoUser === 'consumidor' ? (
+                                    <>
+                                      {this.calculateDistance(
+                                        parseFloat(this.state.user_lat), // Convert to float
+                                        parseFloat(this.state.user_lon), // Convert to float
+                                        parseFloat(produto.lat), // Convert to float
+                                        parseFloat(produto.lon) // Convert to float
+                                      )}
+                                      km
+                                      <br />
+                                    </>
+                                  ) : null}
+                                  {produto.price}€
+                                </div>
+                              </div>
                             </div>
-                            </div>
-                        </div>
-                        </div>
-
-                ))
+                          </div>
+                        ))
+                      ) : (
+                        <h3>No products to display.</h3>
+                      ) 
                 )}
             </div>
             </div>

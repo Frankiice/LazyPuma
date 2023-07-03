@@ -438,13 +438,15 @@ export default class Navbar extends Component{
                         </div>
                       ) : (
                         carrinho.map((item, index) => (
-                        <div class="carrinho-item" key={item.nome}>
+                        <div class="carrinho-item" key={item.nome} >
                           <img class="" src={item.img} alt={item.nome} />
-                          <div class="detalhes text-dark">
-                            <h5 class="text-dark">{item.nome}</h5>
+                          <div class="detalhes text-dark breadcrumb">
+                            <a onClick={() => {
+                              this.setState({ produtoID: item.id_produto }, this.handleProduto);
+                              }} style={{ cursor: 'pointer' }} ><h5>{item.nome}</h5></a>
                             <p class="text-dark">
                               <span class="pt-4 text-dark">{item.preco}€</span><br></br>
-                              <small class="text-muted text-nowrap"> {item.preco_original}€ / per item </small>
+                              <small class="text-muted text-nowrap"> {item.preco_original}€ per item </small>
                               
                               <div className="quantidade">
                                 <div className="row">
@@ -453,8 +455,8 @@ export default class Navbar extends Component{
                                     <p className="text-secondary mb-0  "> </p>
                                     <br></br>
                                     <div className="d-flex flex-column">
-                                      <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar"></i>
-                                      <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar"></i>
+                                      <i onClick={() => this.atualizarQuantidade(index, "incrementar")} className="bi bi-plus-square quantidade_atualizar" style={{ cursor: 'pointer' }}></i>
+                                      <i onClick={() => this.atualizarQuantidade(index, "decrementar")} className="bi bi-dash-square quantidade_atualizar" style={{ cursor: 'pointer' }}></i>
                                     </div>
                   
                                   </div>
@@ -463,7 +465,7 @@ export default class Navbar extends Component{
                             </p>
                           </div>
                           <div class="cancel">
-                            <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)}></i>
+                            <i className="bi bi-x-square-fill" onClick={() => this.removerProduto(index)} style={{ cursor: 'pointer' }}></i>
                           </div>
                         </div>
                         ))
