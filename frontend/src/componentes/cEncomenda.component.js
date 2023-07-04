@@ -377,28 +377,32 @@ render() {
                           </div>
                           <div className="col-md-4">
                             {/* Cancel Order */}
-                            {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" ? (
-                              new Date(encomenda.encomenda.prazoCancelamento) > new Date() && 
-                              this.state.showConfirmationDialog && this.state.confirmationDialogId === encomenda.encomenda.id_encomenda ? (
-                                <div className="confirmation-dialog">
-                                  <h6>Are you sure you want to Cancel this Order?</h6>
-                                  <div>
-                                    <button className="btn btn-danger" onClick={() => { this.setState({ op: "Cancel" }); this.handleOpOrder(encomenda.encomenda.id_encomenda, "Cancel");}}>
-                                      Confirm
-                                    </button>&nbsp;
-                                    <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
-                                      Cancel
-                                    </button>
+                            {
+                              encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" ? (
+                                new Date(encomenda.encomenda.prazoCancelamento) > new Date() && 
+                                this.state.showConfirmationDialog && this.state.confirmationDialogId === encomenda.encomenda.id_encomenda ? (
+                                  <div className="confirmation-dialog">
+                                    <h6>Are you sure you want to Cancel this Order?</h6>
+                                    <div>
+                                      <button className="btn btn-danger" onClick={() => { this.setState({ op: "Cancel" }); this.handleOpOrder(encomenda.encomenda.id_encomenda, "Cancel");}}>
+                                        Confirm
+                                      </button>&nbsp;
+                                      <button className="btn btn-secondary" onClick={() => this.hideConfirmationDialog()}>
+                                        Cancel
+                                      </button>
+                                    </div>
                                   </div>
-                                </div>
-                              ) : (
-                                <div className="d-flex justify-content-end">
-                                  <a className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda, op: "Cancel" }); this.showConfirmationDialog();}}>
-                                    Cancel Order
-                                  </a>
-                                </div>
-                              )
-                            ) : null}
+                                ) : (
+                                  <div className="d-flex justify-content-end">
+                                    {new Date(encomenda.encomenda.prazoCancelamento) > new Date() && (
+                                      <a className="btn btn-light border text-danger icon-hover-danger" onClick={() => { this.setState({ confirmationDialogId: encomenda.encomenda.id_encomenda, op: "Cancel" }); this.showConfirmationDialog();}}>
+                                        Cancel Order
+                                      </a>
+                                    )}
+                                  </div>
+                                )
+                              ) : null}
+
                             {/* Confirm Delivery */}
                             <div className="d-flex justify-content-end">
                               {encomenda.encomenda.estado !== "Canceled" && encomenda.encomenda.estado !== "Complete" && (

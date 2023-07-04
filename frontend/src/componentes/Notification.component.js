@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/componentescss.css";
 import "../scripts/scripts.js";
-import { FaBootstrap } from "react-icons/fa";
-import { FaSearch } from "react-icons/fa"
-import {useState, useEffect} from 'react';
-import axios from 'axios';
 import 'bootstrap';
 
 class Notification extends React.Component {
@@ -14,7 +9,8 @@ class Notification extends React.Component {
       super(props);
       this.state = {
         notifications: [], // Array to store the notifications
-        isNotificationHovered: false
+        isNotificationHovered: false,
+        tipoUser: window.localStorage.getItem("tipoUser"),
       };
     }
 
@@ -53,6 +49,20 @@ class Notification extends React.Component {
         notifications: [...prevState.notifications, notification]
       }));
     }
+
+    // Inside NotificationComponent
+    handleNotificationClick(idOrder) {
+      // Navigate to EncomendasC component with the order ID as a query parameter
+      const {tipoUser} = this.state;
+      if(tipoUser === "consumidor"){
+        window.location.href = `/user/c/orders?id=${idOrder}`;
+      }else{
+        window.location.href = `/user/f/orders?id=${idOrder}`;
+      }
+      
+      // console.log("idOrder", idOrder)
+    }
+
   
     render() {
       const { notifications, isNotificationHovered } = this.state;
@@ -73,7 +83,7 @@ class Notification extends React.Component {
             {notifications.length > 0 ? (
               notifications.map((notification, index) => (
                 <div key={index} className="notification-item">
-                  {notification.mensagem}
+                  <a onClick={() => this.handleNotificationClick(notification.idOrder)}>{notification.mensagem}</a>
                 </div>
               ))
             ) : (

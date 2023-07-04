@@ -199,7 +199,7 @@ function Payment(props) {
       <div class="p-5 col-md-4 order-md-2 mb-4">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span>Your cart</span>
-          <span class="badge badge-secondary badge-pill">3</span>
+          <span class="badge badge-secondary badge-pill">{props.state.count}</span>
         </h4>
         <ul class="list-group mb-3">
         { props.state.carrinho && props.state.carrinho.map(item => (
@@ -358,7 +358,8 @@ function Confirmation(props) {
                 idFrom: idConsumidor,
                 title: "Encomenda criada!",
                 dateMsg: new Date(),
-                infoProdutos
+                infoProdutos,
+                idOrder: data.data
               }),
             })
               .then((res) => res.json())
@@ -564,6 +565,7 @@ countTotalProducts() {
       count += parseInt(localStorageObj[key].quantidade);
     }
   }
+  console.log("count", count)
   return count;
 }
 

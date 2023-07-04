@@ -193,6 +193,7 @@ const NotificationsSchema = new mongoose.Schema(
       title: String,
       mensagem: String,
       dateMsg: Date,
+      idOrder: String
   },
   {
       collection: "notifications"
@@ -1726,7 +1727,7 @@ app.post("/user/encomenda", async (req, res) => {
       console.log("listaUP")
       console.log(listaUP)
   
-      await Encomenda.create({
+      const newEncomenda = await Encomenda.create({
         idConsumidor,
         preco,
         dataEncomenda,
@@ -1735,8 +1736,10 @@ app.post("/user/encomenda", async (req, res) => {
         listaUP,
         estadoEncomenda,
       });
+      
+      const idOfNewDocument = newEncomenda._id;
   
-      res.send({ status: "ok" });
+      res.send({ status: "ok", data: idOfNewDocument });
     } catch (error) {
       res.send({ status: "error", error: error });
     }
@@ -1748,7 +1751,7 @@ app.post("/user/notificationsOrders", async (req, res) => {
     const Notifications = mongoose.model("notifications", NotificationsSchema);
     const ProductDetails = mongoose.model("productdetails", ProductDetailsSchema)
 
-    const { idFrom, idTo, produtoID, title, dateMsg } = req.body;
+    const { idFrom, idTo, produtoID, title, dateMsg, idOrder } = req.body;
 
     console.log(req.body);
 
@@ -1766,6 +1769,7 @@ app.post("/user/notificationsOrders", async (req, res) => {
       title,
       mensagem,
       dateMsg,
+      idOrder
     });
 
     res.send({ status: "ok" });
@@ -1780,7 +1784,7 @@ app.post("/user/notificationsEncomendas", async (req, res) => {
     const UnidadeProducao = mongoose.model("unidadeProducao", UnidadeProducaoSchema);
     const User = mongoose.model("users", UserDetailsSchema);
 
-    const { idFrom, title, dateMsg, infoProdutos } = req.body;
+    const { idFrom, title, dateMsg, infoProdutos, idOrder } = req.body;
 
     console.log(req.body);
 
@@ -1805,6 +1809,7 @@ app.post("/user/notificationsEncomendas", async (req, res) => {
           title,
           mensagem,
           dateMsg,
+          idOrder
         };
 
         notifications.push(notification);
